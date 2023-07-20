@@ -121,12 +121,13 @@ UserLogin.on('connection', (socket) => {
         userlogin.token = token;
         socket.handshake.session.user = {
           id: userlogin._id,
-          username: userlogin.username,
-          nom_etablissement: userlogin.nom_etablissement,
-          isAdmin: userlogin.isAdmin,
+          username:userlogin.role === 'gestionnaire' ? userlogin.prenom + userlogin.nom :userlogin.username,
+          nom_etablissement: userlogin.role === 'gestionnaire' ? userlogin.travail_pour : userlogin.nom_etablissement,
+          isAdmin: userlogin.role === 'gestionnaire' ? false : userlogin.isAdmin,
           ...userlogin._doc,
           token,
         };
+         console.log(socket.handshake.session.user ,"socket.handshake.session.user")
         socket.handshake.session.save();
         socket.emit('loginsuccess', '/dashboard');
       } else {

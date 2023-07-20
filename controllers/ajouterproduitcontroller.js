@@ -87,7 +87,7 @@ exports.addproduitPost = async (req, res) => {
       });
 
       let result = null;
-
+      console.log(user,"user ajouter produit")
       const newHistorique = {
         quantite: data.quantite,
         stockType: req.body.stockType,
