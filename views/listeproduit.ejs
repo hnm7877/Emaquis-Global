@@ -7,7 +7,10 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-NT2SW8WBHT"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
     gtag('js', new Date());
 
     gtag('config', 'G-NT2SW8WBHT');
@@ -248,7 +251,7 @@
                                    <tbody>
                                      {products.map((el, prodId) => {
                                        return (
-                                         <tr>
+                                         <tr key={prodId}>
                                            <td>{el.produit.nom_produit}</td>
                                            <td style={{
                                              maxWidth: '200px',
@@ -322,7 +325,7 @@
                                <div className="modal-body">
                                  <h4> {productSelected.produit.nom_produit} {productSelected.taille}</h4>
                                  {productSelected.historiques && productSelected.historiques.reverse().map((el, index)=>{
-                                   return <p>{el.add_by} a {el.update?`modifiée la quantité de ${el.prev_quantite} à ${el.stockType === "locker"?`${el.lockerQty} casier(s) de ${el.quantite} bouteilles`:el.quantite}`:`ajoutée ${el.stockType === "locker"?`${el.lockerQty} casier(s) de ${el.quantite} bouteilles`:`${el.quantite} quantité(s)`}`} le {new Date(el.date).toLocaleDateString('fr-FR',{
+                                   return <p key={index}>{el.add_by} a {el.update?`modifiée la quantité de ${el.prev_quantite} à ${el.stockType === "locker"?`${el.lockerQty} casier(s) de ${el.quantite} bouteilles`:el.quantite}`:`ajoutée ${el.stockType === "locker"?`${el.lockerQty} casier(s) de ${el.quantite} bouteilles`:`${el.quantite} quantité(s)`}`} le {new Date(el.date).toLocaleDateString('fr-FR',{
                                      year: 'numeric',
                                      month: 'long',
                                      day: 'numeric',
@@ -362,6 +365,8 @@
 
         setLoading(true)
 
+      
+
         fetch('/deleteproduit/'+productSelected._id, {
           method: 'DELETE',
           headers: {
@@ -370,15 +375,22 @@
         })
           .then((res) => res.json())
           .then((data) => {
+            $('.close-modal').each(function () {
+           
+            $(this).trigger('click');
+              });
             setLoading(false)
             handleRemoveProduct(productSelected._id)
-            $('#deleteModal').modal('hide');
+         
+          
         })
-
-
-
-
        }
+
+
+     
+
+
+       
 
 
 
@@ -388,7 +400,7 @@
        id="deleteModal"
        tabindex="-1"
        role="dialog"
-       aria-labelledby="myModalTitle"
+       aria-labelledby="myModalDeleteTitle"
        >
        <div className="modal-dialog modal-dialog-centered" style={{
        maxWidth: '600px',
@@ -403,7 +415,7 @@
          className="close close-modal"
          data-dismiss="modal"
          aria-label="Close"
-         id="close-modal"
+         id="close-delete-modal"
        >
          <span aria-hidden="true">&times;</span>
        </button>
@@ -504,6 +516,7 @@
 
                            const handleRemoveProduct = (id) => {
                             setProducts(products.filter((el) => el._id !== id));
+                            setProductSelected(null);
                            };
 
                            return (

@@ -6,6 +6,67 @@ const Retours = require('../models/retourproduit.model');
 const { settingQueries } = require('../requests/settingQueries');
 const { employeQueries } = require('../requests/EmployeQueries');
 const { BilletQueries } = require('../requests/BilletQueries');
+const { formatDate } = require('../utils/generateYear');
+const { getDateByWeekendMonthYear } = require('../utils/generateWeekly');
+
+exports.venteByMonth = async (req, res) => {
+  try {
+    if (req.session.user) {
+      console.log('ici', req.session.user);
+      const userId = req.session.user._id;
+      const { month, year, week } = req.query;
+      console.log('👉 👉 👉  ~ file: vente.js:19 ~ week:', week);
+      console.log('👉 👉 👉  ~ file: vente.js:19 ~ year:', year);
+      console.log('👉 👉 👉  ~ file: vente.js:19 ~ month:', month);
+
+      // startDate with month and year with moment
+
+      const { start, end } = getDateByWeekendMonthYear(week, month, year);
+      console.log('👉 👉 👉  ~ file: vente.js:23 ~ end:', end);
+      console.log('👉 👉 👉  ~ file: vente.js:23 ~ start:', start);
+
+      const Vente = await venteQueries.getVentes({
+        createdAt: {
+          $gte: start,
+          $lt: end,
+        },
+        travail_pour: userId,
+        status_commande: { $in: ['Validée', 'Retour'] },
+      });
+
+      // let employe = Employe.result;
+      // let prod = Produit.result;
+      let vente = Vente.result;
+
+      let venteByDay = vente.reduce((acc, item) => {
+        const date = new Date(item.createdAt);
+
+        const key = formatDate(date);
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        acc[key].push(item);
+        return acc;
+      }, {});
+
+      res.send({
+        success: true,
+        data: venteByDay,
+      });
+    } else {
+      res.status(401).send({
+        etat: false,
+        data: 'error signature',
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      etat: false,
+    });
+  }
+};
+
 exports.vente = async (req, res) => {
   try {
     const productRes = await produitQueries.getProduitBySession(
@@ -273,7 +334,9 @@ exports.editventePost = async (req, res) => {
         sess.travail_pour
       );
 
-      let billet = await BilletQueries.getBilletByEmployeId(body.for_employe);
+      let billet = await BilletQueries.getBilletByEmployeId(
+        oldVente.result?.for_employe
+      );
 
       if (!billet.result) {
         res.status(400).json({
@@ -351,6 +414,11 @@ exports.editventePost = async (req, res) => {
         amount_collected:
           body.amount_collected ?? oldVente.result.amount_collected,
       };
+
+      if (body.update_for_collected_amount) {
+        newVente.status_commande = 'Validée';
+        newVente.employe_validate_id = sess._id;
+      }
 
       await venteQueries.updateVente(venteId, newVente);
 
@@ -517,6 +585,9 @@ exports.venteBilan = async (req, res) => {
 
     let filter = {
       travail_pour: req.session.user._id,
+      status_commande: {
+        $in: ['Validée', 'Retour'],
+      },
     };
 
     if (start) {
@@ -548,21 +619,29 @@ exports.venteBilan = async (req, res) => {
       // tous produit dans chaque vente(par index et produit)
       for (let [produitIndex, produit] of vente.produit.entries()) {
         // fait un nouveau formatage de produit pour le bilan
+        const total_vente =
+          vente.quantite[produitIndex] < 0
+            ? vente.prix
+            : produit.prix_vente * vente.quantite[produitIndex];
+
+        const total_achat = produit.prix_achat * vente.quantite[produitIndex];
+
         const product = {
           nom: produit.produit.nom_produit,
-          categorie: produit.produit.categorie.nom,
+          categorie: produit.produit.categorie,
           prix_vente: produit.prix_vente,
           prix_achat: produit.prix_achat,
           quantite: vente.quantite[produitIndex],
           taille: produit.taille,
           _id: produit._id,
           productId: produit.productId,
-          total_vente: produit.prix_vente * vente.quantite[produitIndex],
-          benefice:
-            produit.prix_vente * vente.quantite[produitIndex] -
-            produit.prix_achat * vente.quantite[produitIndex],
+          total_vente,
+          benefice: total_vente - total_achat,
           employe: vente.employe,
           createdAt: vente.createdAt,
+          retour_quantite:
+            vente.quantite[produitIndex] < 0 ? vente.quantite[produitIndex] : 0,
+          prix: vente.quantite[produitIndex] < 0 ? vente.prix : 0,
         };
 
         // verifier si le produit existe et calculer son benefice
@@ -573,11 +652,13 @@ exports.venteBilan = async (req, res) => {
 
         if (productFind) {
           productFind.quantite += vente.quantite[produitIndex];
-          productFind.total_vente +=
-            produit.prix_vente * vente.quantite[produitIndex];
-          productFind.benefice +=
-            produit.prix_vente * vente.quantite[produitIndex] -
-            produit.prix_achat * vente.quantite[produitIndex];
+          productFind.total_vente += total_vente;
+          productFind.benefice += total_vente - total_achat;
+
+          productFind.retour_quantite +=
+            vente.quantite[produitIndex] < 0 ? vente.quantite[produitIndex] : 0;
+
+          productFind.prix += vente.quantite[produitIndex] < 0 ? vente.prix : 0;
         } else {
           produits.push(product);
         }

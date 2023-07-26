@@ -7,6 +7,10 @@ const { generateYears, formatDate } = require('../utils/generateYear');
 const moment = require('moment');
 const { getPercent } = require('../utils/getPercent');
 const { settingQueries } = require('../requests/settingQueries');
+const {
+  getDateByWeekendMonthYear,
+  getWeeksInMonth,
+} = require('../utils/generateWeekly');
 
 exports.dashboard = async (req, res) => {
   if (req.session.user) {
@@ -17,7 +21,29 @@ exports.dashboard = async (req, res) => {
     try {
       const Employe = await employeQueries.getEmployeByEtablissement(userId);
       const Produit = await produitQueries.getProduitBySession(userId);
+
+      const month = new Date().getMonth();
+      const year = new Date().getFullYear();
+      // Définir la date de référence pour le mois
+
+      // Calculez le nombre de semaines entre le premier et le dernier jour du mois
+      const weeksInMonth = getWeeksInMonth(month, year);
+
+      const currentDate = moment();
+
+      const currentWeekIndex =
+        currentDate.isoWeek() -
+        moment(currentDate).startOf('month').isoWeek() +
+        1;
+
+      const { start, end } = getDateByWeekendMonthYear(
+        currentWeekIndex,
+        month + 1,
+        year
+      );
+
       const Vente = await venteQueries.getVentes({
+        createdAt: { $gte: start, $lte: end },
         travail_pour: userId,
         status_commande: { $in: ['Validée', 'Retour'] },
       });
@@ -62,15 +88,15 @@ exports.dashboard = async (req, res) => {
           return acc + item.prix;
         }, 0) || 0;
 
-      const toDay = new Date().getDay();
-      const time = new Date().getTime();
-      const previousWeekDay = new Date(
-        time - ((toDay === 0 ? 7 : toDay) - 1) * 24 * 60 * 60 * 1000
-      );
+      // const toDay = new Date().getDay();
+      // const time = new Date().getTime();
+      // const previousWeekDay = new Date(
+      //   time - ((toDay === 0 ? 7 : toDay) - 1) * 24 * 60 * 60 * 1000
+      // );
 
       const weekKeys = Object.keys(venteByDay).filter((acc) => {
         const date = new Date(acc);
-        if (date >= new Date(formatDate(previousWeekDay))) {
+        if (date >= new Date(formatDate(start))) {
           return true;
         } else {
           return false;
@@ -101,10 +127,10 @@ exports.dashboard = async (req, res) => {
 
       const allProductsByDayGrouped =
         allProductsByDay?.reduce((acc, item) => {
-          const productId = item.produit._id;
+          const productId = item.produit?._id;
           const taille = item.taille;
           const productFind = acc.find(
-            (item) => item.produit._id === productId && item.taille === taille
+            (item) => item.produit?._id === productId && item.taille === taille
           );
 
           let promo_quantity = 0;
@@ -164,6 +190,8 @@ exports.dashboard = async (req, res) => {
         allProductsByDayGrouped,
         productMostSold,
         totalVenteWeek: formatAmount(totalVenteWeek || 0),
+        currentWeekIndex,
+        weeksInMonth,
       });
     } catch (e) {
       console.log('err', e);
@@ -172,7 +200,6 @@ exports.dashboard = async (req, res) => {
   } else {
     res.redirect('/');
   }
-
 };
 
 exports.dashboardPost = async (req, res) => {
