@@ -55,10 +55,14 @@ const fs = require('fs');
 const S3 = require('aws-sdk/clients/s3');
 const { authSuperAdmin, checkAuthUser } = require('../middleware/auth');
 const { uploadFile } = require('../utils/uploadFile');
-const {
-  condition_general,
-} = require('../controllers/conditiongeneral_controller');
 const conditiongeneral_controller = require('../controllers/conditiongeneral_controller');
+const { produitsList } = require('../controllers/produit');
+const { PRODUCT_SIZE } = require('../constants');
+const { stocksList, addStock } = require('../controllers/stock.controller');
+const {
+  stocksImageList,
+  addStockImage,
+} = require('../controllers/stock-img.controller');
 
 var router = express.Router();
 
@@ -113,20 +117,13 @@ router.post('/listcategorie', listcategoriecontroller.seecatPost);
 router.get('/listeproduit', listeproduitcontroller.produit);
 router.post('/listeproduit', listeproduitcontroller.produitPost);
 
-router.get('/bilan', (req, res) => {
-  if (req.session.user) {
-    res.setHeader('Content-Type', 'text/html');
-
-    // react build folder
-
-    res.sendFile(path.join(__dirname, '../reactBilan/index.html'));
-  } else {
-    res.redirect('/connexion');
-  }
-  // req header
-  // res header
-  // res status
-  // res body
+router.get('/products', produitsList);
+router.get('/categories', listcategoriecontroller.categoriesList);
+router.get('/products-sizes', (req, res) => {
+  res.send({
+    data: PRODUCT_SIZE,
+    success: true,
+  });
 });
 
 router.get('/vente', checkAuthUser, ventecontroller.vente);
@@ -196,6 +193,39 @@ router.get('/test/paiement', summarycontroller.paiement);
 router.get('/summaryadmin', summaryadmincontroller.summaryadmin);
 router.post('/summaryadmin', summaryadmincontroller.summaryadmin);
 // router.post("/ajouterproduit", ajouterproduitcontroller.addproduitPost);
+
+// user session
+
+router.get('/get-user-session', (req, res) => {
+  if (req.session.user) {
+    let user = req.session.user?._doc || req.session.user;
+    const { password, ...data } = user;
+    res.send({
+      success: true,
+      data,
+    });
+  } else {
+    res.send({
+      success: false,
+      data: null,
+    });
+  }
+});
+
+// Produits
+
+router.get(
+  '/get-products-global',
+  emajouterproduitcontroller.getProductsGlobalList
+);
+
+//STOCKS
+
+router.get('/stocks', stocksList);
+router.post('/add-stock', addStock);
+
+router.get('/stocks-images', stocksImageList);
+router.post('/add-stock-image', upload.single('image'), addStockImage);
 
 router.post(
   '/ajouter-produit-global',
@@ -279,5 +309,21 @@ router.post('/emajouterproduit', upload.single('image'), async (req, res) => {
 });
 
 router.use('/billet', billetRouter);
+
+router.get('*', (req, res) => {
+  if (req.session.user) {
+    res.setHeader('Content-Type', 'text/html');
+
+    // react build folder
+
+    res.sendFile(path.join(__dirname, '../reactBilan/index.html'));
+  } else {
+    res.redirect('/connexion');
+  }
+  // req header
+  // res header
+  // res status
+  // res body
+});
 
 module.exports = router;
