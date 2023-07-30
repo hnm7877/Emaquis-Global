@@ -2,19 +2,23 @@ const { employeQueries } = require('../requests/EmployeQueries');
 exports.userlist = async (req, res) => {
   if (req.session.user) {
     const session = req.session.user;
-    console.log(session.id);
+    console.log(session);
     try {
-      const Employe = await employeQueries.getAllEmploye();
-      let Result = [];
+      // Vérifier si la propriété "travail_pour" existe dans la session
+      const employeQueryParameter = session.travail_pour ? session.travail_pour : session.id;
+      console.log(employeQueryParameter,"employeQueryParameter")
+      // Utiliser la valeur appropriée pour la requête "getEmployeByEtablissement"
+      const Employe = await employeQueries.getEmployeByEtablissement(employeQueryParameter);
+       console.log(Employe,"employe")
       if (Employe.result !== null) {
-        let employe = Employe.result;
-        employe.forEach(async (el) => {
-          if (session.id == el.travail_pour) {
-            Result.push(el);
-          }
-        });
+        // let employe = Employe.result;
+        // employe.forEach((el) => {
+        //   if (session.id == el.travail_pour) {
+          //  Result.push(Employe.result);
+        //   }
+        // });
         res.render('user_list', {
-          Result: Result,
+          Result: Employe.result,
           user: req.session.user,
         });
       }
@@ -26,6 +30,7 @@ exports.userlist = async (req, res) => {
     res.redirect('/');
   }
 };
+
 exports.userlistPost = async (req, res) => {
   if (req.session.user) {
     try {

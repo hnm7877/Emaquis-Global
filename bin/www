@@ -88,6 +88,57 @@ SaveUSer.on('connection', (socket) => {
 });
 
 //connexion admin et gestionnaire
+// const UserLogin = io.of('/connexion').use(Serveur.getSharedSession());
+// UserLogin.on('connection', (socket) => {
+//   console.log('connexion utilisateur');
+//   try {
+//     socket.on('login', async (data) => {
+//       const { emailOrPhoneNumber, password } = data;
+//       console.log(emailOrPhoneNumber, password, 'data');
+//       if (!(emailOrPhoneNumber && password)) {
+//         console.log('Veuillez remplir tous les champs');
+//       }
+//       let userlogin = await User.findOne({
+//         $or: [{ email: emailOrPhoneNumber }, { numero: emailOrPhoneNumber }],
+//          // Ajouter la condition de rôle "gestionnaire"
+//       });
+    
+//       if (!userlogin) {
+//         userlogin = await Employe.findOne({
+//           $or: [{ numero: emailOrPhoneNumber }, { numero: emailOrPhoneNumber }],
+//           role: 'gestionnaire' // Ajouter la condition de rôle "gestionnaire"
+//         });
+//       }
+//       if (userlogin && (await bcrypt.compare(password, userlogin.password))) {
+//         const token = jwt.sign(
+//           {
+//             user_id: userlogin._id,
+//             emailOrPhoneNumber,
+//             isAdmin: userlogin.isAdmin,
+//           },
+//           process.env.SECRET
+//         );
+
+//         userlogin.token = token;
+//         socket.handshake.session.user = {
+//           id: userlogin._id,
+//           username:userlogin.role === 'gestionnaire' ? userlogin.prenom + userlogin.nom :userlogin.username,
+//           nom_etablissement: userlogin.role === 'gestionnaire' ? userlogin.travail_pour : userlogin.nom_etablissement,
+//           isAdmin: userlogin.role === 'gestionnaire' ? false : userlogin.isAdmin,
+//           ...userlogin._doc,
+//           token,
+//         };
+//          console.log(socket.handshake.session.user ,"socket.handshake.session.user")
+//         socket.handshake.session.save();
+//         socket.emit('loginsuccess', '/dashboard');
+//       } else {
+//         socket.emit('bad');
+//       }
+//     });
+//   } catch (e) {
+//     console.log(e);
+//   }
+// });
 const UserLogin = io.of('/connexion').use(Serveur.getSharedSession());
 UserLogin.on('connection', (socket) => {
   console.log('connexion utilisateur');
@@ -100,35 +151,39 @@ UserLogin.on('connection', (socket) => {
       }
       let userlogin = await User.findOne({
         $or: [{ email: emailOrPhoneNumber }, { numero: emailOrPhoneNumber }],
-         // Ajouter la condition de rôle "gestionnaire"
+        // Ajouter la condition de rôle "gestionnaire"
       });
-    
+
       if (!userlogin) {
         userlogin = await Employe.findOne({
           $or: [{ numero: emailOrPhoneNumber }, { numero: emailOrPhoneNumber }],
-          role: 'gestionnaire' // Ajouter la condition de rôle "gestionnaire"
+          role: 'gestionnaire', // Ajouter la condition de rôle "gestionnaire"
         });
       }
       if (userlogin && (await bcrypt.compare(password, userlogin.password))) {
-        const token = jwt.sign(
-          {
-            user_id: userlogin._id,
-            emailOrPhoneNumber,
-            isAdmin: userlogin.isAdmin,
-          },
-          process.env.SECRET
-        );
+        const tokenData = {
+          user_id: userlogin._id,
+          emailOrPhoneNumber,
+          isAdmin: userlogin.isAdmin,
+        };
+
+        if (userlogin.role === 'gestionnaire') {
+          tokenData.travail_pour = userlogin.travail_pour;
+          tokenData.role = userlogin.role;
+        }
+
+        const token = jwt.sign(tokenData, process.env.SECRET);
 
         userlogin.token = token;
         socket.handshake.session.user = {
           id: userlogin._id,
-          username:userlogin.role === 'gestionnaire' ? userlogin.prenom + userlogin.nom :userlogin.username,
+          username: userlogin.role === 'gestionnaire' ? userlogin.prenom + userlogin.nom : userlogin.username,
           nom_etablissement: userlogin.role === 'gestionnaire' ? userlogin.travail_pour : userlogin.nom_etablissement,
           isAdmin: userlogin.role === 'gestionnaire' ? false : userlogin.isAdmin,
           ...userlogin._doc,
           token,
         };
-         console.log(socket.handshake.session.user ,"socket.handshake.session.user")
+        console.log(socket.handshake.session.user, "socket.handshake.session.user");
         socket.handshake.session.save();
         socket.emit('loginsuccess', '/dashboard');
       } else {
@@ -140,12 +195,13 @@ UserLogin.on('connection', (socket) => {
   }
 });
 
+
 const SaveEmploye = io.of('/ajouteruser').use(Serveur.getSharedSession());
 SaveEmploye.on('connection', (socket) => {
   socket.on('setemploye', async (data) => {
-    console.log(data);
-    const Result = await employeQueries.setEmploye(data);
-    console.log(Result);
+    console.log(data,"ajouter user");
+     const Result = await employeQueries.setEmploye(data);
+     console.log(Result,"Result")
     if (Result) {
       socket.emit('saved');
     } else {

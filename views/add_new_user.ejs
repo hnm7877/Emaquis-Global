@@ -178,7 +178,8 @@
                             name="email"
                             value="<%=locals.employe?.email%>"
                           /> -->
-                        <input type="text" name="session" value="<%= user?.id %>" hidden />
+                        <!-- <input type="text" name="session" value="<%= user?.id %>" hidden /> -->
+                        <input type="text" name="session" value="<%= user?.travail_pour ?? user?._id %>" hidden />
                         <input type="checkbox" name="update" value="<%= locals.update %>" hidden />
                       </div>
                     </div>
@@ -260,7 +261,7 @@
         password: $('input[name="password"]').val(),
         numero: $('input[name="numero"]').val(),
       };
-
+     console.log(data,"data")
 
 
       if (
@@ -290,7 +291,7 @@
           data,
         });
       } else {
-        socket.emit('setemploye', data);
+       socket.emit('setemploye', data);
       }
 
       socket.on('saved', (data) => {
