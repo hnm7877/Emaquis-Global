@@ -47,7 +47,7 @@ const storage = multer.diskStorage({
     console.log(file);
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     cb(null, file.fieldname + "-" + uniqueSuffix);
-  },
+  }
 });
 
 const upload = multer({ storage: storage });
@@ -63,23 +63,34 @@ const { PRODUCT_SIZE } = require("../constants");
 const { stocksList, addStock } = require("../controllers/stock.controller");
 const {
   stocksImageList,
-  addStockImage,
+  addStockImage
 } = require("../controllers/stock-img.controller");
 const { addEmployeeImage } = require("../controllers/allemploye");
 const { settingQueries } = require("../requests/settingQueries");
 const { userQueries } = require("../requests/UserQueries");
 const { generateTicket } = require("../controllers/ticket.controller");
 const {
-  listeProduitGlobal, 
+  listeProduitGlobal,
   postProduitGlobal,
   getProduitGlobal,
-  deleteProduitGlobal,
+  deleteProduitGlobal
 } = require("../controllers/produitglobal.controler");
-const {produitBySession} = require("../controllers/produit")
+const { produitBySession } = require("../controllers/produit");
+const maquisRouter = require("./maquis.router");
+const maquisController = require("../controllers/maquis.controller");
+const { getParentMaquisList } = require("../middleware/parentMaquis");
 
 var router = express.Router();
 
+router.use(getParentMaquisList);
+
 /* GET home page. */
+
+router.get("/add-new-maquis", maquisController.getAddNewMaquis);
+router.get("/maquis-list", maquisController.getMaquisListeByParent);
+router.post("/add-new-maquis", maquisController.postAddNewMaquis);
+router.get("/swap-token-maquis/:maquis_id", maquisController.swapTokenMaquis);
+router.get("/delete-maquis/:maquis_id", maquisController.adminDeleteMaquis);
 
 router.get("/", generalcontroller.index);
 router.post("/", generalcontroller.index);
@@ -139,7 +150,7 @@ router.get("/categories", listcategoriecontroller.categoriesList);
 router.get("/products-sizes", (req, res) => {
   res.send({
     data: PRODUCT_SIZE,
-    success: true,
+    success: true
   });
 });
 
@@ -231,13 +242,13 @@ router.get("/get-user-session", async (req, res) => {
         product_return_type: setting.result.product_return_type,
         objective: setting.result.objective,
         numberOfTables: setting.result.numberOfTables,
-        hasStock: setting.result.hasStock,
-      },
+        hasStock: setting.result.hasStock
+      }
     });
   } else {
     res.send({
       success: false,
-      data: null,
+      data: null
     });
   }
 });
@@ -288,7 +299,7 @@ router.post("/emajouterproduit", upload.single("image"), async (req, res) => {
   const s3 = new S3({
     region,
     accessKeyId,
-    secretAccessKey,
+    secretAccessKey
   });
 
   // uploads a file to s3
@@ -299,7 +310,7 @@ router.post("/emajouterproduit", upload.single("image"), async (req, res) => {
       Bucket: bucketName,
       Body: fileStream,
       Key: file.originalname,
-      acl: "public-read",
+      acl: "public-read"
     };
     return s3.upload(uploadParams).promise();
   }
@@ -313,7 +324,7 @@ router.post("/emajouterproduit", upload.single("image"), async (req, res) => {
       prix_achat: parseInt(req.body.prix_achat),
       quantite: parseInt(req.body.quantite),
       image: result.Location,
-      session: req.body.session,
+      session: req.body.session
     };
     const Result = await produitQueries.setProduit(data);
     console.log(Result);
@@ -367,7 +378,7 @@ router.post(
       const result = await employeQueries.updateEmployeePhotoById(id, image);
       res.send({
         data: result.result,
-        success: result.etat,
+        success: result.etat
       });
     } catch (e) {
       console.log(e);
@@ -376,31 +387,31 @@ router.post(
   }
 );
 
-router.post("/etablishmentProduct/:id", checkAuthUser,async (req, res) => {
+router.post("/etablishmentProduct/:id", checkAuthUser, async (req, res) => {
   try {
     const { id } = req.params;
     const produitBySession = await produitQueries.getProduitBySession(id);
-    
-    if (produitBySession.result.length===0 ) {
-       return res.status(404).json({
+
+    if (produitBySession.result.length === 0) {
+      return res.status(404).json({
         error: false,
         messageCode: "NotFound",
-        message: "aucun produit trouvé.",
+        message: "aucun produit trouvé."
       });
     }
 
-   return res.status(200).json({
+    return res.status(200).json({
       error: false,
       messageCode: "Success",
       message: "Succès",
-      produitBySession,
+      produitBySession
     });
   } catch (err) {
     console.log(err);
     return res.status(500).json({
       error: true,
       messageCode: "Error",
-      message: "internal error",
+      message: "internal error"
     });
   }
 });

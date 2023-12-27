@@ -216,12 +216,30 @@
                         <span class="d-none d-sm-inline-block ml-1">
                             <%= locals.user?.nom %> <%= locals.user?.prenom ||
                             locals.user?.prenoms %>
+
+                            <% if(!locals.user?.nom) { %>
+                            <%= locals.user?.nom_etablissement %>
+                            <% } %>
+
                         </span>
                         
                         <i class="mdi mdi-chevron-down d-none d-sm-inline-block"></i>
                         <h5><%= locals.user?.role %></h5>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
+
+                      <% if(locals.user?.maquisList) { %>
+                       
+
+                      <% for ( let maquis of locals.user.maquisList) { %>
+
+                        <a href="/swap-token-maquis/<%=maquis._id%>" class="dropdown-item notify-item">
+                            <i class="mdi mdi-account-outline"></i>
+                            <span><%= maquis.nom_etablissement %></span>
+                        </a>
+
+                      <% } %>
+                      <% } %>
                         
                        <a class="dropdown-item d-flex align-items-center justify-content-between"
                             href="/profile">

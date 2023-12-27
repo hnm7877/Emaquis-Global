@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zxx">
+	<meta
+		http-equiv="content-type"
+		content="text/html;charset=UTF-8"
+	/>
+
+	<head>
+		<!-- Google tag (gtag.js) -->
+		<script
+			async
+			src="https://www.googletagmanager.com/gtag/js?id=G-NT2SW8WBHT"
+		></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag('js', new Date());
+
+			gtag('config', 'G-NT2SW8WBHT');
+		</script>
+		<!-- End Google tag (gtag.js) -->
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, shrink-to-fit=no"
+		/>
+		<script src="assets/js/jquery.min.js"></script>
+		<title>Ajout un nouveau maquis</title>
+		<!-- App css -->
+		<link
+			href="assets/css/bootstrap.min.css"
+			rel="stylesheet"
+			type="text/css"
+		/>
+		<link
+			href="assets/css/icons.min.css"
+			rel="stylesheet"
+			type="text/css"
+		/>
+		<link
+			href="assets/css/theme.min.css"
+			rel="stylesheet"
+			type="text/css"
+		/>
+		<link
+			href="assets/css/style.css"
+			rel="stylesheet"
+			type="text/css"
+		/>
+		<link
+			rel="stylesheet"
+			href="css/style.css"
+		/>
+
+		<%- include('partial/newHead.ejs') %> <%- include('partial/head.ejs') %>
+	</head>
+
+	<body class="crm_body_bg">
+		<%- include('partial/newSideBar.ejs') %>
+
+		<!--/ sidebar  -->
+
+		<section class="main_content dashboard_part large_header_bg">
+			<!-- menu  -->
+
+			<!--/ menu  -->
+			<div class="main_content_iner overly_inner">
+				<div class="container-fluid p-0">
+					<!-- page title  -->
+					<!-- page title  -->
+					<div class="row">
+						<div class="col-12">
+							<div
+								class="page_title_box d-flex flex-wrap align-items-center justify-content-between"
+							>
+								<div class="page_title_left d-flex align-items-center">
+									<!--
+                <h3 class="f_s_25 f_w_700 dark_text mr_30">
+                  Tableau de bord
+                </h3>
+                  <ol class="breadcrumb page_bradcam mb-0">
+                    <li class="breadcrumb-item">
+                      <a href="javascript:void(0);">Acceuil</a>
+                    </li>
+                    <li class="breadcrumb-item active">Analyse</li>
+                  </ol> 
+                  -->
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<p
+								id="sess"
+								hidden
+							>
+								<%= user?.id %>
+							</p>
+							<div class="white_card card_height_100 mb_30">
+								<div class="white_card_header">
+									<div class="box_header m-0">
+										<div class="main-title">
+											<h3 class="m-0">Ajouter un nouveau maquis</h3>
+										</div>
+									</div>
+								</div>
+								<form
+									action="/add-new-maquis"
+									method="post"
+								>
+									<% if(locals.update) { %>
+									<div
+										class="alert alert-success"
+										role="alert"
+										style="text-align: center; display: none"
+										id="alert-success"
+									>
+										Maquis modifier avec succès !
+									</div>
+
+									<% } else { %>
+									<div
+										class="alert alert-success"
+										role="alert"
+										style="text-align: center; display: none"
+										id="alert-success"
+									>
+										Nouveau Maquis enregistrer avec succès !
+									</div>
+									<% } %>
+
+                  <% if(locals.error) { %>
+									<div
+										class="alert alert-danger"
+										role="alert"
+										style="text-align: center;"
+										id="alert-danger"
+									>
+										<%= locals.error %>
+									</div>
+
+                  <% } %>
+									<div class="white_card_body">
+										<div class="row">
+											<div class="col-lg-6">
+												<div class="common_input mb_15">
+													<input
+														type="text"
+														placeholder="Nom d'utilisateur"
+														name="username"
+														value="<%= locals.maquis?.username %>"
+														class="form-focus"
+                            required
+													/>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="common_input mb_15">
+													<input
+														type="text"
+														placeholder="Nom de l'établissement"
+														name="nom_etablissement"
+														value="<%=locals.maquis?.nom_etablissement%>"
+														class="form-focus"
+                            required
+													/>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="common_input mb_15">
+													<input
+														type="text"
+														placeholder="Adresse"
+														name="adresse"
+														value="<%=locals.maquis?.adresse%>"
+														class="form-focus"
+                            required
+													/>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="common_input mb_15">
+													<input
+														type="text"
+														placeholder="Email"
+														name="email"
+														value="<%=locals.maquis?.email%>"
+														class="form-focus"
+													/>
+												</div>
+											</div>
+											<div class="col-lg-6">
+												<div class="common_input mb_15 input-group">
+													<input
+														type="number"
+														placeholder="Numéro de téléphone"
+														name="numero"
+														value="<%=locals.maquis?.numero%>"
+														required
+														class="form-focus form-focus-warning"
+													/>
+													<small class="text-info"
+														>Le numéro de téléphone va permettre de vous
+														connecter directement sur ce maquis avec le mot de
+														passe
+													</small>
+												</div>
+											</div>
+
+
+                      <div class="col-lg-6">
+												<div class="common_input mb_15 input-group">
+                          <select class="form-control form-control-lg" aria-label=".form-select-lg example" name='product_return_type' value="<%user.product_return_type%>">
+                            <% retour_produits_types.forEach((p)=> { %>
+                           
+                            <option value="<%= p.type %>"><%= p.nom %></option>
+                           
+                            <% }) %>
+  
+                          </select>
+												</div>
+											</div>
+
+
+                      <div class="col-lg-6">
+												<div class="common_input mb_15 input-group">
+													<input
+														type="number"
+														placeholder="Objectif à atteindre par jour"
+														name="objective"
+														value="<%=locals.maquis?.objective%>"
+														required
+														class="form-focus form-focus-warning"
+													/>
+													
+												</div>
+											</div>
+
+
+                      <div class="col-lg-6">
+												<div class="common_input mb_15 input-group">
+													<input
+														type="number"
+														placeholder="Nombre de table"
+														name="numberOfTables"
+														value="<%=locals.maquis?.numberOfTables%>"
+														required
+														class="form-focus form-focus-warning"
+													/>
+													
+												</div>
+											</div>
+
+                      <div class="col-lg-6">
+                        <div class="common_input mb_15 input-group">
+                        <select class='form-control form-control-lg' id="pays" name="country">
+                          <% pays.forEach((p)=> { %>
+                          
+                          <option value="<%= p.code %>"><%= p.nom %></option>
+                         
+                          <% }); %>
+                        </select>
+                      </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="common_input mb_15 input-group">
+
+                        <select class='form-control form-control-lg' id="city" name="city">
+                          <% pays.forEach((p)=> { %>
+                         
+                          <% for(ville of p.cities) {%>
+                          <option value="<%=ville%>"><%= ville %></option>
+                          <% } %>
+                         
+                          <% }); %>
+                        </select>
+                        </div>
+
+                      </div>
+
+
+                      <div class="col-lg-6">
+												<div class="common_input mb_15">
+													<input
+														type="password"
+														placeholder="mot de passe"
+														name="password"
+														class="form-focus"
+                            required
+													/>
+												</div>
+											</div>
+
+
+                      <input
+														type="hidden"
+														name="parent"
+                            value="<%=locals.user?.id%>"
+                            required
+													/>
+  
+
+                    </div>
+
+											<div class="col-lg-6 col-md-6 col-sm-6">
+												<div class="create_report_btn mt_30">
+													<button
+														type="submit"
+														class="btn_1 radius_btn d-block text-center btn_1_Verif"
+													>
+														<%= locals.update?"Modifier": "Ajouter"%> maquis
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- footer part -->
+			<div class="footer_part">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="footer_iner text-center">
+								<p>
+									2023 © E-Maquis - Designed by
+									<a href="#"> <i class="ti-gun"></i> </a><a href="#"> HNM</a> -
+									<a href="/faq">FAQ</a>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- main content part end -->
+		<div class="menu-overlay"></div>
+
+		<div
+			id="back-top"
+			style="display: none"
+		>
+			<a
+				title="Go to Top"
+				href="#"
+			>
+				<i class="ti-angle-up"></i>
+			</a>
+		</div>
+
+		<!-- footer  -->
+		<%- include('partial/script.ejs') %> <%-
+		include('partial/scriptNewTemp.ejs') %>
+
+		<script src="/socket.io/socket.io.js "></script>
+    <script>
+       const countries = <%- JSON.stringify(pays) %>
+   
+
+    $('#pays').change(() => {
+      const countryValue = $('#pays').val();
+      const country = countries.find((c) => c.code === countryValue);
+      
+      if (country) {
+        $('#city').html('<option value="" selected>Selection ta ville</option>');
+        country.cities.forEach((ville) => {
+
+         
+            $('#city').append(`<option value="${ville}">${ville}</option>`)
+          
+
+        })
+      }
+
+    })
+  
+      </script>
+	
+
+		<script
+			src="../js/verifInput.js"
+			defer
+		></script>
+		<!-- jQuery  -->
+
+		<script src="assets/js/bootstrap.bundle.min.js"></script>
+		<script src="assets/js/metismenu.min.js"></script>
+		<script src="assets/js/waves.js"></script>
+		<script src="assets/js/simplebar.min.js"></script>
+
+		<!-- Morris Js-->
+		<script src="../plugins/morris-js/morris.min.js"></script>
+		<!-- Raphael Js-->
+		<script src="../plugins/raphael/raphael.min.js"></script>
+
+		<!-- Morris Custom Js-->
+		<script src="assets/pages/dashboard-demo.js"></script>
+
+		<!-- App js -->
+		<script src="assets/js/theme.js"></script>
+	</body>
+
+	<!-- Mirrored from demo.dashboardpack.com/user-management-html/add_new_user.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 05 Jul 2021 17:20:09 GMT -->
+</html>

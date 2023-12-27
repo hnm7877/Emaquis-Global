@@ -1,0 +1,17 @@
+<select name="indicatif">
+	<% for (let country of countries) { %> <% if (country.indicatif == '+225') {
+	%>
+	<option
+		value="<%= country.indicatif %>"
+		selected
+	>
+		<%= `${country.nom}(${country.indicatif})` %>
+	</option>
+	<% } else { %>
+
+	<option value="<%= country.indicatif %>">
+		<%= `${country.nom}(${country.indicatif})` %>
+	</option>
+
+	<% } %> <% } %>
+</select>

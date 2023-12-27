@@ -15,7 +15,7 @@ exports.PRODUCT_SIZE = [
   "125cl",
   "150cl",
   "200cl",
-  "250cl",
+  "250cl"
 ];
 
 // pays de l'afrique de l'ouest
@@ -24,6 +24,7 @@ exports.PAYS = [
   {
     code: "benin",
     nom: "Bénin",
+    indicatif: "+229",
     cities: [
       "Cotonou",
       "Porto-Novo",
@@ -56,12 +57,13 @@ exports.PAYS = [
       "Grand-Popo",
       "Djougou",
       "Kétou",
-      "Athiémé",
-    ],
+      "Athiémé"
+    ]
   },
   {
     code: "burkina_faso",
     nom: "Burkina Faso",
+    indicatif: "+226",
     cities: [
       "Ouagadougou",
       "Bobo-Dioulasso",
@@ -98,12 +100,13 @@ exports.PAYS = [
       "Léo",
       "Nouna",
       "Réo",
-      "Tenkodogo",
-    ],
+      "Tenkodogo"
+    ]
   },
   {
     code: "cap_vert",
     nom: "Cap-Vert",
+    indicatif: "+238",
     cities: [
       "Praia",
       "Mindelo",
@@ -136,12 +139,13 @@ exports.PAYS = [
       "Ribeira Brava",
       "Tarrafal",
       "Paul",
-      "Porto Ingles",
-    ],
+      "Porto Ingles"
+    ]
   },
   {
     code: "cote_d_ivoire",
     nom: "Côte d'Ivoire",
+    indicatif: "+225",
     cities: [
       "Abidjan",
       "Yamoussoukro",
@@ -195,12 +199,13 @@ exports.PAYS = [
       "Zuénoula",
       "Odienné",
       "Yamoussoukro",
-      "Abidjan",
-    ],
+      "Abidjan"
+    ]
   },
   {
     code: "gambie",
     nom: "Gambie",
+    indicatif: "+220",
     cities: [
       "Banjul",
       "Serekunda",
@@ -242,12 +247,13 @@ exports.PAYS = [
       "Kanifing",
       "Serekunda",
       "Bakoteh",
-      "Kololi",
-    ],
+      "Kololi"
+    ]
   },
   {
     code: "ghana",
     nom: "Ghana",
+    indicatif: "+233",
     cities: [
       "Accra",
       "Kumasi",
@@ -295,12 +301,13 @@ exports.PAYS = [
       "Suhum",
       "Elmina",
       "Salaga",
-      "Bibiani",
-    ],
+      "Bibiani"
+    ]
   },
   {
     code: "guinee",
     nom: "Guinée",
+    indicatif: "+224",
     cities: [
       "Conakry",
       "Nzérékoré",
@@ -357,12 +364,13 @@ exports.PAYS = [
       "Koundara",
       "Fria",
       "Boké",
-      "Macenta",
-    ],
+      "Macenta"
+    ]
   },
   {
     code: "guinee_bissau",
     nom: "Guinée-Bissau",
+    indicatif: "+245",
     cities: [
       "Bissau",
       "Bafatá",
@@ -395,12 +403,13 @@ exports.PAYS = [
       "Quebo",
       "Fulacunda",
       "Bubaque",
-      "Bissau",
-    ],
+      "Bissau"
+    ]
   },
   {
     code: "liberia",
     nom: "Libéria",
+    indicatif: "+231",
     cities: [
       "Monrovia",
       "Gbarnga",
@@ -444,12 +453,13 @@ exports.PAYS = [
       "Zwedru",
       "Zorzor",
       "Buchanan",
-      "Bopolu",
-    ],
+      "Bopolu"
+    ]
   },
   {
     code: "mali",
     nom: "Mali",
+    indicatif: "+223",
     cities: [
       "Bamako",
       "Ségou",
@@ -498,12 +508,13 @@ exports.PAYS = [
       "Bla",
       "Youwarou",
       "Ménaka",
-      "Ké-Macina",
-    ],
+      "Ké-Macina"
+    ]
   },
   {
     code: "mauritanie",
     nom: "Mauritanie",
+    indicatif: "+222",
     cities: [
       "Nouakchott",
       "Nouadhibou",
@@ -558,12 +569,13 @@ exports.PAYS = [
       "Tékane",
       "Nouakchott",
       "Tidjikdja",
-      "Selibaby",
-    ],
+      "Selibaby"
+    ]
   },
   {
     code: "niger",
     nom: "Niger",
+    indicatif: "+227",
     cities: [
       "Niamey",
       "Zinder",
@@ -605,12 +617,13 @@ exports.PAYS = [
       "Bilma",
       "Gaya",
       "Arlit",
-      "Guidimouni",
-    ],
+      "Guidimouni"
+    ]
   },
   {
     code: "nigeria",
     nom: "Nigeria",
+    indicatif: "+234",
     cities: [
       "Lagos",
       "Kano",
@@ -672,12 +685,13 @@ exports.PAYS = [
       "Amaigbo",
       "Bama",
       "Ilobu",
-      "Jalingo",
-    ],
+      "Jalingo"
+    ]
   },
   {
     code: "senegal",
     nom: "Sénégal",
+    indicatif: "+221",
     cities: [
       "Dakar",
       "Thiès",
@@ -729,12 +743,13 @@ exports.PAYS = [
       "Rufisque",
       "Thiès",
       "Mbour",
-      "Dakar",
-    ],
+      "Dakar"
+    ]
   },
   {
     code: "sierra_leone",
     nom: "Sierra Leone",
+    indicatif: "+232",
     cities: [
       "Freetown",
       "Bo",
@@ -802,12 +817,13 @@ exports.PAYS = [
       "Segbwema",
       "Baiima",
       "Falaba",
-      "Gberia Fotombu",
-    ],
+      "Gberia Fotombu"
+    ]
   },
   {
     code: "togo",
     nom: "Togo",
+    indicatif: "+228",
     cities: [
       "Lomé",
       "Sokodé",
@@ -855,12 +871,13 @@ exports.PAYS = [
       "Mango",
       "Kpagouda",
       "Bassar",
-      "Tchaoudjo",
-    ],
+      "Tchaoudjo"
+    ]
   },
   {
     code: "tunisie",
     nom: "Tunisie",
+    indicatif: "+216",
     cities: [
       "Tunis",
       "Sfax",
@@ -912,12 +929,13 @@ exports.PAYS = [
       "Bizerte",
       "Kairouan",
       "Gafsa",
-      "Ben Arous",
-    ],
+      "Ben Arous"
+    ]
   },
   {
     code: "zambie",
     nom: "Zambie",
+    indicatif: "+260",
     cities: [
       "Lusaka",
       "Kitwe",
@@ -966,12 +984,13 @@ exports.PAYS = [
       "Mkushi",
       "Maamba",
       "Lundazi",
-      "Namwala",
-    ],
+      "Namwala"
+    ]
   },
   {
     code: "zimbabwe",
     nom: "Zimbabwe",
+    indicatif: "+263",
     cities: [
       "Harare",
       "Bulawayo",
@@ -1020,24 +1039,30 @@ exports.PAYS = [
       "Avondale",
       "Borrowdale",
       "Marlborough",
-      "Ruwa",
-    ],
-  },
+      "Ruwa"
+    ]
+  }
 ];
+
+// rewrite this PAYS with country code prefix 00xx
+// exemple:
+// PAYS = [{
+//   code: 'ci',
+//}]
 
 exports.TYPE_RETOUR_PRDUITS = [
   {
     type: "full",
-    nom: "remboursement total",
+    nom: "remboursement total"
   },
   {
     type: "half",
-    nom: "remboursement partiel",
+    nom: "remboursement partiel"
   },
   {
     type: "tip",
-    nom: "avoir",
-  },
+    nom: "avoir"
+  }
 ];
 
 exports.MONTHS = [
@@ -1052,7 +1077,7 @@ exports.MONTHS = [
   { code: 9, nom: "Septembre" },
   { code: 10, nom: "Octobre" },
   { code: 11, nom: "Novembre" },
-  { code: 12, nom: "Décembre" },
+  { code: 12, nom: "Décembre" }
 ];
 
 exports.MARQUES = [
@@ -1061,7 +1086,7 @@ exports.MARQUES = [
   { code: 3, nom: "Brakina" },
   { code: 4, nom: "Bramali" },
   { code: 5, nom: "BGI" },
-  { code: 6, nom: "Coca-Cola" },
+  { code: 6, nom: "Coca-Cola" }
 ];
 
 exports.START_TIP_DAY = new Date("2023-10-08T00:00:00.000Z");

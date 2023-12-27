@@ -1,23 +1,24 @@
-const settingsModel = require('../models/settings.model');
+const settingsModel = require("../models/settings.model");
 
 exports.settingQueries = class {
   static setSetting(data) {
-    return new Promise(async (next) => {
+    return new Promise(async next => {
       const setting = new settingsModel({
         product_return_type: data.product_return_type,
         travail_pour: data.travail_pour,
         numberOfTables: data.numberOfTables,
+        objective: data.objective,
       });
 
       await setting
         .save()
-        .then((res) => {
+        .then(res => {
           next({
             etat: true,
             result: res,
           });
         })
-        .catch((err) => {
+        .catch(err => {
           next({
             etat: false,
             err: err,
@@ -28,12 +29,12 @@ exports.settingQueries = class {
 
   static getSettingByUserId(travail_pour) {
     try {
-      return new Promise(async (next) => {
+      return new Promise(async next => {
         settingsModel
           .findOne({
             travail_pour,
           })
-          .then(async (data) => {
+          .then(async data => {
             if (data) {
               next({
                 etat: true,
@@ -42,12 +43,12 @@ exports.settingQueries = class {
             } else {
               const newSetting = await this.setSetting({
                 travail_pour,
-                product_return_type: 'full',
+                product_return_type: "full",
               });
               next(newSetting);
             }
           })
-          .catch((err) => {
+          .catch(err => {
             next({
               etat: false,
               err: err,
@@ -60,7 +61,7 @@ exports.settingQueries = class {
   }
 
   static updateSetting(travail_pour, data) {
-    return new Promise(async (next) => {
+    return new Promise(async next => {
       settingsModel
         .updateOne(
           {
@@ -68,13 +69,13 @@ exports.settingQueries = class {
           },
           data
         )
-        .then((data) => {
+        .then(data => {
           next({
             etat: true,
             result: data,
           });
         })
-        .catch((err) => {
+        .catch(err => {
           next({
             etat: false,
             err: err,
