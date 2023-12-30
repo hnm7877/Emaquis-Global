@@ -1,10 +1,14 @@
-const { transporter } = require('./config');
-require('dotenv').config();
+const { createTransporter } = require("./config");
+require("dotenv").config();
 
 const sendMail = async (email, options = {}) => {
   try {
+    const transporter = await createTransporter();
+
+    if (!transporter) return { success: false };
+
     await transporter.sendMail({
-      from: process.env.GMAIL,
+      from: `E-maquis service <${process.env.GMAIL_USER}>`,
       to: email,
       subject: options.subject,
       text: options.text || options.message,

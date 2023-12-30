@@ -1,164 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<title>E-maquis</title>
-		<!-- Stylesheets -->
-		<link
-			rel="stylesheet"
-			href="newAssets/css/login.css"
-		/>
+  <head>
+    <meta charset="utf-8" />
+    <title>E-maquis</title>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="newAssets/css/login.css" />
 
-		<link
-			rel="shortcut icon"
-			href="newAssets/images/logo/emaquisLogo2.png"
-			type="image/x-icon"
-		/>
-		<link
-			rel="icon"
-			href="newAssets/images/logo/emaquisLogo2.png"
-			type="image/x-icon"
-		/>
+    <link
+      rel="shortcut icon"
+      href="newAssets/images/logo/emaquisLogo2.png"
+      type="image/x-icon"
+    />
+    <link
+      rel="icon"
+      href="newAssets/images/logo/emaquisLogo2.png"
+      type="image/x-icon"
+    />
 
-		<!-- Responsive -->
-		<meta
-			http-equiv="X-UA-Compatible"
-			content="IE=edge"
-		/>
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-		/>
+    <!-- Responsive -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
 
-		<!--[if lt IE 9
-			]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script
-		><![endif]-->
-		<!--[if lt IE 9]><script src="js/respond.js"></script><![endif]-->
-	</head>
+    <!--[if lt IE 9
+      ]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script
+    ><![endif]-->
+    <!--[if lt IE 9]><script src="js/respond.js"></script><![endif]-->
+  </head>
 
-	<body>
-		<div class="wrapper">
-			<form action="">
-				<a href="/"
-					><img
-						src="newAssets/images/logo/emaquisLogo2.png"
-						width="100"
-						alt=""
-						srcset=""
-				/></a>
-				<h1>Espace Gestionnaire</h1>
-				<div
-					class="alert alert-success animSuccessConnect"
-					role="alert"
-					style="text-align: center; display: none"
-					id="alert-success"
-				>
-					Connexion réussie !
-				</div>
-				<div
-					class="alert alert-danger animFailConnect"
-					role="alert"
-					style="text-align: center; display: none"
-					id="alert-danger"
-				>
-					Email ou mot de passe incorrecte
-				</div>
+  <body>
+    <div class="wrapper">
+      <form action="">
+        <a href="/"
+          ><img
+            src="newAssets/images/logo/emaquisLogo2.png"
+            width="100"
+            alt=""
+            srcset=""
+        /></a>
+        <h1>Espace Gestionnaire</h1>
+        <div
+          class="alert alert-success animSuccessConnect"
+          role="alert"
+          style="text-align: center; display: none"
+          id="alert-success"
+        >
+          Connexion réussie !
+        </div>
+        <div
+          class="alert alert-danger animFailConnect"
+          role="alert"
+          style="text-align: center; display: none"
+          id="alert-danger"
+        >
+          Email ou mot de passe incorrecte
+        </div>
 
-				<div class="input-box">
-					<%- include('partial/countriesIndicatifs.ejs') %>
-				</div>
+        <div class="input-box">
+          <%- include('partial/countriesIndicatifs.ejs') %>
+        </div>
 
-				<div class="input-box">
-					<input
-						type="text"
-						placeholder="Email ou N° de Téléphone"
-						name="emailOrPhoneNumber"
-						required
-					/>
-					<span class="icon flaticon-user"></span>
-				</div>
-				<div class="input-box">
-					<input
-						type="password"
-						placeholder="Mot de passe"
-						name="password"
-						required
-					/>
-					<span class="icon flaticon-user"></span>
-				</div>
+        <div class="input-box">
+          <input
+            type="text"
+            placeholder="Email ou N° de Téléphone"
+            name="emailOrPhoneNumber"
+            required
+          />
+          <span class="icon flaticon-user"></span>
+        </div>
+        <div class="input-box">
+          <input
+            type="password"
+            placeholder="Mot de passe"
+            name="password"
+            required
+          />
+          <span class="icon flaticon-user"></span>
+        </div>
 
-				<div class="remember-forget">
-					<!-- <label for="">
+        <div class="remember-forget">
+          <!-- <label for="">
                     <input type="checkbox">
                     Se souvenir
                 </label> -->
-					<a href="">Mot de passe oublié</a>
-				</div>
-				<button
-					type="submit"
-					class="btn"
-				>
-					Se connecter
-				</button>
-				<div class="register-link">
-					<p>
-						Vous n'avez pas de compte?
-						<a href="/inscription">Créer un compte</a>
-					</p>
-				</div>
-			</form>
-		</div>
+          <a href="/forgot_password">Mot de passe oublié</a>
+        </div>
+        <button type="submit" class="btn">Se connecter</button>
+        <div class="register-link">
+          <p>
+            Vous n'avez pas de compte?
+            <a href="/inscription">Créer un compte</a>
+          </p>
+        </div>
+      </form>
+    </div>
 
-		<!-- JAVASCRIPTS -->
-		<script src="plugins/jquery/jquery.min.js"></script>
+    <!-- JAVASCRIPTS -->
+    <script src="plugins/jquery/jquery.min.js"></script>
 
-		<script src="js/script.js"></script>
-		<script src="/socket.io/socket.io.js"></script>
+    <script src="js/script.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
 
-		<script>
-			const socket = io(window.location.origin + window.location.pathname);
-			console.log(window.location.origin + window.location.pathname);
+    <script>
+      const socket = io(window.location.origin + window.location.pathname);
+      console.log(window.location.origin + window.location.pathname);
 
-			$('form').on('submit', (e) => {
-				e.preventDefault();
-				isSucces = true;
-				const data = {
-					emailOrPhoneNumber: $('input[name="emailOrPhoneNumber"]').val(),
-					password: $('input[name="password"]').val(),
-					indicatif: $('select[name="indicatif"]').val(),
-				};
+      $("form").on("submit", e => {
+        e.preventDefault();
+        isSucces = true;
+        const data = {
+          emailOrPhoneNumber: $('input[name="emailOrPhoneNumber"]').val(),
+          password: $('input[name="password"]').val(),
+          indicatif: $('select[name="indicatif"]').val(),
+        };
 
-				socket.emit('login', data);
-			});
-			socket.on('loginsuccess', () => {
-				setTimeout(() => {
-					// Ajoutez la classe 'success-animation' à l'élément du formulaire ou à l'élément de confirmation
-					document
-						.querySelector('.animSuccessConnect')
-						.classList.add('success-animation');
-					document.querySelector('.animSuccessConnect').style.display = 'block';
-				}, 2000);
+        socket.emit("login", data);
+      });
+      socket.on("loginsuccess", () => {
+        setTimeout(() => {
+          // Ajoutez la classe 'success-animation' à l'élément du formulaire ou à l'élément de confirmation
+          document
+            .querySelector(".animSuccessConnect")
+            .classList.add("success-animation");
+          document.querySelector(".animSuccessConnect").style.display = "block";
+        }, 2000);
 
-				// Redirigez l'utilisateur vers la page de tableau de bord après l'animation
-				setTimeout(() => {
-					location.href = '/dashboard';
-				}, 3000);
-			});
+        // Redirigez l'utilisateur vers la page de tableau de bord après l'animation
+        setTimeout(() => {
+          location.href = "/dashboard";
+        }, 3000);
+      });
 
-			socket.on('bad', () => {
-				setTimeout(() => {
-					document.querySelector('.animFailConnect').style.display = 'block';
-					// Ajoutez la classe 'shake' à l'élément du formulaire
-					document.querySelector('.animFailConnect').classList.add('shake');
-				}, 1000);
-			});
+      socket.on("bad", () => {
+        setTimeout(() => {
+          document.querySelector(".animFailConnect").style.display = "block";
+          // Ajoutez la classe 'shake' à l'élément du formulaire
+          document.querySelector(".animFailConnect").classList.add("shake");
+        }, 1000);
+      });
 
-			// Supprimez la classe 'shake' lorsque l'animation est terminée
-			document
-				.querySelector('.animFailConnect')
-				.addEventListener('animationend', () => {
-					document.querySelector('.animFailConnect').classList.remove('shake');
-				});
-		</script>
-	</body>
+      // Supprimez la classe 'shake' lorsque l'animation est terminée
+      document
+        .querySelector(".animFailConnect")
+        .addEventListener("animationend", () => {
+          document.querySelector(".animFailConnect").classList.remove("shake");
+        });
+    </script>
+  </body>
 </html>
