@@ -124,7 +124,7 @@ exports.forceSession = async (req, res, next) => {
 				});
 			}
 
-			if (!employe && data !== process.env.SYNCHRO_API_SECRET) {
+			if (!employe && !data?.justForSynchro) {
 				res.status(401).send({ error: 'error signature' });
 				return;
 			}
