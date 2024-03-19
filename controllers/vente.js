@@ -158,7 +158,8 @@ exports.ventePost = async (req, res) => {
 						});
 					}
 
-					const { _id, ...data } = currentProduct.result._doc;
+					const { _id, ...data } =
+						currentProduct.result._doc || currentProduct.result;
 
 					produits.push({ ...data, productId: _id, produit: data.produit._id });
 				}
@@ -347,7 +348,8 @@ exports.editventePost = async (req, res) => {
 						});
 					}
 
-					const { _id, ...data } = currentProduct.result._doc;
+					const { _id, ...data } =
+						currentProduct.result._doc || currentProduct.result;
 
 					produits.push({
 						...data,

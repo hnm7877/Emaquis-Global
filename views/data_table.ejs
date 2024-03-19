@@ -1,182 +1,211 @@
 <!DOCTYPE html>
 <html lang="zxx">
-  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NT2SW8WBHT"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+	<meta
+		http-equiv="content-type"
+		content="text/html;charset=UTF-8"
+	/>
+	<head>
+		<!-- Google tag (gtag.js) -->
+		<script
+			async
+			src="https://www.googletagmanager.com/gtag/js?id=G-NT2SW8WBHT"
+		></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag('js', new Date());
 
-      gtag('config', 'G-NT2SW8WBHT');
-    </script>
-    <!-- End Google tag (gtag.js) -->
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <script src="assets/js/jquery.min.js"></script>
-  <title>Liste des ventes</title>
-  <!-- App css -->
-  <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-  <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-  <link href="assets/css/theme.min.css" rel="stylesheet" type="text/css" />
-  <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
-  
+			gtag('config', 'G-NT2SW8WBHT');
+		</script>
+		<!-- End Google tag (gtag.js) -->
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, shrink-to-fit=no"
+		/>
+		<script src="assets/js/jquery.min.js"></script>
+		<title>Liste des ventes</title>
+		<!-- App css -->
+		<link
+			href="assets/css/bootstrap.min.css"
+			rel="stylesheet"
+			type="text/css"
+		/>
+		<link
+			href="assets/css/icons.min.css"
+			rel="stylesheet"
+			type="text/css"
+		/>
+		<link
+			href="assets/css/theme.min.css"
+			rel="stylesheet"
+			type="text/css"
+		/>
+		<link
+			href="assets/css/style.css"
+			rel="stylesheet"
+			type="text/css"
+		/>
 
-  <%- include('partial/newHead.ejs') %>
+		<%- include('partial/newHead.ejs') %> <%- include('partial/head.ejs') %> <%-
+		include('partial/script.ejs') %>
+	</head>
+	<body class="crm_body_bg">
+		<style>
+			.sidebar .logo .large_logo img {
+				width: 70%;
+				margin-left: 15%;
+			}
+			#status_btnn {
+				display: inline-block;
+				padding: 2px 15px;
+				font-size: 11px;
+				font-weight: 300;
+				color: #fff !important;
+				background: #ff9409;
+				-webkit-border-radius: 30px;
+				-moz-border-radius: 30px;
+				border-radius: 30px;
+				text-transform: capitalize;
+				white-space: nowrap;
+				min-width: 70px;
+				text-align: center;
+			}
+			.lms_checkbox_1 input:checked + .slider-check:before {
+				transform: translateX(20px);
+				background: #2eec1c;
+			}
 
-    <%- include('partial/head.ejs') %>
-    <%- include('partial/script.ejs') %>
-  </head>
-  <body class="crm_body_bg">
-    <style>
-      .sidebar .logo .large_logo img {
-        width: 70%;
-        margin-left: 15%;
-      }
-      #status_btnn {
-        display: inline-block;
-        padding: 2px 15px;
-        font-size: 11px;
-        font-weight: 300;
-        color: #fff !important;
-        background: #ff9409;
-        -webkit-border-radius: 30px;
-        -moz-border-radius: 30px;
-        border-radius: 30px;
-        text-transform: capitalize;
-        white-space: nowrap;
-        min-width: 70px;
-        text-align: center;
-      }
-      .lms_checkbox_1 input:checked + .slider-check:before {
-        transform: translateX(20px);
-        background: #2eec1c;
-      }
+			.venteRed td {
+				color: rgb(219, 36, 23) !important;
+			}
 
-      .venteRed td {
-        color: rgb(219, 36, 23) !important;
-      }
-    </style>
+			.venteGreen {
+				color: rgb(0, 128, 0) !important;
+			}
 
-    <%- include('partial/newSideBar.ejs') %>
-    <!--/ sidebar  -->
+			.venteOrange {
+				color: rgb(255, 165, 0) !important;
+			}
+		</style>
 
-    <section class="main_content dashboard_part large_header_bg">
-      <!-- menu  -->
-      
+		<%- include('partial/newSideBar.ejs') %>
+		<!--/ sidebar  -->
 
-      <div class="main_content_iner">
-        <div class="container-fluid p-0">
-          <div class="row justify-content-center">
-            <div class="col-lg-12">
-              <div class="white_card card_height_100 mb_30">
-                <div class="white_card_header">
-                  <div class="box_header m-0">
-                    <div class="main-title">
-                      <h3 class="m-0">Liste des ventes</h3>
-                    </div>
-                  </div>
-                </div>
-                <div class="white_card_body">
-                  <div class="QA_section">
-                    <div class="white_box_tittle list_header">
-                      
-                      <%- include('partial/inputSearch.ejs') %>
-                    </div>
+		<section class="main_content dashboard_part large_header_bg">
+			<!-- menu  -->
 
-                    <div class="QA_table mb_30">
-                      <!-- table-responsive -->
-                      <table class="table lms_table_active3">
-                        <thead>
-                          <tr>
-                            <th scope="col">Code</th>
-                            <th scope="col">Produit</th>
-                            <th scope="col">Categories</th>
-                            <th scope="col">Vendeur / Vendeuse</th>
-                            <th scope="col">Quantité</th>
-                            <th scope="col">Prix</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Date</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <% for(let vente of ventes) {%>
-                          <tr class="<%=vente.prix<0?'venteRed':''%>">
-                            <td><%= vente.code %></td>
-                            <td><%= vente.produit %></td>
-                            <td><%= vente.categories%></td>
+			<div class="main_content_iner">
+				<div class="container-fluid p-0">
+					<div class="row justify-content-center">
+						<div class="col-lg-12">
+							<div class="white_card card_height_100 mb_30">
+								<div class="white_card_header">
+									<div class="box_header m-0">
+										<div class="main-title">
+											<h3 class="m-0">Liste des ventes</h3>
+										</div>
+									</div>
+								</div>
+								<div class="white_card_body">
+									<div class="QA_section">
+										<div class="white_box_tittle list_header">
+											<%- include('partial/inputSearch.ejs') %>
+										</div>
 
-                            <td><%= vente.employe%></td>
+										<div class="QA_table mb_30">
+											<!-- table-responsive -->
+											<table class="table lms_table_active3">
+												<thead>
+													<tr>
+														<th scope="col">Code</th>
+														<th scope="col">Produit</th>
+														<th scope="col">Categories</th>
+														<th scope="col">Vendeur / Vendeuse</th>
+														<th scope="col">Quantité</th>
+														<th scope="col">Prix</th>
+														<th scope="col">Status</th>
+														<th scope="col">Date</th>
+													</tr>
+												</thead>
+												<tbody>
+													<% for(let vente of ventes) {%>
+													<tr class="<%=vente.prix<0?'venteRed': '' %>">
+														<td><%= vente.code %></td>
+														<td><%= vente.produit %></td>
+														<td><%= vente.categories%></td>
 
-                            <td><%= vente.quantite%></td>
+														<td><%= vente.employe%></td>
 
-                            <td><%= vente.prix%></td>
-                            <td><%= vente.status_commande %></td>
-                            <td><%= (vente.createdAt) %></td>
-                          </tr>
-                          <% } %>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+														<td><%= vente.quantite%></td>
 
-      <div class="footer_part">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="footer_iner text-center">
-                <p>
-                  2023 © HNM - Designed by
-                  <a href="#"> <i class="ti-gun"></i> </a
-                  ><a href="#"> HNM</a> - <a href="/faq">FAQ</a>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <div class="menu-overlay"></div>
+														<td><%= vente.prix%></td>
+														<td class="<%=vente.prix>0 ?vente.status_commande == "Validée" ? "venteGreen":"venteOrange":""%>"><%= vente.status_commande %></td>
+														<td><%= (vente.createdAt) %></td>
+													</tr>
+													<% } %>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-    
+			<div class="footer_part">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="footer_iner text-center">
+								<p>
+									2023 © HNM - Designed by
+									<a href="#"> <i class="ti-gun"></i> </a><a href="#"> HNM</a> -
+									<a href="/faq">FAQ</a>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<div class="menu-overlay"></div>
 
-    <!--/### CHAT_MESSAGE_BOX  ### -->
-    <div id="back-top" style="display: none">
-      <a title="Go to Top" href="#">
-        <i class="ti-angle-up"></i>
-      </a>
-    </div>
-    <!-- footer  -->
-    <!-- footer  -->
-    <!-- jquery slim -->
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/metismenu.min.js"></script>
-    <script src="assets/js/waves.js"></script>
-    <script src="assets/js/simplebar.min.js"></script>
-  
-    
-  
-    <!-- Morris Js-->
-    <script src="../plugins/morris-js/morris.min.js"></script>
-    <!-- Raphael Js-->
-    <script src="../plugins/raphael/raphael.min.js"></script>
-  
-    <!-- Morris Custom Js-->
-    <script src="assets/pages/dashboard-demo.js"></script>
-  
-    <!-- App js -->
-    <script src="assets/js/theme.js"></script>
-  </body>
+		<!--/### CHAT_MESSAGE_BOX  ### -->
+		<div
+			id="back-top"
+			style="display: none"
+		>
+			<a
+				title="Go to Top"
+				href="#"
+			>
+				<i class="ti-angle-up"></i>
+			</a>
+		</div>
+		<!-- footer  -->
+		<!-- footer  -->
+		<!-- jquery slim -->
+		<script src="assets/js/bootstrap.bundle.min.js"></script>
+		<script src="assets/js/metismenu.min.js"></script>
+		<script src="assets/js/waves.js"></script>
+		<script src="assets/js/simplebar.min.js"></script>
 
-  <!-- Mirrored from demo.dashboardpack.com/user-management-html/data_table.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 05 Jul 2021 17:20:14 GMT -->
+		<!-- Morris Js-->
+		<script src="../plugins/morris-js/morris.min.js"></script>
+		<!-- Raphael Js-->
+		<script src="../plugins/raphael/raphael.min.js"></script>
+
+		<!-- Morris Custom Js-->
+		<script src="assets/pages/dashboard-demo.js"></script>
+
+		<!-- App js -->
+		<script src="assets/js/theme.js"></script>
+	</body>
+
+	<!-- Mirrored from demo.dashboardpack.com/user-management-html/data_table.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 05 Jul 2021 17:20:14 GMT -->
 </html>

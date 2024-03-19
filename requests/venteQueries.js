@@ -43,7 +43,7 @@ exports.venteQueries = class {
 		});
 	}
 
-	static getVentes(query) {
+	static getVentes(query, select = {}) {
 		return new Promise(async (next) => {
 			Vente.find(query)
 				.populate({
@@ -61,13 +61,25 @@ exports.venteQueries = class {
 
 				.select({
 					_id: 1,
+					'produit._id': 1,
 					'produit.prix_achat': 1,
 					'produit.prix_vente': 1,
 					'produit.promo': 1,
 					'produit.productId': 1,
+					'produit.promo_quantity': 1,
+					'produit.promo_price': 1,
+					'produit.taille': 1,
 					quantite: 1,
 					prix: 1,
 					createdAt: 1,
+					travail_pour: 1,
+					for_employe: 1,
+					somme_encaisse: 1,
+					monnaie: 1,
+					amount_collected: 1,
+					status_commande: 1,
+					formules: 1,
+					...select,
 				})
 				.lean()
 				.then((ventes) => {
