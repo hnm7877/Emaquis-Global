@@ -665,310 +665,318 @@
     </div>
 
     <script>
-      // currently sale
+        // currently sale
 
-      //const socket = io();
-      const date = new Date();
-      const month = date.getMonth() + 1;
-      const year = date.getFullYear();
+        //const socket = io();
+        const date = new Date();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
 
-      const celebriteObjective = () => {
-        startConfetti({
-          particleCount: 100,
-          spread: 70,
-          origin: {
-            y: 0.6
+        const celebriteObjective = () => {
+          startConfetti({
+            particleCount: 100,
+            spread: 70,
+            origin: {
+              y: 0.6
+            }
+          });
+
+
+          const canvas = document.getElementsByTagName('canvas');
+
+          if (canvas) {
+            canvas[0].style.position = 'absolute';
+            canvas[0].style.top = '0';
+            canvas[0].style.left = '0';
+            canvas[0].style.width = '100%';
+            canvas[0].style.height = '100%';
+
+
+            setTimeout(() => {
+              stopConfetti();
+            }, 3000);
+
           }
-        });
-
-
-        const canvas = document.getElementsByTagName('canvas');
-
-        if (canvas) {
-          canvas[0].style.position = 'absolute';
-          canvas[0].style.top = '0';
-          canvas[0].style.left = '0';
-          canvas[0].style.width = '100%';
-          canvas[0].style.height = '100%';
-
-
-          setTimeout(() => {
-            stopConfetti();
-          }, 3000);
-
         }
-      }
-      const ventes = <%- JSON.stringify(venteByDay) %>;
-      const objectivePercent = <%- JSON.stringify(objectivePercent) %>;
-      //     const user_travail_pour = <%- JSON.stringify(user.travail_pour) %>;
-      // const socket = io();
-      // socket.on('connect', () => {
-      //   socket.on(`${user_travail_pour}-editvente`,(data)=>{
-      //     $.notify("Vous avez une vente  !", "success");
-      //     const ventes = <%- JSON.stringify(venteByDay) %>;
-      //     const objectivePercent = <%- JSON.stringify(objectivePercent) %>;
+        const ventes = <%- JSON.stringify(venteByDay) %>;
+        const objectivePercent = <%- JSON.stringify(objectivePercent) %>;
+        //     const user_travail_pour = <%- JSON.stringify(user.travail_pour) %>;
+        // const socket = io();
+        // socket.on('connect', () => {
+        //   socket.on(`${user_travail_pour}-editvente`,(data)=>{
+        //     $.notify("Vous avez une vente  !", "success");
+        //     const ventes = <%- JSON.stringify(venteByDay) %>;
+        //     const objectivePercent = <%- JSON.stringify(objectivePercent) %>;
 
-      //   })
-      // })
-      //  const ventes = <%- JSON.stringify(venteByDay) %>;
-      //  const objectivePercent = <%- JSON.stringify(objectivePercent) %>;
-
-
-      if (localStorage.getItem('celebriteObjective') && localStorage.getItem('celebriteObjectiveDate') != new Date().toLocaleDateString()) {
-        localStorage.removeItem('celebriteObjective');
-        localStorage.removeItem('celebriteObjectiveDate');
-      }
+        //   })
+        // })
+        //  const ventes = <%- JSON.stringify(venteByDay) %>;
+        //  const objectivePercent = <%- JSON.stringify(objectivePercent) %>;
 
 
-      if (objectivePercent == 100 && !localStorage.getItem('celebriteObjective')) {
-        celebriteObjective();
-        localStorage.setItem('celebriteObjective', true);
-        localStorage.setItem('celebriteObjectiveDate', new Date().toLocaleDateString());
-      }
+        if (localStorage.getItem('celebriteObjective') && localStorage.getItem('celebriteObjectiveDate') != new Date().toLocaleDateString()) {
+          localStorage.removeItem('celebriteObjective');
+          localStorage.removeItem('celebriteObjectiveDate');
+        }
 
 
-      const filterLabelsByMonth = (data, month, year) => {
-        return Object.keys(data).filter(label => {
-          const dateSplit = label.split('/');
-          return Number(dateSplit[0]) == month && dateSplit[2] == year;
-        });
-      }
+        if (objectivePercent == 100 && !localStorage.getItem('celebriteObjective')) {
+          celebriteObjective();
+          localStorage.setItem('celebriteObjective', true);
+          localStorage.setItem('celebriteObjectiveDate', new Date().toLocaleDateString());
+        }
 
 
-      const filterVentesValuesByMonth = (data, month, year) => {
-        return Object.entries(data).map((vente) => {
-          return [vente[0], vente[1].reduce((acc, val) => acc + val.prix, 0)]
-        }).filter(vente => {
-          const dateSplit = vente[0].split('/');
-          return Number(dateSplit[0]) == month && dateSplit[2] == year;
-        }).sort((a, b) => {
-          if (new Date(a[0]) > new Date(b[0])) return -1;
-          if (new Date(a[0]) < new Date(b[0])) return 1;
-          return 0;
-        }).map((vente) => vente[1]);
-      }
+        const filterLabelsByMonth = (data, month, year) => {
+          return Object.keys(data).filter(label => {
+            const dateSplit = label.split('/');
+            return Number(dateSplit[0]) == month && dateSplit[2] == year;
+          });
+        }
 
 
-      const fetchData = async () => {
-        const week = $('#chart_week').val();
-        const month = $('#chart_month').val();
-        const year = $('#chart_year').val();
-
-        $('.loader_container').css('display', 'flex');
-
-        // loading chart
-
-        chart_management.updateOptions({
-          labels: [],
-          series: [{
-            name: 'total',
-            type: 'column',
-            data: [],
-          }]
-        })
+        const filterVentesValuesByMonth = (data, month, year) => {
+          return Object.entries(data)
+              .filter(vente => {
+                  const dateSplit = vente[0].split('/');
+                  return Number(dateSplit[0]) == month && dateSplit[2] == year;
+              })
+              .map(vente => {
+                  const totalPrice = vente[1].reduce((acc, val) => acc + val.prix, 0);
+                  return [vente[0], totalPrice];
+              })
+              .sort((a, b) => {
+                  const dateA = new Date(a[0]);
+                  const dateB = new Date(b[0]);
+                  if (dateA > dateB) return -1;
+                  if (dateA < dateB) return 1;
+                  return 0;
+              })
+              .map(vente => vente[1]);
+      };
 
 
 
+        const fetchData = async () => {
+          const week = $('#chart_week').val();
+          const month = $('#chart_month').val();
+          const year = $('#chart_year').val();
 
-        const res = await fetch(`vente-by-month?month=${month>9?month:'0'+month}&year=${year}&week=${week}`);
-        const data = await res.json();
+          $('.loader_container').css('display', 'flex');
 
-
-        if (data.success) {
-          const ventesLabels = filterLabelsByMonth(data?.data, month, year);
-
-          const ventesValues = filterVentesValuesByMonth(data?.data, month, year);
-
+          // loading chart
 
           chart_management.updateOptions({
-            labels: ventesLabels.reverse(),
+            labels: [],
             series: [{
               name: 'total',
               type: 'column',
-              data: ventesValues.reverse(),
+              data: [],
             }]
           })
+
+
+
+
+          const res = await fetch(`vente-by-month?month=${month>9?month:'0'+month}&year=${year}&week=${week}`);
+          const data = await res.json();
+
+
+          if (data.success) {
+            const ventesLabels = filterLabelsByMonth(data?.data, month, year);
+
+            const ventesValues = filterVentesValuesByMonth(data?.data, month, year);
+
+
+            chart_management.updateOptions({
+              labels: ventesLabels.reverse(),
+              series: [{
+                name: 'total',
+                type: 'column',
+                data: ventesValues.reverse(),
+              }]
+            })
+          }
+
+          $('.loader_container').css('display', 'none');
+
         }
 
-        $('.loader_container').css('display', 'none');
 
-      }
-
-
-      const ventesLabels = filterLabelsByMonth(ventes, month, year);
+        const ventesLabels = filterLabelsByMonth(ventes, month, year);
 
 
-      const ventesValues = filterVentesValuesByMonth(ventes, month, year);
+        const ventesValues = filterVentesValuesByMonth(ventes, month, year);
 
-      var options = {
-        series: [objectivePercent],
-        chart: {
-          height: 300,
-          type: 'radialBar',
-          offsetY: 0,
-        },
-        plotOptions: {
-          radialBar: {
-            startAngle: -90,
-            endAngle: 90,
+        var options = {
+          series: [objectivePercent],
+          chart: {
+            height: 300,
+            type: 'radialBar',
+            offsetY: 0,
+          },
+          plotOptions: {
+            radialBar: {
+              startAngle: -90,
+              endAngle: 90,
 
-            hollow: {
-              margin: 0,
-              size: '70%',
-            },
-            dataLabels: {
-              showOn: 'always',
-              name: {
-                show: true,
-                fontSize: '13px',
-                fontWeight: '700',
-                offsetY: -5,
-                color: ['#98ED58', '#E5ECFF'],
+              hollow: {
+                margin: 0,
+                size: '70%',
               },
-              value: {
-                color: ['#98ED58', '#E5ECFF'],
-                fontSize: '30px',
-                fontWeight: '700',
-                offsetY: -40,
-                show: true,
+              dataLabels: {
+                showOn: 'always',
+                name: {
+                  show: true,
+                  fontSize: '13px',
+                  fontWeight: '700',
+                  offsetY: -5,
+                  color: ['#98ED58', '#E5ECFF'],
+                },
+                value: {
+                  color: ['#98ED58', '#E5ECFF'],
+                  fontSize: '30px',
+                  fontWeight: '700',
+                  offsetY: -40,
+                  show: true,
+                },
+              },
+              track: {
+                background: ['rgba(150,103,27,0.35)', '#E5ECFF'],
+                strokeWidth: '100%',
               },
             },
-            track: {
-              background: ['rgba(150,103,27,0.35)', '#E5ECFF'],
-              strokeWidth: '100%',
+          },
+          colors: ['#98ED58'],
+          stroke: {
+            lineCap: 'round',
+          },
+          labels: ['Progress'],
+        };
+
+        var chart = new ApexCharts(
+          document.querySelector('#chart-currently'),
+          options
+        );
+        chart.render();
+
+        /* -------------------------------------------------------------------------- */
+        /*                                     chart                                    */
+        /* -------------------------------------------------------------------------- */
+
+        options = {
+          chart: {
+            height: 500,
+            type: 'line',
+            stacked: !1,
+            toolbar: {
+              show: !1
             },
           },
-        },
-        colors: ['#98ED58'],
-        stroke: {
-          lineCap: 'round',
-        },
-        labels: ['Progress'],
-      };
-
-      var chart = new ApexCharts(
-        document.querySelector('#chart-currently'),
-        options
-      );
-      chart.render();
-
-      /* -------------------------------------------------------------------------- */
-      /*                                     chart                                    */
-      /* -------------------------------------------------------------------------- */
-
-      options = {
-        chart: {
-          height: 500,
-          type: 'line',
-          stacked: !1,
-          toolbar: {
-            show: !1
+          stroke: {
+            width: [0, 2, 4],
+            curve: 'smooth'
           },
-        },
-        stroke: {
-          width: [0, 2, 4],
-          curve: 'smooth'
-        },
-        plotOptions: {
-          bar: {
-            columnWidth: '30%'
-          }
-        },
-        colors: ['#FF9C2C', '#dfe2e6', '#98ED58'],
-        series: [{
-          name: 'total',
-          type: 'column',
-          data: ventesValues.reverse(),
-        }],
-        fill: {
-          opacity: [0.85, 0.25, 1],
-          gradient: {
-            inverseColors: !1,
-            shade: 'light',
-            type: 'vertical',
-            opacityFrom: 0.85,
-            opacityTo: 0.55,
-            stops: [0, 100, 100, 100],
+          plotOptions: {
+            bar: {
+              columnWidth: '30%'
+            }
           },
-        },
-        labels: ventesLabels.reverse(),
-        markers: {
-          size: 0
-        },
-        xaxis: {
-          type: 'datetime'
-        },
-        yaxis: {
-          title: {
-            text: 'Prix total'
-          }
-        },
-        tooltip: {
-          shared: !0,
-          intersect: !1,
-          y: {
-            formatter: function(e) {
-              return void 0 !== e ? e.toFixed(0) + ' FCFA' : e;
+          colors: ['#FF9C2C', '#dfe2e6', '#98ED58'],
+          series: [{
+            name: 'total',
+            type: 'column',
+            data: ventesValues.reverse(),
+          }],
+          fill: {
+            opacity: [0.85, 0.25, 1],
+            gradient: {
+              inverseColors: !1,
+              shade: 'light',
+              type: 'vertical',
+              opacityFrom: 0.85,
+              opacityTo: 0.55,
+              stops: [0, 100, 100, 100],
             },
           },
-        },
-        grid: {
-          borderColor: '#f1f1f1'
-        },
-      };
-      let chart_management = new ApexCharts(
-        document.querySelector('#management_bar'),
-        options
-      )
+          labels: ventesLabels.reverse(),
+          markers: {
+            size: 0
+          },
+          xaxis: {
+            type: 'datetime'
+          },
+          yaxis: {
+            title: {
+              text: 'Prix total'
+            }
+          },
+          tooltip: {
+            shared: !0,
+            intersect: !1,
+            y: {
+              formatter: function(e) {
+                return void 0 !== e ? e.toFixed(0) + ' FCFA' : e;
+              },
+            },
+          },
+          grid: {
+            borderColor: '#f1f1f1'
+          },
+        };
+        let chart_management = new ApexCharts(
+          document.querySelector('#management_bar'),
+          options
+        )
 
 
-      chart_management.render();
-      console.log("chart management")
-      //
-      console.log("chart management 11")
+        chart_management.render();
+        console.log("chart management")
+        //
+        console.log("chart management 11")
 
 
-      // socket.on('connect', () => {
+        // socket.on('connect', () => {
 
-      //   //      socket.on(`
-      //   //     $ {
-      //   //       user_travail_pour
-      //   //     } - editvente`, (data) => {
-      //   // //   alert('Edit');
-      //   // //   console.log("chart management 22")
+        //   //      socket.on(`
+        //   //     $ {
+        //   //       user_travail_pour
+        //   //     } - editvente`, (data) => {
+        //   // //   alert('Edit');
+        //   // //   console.log("chart management 22")
 
-      //   // // })
-      // })
-      console.log("chart management 33")
-      //chart_week
+        //   // // })
+        // })
+        console.log("chart management 33")
+        //chart_week
 
-      $('#chart_week').on('change', async function() {
-        const {
-          ventesLabels,
-          ventesValues
-        } = await fetchData();
+        $('#chart_week').on('change', async function() {
+          const {
+            ventesLabels,
+            ventesValues
+          } = await fetchData();
 
-      })
-
-
-      $('#chart_month').on('change', async function() {
-        const {
-          ventesLabels,
-          ventesValues
-        } = await fetchData();
+        })
 
 
-      })
+        $('#chart_month').on('change', async function() {
+          const {
+            ventesLabels,
+            ventesValues
+          } = await fetchData();
 
 
-      $('#chart_year').on('change', async function() {
-        const {
-          ventesLabels,
-          ventesValues
-        } = await fetchData();
+        })
 
 
-      })
+        $('#chart_year').on('change', async function() {
+          const {
+            ventesLabels,
+            ventesValues
+          } = await fetchData();
+
+
+        })
     </script>
 
     <script>
