@@ -55,7 +55,6 @@ exports.dashboard = async (req, res) => {
 				travail_pour: userId,
 				status_commande: { $in: ['Validée', 'Retour'] },
 			});
-
 			const Vente = await venteQueries.getVentes({
 				createdAt: { $gte: start, $lte: end },
 				travail_pour: userId,
@@ -77,7 +76,7 @@ exports.dashboard = async (req, res) => {
 				}
 				acc[key].push(item);
 				return acc;
-			});
+			}, []);
 
 			// afficher l'employe qui a fait le plus de vente
 
@@ -88,7 +87,7 @@ exports.dashboard = async (req, res) => {
 				}
 				acc[key].push(item);
 				return acc;
-			});
+			}, []);
 
 			const toDayKey = formatDate(new Date());
 
@@ -203,6 +202,8 @@ exports.dashboard = async (req, res) => {
 
 			const objectivePercent =
 				(totalVente / (settings?.result.objective || 1)) * 100;
+
+			console.log(allProductsByDayGrouped);
 
 			res.render('dashboard', {
 				totalemploye: employe.length,
