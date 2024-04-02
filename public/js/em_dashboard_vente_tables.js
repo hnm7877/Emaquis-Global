@@ -165,17 +165,15 @@ const TablesItem = ({
 					/>
 				</button>
 
-				{vente.amount_collected && (
-					<button
-						disabled={loading['Validée'] || loading['Annulée']}
-						onClick={() => handleSubmit(vente._id, 'Annulée')}
-					>
-						<img
-							src='/svgs/trash-b.svg'
-							alt='cancel'
-						/>
-					</button>
-				)}
+				<button
+					disabled={loading['Validée'] || loading['Annulée']}
+					onClick={() => handleSubmit(vente._id, 'Annulée')}
+				>
+					<img
+						src='/svgs/trash-b.svg'
+						alt='cancel'
+					/>
+				</button>
 			</td>
 		</tr>
 	);
