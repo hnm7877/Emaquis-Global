@@ -650,8 +650,8 @@
 
 
                           {
-                            ['locker','cardboard','bottle'].map(type =>(
-                              <option value={type}>{type ==="locker"?"Casier": type === "cardboard"? "Carton": "Bouteille"}</option>
+                            ['locker','cardboard','bottle','glass'].map(type =>(
+                              <option value={type}>{type ==="locker"?"Casier": type === "cardboard"? "Carton": type==="glass"?"Verre":"Bouteille"}</option>
                               ))
                           }
 
