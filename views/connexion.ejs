@@ -1,21 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-NT2SW8WBHT"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "G-NT2SW8WBHT");
-    </script>
     <meta charset="utf-8" />
     <title>E-maquis</title>
     <!-- Stylesheets -->
@@ -63,6 +48,16 @@
           id="alert-success"
         >
           Connexion réussie !
+          <script src="https://cdn.lordicon.com/lordicon.js"></script>
+          <lord-icon
+            src="https://cdn.lordicon.com/iloumlrk.json"
+            trigger="in"
+            delay="1500"
+            stroke="bold"
+            state="in-reveal"
+            style="width: 250px; height: 250px"
+          >
+          </lord-icon>
         </div>
         <div
           class="alert alert-danger animFailConnect"
@@ -71,6 +66,16 @@
           id="alert-danger"
         >
           Email ou mot de passe incorrecte
+          <script src="https://cdn.lordicon.com/lordicon.js"></script>
+          <lord-icon
+            src="https://cdn.lordicon.com/mcxhyndb.json"
+            trigger="loop"
+            delay="2000"
+            state="in-reveal"
+            colors="primary:#121331,secondary:#c71f16"
+            style="width: 250px; height: 250px"
+          >
+          </lord-icon>
         </div>
         <div class="input-box">
           <input
@@ -116,11 +121,13 @@
 
     <script>
       const socket = io(window.location.origin + window.location.pathname);
-      console.log(window.location.origin + window.location.pathname);
 
       $("form").on("submit", (e) => {
         e.preventDefault();
-        isSucces = true;
+        const submitButton = $('button[type="submit"]');
+        submitButton.prop("disabled", true);
+        submitButton.text("Connexion en cours..."); // Ajouter un indicateur de chargement
+
         const data = {
           emailOrPhoneNumber: $('input[name="emailOrPhoneNumber"]').val(),
           password: $('input[name="password"]').val(),
@@ -135,7 +142,7 @@
             .querySelector(".animSuccessConnect")
             .classList.add("success-animation");
           document.querySelector(".animSuccessConnect").style.display = "block";
-        }, 2000);
+        }, 1000);
 
         // Redirigez l'utilisateur vers la page de tableau de bord après l'animation
         setTimeout(() => {
@@ -149,14 +156,29 @@
           // Ajoutez la classe 'shake' à l'élément du formulaire
           document.querySelector(".animFailConnect").classList.add("shake");
         }, 1000);
+        // Réactiver le bouton et restaurer le texte après un échec de connexion
+        const submitButton = $('button[type="submit"]');
+        setTimeout(() => {
+          submitButton.prop("disabled", false);
+          submitButton.text("Se connecter");
+        }, 2000);
       });
 
       // Supprimez la classe 'shake' lorsque l'animation est terminée
-      document
-        .querySelector(".animFailConnect")
-        .addEventListener("animationend", () => {
-          document.querySelector(".animFailConnect").classList.remove("shake");
-        });
+      setTimeout(() => {
+        document
+          .querySelector(".animFailConnect")
+          .addEventListener("animationend", () => {
+            document
+              .querySelector(".animFailConnect")
+              .classList.remove("shake");
+          });
+      }, 2000);
+
+      // Effacer l'alerte de danger et l'icône en cas de nouvelle tentative de connexion
+      $("button[type='submit']").on("click", () => {
+        document.querySelector(".animFailConnect").style.display = "none";
+      });
     </script>
   </body>
 </html>
