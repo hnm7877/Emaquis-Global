@@ -152,7 +152,9 @@ for (let rupture of produits) {
 }
 
 // Affichage du nombre de notifications
-notificationCount.innerHTML = notifications.length;
+if(notificationCount){
+    notificationCount.innerHTML = notifications.length;
+}
 
 // Fonction pour obtenir la couleur de fond de la notification en fonction du message
 const getNotificationColor = (message) => {
@@ -197,7 +199,7 @@ const showNextNotificationsGroup = () => {
 };
 
 // Gestion du clic sur l'icône de notification
-notificationList.addEventListener('click', () => {
+notificationListUl.addEventListener('click', () => {
     // Réinitialiser la liste des notifications
     notificationListUl.innerHTML = "";
     // Afficher les 5 premières notifications

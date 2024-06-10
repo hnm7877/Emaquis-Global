@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<link
+			href="newAssets/css/bootstrap.css"
+			rel="stylesheet"
+		/>
+		<link
+			href="newAssets/css/main.css"
+			rel="stylesheet"
+		/>
+		<link
+			href="newAssets/css/responsive.css"
+			rel="stylesheet"
+		/>
+		<title>Merci à vous</title>
+		<style>
+			body {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div
+						class="alert alert-success text-center"
+						role="alert"
+					>
+						<h4 class="alert-heading">Merci à vous!</h4>
+						<p>
+							Votre don a été effectué avec succès, merci pour votre générosité.
+						</p>
+						<hr />
+						<p class="mb-0">
+							Vous pouvez continuer à soutenir notre cause en faisant un autre
+							don.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			setTimeout(() => {
+				window.location.href = '/';
+			}, 5000);
+		</script>
+	</body>
+</html>

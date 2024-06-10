@@ -76,6 +76,7 @@ const {
 	deleteProduitGlobal,
 } = require('../controllers/produitglobal.controler');
 const { produitBySession } = require('../controllers/produit');
+const { donatePage, donateWebhook, donateSuccess, donateError } = require('../controllers/donate.controller');
 
 var router = express.Router();
 
@@ -278,6 +279,11 @@ router.delete(
 	'/deleteproduit/:productId',
 	ajouterproduitcontroller.deleteProduit
 );
+
+router.post('/donate', donatePage);
+router.post('/donate/webhook', donateWebhook);
+router.get('/donate-success', donateSuccess);
+router.get('/donate-error', donateError);
 
 router.post('/emajouterproduit', upload.single('image'), async (req, res) => {
 	const file = req.file;

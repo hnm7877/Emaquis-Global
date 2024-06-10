@@ -73,9 +73,12 @@
 
     <%- include('partial/newHead.ejs') %> <%-
     include('partial/notifManoScript.ejs') %>
+    <script src="js/bootstrap.min.js"></script> 
   </head>
 
   <body class="crm_body_bg">
+    <%- include('partial/donateModal') %>
+    
     <div id="layout-wrapper">
       <!-- ============================================================== -->
       <!-- Start right Content here -->
@@ -1047,7 +1050,11 @@
 
 
               const res = await fetch(`vente-by-month?month=${month>9?month:'0'+month}&year=${year}&week=${week}`);
+             
               const data = await res.json();
+              console.log("🚀 ~ fetchData ~ data:", data?.
+success
+)
 
 
               if (data.success) {
@@ -1067,6 +1074,8 @@
               }
 
               $('.loader_container').css('display', 'none');
+
+            
 
             }
 
@@ -1219,32 +1228,26 @@
             //chart_week
 
             $('#chart_week').on('change', async function() {
-              const {
-                ventesLabels,
-                ventesValues
-              } = await fetchData();
+              await fetchData();
 
             })
 
 
             $('#chart_month').on('change', async function() {
-              const {
-                ventesLabels,
-                ventesValues
-              } = await fetchData();
+              await fetchData();
 
 
             })
 
 
             $('#chart_year').on('change', async function() {
-              const {
-                ventesLabels,
-                ventesValues
-              } = await fetchData();
+             await fetchData();
 
 
             })
+
+            // force update data
+            fetchData();
     </script>
 
     <script>

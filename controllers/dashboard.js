@@ -61,6 +61,8 @@ exports.dashboard = async (req, res) => {
 				status_commande: { $in: ['Validée', 'Retour'] },
 			});
 
+			const totalVentesValidate = await venteQueries.getTotalVentesValidate(userId);
+
 			const settings = await settingQueries.getSettingByUserId(userId);
 
 			let employe = Employe.result;
@@ -222,6 +224,7 @@ exports.dashboard = async (req, res) => {
 				totalVenteWeek: formatAmount(totalVenteWeek || 0),
 				currentWeekIndex,
 				weeksInMonth,
+				totalVentesValidate: totalVentesValidate.result,
 			});
 		} catch (e) {
 			console.log('err', e);

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.cinetpay.com/seamless/main.js"></script>
+    <style>
+        .sdk {
+            display: block;
+            position: absolute;
+            background-position: center;
+            text-align: center;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+  <title>Donation</title>
+</head>
+<body>
+<script>
+  function checkout() {
+    const amount = '<%=amount%>'
+    CinetPay.setConfig({
+        apikey: '<%=apiKey%>',//   YOUR APIKEY
+        site_id: '<%=siteId%>',//YOUR_SITE_ID
+        notify_url: '<%=notifyUrl%>',
+        return_url: '<%=returnUrl%>',
+        mode: '<%=mode%>'
+    });
+    CinetPay.getCheckout({
+        transaction_id: Math.floor(Math.random() * 100000000).toString(), // YOUR TRANSACTION ID
+        amount: Number(amount),
+        currency: 'XOF',
+        channels: 'ALL',
+        description: 'Donation',   
+    });
+    CinetPay.waitResponse(function(data) {
+        if (data.status == "REFUSED") {
+            if (alert("Votre paiement a échoué")) {
+                window.location.href = "/donate-error";
+            }
+        } else if (data.status == "ACCEPTED") {
+            if (alert("Votre paiement a été effectué avec succès, merci pour votre don")) {
+               window.location.href = "/donate-success";
+            }
+        }
+    });
+    CinetPay.onError(function(data) {
+        console.log(data);
+    });
+}
+
+checkout();
+</script>
+</body>
+</html>

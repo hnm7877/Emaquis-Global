@@ -98,6 +98,24 @@ exports.venteQueries = class {
     });
   }
 
+  static getTotalVentesValidate(travail_pour) {
+    return new Promise(async (next) => {
+      Vente.countDocuments({travail_pour, status_commande: "Validée" })
+        .then((data) => {
+          next({
+            etat: true,
+            result: data,
+          });
+        })
+        .catch((err) => {
+          next({
+            etat: false,
+            err: err,
+          });
+        });
+    });
+  }
+
   static getVentesById(id) {
     try {
       return new Promise(async (next) => {
