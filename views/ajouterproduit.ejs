@@ -25,6 +25,11 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <script src="assets/js/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"
+    />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -516,8 +521,8 @@
                   Echec de l'opération, veuillez recommencer!
                 </div>}
                 <div className='white_card_body'>
-                  <div className='row'>
-                    <div className='col-lg-6'>
+                  <div className='row' >
+                    <div className='col-lg-6' id="categorie">
 
       																<select className="select wide"
 
@@ -533,8 +538,10 @@
       																			))}
       															</select>
                     </div>
+                    <div className='col-lg-6 mb_15' id='produit'>
 
-                    <div className='col-lg-6 mb_15' id='productContainer'>
+
+                      <div className='col-lg-6 mb_15' id='productContainer'>
 
 
 
@@ -556,8 +563,8 @@
       																		))}
       															</select>
                     </div>
-
-                    {!is_cocktail &&<div className='col-lg-6'>
+                  </div>
+                    {!is_cocktail &&<div className='col-lg-6' id="taille">
                       <div className='common_input mb_15'>
 
       																		<select className="select wide selectProduit"
@@ -584,7 +591,7 @@
                       </div>
                     </div>}
 
-                    <div className='col-lg-6'>
+                    <div className='col-lg-6' id="prix_vente">
                       <div className='common_input mb_15'>
                         <input
                           type='number'
@@ -600,10 +607,10 @@
                       </div>
                     </div>
                      <div className='col-lg-6'>
-                      <div className='common_input mb_15'>
+                      <div className='common_input mb_15' id="prix_achat">
                         <input
                           type='number'
-                          placeholder="prix d'\achat  ex: 320"
+                          placeholder="prix d'achat  ex: 320"
                           name='prix_achat'
                           required
                           value={prix_achat}
@@ -622,7 +629,7 @@
                       </div>
                     </div>
 
-                    {!is_cocktail &&  <div className='col-lg-6'>
+                    {!is_cocktail &&  <div className='col-lg-6' id="quantite">
                       <div className="row">
                       <div className={'col-lg-6 common_input mb_15'}>
                         <input
@@ -638,7 +645,7 @@
                           }}
                         />
                       </div>
-                   <div className='col-lg-6 common_input mb_15'>
+                   <div className='col-lg-6 common_input mb_15' id="stockType">
                         <select
                           className='nice_Select2 nice_Select_line wide'
                           name='stockType'
@@ -665,7 +672,7 @@
                     </div>}
 
                      <div className="col-lg-12 pl-4">
-                      <div className="form-check">
+                      <div className="form-check" id="formule">
                           <input className="form-check-input" checked={promo} onChange={(e)=>setPromo(e.target.checked)} type="checkbox" value="" id="flexCheckDefault"
 
                           />
@@ -677,7 +684,7 @@
                      {
                       !!promo && <React.Fragment>
                       <div className='col-lg-6 mt-2'>
-                      <div className='common_input mb_15'>
+                      <div className='common_input mb_15' id="promoQuantity">
                         <input
                           type='number'
                           placeholder='Nombre de quantité de la formule'
@@ -693,7 +700,7 @@
                     </div>
 
                     <div className='col-lg-6 mt-2'>
-                      <div className='common_input mb_15'>
+                      <div className='common_input mb_15' id="promoPrice">
                         <input
                           type='number'
                           placeholder='Le prix de la formule'
@@ -725,7 +732,7 @@
                       }
                     </div>
 
-                    <div className='col-lg-12'>
+                    <div className='col-lg-12' id="button">
                       <div className='create_report_btn mt_30'>
                         <button
                           type='submit'
@@ -746,6 +753,119 @@
         };
 
         ReactDOM.render(<AddProduct />, document.getElementById('add_product'));
+    </script>
+    <script>
+      const driver = window.driver.js.driver;
+      // Définir une variable pour garder une trace si l'action a déjà été effectuée
+      let guideAlreadyShownAddProduct = false;
+
+      const currentRoute = window.location.pathname;
+
+      const driverObj = driver({
+        showProgress: true,
+        showAnimation: true,
+        animationDuration: 2000,
+        showButtons: true,
+        showBackButton: true,
+        showResetButton: true,
+        showCloseButton: true,
+        showNextButton: true,
+        showSkipButton: true,
+        showPrevButton: true,
+        showPauseButton: true,
+        showPlayButton: true,
+        showFullscreenButton: true,
+        popoverClass: "driverjs-theme",
+        steps: [
+          {
+            element: "#categorie",
+            popover: {
+              title: "Choisir la catégorie de la boisson",
+              description: "Choisir la catégorie de la boisson",
+            },
+          },
+          {
+            element: "#produit",
+            popover: {
+              title: "Choisir le produit",
+              description: "Choisir le produit",
+            },
+          },
+          {
+            element: "#taille",
+            popover: {
+              title: "Choisir la taille",
+              description: "Choisir la taille",
+            },
+          },
+          {
+            element: "#prix_vente",
+            popover: {
+              title: "Entrez le prix de vente",
+              description: "Entrez le prix de vente",
+            },
+          },
+          {
+            element: "#prix_achat",
+            popover: {
+              title: "Entrez le prix d'achat",
+              description:
+                "le prix d'achat d'une bouteille se calcule en divisant le prix d'achat du carton ou du casier par le nombre de bouteille dans le carton ou du casier.",
+            },
+          },
+          {
+            element: "#quantite",
+            popover: {
+              title: "Entrez la quantité",
+              description: "Entrez la quantité",
+            },
+          },
+          {
+            element: "#stockType",
+            popover: {
+              title: "Choisir le type de stock",
+              description:
+                "Choisir le type de stock <br> <b>Casier</b>: Exemple => 1 casier d'une taille de boisson entre 5Cl et 33Cl le système va automatiquement calculer la quantité de bouteille dans le casier et enregistrer 24 Bouteilles <br> Carton: Exemple => 1 carton d'une taille de boisson entre 5Cl et 33Cl le système va automatiquement calculer la quantité de bouteille dans le carton et enregistrer 24 Bouteilles <br> Bouteille: 1 bouteille de taille quelconque le système implementera 1 bouteille <br> Verre: Verre",
+            },
+          },
+          {
+            element: "#formule",
+            popover: {
+              title: "Voulez-vous ajouter cette boisson en formule ?",
+              description: "Voulez-vous ajouter cette boisson en formule ?",
+            },
+          },
+          {
+            element: "#promoQuantity",
+            popover: {
+              title: "Entrez le nombre de quantité de la formule",
+              description: "Entrez le nombre de quantité de la formule",
+            },
+          },
+          {
+            element: "#promoPrice",
+            popover: {
+              title: "Entrez le prix de la formule",
+              description: "Entrez le prix de la formule",
+            },
+          },
+          {
+            element: "#button",
+            popover: {
+              title: "Enregistrer",
+              description: "Enregistrer le produit",
+            },
+          },
+        ],
+      });
+      if (
+        currentRoute === "/ajouterproduit" &&
+        !localStorage.getItem("guideAlreadyShownAddProduct")
+      ) {
+        driverObj.drive();
+        // Mettre à jour la variable pour indiquer que le guide a été affiché
+        localStorage.setItem("guideAlreadyShownAddProduct", true);
+      }
     </script>
 
     <script src="assets/js/bootstrap.bundle.min.js"></script>
