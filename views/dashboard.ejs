@@ -937,7 +937,7 @@
                       },
                     ],
                   });
-                  if (currentRoute ==="/dashboard" && !localStorage.getItem("guideAlreadyShown")) {
+                  if (currentRoute ==="/dashboard" && (!localStorage.getItem("guideAlreadyShown") || Date.now() - parseInt(localStorage.getItem("guideAlreadyShown"), 10) > 172800000)) {
                     driverObj.drive();
                     // Mettre à jour la variable pour indiquer que le guide a été affiché
                     localStorage.setItem("guideAlreadyShown", true);

@@ -454,7 +454,7 @@
             popover: {
               title: "Entrer le numéro de téléphone",
               description:
-                "Le numéro de téléphone va permettre à la serveuse, au gestionnaire ou au barman de pouvoir se connecter à l'application mobile E-Maquis pour pouvoir prendre les commandes des clients, et le Barman aura besoin de ce numéro pour pouvoir se connecter à son espaces de travail Barman. Le numéro de téléphone doit être unique.",
+                "Le numéro de téléphone va permettre à la serveuse, au gestionnaire ou au barman de pouvoir se connecter à l'application mobile <b>E-Maquis:Serveur/serveuse</b> disponible sur <b>PlayStore</b> pour pouvoir prendre les commandes des clients, et le Barman aura besoin de ce numéro pour pouvoir se connecter à son espaces de travail Barman sur <b>Web</b>. Le numéro de téléphone doit être unique.",
             },
           },
           {
@@ -482,7 +482,10 @@
       });
       if (
         currentRoute === "/ajouteruser" &&
-        !localStorage.getItem("guideAlreadyShownAddUser")
+        (!localStorage.getItem("guideAlreadyShownAddUser") ||
+          Date.now() -
+            parseInt(localStorage.getItem("guideAlreadyShownAddUser"), 10) >
+            172800000)
       ) {
         driverObj.drive();
         // Mettre à jour la variable pour indiquer que le guide a été affiché

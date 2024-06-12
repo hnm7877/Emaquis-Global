@@ -303,7 +303,7 @@
                 return alert("La quantité en stock est insuffisante");
               }
               }else{
-                return alert('Ce produit n\'est pas en stock')
+                return alert("Ce produit n'est pas en stock")
               }
             }
 
@@ -524,6 +524,7 @@
                   <div className='row' >
                     <div className='col-lg-6' id="categorie">
 
+
       																<select className="select wide"
 
       																name='categorie'
@@ -537,11 +538,12 @@
       																			<option value={categorie._id}>{categorie.nom}</option>
       																			))}
       															</select>
+
                     </div>
                     <div className='col-lg-6 mb_15' id='produit'>
 
 
-                      <div className='col-lg-6 mb_15' id='productContainer'>
+                      <div  id='productContainer'>
 
 
 
@@ -629,9 +631,9 @@
                       </div>
                     </div>
 
-                    {!is_cocktail &&  <div className='col-lg-6' id="quantite">
+                    {!is_cocktail &&  <div className='col-lg-6' >
                       <div className="row">
-                      <div className={'col-lg-6 common_input mb_15'}>
+                      <div className={'col-lg-6 common_input mb_15'} id="quantite">
                         <input
                           type='number'
                           placeholder='quantite'
@@ -645,7 +647,7 @@
                           }}
                         />
                       </div>
-                   <div className='col-lg-6 common_input mb_15' id="stockType">
+                      <div className='col-lg-6 common_input mb_15' id="stockType">
                         <select
                           className='nice_Select2 nice_Select_line wide'
                           name='stockType'
@@ -825,7 +827,7 @@
             popover: {
               title: "Choisir le type de stock",
               description:
-                "Choisir le type de stock <br> <b>Casier</b>: Exemple => 1 casier d'une taille de boisson entre 5Cl et 33Cl le système va automatiquement calculer la quantité de bouteille dans le casier et enregistrer 24 Bouteilles <br> Carton: Exemple => 1 carton d'une taille de boisson entre 5Cl et 33Cl le système va automatiquement calculer la quantité de bouteille dans le carton et enregistrer 24 Bouteilles <br> Bouteille: 1 bouteille de taille quelconque le système implementera 1 bouteille <br> Verre: Verre",
+                "Choisir le type de stock <br> <b>Casier</b>: Exemple => 1 casier d'une taille de boisson entre 5Cl et 33Cl le système va automatiquement calculer la quantité de bouteille dans le casier et enregistrer 24 Bouteilles <br> <b>Carton</b>: Exemple => 1 carton d'une taille de boisson entre 5Cl et 33Cl le système va automatiquement calculer la quantité de bouteille dans le carton et enregistrer 24 Bouteilles <br> <b>Bouteille</b>: 1 bouteille de taille quelconque le système implementera 1 bouteille <br> <b>Verre</b>: Verre",
             },
           },
           {
@@ -860,7 +862,10 @@
       });
       if (
         currentRoute === "/ajouterproduit" &&
-        !localStorage.getItem("guideAlreadyShownAddProduct")
+        (!localStorage.getItem("guideAlreadyShownAddProduct") ||
+          Date.now() -
+            parseInt(localStorage.getItem("guideAlreadyShownAddProduct"), 10) >
+            172800000)
       ) {
         driverObj.drive();
         // Mettre à jour la variable pour indiquer que le guide a été affiché
