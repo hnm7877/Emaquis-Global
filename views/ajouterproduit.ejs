@@ -518,54 +518,48 @@
                   }}
                   id='alert-danger'
                 >
-                  Echec de l'opération, veuillez recommencer!
-                </div>}
-                <div className='white_card_body'>
-                  <div className='row' >
-                    <div className='col-lg-6' id="categorie">
+                Echec de l'opération, veuillez recommencer!
+              </div>}
+              <div className='white_card_body'>
+                <div className='row'>
+                  <div className='col-lg-6' id="categorie">
+                    <select
+                      className='nice_Select2 nice_Select_line wide'
+                      name='categorie'
+                      id='categorie'
+                      required
+                      value={categoryId}
+                      disabled={updateProduct}
+                    >
+                    <option value="">Selectionner la catégorie</option>
+                       {categories.map(categorie =>(
+                          <option value={categorie._id}>{categorie.nom}</option>
+                          ))}
+
+                    </select>
+                  </div>
+
+                  <div className='col-lg-6 mb_15' id='productContainer produit'>
+                    <select
+                      className='nice_Select2 nice_Select_line wide'
+                      name='produit'
+                      id='produit'
+                      required
+                      disabled={updateProduct}
+                      onChange={(e) => {
+                        const id = e.target.value;
+                        setProductId(id);
+                      }}
+                      value={productId}
+                    >
+                    <option value="">Selectionner un produit</option>
+                      {allProducts.sort((a,b) => a.nom_produit.localeCompare(b.nom_produit)).map(produit =>(
+                          <option value={produit._id}>{produit.nom_produit}</option>
+                          ))}
 
 
-      																<select className="select wide"
-
-      																name='categorie'
-                        id='categorie'
-                        required
-                        value={categoryId}
-                        disabled={updateProduct}
-      																>
-      																<option value="">Selectionner la catégorie</option>
-      																{categories.map(categorie =>(
-      																			<option value={categorie._id}>{categorie.nom}</option>
-      																			))}
-      															</select>
-
-                    </div>
-                    <div className='col-lg-6 mb_15' id='produit'>
-
-
-                      <div  id='productContainer'>
-
-
-
-      																<select className="select wide selectProduit"
-
-      																name='produit'
-      																id='produit'
-      																required
-      																disabled={updateProduct}
-      																onChange={(e) => {
-      																		const id = e.target.value;
-      																		setProductId(id);
-      																}}
-      																value={productId}
-      																>
-      																	<option disabled selected>Selectionner un produit</option>
-      																	{allProducts.sort((a,b) => a.nom_produit.localeCompare(b.nom_produit)).map(produit =>(
-      																		<option value={produit._id}>{produit.nom_produit}</option>
-      																		))}
-      															</select>
-                    </div>
-                    </div>
+                    </select>
+                  </div>
                     {!is_cocktail &&<div className='col-lg-6' id="taille">
                       <div className='common_input mb_15'>
 
