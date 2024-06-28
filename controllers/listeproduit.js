@@ -1,4 +1,4 @@
-const { produitQueries } = require('../requests/produitQueries');
+const { produitQueries } = require("../requests/produitQueries");
 
 exports.produit = async (req, res) => {
   if (req.session.user) {
@@ -9,28 +9,54 @@ exports.produit = async (req, res) => {
         session.id || session.travail_pour
       );
 
-      res.render('listeproduit', {
+      res.render("listeproduit", {
         Result: products.result,
         user: req.session.user,
       });
     } catch (e) {
-      console.log('err', e);
+      console.log("err", e);
       res.redirect(e);
     }
   } else {
-    res.redirect('/');
+    res.redirect("/");
   }
 };
 
 exports.produitPost = async (req, res) => {
   if (req.session.user) {
     try {
-      res.render('listeproduit');
+      res.render("listeproduit");
     } catch (e) {
-      console.log('err', e);
+      console.log("err", e);
       res.redirect(e);
     }
   } else {
-    res.redirect('/');
+    res.redirect("/");
+  }
+};
+
+exports.produitByPrice = async (req, res) => {
+  if (req.session.user) {
+    const session = req.session.user;
+
+    try {
+      const products = await produitQueries.getProduitBySession(
+        session.id || session.travail_pour
+      );
+
+      const sortedProducts = products.result.sort(
+        (a, b) => a.prix_vente - b.prix_vente
+      );
+
+      res.render("listeproduit", {
+        Result: sortedProducts,
+        user: req.session.user,
+      });
+    } catch (e) {
+      console.log("err", e);
+      res.redirect(e);
+    }
+  } else {
+    res.redirect("/");
   }
 };
