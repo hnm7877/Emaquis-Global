@@ -292,170 +292,168 @@
             </div>
             <!-- end row -->
 
-            <div class="row d-flex">
-              <div class="col-lg-7">
-                <div class="card card_custom">
-                  <div class="card-body">
-                    <h4 class="card-title d-inline-block">Ventes</h4>
-
-                    <div class="row text-center mt-4">
-                      <select
-                        class="nice_Select2 max-width-220 mr-2"
-                        id="chart_week"
-                      >
-                        <option value="">choisir la semaine</option>
-                        <% for( let week = 1; week <= weeksInMonth; week++) { %>
-                        <% if(week === currentWeekIndex) { %>
-                        <option value="<%= week %>" selected>
-                          Semaine <%= week %>
-                        </option>
-                        <% } else { %>
-
-                        <option value="<%= week %>">Semaine <%= week %></option>
-                        <% } %> <% } %>
-                      </select>
-
-                      <label for="chart_month"></label
-                      ><select
-                        class="nice_Select2 max-width-220 mr-2"
-                        id="chart_month"
-                      >
-                        <option value="1">choisir le mois</option>
-                        <% for( month of months) { %> <% if (month.code === new
-                        Date().getMonth()+1) { %>
-                        <option value="<%= month.code %>" selected>
-                          <%= month.nom %>
-                        </option>
-                        <% } else { %>
-                        <option value="<%= month.code %>">
-                          <%= month.nom %>
-                        </option>
-                        <% } %> <% } %>
-                      </select>
-
-                      <select
-                        class="nice_Select2 max-width-220"
-                        id="chart_year"
-                      >
-                        <option value="1">choisir l'année</option>
-                        <% for( year of years) { %> <% if(year === new
-                        Date().getFullYear()) { %>
-                        <option value="<%= year %>" selected>
-                          <%= year %>
-                        </option>
-                        <% } else { %>
-
-                        <option value="<%= year %>"><%= year %></option>
-                        <% } %> <% } %>
-                      </select>
+            <div class="row d-flex justify-between">
+              <div class="row d-flex justify-between">
+                <div class="col-lg-7 col-md-12">
+                  <div class="card card_custom">
+                    <div class="card-body">
+                      <h4 class="card-title d-inline-block">Ventes</h4>
+                      <div class="row text-center mt-4">
+                        <div class="col-md-4 mb-2">
+                          <select
+                            class="nice_Select2 form-control"
+                            id="chart_week"
+                          >
+                            <option value="">choisir la semaine</option>
+                            <% for(let week = 1; week <= weeksInMonth; week++) {
+                            %> <% if(week === currentWeekIndex) { %>
+                            <option value="<%= week %>" selected>
+                              Semaine <%= week %>
+                            </option>
+                            <% } else { %>
+                            <option value="<%= week %>">
+                              Semaine <%= week %>
+                            </option>
+                            <% } %> <% } %>
+                          </select>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                          <select
+                            class="nice_Select2 form-control"
+                            id="chart_month"
+                          >
+                            <option value="1">choisir le mois</option>
+                            <% for(month of months) { %> <% if(month.code ===
+                            new Date().getMonth() + 1) { %>
+                            <option value="<%= month.code %>" selected>
+                              <%= month.nom %>
+                            </option>
+                            <% } else { %>
+                            <option value="<%= month.code %>">
+                              <%= month.nom %>
+                            </option>
+                            <% } %> <% } %>
+                          </select>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                          <select
+                            class="nice_Select2 form-control"
+                            id="chart_year"
+                          >
+                            <option value="1">choisir l'année</option>
+                            <% for(year of years) { %> <% if(year === new
+                            Date().getFullYear()) { %>
+                            <option value="<%= year %>" selected>
+                              <%= year %>
+                            </option>
+                            <% } else { %>
+                            <option value="<%= year %>"><%= year %></option>
+                            <% } %> <% } %>
+                          </select>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="white_card_body">
-                    <div id="management_bar"></div>
-                    <div class="loader_container">
-                      <div class="loader"></div>
+                    <div class="white_card_body">
+                      <div id="management_bar"></div>
+                      <div class="loader_container">
+                        <div class="loader"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <!-- end col -->
 
-              <!--Objectif à atteindre -->
-              <div class="col-xl-4">
-                <div class="white_card white_card_bottom card_height_100 mb_30">
-                  <div class="white_card_header">
-                    <div class="box_header m-0">
-                      <div class="main-title">
-                        <h3 class="m-0 justify-content-center d-flex">
-                          Objectif à atteindre
-                        </h3>
+                <div class="col-lg-5 col-md-12">
+                  <div class="row w-full">
+                    <div class="col-md-6 mb-4">
+                      <div class="white_card white_card_bottom card_height_100">
+                        <div class="white_card_header">
+                          <div class="box_header m-0">
+                            <div class="main-title">
+                              <h3 class="m-0 text-center">
+                                Objectif à atteindre
+                              </h3>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="white_card_body">
+                          <div id="chart-currently"></div>
+                        </div>
                       </div>
-                      <div class="header_more_tool">
-                        <div class="dropdown">
-                          <span
-                            class="dropdown-toggle"
-                            id="dropdownMenuButton"
-                            data-toggle="dropdown"
-                          >
-                            <i class="ti-more-alt"></i>
-                          </span>
-                          <div
-                            class="dropdown-menu dropdown-menu-right"
-                            aria-labelledby="dropdownMenuButton"
-                          >
-                            <a class="dropdown-item" href="#">
-                              <i class="ti-eye"></i> Voir plus
-                            </a>
-                            <a class="dropdown-item" href="#">
-                              <i class="ti-printer"></i> Print</a
+                    </div>
+
+                    <div class="col-md-6 mb-4 col-lg-6">
+                      <div class="card card_custom">
+                        <div class="card-body w-100">
+                          <h4 class="card-title">Produits en rupture</h4>
+                          <p class="card-subtitle mb-4 font-size-13"></p>
+                          <div class="table-responsive custom-scroll">
+                            <% if(Tab.length === 0) { %>
+                            <div class="alert alert-warning" role="alert">
+                              Aucun produit en rupture de stock pour le moment.
+                            </div>
+                            <% } else { %>
+                            <table
+                              class="table table-centered table-hover table-xl mb-0"
+                              id="recent-orders"
                             >
-                            <a class="dropdown-item" href="#">
-                              <i class="fa fa-download"></i> Download</a
-                            >
+                              <thead>
+                                <tr>
+                                  <th class="border-top-0">Nom de produit</th>
+                                  <th class="border-top-0">Quantité</th>
+                                  <th class="border-top-0">Taille</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <% Tab.forEach(el => { %> <% if(el.quantite ===
+                                0 && !el.is_cocktail) { %>
+                                <tr>
+                                  <td class="text-truncate">
+                                    <div
+                                      class="customer d-flex align-items-center"
+                                    >
+                                      <div class="thumb_34 mr_15 mt-0">
+                                        <img
+                                          src="<%= el.produit.image %>"
+                                          alt=""
+                                          style="
+                                            width: 40px;
+                                            height: 40px;
+                                            object-fit: contain;
+                                          "
+                                        />
+                                      </div>
+                                      <span class="f_s_12 f_w_600 color_text_5"
+                                        ><%= el.produit.nom_produit %></span
+                                      >
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <a
+                                      href="#"
+                                      class=""
+                                      style="color: rgb(219, 36, 23)"
+                                    >
+                                      <%= el.quantite %>
+                                    </a>
+                                  </td>
+                                  <td class="text-truncate">
+                                    <%= el.taille %>
+                                  </td>
+                                </tr>
+                                <% } %> <% }) %>
+                              </tbody>
+                            </table>
+                            <% } %>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="white_card_body">
-                    <div id="chart-currently"></div>
-                    <div class="monthly_plan_wraper">
-                      <!--
-                                <% if(productMostSold?.produit) { %>
-                                <div class="single_plan d-flex align-items-center justify-content-between">
-                                  <div class="plan_left d-flex align-items-center">
-                                    <div class="thumb obj_prod">
-                                      <img src="<%= productMostSold?.produit.image %>" alt="img boisson" 
-                                      style="
-                                        width: 40px;
-                                        height: 40px;
-                                        object-fit: contain;
-                                        "
-                                      />
-                                    </div>
-                                    <div>
-                                      <h5>Produit le plus vendu</h5>
-                                      <span><%= productMostSold?.produit?.nom_produit %> <%= productMostSold?.taille %> x <%=
-                                          productMostSold?.quantite %></span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <% } %>
-                                -->
-                      <!-- <div
-                                    class="single_plan d-flex align-items-center justify-content-between"
-                                  >
-                                    <div class="plan_left d-flex align-items-center">
-                                      <div class="thumb">
-                                        <img src="img/icon2/6.svg" alt="" />
-                                      </div>
-                                      <div>
-                                        <h5>Total</h5>
-                                        <span
-                                          >40 % d'augmentation sur les rapports
-                                          hebdomadaires</span
-                                        >
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div
-                                    class="single_plan d-flex align-items-center justify-content-between"
-                                  >
-                                    <div class="plan_left d-flex align-items-center">
-                                      <div class="thumb">
-                                        <img src="img/icon2/5.svg" alt="" />
-                                      </div>
-                                      <div>
-                                        <h5>Meilleure moyenne de vente</h5>
-                                        <span>14,45 / 20</span>
-                                      </div>
-                                    </div>
-                                  </div> -->
-                    </div>
+                    <!-- Add other col-md-6 items here if needed -->
                   </div>
                 </div>
               </div>
             </div>
+
             <!-- end row-->
 
             <div class="row">

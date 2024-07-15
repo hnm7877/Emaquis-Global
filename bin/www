@@ -24,7 +24,7 @@ const swaggerUi = require("swagger-ui-express"),
 
 const FileUpload = require("../utils/fileupload");
 
-const {dbConnection} = require("../settings/database");
+const { dbConnection } = require("../settings/database");
 const { all } = require("../routes/index");
 const { uploadFile } = require("../utils/uploadFile");
 
@@ -79,7 +79,7 @@ SaveUSer.on("connection", (socket) => {
         };
         socket.handshake.session.save();
         console.log(socket.handshake.session);
-        console.log({ token: token });
+        //console.log({ token: token });
         socket.emit("saved");
 
         socket.emit("redirect", "/config_profil");
@@ -120,8 +120,7 @@ UserLogin.on("connection", (socket) => {
           ...userlogin._doc,
           token,
         };
-       
-        
+
         socket.handshake.session.save();
         socket.emit("loginsuccess", "/dashboard");
       } else {
