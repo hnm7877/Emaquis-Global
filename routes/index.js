@@ -36,6 +36,7 @@ const summaryadmincontroller = require('../controllers/summary_admin');
 const config_profil = require('../controllers/config_profil');
 const billetRouter = require('./billet.router');
 const appConfigRouter = require('./app.router');
+const listsRouter = require('./lists.router');
 const path = require('path');
 
 const multer = require('multer');
@@ -79,6 +80,10 @@ const { produitBySession } = require('../controllers/produit');
 const { donatePage, donateWebhook, donateSuccess, donateError } = require('../controllers/donate.controller');
 
 var router = express.Router();
+
+
+router.use('/api/lists',listsRouter);
+
 
 /* GET home page. */
 
@@ -335,6 +340,15 @@ router.get('/generate-ticket/:orderId', generateTicket);
 
 router.use('/billet', billetRouter);
 router.use('/app', appConfigRouter);
+
+router.get('/lists/*', (req, res) => {
+	
+		res.setHeader('Content-Type', 'text/html');
+
+		// react build folder
+
+		res.sendFile(path.join(__dirname, '../emaquis-lists/index.html'));
+});
 
 router.get('*', (req, res) => {
 	if (req.session.user) {

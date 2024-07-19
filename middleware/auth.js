@@ -88,11 +88,16 @@ exports.authSuperAdmin = async (req, res, next) => {
 
 exports.forceSession = async (req, res, next) => {
   const authorization = req.headers.authorization;
-
+  
   if (authorization && !req.session.user) {
     try {
       const token = authorization.split(' ')[1];
       const data = jwt.verify(token, secret);
+     
+			if(data.justForList){
+				return next();
+			}
+
       let employe = await employeModel.findOne({
         _id: data?.employe_id,
         deleted: false,
@@ -119,4 +124,26 @@ exports.forceSession = async (req, res, next) => {
   }
 
   next();
+};
+
+
+exports.authListsApi = async (req, res, next) => {
+	const auth = req.headers.authorization;
+	
+	if (auth) {
+		const token = auth.split(' ')[1];
+		if (token) {
+			jwt.verify(token, secret, (err, user) => {
+				if (err) {
+					return res.sendStatus(403);
+				}
+				req.user = user;
+				next();
+			});
+		} else {
+			return res.sendStatus(401);
+		}
+	} else {
+		return res.sendStatus(401);
+	}
 };
