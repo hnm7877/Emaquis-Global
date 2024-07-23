@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const venteModel = require('../models/vente.model');
 const produitModel = require('../models/produit.model');
+const userModel = require('../models/user.model');
 
 exports.auth = async (req, res) => {
 	const { username, password } = req.body;
@@ -25,118 +26,36 @@ exports.auth = async (req, res) => {
 	}
 };
 
-
 exports.listsUsers = async (req, res) => {
 	const { limit = 30, page = 1 } = req.query;
-	const users = await produitModel.aggregate([
-		{
-			$group: {
-				_id: '$session',
-				total: { $sum: 1 },
-			},
-		},
-		{
-			$lookup: {
-				from: 'users',
-				localField: '_id',
-				foreignField: '_id',
-				as: 'user',
-			},
-		},
-		{
-			$unwind: '$user',
-		},
-		{
-			$project: {
-				_id: 0,
-				total: 1,
-				user: {
-					_id: 1,
-					email: 1,
-					nom_etablissement: 1,
-					numero: 1,
-					city: 1,
-					square: 1,
-					username: 1,
-					createdAt: 1,
-				},
-			},
-		},
-    {
-      $sort: {
-        'user.createdAt': -1,
-      }
-    },
-		{
-			$match: {
-				total: { $lt: 10 },
-			},
-		},
-		{
-			$skip: (Number(page) - 1) * limit,
-		},
-		{
-			$limit: parseInt(limit),
-		},
-    
-	]);
 
-	const usersAll = await produitModel.aggregate([
-		{
-			$group: {
-				_id: '$session',
-				total: { $sum: 1 },
-			},
-		},
-		{
-			$lookup: {
-				from: 'users',
-				localField: '_id',
-				foreignField: '_id',
-				as: 'user',
-			},
-		},
-		{
-			$unwind: '$user',
-		},
-		{
-			$project: {
-				_id: 0,
-				total: 1,
-				user: {
-					_id: 1,
-					email: 1,
-					nom_etablissement: 1,
-					numero: 1,
-					city: 1,
-					square: 1,
-					username: 1,
-					createdAt: 1,
-				},
-			},
-		},
-    {
-			$match: {
-				total: { $lt: 10 },
-			},
-		},
-	]);
+	const users = await userModel
+		.find({})
+		.select('email nom_etablissement numero city square username createdAt')
+		.sort({ createdAt: -1 })
+		.limit(parseInt(limit))
+		.skip((Number(page) - 1) * limit);
 
-  const usersWithVentes = await Promise.all(
-    users.map(async (user) => {
-      const ventes = await venteModel.count({ travail_pour: user.user._id });
-      return {
-        ...user,
-        ventes,
-      };
-    })
-  )
+	const total = await userModel.count({});
+
+	const usersWithVentes = await Promise.all(
+		users.map(async (user) => {
+			const ventesLength = await venteModel.count({ travail_pour: user._id });
+			const produitsLength = await produitModel.count({ session: user._id });
+
+			return {
+				user,
+				ventes: ventesLength,
+				total: produitsLength,
+			};
+		})
+	);
 
 	res.send({
 		success: true,
 		users: usersWithVentes,
-		total: usersAll.length,
-		totalPage: Math.ceil(usersAll.length / limit),
+		total,
+		totalPage: Math.ceil(total / limit),
 		page,
 	});
 };
