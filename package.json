@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "test": "jest"
+    "test": "jest",
+    "build": "webpack --config webpack.config.js",
+    "build:azure": "webpack --config webpack.config.js --env=dev"
   },
   "dependencies": {
     "autoprefixer": "^10.4.14",
