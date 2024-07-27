@@ -2,6 +2,10 @@
   "name": "e-maquis",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "18.20.4",
+    "npm": "10.7.0"
+  },
   "scripts": {
     "start": "nodemon ./bin/www",
     "test": "jest",
