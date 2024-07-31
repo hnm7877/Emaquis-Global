@@ -137,6 +137,7 @@ exports.addproduitPost = async (req, res) => {
 				produit: data.produit,
 				session,
 				taille: data.taille,
+				isDeleted: false
 			});
 
 			let result = null;
