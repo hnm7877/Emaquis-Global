@@ -145,7 +145,7 @@ exports.addproduitPost = async (req, res) => {
 			if (
 				stock.result &&
 				setting.result.hasStock &&
-				!produit_exist.result.is_cocktail
+				!produit_exist.result?.is_cocktail
 			) {
 				await stock.result.updateOne({
 					$inc: {
