@@ -232,6 +232,7 @@
           const [ promo,setPromo] = React.useState(<%- JSON.stringify(product?.promo) %>);
           const [promoQuantity, setPromoQuantity] = React.useState(<%- JSON.stringify(product?.promo_quantity) %>);
           const [promoPrice, setPromoPrice] = React.useState(<%- JSON.stringify(product?.promo_price) %>);
+          const [pricesType, setPricesType] = React.useState(<%- JSON.stringify(product?.pricesType || []) %>);
           const [stockType, setStockType] = React.useState(updateProduct?'bottle':'locker');
 
 
@@ -245,6 +246,10 @@
           const productInStock =  stocks.find(s => s.produit._id == productId && s.size == selectedSize);
           const categorySelected = categories.find(c => c._id == categoryId);
           const is_cocktail = categorySelected && categorySelected.nom.toLowerCase().includes('cocktail');
+          const halfPrice = pricesType.find(p => p.type === 1);
+          const quarterPrice = pricesType.find(p => p.type === 2);
+
+          const isLiqueurCategory = categorySelected && categorySelected.nom.toLowerCase().includes('liqueurs');
 
 
 
@@ -283,7 +288,8 @@
               promo_quantity: promoQuantity,
               promo_price: promoPrice,
               stockType,
-              is_cocktail
+              is_cocktail,
+              pricesType: isLiqueurCategory ? pricesType.filter(p => p.price !== '').map(p=>({...p, price: Number(p.price)})): []
             }
 
 
@@ -667,6 +673,75 @@
 
                     </div>}
 
+
+                    {isLiqueurCategory &&
+                      <React.Fragment>
+                        <div className='col-lg-6 mt-2'>
+                      <div className='common_input mb_15' id="promoPrice">
+                        <input
+                          type='number'
+                          placeholder='Le prix de démi bouteille'
+                          name='halftPrice'
+                          required
+                          value={halfPrice ? halfPrice.price : ''}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setPricesType((prev)=>{
+                              const findPrice = prev.find(p => p.type === 1);
+                              if(findPrice){
+                                return prev.map(p => {
+                                  if(p.type === 1){
+                                    return {
+                                      ...p,
+                                      price: value
+                                    }
+                                  }
+                                  return p;
+                                })
+                              }else{
+                                return [...prev, {type: 1, price: value}]
+                              }
+                            });
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className='col-lg-6 mt-2'>
+                      <div className='common_input mb_15' id="promoPrice">
+                        <input
+                          type='number'
+                          placeholder="Le prix d'un quart de bouteille"
+                          name='quarterPrice'
+                          required
+                          value={quarterPrice ? quarterPrice.price : ''}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setPricesType((prev)=>{
+                              const findPrice = prev.find(p => p.type === 2);
+                              if(findPrice){
+                                return prev.map(p => {
+                                  if(p.type === 2){
+                                    return {
+                                      ...p,
+                                      price: value
+                                    }
+                                  }
+                                  return p;
+                                })
+                              }else{
+                                return [...prev, {type: 2, price: value}]
+                              }
+                            });
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                      </React.Fragment>
+                     }
+
+
                      <div className="col-lg-12 pl-4">
                       <div className="form-check" id="formule">
                           <input className="form-check-input" checked={promo} onChange={(e)=>setPromo(e.target.checked)} type="checkbox" value="" id="flexCheckDefault"
@@ -677,6 +752,7 @@
 
                      </div>
 
+                     
                      {
                       !!promo && <React.Fragment>
                       <div className='col-lg-6 mt-2'>
@@ -713,6 +789,9 @@
 
                       </React.Fragment>
                      }
+
+
+                  
 
 
                     <div className='col-lg-6'>

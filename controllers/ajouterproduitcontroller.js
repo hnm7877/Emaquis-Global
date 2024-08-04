@@ -131,6 +131,7 @@ exports.addproduitPost = async (req, res) => {
 				session: session,
 				historiques: [],
 				is_cocktail: req.body.is_cocktail,
+				pricesType: req.body.pricesType || [],
 			};
 
 			const produit_exist = await produitQueries.getProduitByData({
@@ -160,6 +161,7 @@ exports.addproduitPost = async (req, res) => {
 				lockerQty: req.body.quantite,
 				prix_vente: data.prix_vente,
 				prix_achat: data.prix_achat,
+				pricesTypes: data.pricesType,
 				date: new Date(),
 				add_by:
 					user.nom && user.prenoms
@@ -291,6 +293,7 @@ exports.editproduitPost = async (req, res) => {
 			promo_price: parseInt(req.body.promo_price) || null,
 			session: session,
 			historiques: [],
+			pricesType: req.body.pricesType || [],
 		};
 
 		// ok on fait le test maintenant
@@ -320,6 +323,7 @@ exports.editproduitPost = async (req, res) => {
 			prix_vente: data.prix_vente,
 			prix_achat: data.prix_achat,
 			prev_quantite: produit_exist.result.quantite,
+			pricesTypes: data.pricesType,
 			date: new Date(),
 			add_by:
 				user.nom && user.prenoms

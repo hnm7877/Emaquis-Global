@@ -28,7 +28,6 @@ const ProduitSchema = new Schema(
 			type: Boolean,
 			default: false,
 		},
-
 		historiques: {
 			type: [Object],
 		},
@@ -36,6 +35,18 @@ const ProduitSchema = new Schema(
 			type: Boolean,
 			default: false,
 		},
+		pricesType: {
+			type: [
+				{
+					type: {
+						type: Number,
+						enum: [1, 2],
+					},
+					price: { type: Number },
+				}
+			],
+			default: []
+		}
 	},
 	{ timestamps: true }
 );
