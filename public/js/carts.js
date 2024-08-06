@@ -6,7 +6,7 @@ const CartList = () => {
       <h4>Panier</h4>
       <div className='carts-list'>
         {carts.map((product) => {
-          return <CartItem key={product._id} product={product} />;
+          return <CartItem key={product._id + product.priceType || ''} product={product} />;
         })}
       </div>
       <CartFooter />
@@ -19,9 +19,27 @@ const CartItem = ({ product }) => {
     handleUpdateProductQuantity,
     updateProductQuantity,
     removeProductFromCart,
+    carts
   } = React.useContext(ProductsContext);
 
+
+  const itemList = carts.filter((cart) => cart._id === product._id);
+
+  const totalQty =  itemList.reduce((acc, el) => {
+    if(el.priceType){
+      acc += el.priceType === 1 ? el.quantity * 0.5 : el.quantity * 1/4;
+    }else{
+      acc += el.quantity;
+    }
+    return acc;
+  }, 0);
+
   const quantity = product.quantity;
+  const realQty = totalQty - (product.quantity_already_sold || 0);
+  const restQty = product.quantite - realQty;
+  const canIncr = product.priceType === 1 ?  restQty >= 0.5 : product.priceType === 2 ? restQty >= 0.25 : restQty >= 1;
+
+
   return (
     <div className='cart-item'>
       <div className='cart-item__details'>
@@ -63,8 +81,7 @@ const CartItem = ({ product }) => {
           onClick={() => handleUpdateProductQuantity(product, 'incr')}
           disabled={
             !product.is_cocktail &&
-            product.quantite <=
-              product.quantity - (product.quantity_already_sold || 0)
+            !canIncr
           }
         >
           +
@@ -119,14 +136,19 @@ const CartFooter = () => {
   const handleSubmit = () => {
     if (loading) return;
 
+    const cartsWithoutPriceType = carts.filter((prod) => !prod.priceType);
+    const cartsWithPriceType = carts.filter((prod) => prod.priceType);
+
     const vente = {
-      produit: carts.map((prod) => prod._id),
-      quantite: carts.map((prod) => prod.quantity),
+      produit: cartsWithoutPriceType.map((prod) => prod._id),
+      quantite: cartsWithoutPriceType.map((prod) => prod.quantity),
+      pricesType: cartsWithPriceType.map((prod) => ({_id: prod._id, type: prod.priceType, quantity: prod.quantity})),
       somme_encaisse: Number(sommeEncaisse),
       amount_collected: collectedLater ? false : true,
       table_number: tableNumber,
       for_employe: user._id,
     };
+
 
     if (collectedLater && !tableNumber) {
       return alert('Veuillez saisir le numéro de table');

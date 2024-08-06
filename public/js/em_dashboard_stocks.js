@@ -56,7 +56,7 @@ const TablesStocksBody = () => {
                       : 'rgb(219, 36, 23)',
                 }}
               >
-                {product.is_cocktail ? '∞' : product.quantite}
+                {product.is_cocktail ? '∞' : formatProductQuantity(product.quantite)}
               </a>
             </td>
           </tr>

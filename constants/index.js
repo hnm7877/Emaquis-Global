@@ -1066,3 +1066,8 @@ exports.MARQUES = [
 ];
 
 exports.START_TIP_DAY = new Date("2023-10-08T00:00:00.000Z");
+
+exports.PRICE_TYPE = {
+  1: 1/2,
+  2: 1/4,
+}

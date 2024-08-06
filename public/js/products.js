@@ -45,8 +45,22 @@ const ProductList = () => {
 };
 
 const ProductCard = ({ product }) => {
-  const { addProductToCart } = React.useContext(ProductsContext);
+  const { addProductToCart, handleSelectProduct } = React.useContext(ProductsContext);
   const { billet } = React.useContext(AppContext);
+
+
+  const handleClickProduct = () => {
+    if (billet && !billet.is_closed) {
+      if(product.pricesType.length){
+        handleSelectProduct(product);
+        $('#productMultiPricesModal').modal('show');
+      }else{
+        addProductToCart(product);
+      }
+    }
+  }
+
+  
 
   return (
     <div className='product-card'>
@@ -87,7 +101,7 @@ const ProductCard = ({ product }) => {
                     : 'rgb(219, 36, 23)',
               }}
             >
-              {product.is_cocktail ? '∞' : product.quantite}
+              {product.is_cocktail ? '∞' : formatProductQuantity(product.quantite)}
             </span>
           </p>
         )}
@@ -107,9 +121,7 @@ const ProductCard = ({ product }) => {
       {!product.isReturnProduct && (
         <div
           className='product-card__actions'
-          onClick={() =>
-            billet && !billet.is_closed ? addProductToCart(product) : null
-          }
+          onClick={handleClickProduct}
         >
           <button
             className='btn'

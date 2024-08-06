@@ -69,6 +69,7 @@ exports.venteQueries = class {
           "produit.promo_quantity": 1,
           "produit.promo_price": 1,
           "produit.taille": 1,
+          'produit.priceType': 1,
           quantite: 1,
           prix: 1,
           createdAt: 1,

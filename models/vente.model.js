@@ -26,11 +26,15 @@ const VenteSchema = new Schema(
           type: Number,
           default: null,
         },
-
         historiques: {
           type: [Object],
         },
         productId: { type: String },
+        priceType: {
+          type: Number,
+          enum: [1,2],
+          default: null
+        }
       },
     ],
     quantite: [{ type: Number }],

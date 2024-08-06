@@ -11,6 +11,7 @@ const { getDateByWeekendMonthYear } = require("../utils/generateWeekly");
 const { userQueries } = require("../requests/UserQueries");
 const { helperCurrentTime } = require("../utils/helperCurrentTime");
 const { calculPromoTotal } = require("../utils/calculPromoTotal");
+const {PRICE_TYPE} = require("../constants");
 
 exports.venteByMonth = async (req, res) => {
   try {
@@ -100,6 +101,7 @@ exports.ventePost = async (req, res) => {
   try {
     let sess = req.session.user;
     const vente = req.body;
+    const pricesType = req.body.pricesType || [];
 
     let Vente = {};
     // let prize = [];
@@ -172,6 +174,40 @@ exports.ventePost = async (req, res) => {
 
       const maquisIsOpen = await checkMaquisIsOpen(sess.travail_pour);
 
+      for(let priceType of pricesType){
+        const currentProduct = await produitQueries.getProduitById(priceType._id);
+        const totalQtyWithProductId = pricesType.reduce((acc, p) => {
+          if(p._id === priceType._id){
+            return acc + p.quantity;
+          }
+          return acc;
+        },0)
+
+
+      
+        if(currentProduct.result){
+          if(currentProduct.result.quantite < totalQtyWithProductId){
+            product_unavailables.push({
+              nom_produit: currentProduct.result.produit.nom_produit,
+              taille: currentProduct.result.taille,
+              quantite: currentProduct.result.quantite,
+              priceType: priceType.type,
+            });
+          } else {
+            const current_price = currentProduct.result.pricesType.find(p => p.type === priceType.type)?.price || 0;
+            sum += current_price * priceType.quantity;
+   
+            const { _id, ...data } =
+            currentProduct.result._doc || currentProduct.result;
+            produits.push({ ...data, productId: _id, produit: data.produit._id, priceType: priceType.type, prix_vente: current_price });
+          }
+
+         
+        }
+      }
+
+      const venteQuantities = [...vente.quantite, ...pricesType.map(p => p.quantity)];
+
       if (!maquisIsOpen) {
         return res.status(400).json({
           message: "Le maquis est fermé",
@@ -207,7 +243,7 @@ exports.ventePost = async (req, res) => {
 
       let newVente = {
         produit: produits,
-        quantite: vente.quantite,
+        quantite: venteQuantities,
         employe: sess._id,
         travail_pour: sess.travail_pour,
         status_commande: "En attente",
@@ -225,6 +261,19 @@ exports.ventePost = async (req, res) => {
         Produits.updateOne(
           { session: sess.travail_pour, _id: produit_id },
           { $inc: { quantite: -vente.quantite[index] } },
+          { new: true },
+          (err, data) => {
+            if (err) {
+              return;
+            }
+          }
+        );
+      });
+
+      pricesType.forEach((priceType) => {
+        Produits.updateOne(
+          { session: sess.travail_pour, _id: priceType._id },
+          { $inc: { quantite: -1 * PRICE_TYPE[priceType.type] * priceType.quantity } },
           { new: true },
           (err, data) => {
             if (err) {
