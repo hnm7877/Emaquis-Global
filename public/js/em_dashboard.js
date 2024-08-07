@@ -55,13 +55,14 @@ const AppRoot = () => {
 							const newProduct = { ...product };
 							const totalQty = itemList.reduce((acc, el) => {
 								if(el.priceType){
-									acc += el.quantite * (el.prieType === 1 ? 0.5 : 0.25);
+									acc += el.quantite * (el.priceType === 1 ? 0.5 : 0.25);
 								}else{
 									acc += el.quantite;
 								}
 
 								return acc;
 							}, 0);
+
 
 							newProduct.quantite -= totalQty;
 							return newProduct;

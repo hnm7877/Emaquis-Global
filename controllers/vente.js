@@ -178,7 +178,7 @@ exports.ventePost = async (req, res) => {
         const currentProduct = await produitQueries.getProduitById(priceType._id);
         const totalQtyWithProductId = pricesType.reduce((acc, p) => {
           if(p._id === priceType._id){
-            return acc + p.quantity;
+            return acc + (p.quantity * PRICE_TYPE[p.type]);
           }
           return acc;
         },0)
@@ -199,7 +199,7 @@ exports.ventePost = async (req, res) => {
    
             const { _id, ...data } =
             currentProduct.result._doc || currentProduct.result;
-            produits.push({ ...data, productId: _id, produit: data.produit._id, priceType: priceType.type, prix_vente: current_price });
+            produits.push({ ...data, productId: _id, produit: data.produit._id, priceType: priceType.type, prix_vente: current_price, prix_achat: data.prix_achat * PRICE_TYPE[priceType.type] });
           }
 
          
@@ -322,7 +322,7 @@ exports.editventePost = async (req, res) => {
       });
       return;
     }
-    const body = req.body;
+    const body = req.body;  
     const pricesType = req.body.pricesType || [];
 
     const formulesProduct = [];
@@ -416,7 +416,7 @@ exports.editventePost = async (req, res) => {
 				);
 				const totalQtyWithProductId = pricesType.reduce((acc, p) => {
 					if (p._id === priceType._id) {
-						return acc + p.quantity;
+						return acc + (p.quantity * PRICE_TYPE[p.type]);
 					}
 					return acc;
 				}, 0);
@@ -465,6 +465,7 @@ exports.editventePost = async (req, res) => {
 						productId: _id,
 						produit: data.produit._id,
 						priceType: priceType.type,
+            prix_achat: currentProduct.result.prix_achat * PRICE_TYPE[priceType.type],
 						prix_vente: current_price,
 					});
 				}
@@ -515,9 +516,6 @@ exports.editventePost = async (req, res) => {
       }
 
       const products = [];
-
-
-      console.log(JSON.stringify({oldVente,pricesType},null,2));
 
       if (oldVente.result.produit.length > 0) {
 				for (let [index, product] of oldVente.result.produit.entries()) {
@@ -600,7 +598,7 @@ exports.editventePost = async (req, res) => {
 
       await venteQueries.updateVente(venteId, newVente);
 
-      const allProductsWithPricesType = body.pricesType.filter(
+      const allProductsWithPricesType = pricesType.filter(
         (p) => !products.find((prod) => prod.id === p._id && prod.type === p.type)
       ).map((prod) => {
         return {
@@ -663,6 +661,7 @@ exports.editventePost = async (req, res) => {
       });
     }
   } catch (e) {
+    console.log("🚀 ~ exports.editventePost= ~ e:", e)
     res.status(500).json({
       etat: false,
       data: "Error",
