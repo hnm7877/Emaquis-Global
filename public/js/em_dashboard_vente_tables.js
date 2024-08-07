@@ -108,7 +108,7 @@ const TablesItem = ({
 		} else {
 			return (
 				<span key={el._id}>
-					{el.produit.nom_produit} {el.priceType ? el.priceType === 1 ? '(Demi)' : '(Quart)':''}
+					{el.produit.nom_produit} {el.priceType ?formatProductPriceType(el.priceType):''}
 					{text}
 				</span>
 			);

@@ -13,7 +13,7 @@ ${data.vente.produit
 	.map((p, index) =>
 		generatorTicket.generateLineBasedOnTemplateText([
 			data.vente.quantite[index],
-			(p.promo ? '(F) ' : '') + p.produit.nom_produit,
+			(p.promo ? '(F) ' : '') + p.produit.nom_produit + (p.priceType ? (p.priceType === 1 ? '(D)' : '(Q)') : ''),
 			'',
 			p.prix_vente,
 			p.total_price,

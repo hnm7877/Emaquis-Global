@@ -49,17 +49,21 @@ const AppRoot = () => {
 
 				setProducts((prProducts) => {
 					const newProducts = prProducts.map((product) => {
-						const index = vente.produit.findIndex(
-							(el) => el.productId === product._id
-						);
-						if (index !== -1) {
-							console.log(vente.produit, vente.produit[index].priceType);
+						const itemList = vente.produit.map((el,idx) => el.productId === product._id ? {id:el.productId, priceType:el.priceType,idx, quantite: vente.quantite[idx]} : null).filter(Boolean);
+
+						if (itemList.length) {
 							const newProduct = { ...product };
-							newProduct.quantite -= vente.produit[index].priceType
-								? vente.produit[index].priceType === 1
-									? 0.5
-									: 0.25
-								: vente.quantite[index];
+							const totalQty = itemList.reduce((acc, el) => {
+								if(el.priceType){
+									acc += el.quantite * (el.prieType === 1 ? 0.5 : 0.25);
+								}else{
+									acc += el.quantite;
+								}
+
+								return acc;
+							}, 0);
+
+							newProduct.quantite -= totalQty;
 							return newProduct;
 						} else {
 							return product;
@@ -92,11 +96,14 @@ const AppRoot = () => {
 
 				setProducts((prProducts) => {
 					const newProducts = prProducts.map((product) => {
-						const index = allProducts.findIndex((el) => el.id === product._id);
-
-						if (index !== -1) {
+						const itemList = allProducts.filter((el) => el.id === product._id);
+						
+						if (itemList.length) {
+							const totalQty = itemList.reduce((acc, el) => {
+								return acc + el.quantite;
+							}, 0)
 							const newProduct = { ...product };
-							newProduct.quantite -= allProducts[index].quantite;
+							newProduct.quantite -= totalQty;
 							return newProduct;
 						} else {
 							return product;
@@ -156,8 +163,9 @@ const AppRoot = () => {
 					);
 
 					if (index !== -1) {
+						const venteProduct = vente.produit[index];
 						const newProduct = { ...product };
-						newProduct.quantite += vente.quantite[index];
+						newProduct.quantite += venteProduct.priceType ? (venteProduct.priceType === 1 ? 0.5 : 0.25) * vente.quantite[index] : vente.quantite[index];
 						return newProduct;
 					} else {
 						return product;
@@ -467,7 +475,7 @@ const ModalUnvailableProducts = () => {
 							productUnvailable.map((el, index) => {
 								return (
 									<p key={index}>
-										{el.nom_produit}{el.priceType?(el.priceType === 1 ? '(Demi) ':'(Quart) '):' '}
+										{el.nom_produit}{el.priceType?formatProductPriceType(el.priceType):' '}
 										{el.taille + `\n quantité restante: ${formatProductQuantity(el.quantite)}`}
 									</p>
 								);

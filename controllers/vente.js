@@ -323,6 +323,7 @@ exports.editventePost = async (req, res) => {
       return;
     }
     const body = req.body;
+    const pricesType = req.body.pricesType || [];
 
     const formulesProduct = [];
     const product_unavailables = [];
@@ -408,6 +409,70 @@ exports.editventePost = async (req, res) => {
         }
       }
 
+
+      for (let priceType of pricesType) {
+				const currentProduct = await produitQueries.getProduitById(
+					priceType._id
+				);
+				const totalQtyWithProductId = pricesType.reduce((acc, p) => {
+					if (p._id === priceType._id) {
+						return acc + p.quantity;
+					}
+					return acc;
+				}, 0);
+
+				if (currentProduct.result) {
+					const product_in_old_vente_index =
+						oldVente.result.produit.findIndex(
+							(product) => '' + product.productId === priceType._id
+						);
+
+					const qty =
+						oldVente?.result?.quantite[product_in_old_vente_index] || 0;
+
+					if (
+						!currentProduct.result.is_cocktail &&
+						currentProduct.result.quantite + qty < totalQtyWithProductId
+					) {
+						if (product_in_old_vente_index !== -1) {
+							const qty =
+								oldVente.result.quantite[product_in_old_vente_index];
+
+							if (qty - priceType.quantity > 0) {
+								// return no do nothing
+								continue;
+							}
+						}
+
+						product_unavailables.push({
+							nom_produit: currentProduct.result.produit.nom_produit,
+							taille: currentProduct.result.taille,
+							quantite: currentProduct.result.quantite,
+							priceType: priceType.type,
+						});
+					}
+
+					const current_price =
+						currentProduct.result.pricesType.find(
+							(p) => p.type === priceType.type
+						)?.price || 0;
+					sum += current_price * priceType.quantity;
+
+					const { _id, ...data } =
+						currentProduct.result._doc || currentProduct.result;
+					produits.push({
+						...data,
+						productId: _id,
+						produit: data.produit._id,
+						priceType: priceType.type,
+						prix_vente: current_price,
+					});
+				}
+			}
+
+      const venteQuantities = [...body.quantite, ...pricesType.map(p => p.quantity)];
+
+
       const setting = await settingQueries.getSettingByUserId(
         sess.travail_pour
       );
@@ -451,45 +516,72 @@ exports.editventePost = async (req, res) => {
 
       const products = [];
 
+
+      console.log(JSON.stringify({oldVente,pricesType},null,2));
+
       if (oldVente.result.produit.length > 0) {
-        for (let [index, product] of oldVente.result.produit.entries()) {
-          const productId = "" + product.productId;
-          const productIdFinded = body.produit.find((id) => id === productId);
+				for (let [index, product] of oldVente.result.produit.entries()) {
+					const productId = '' + product.productId;
+					const productIdFinded = body.produit.find((id) => id === productId && !product.priceType);
+					const productPriceTypeFinded = pricesType.find(
+						(p) => p._id === productId && p.type === product.priceType
+					);
 
-          if (productIdFinded) {
-            const productIndex = body.produit.findIndex(
-              (id) => id === productId
-            );
+					if (productIdFinded || productPriceTypeFinded) {
+						const productIndex = body.produit.findIndex(
+							(id) => id === productId
+						);
+						const productPriceTypeIndex = pricesType.findIndex(
+							(p) => p._id === productId && p.type === product.priceType
+						);
 
-            const currentProduct = await produitQueries.getProduitById(
-              body.produit[productIndex]
-            );
+						const currentProduct = await produitQueries.getProduitById(
+							productPriceTypeIndex !== -1
+								? pricesType[productPriceTypeIndex]._id
+								: body.produit[productIndex]
+						);
 
-            if (currentProduct?.result?.taille === product.taille) {
-              const quantite =
-                body.quantite[productIndex] - oldVente.result.quantite[index];
-              products.push({
-                id: product.productId,
-                quantite: quantite,
-              });
-            } else {
-              products.push({
-                id: product.productId,
-                quantite: body.quantite[productIndex],
-              });
-            }
-          } else {
-            products.push({
-              id: product.productId,
-              quantite: -oldVente.result.quantite[index],
-            });
-          }
-        }
-      }
+						if (currentProduct?.result?.taille === product.taille) {
+							const quantite =
+								(productPriceTypeIndex !== -1
+									? pricesType[productPriceTypeIndex].quantity
+									: body.quantite[productIndex]) -
+								oldVente.result.quantite[index];
+							products.push({
+								id: product.productId,
+								quantite,
+								type:
+									productPriceTypeIndex !== -1
+										? pricesType[productPriceTypeIndex].type
+										: null,
+							});
+						} else {
+							products.push({
+								id: product.productId,
+								quantite:
+									productPriceTypeIndex !== -1
+										? pricesType[productPriceTypeIndex].quantity
+										: body.quantite[productIndex],
+								type:
+									productPriceTypeIndex !== -1
+										? pricesType[productPriceTypeIndex].type
+										: null,
+							});
+						}
+					} else {
+						products.push({
+							id: product.productId,
+							quantite: -oldVente.result.quantite[index],
+							type: product.priceType,
+						});
+					}
+				}
+			}
+
 
       let newVente = {
         produit: produits,
-        quantite: body.quantite,
+        quantite: venteQuantities,
         employe: sess._id,
         travail_pour: sess.travail_pour,
         prix: sum,
@@ -508,8 +600,18 @@ exports.editventePost = async (req, res) => {
 
       await venteQueries.updateVente(venteId, newVente);
 
+      const allProductsWithPricesType = body.pricesType.filter(
+        (p) => !products.find((prod) => prod.id === p._id && prod.type === p.type)
+      ).map((prod) => {
+        return {
+          id: prod._id,
+          quantite: prod.quantity,
+          type: prod.type,
+        };
+      });      
+
       const allProducts = body.produit
-        .filter((prodId) => !products.find((prod) => "" + prod.id === prodId))
+        .filter((prodId) => !products.find((prod) => "" + prod.id === prodId && !prod.type))
         .map((prodId) => {
           const productIndex = body.produit.findIndex((id) => id === prodId);
           return {
@@ -517,7 +619,15 @@ exports.editventePost = async (req, res) => {
             quantite: body.quantite[productIndex],
           };
         })
-        .concat(products);
+        .concat(allProductsWithPricesType)
+        .concat(products)
+        .map((prod) => {
+          return {
+            id: prod.id,
+            quantite: prod.type ? PRICE_TYPE[prod.type] * prod.quantite : prod.quantite,
+            type: prod.type,
+          };
+        });
 
       allProducts.forEach((product, index) => {
         Produits.updateOne(
@@ -589,7 +699,7 @@ exports.editStatusVente = async (req, res) => {
               product.productId
             );
 
-            const newQte = produit.result.quantite + Number(vente.quantite[i]);
+            const newQte = produit.result.quantite + Number(product.priceType? PRICE_TYPE[product.priceType] * vente.quantite[i] :vente.quantite[i]);
 
             await produitQueries.updateProduit(
               {
@@ -644,7 +754,7 @@ exports.editStatusVenteApi = async (req, res) => {
               );
 
               const newQte =
-                produit.result.quantite + Number(vente.quantite[i]);
+                produit.result.quantite + Number(product.priceType? PRICE_TYPE[product.priceType] * vente.quantite[i] :vente.quantite[i]);
 
               await produitQueries.updateProduit(
                 {
@@ -803,6 +913,7 @@ exports.venteBilan = async (req, res) => {
                   ? vente.quantite[produitIndex]
                   : 0,
               prix: vente.quantite[produitIndex] < 0 ? vente.prix : 0,
+              priceType: produit.priceType,
             };
 
             produits.push(product);

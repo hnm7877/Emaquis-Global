@@ -17,3 +17,7 @@ const formatProductQuantity = (quantity) => {
 
   return quantity;
 };
+
+const formatProductPriceType = (priceType) => {
+  return priceType === 1 ? '(Demi)' : '(Quart)'
+}
