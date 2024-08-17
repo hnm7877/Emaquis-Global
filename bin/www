@@ -143,7 +143,9 @@ UserLogin.on("connection", socket => {
           nom_etablissement: userlogin.nom_etablissement,
           isAdmin: userlogin.isAdmin,
           ...userlogin._doc,
-          token
+          token,
+          userHasSubscription:userlogin.paid===true?userlogin.paid:false
+
         };
 
         socket.handshake.session.save();

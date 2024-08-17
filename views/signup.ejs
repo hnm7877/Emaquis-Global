@@ -108,7 +108,27 @@
                 <span class="icon flaticon-user"></span>
               </div>
             </div>
-          </div>
+            <div class="col-lg-6 col-md-6">
+              <div class="input-box">
+                <input
+                        type="number"
+                        placeholder="nombre de jour"
+                        name="duree"
+
+                />
+                <span class="icon flaticon-user"></span>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <div class="input-box">
+                <select name="event" class="">
+                  <option class="col-lg-6">créer un compte pour un évenement ?</option>
+                  <option  class="col-lg-6" value="true">OUI</option>
+                  <option class="col-lg-6" value="false">NON</option>
+                </select>
+                <span class="icon flaticon-user"></span>
+              </div>
+            </div>
           <div class="row clearfix">
             <div class="col-lg-6 col-md-6">
               <div class="input-box">
@@ -215,6 +235,8 @@
           password: password,
           numero: $('input[name="numero"]').val(),
           indicatif: $('select[name="indicatif"]').val(),
+          forEvent:$('select[name="event"]').val(),
+          period : $('input[name="duree"]').val(),
         };
 
         console.log(data);

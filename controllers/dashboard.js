@@ -15,6 +15,7 @@ const { helperCurrentTime } = require("../utils/helperCurrentTime");
 const { userQueries } = require("../requests/UserQueries");
 
 exports.dashboard = async (req, res) => {
+  console.log(req.session.user,"session")
   if (req.session.user) {
     // let totalemploye;
     res.setHeader("Content-Type", "text/html");

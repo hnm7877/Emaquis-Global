@@ -14,6 +14,8 @@ exports.userQueries = class {
         numero: data.numero,
         password: encryptedPassword,
         isAdmin: false,
+        forEvent:data.forEvent,
+        period:data.period
       });
       await user
         .save()

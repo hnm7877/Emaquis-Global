@@ -47,6 +47,9 @@
 </head>
 
 <body class="crm_body_bg">
+<% if (userHasSubscription) { %>
+  <%- include('eventModal/modal.html') %>
+<% } %>
   <div id="layout-wrapper">
     <!-- ============================================================== -->
     <!-- Start right Content here -->

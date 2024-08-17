@@ -17,6 +17,8 @@ exports.dashboard = async (req, res) => {
     // let totalemploye;
     res.setHeader('Content-Type', 'text/html');
     const session = req.session.user;
+
+
     const userId = session.id;
     try {
       const Employe = await employeQueries.getEmployeByEtablissement(userId);
@@ -192,6 +194,7 @@ exports.dashboard = async (req, res) => {
         totalVenteWeek: formatAmount(totalVenteWeek || 0),
         currentWeekIndex,
         weeksInMonth,
+        userHasSubscriptionpaid : req.session.user.paid
       });
     } catch (e) {
       console.log('err', e);
