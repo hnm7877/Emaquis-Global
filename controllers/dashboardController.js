@@ -194,7 +194,7 @@ exports.dashboard = async (req, res) => {
         totalVenteWeek: formatAmount(totalVenteWeek || 0),
         currentWeekIndex,
         weeksInMonth,
-        userHasSubscriptionpaid : req.session.user.paid
+        userHasSubscriptionpaid: req.session.user.paid
       });
     } catch (e) {
       console.log('err', e);

@@ -144,7 +144,7 @@ UserLogin.on("connection", socket => {
           isAdmin: userlogin.isAdmin,
           ...userlogin._doc,
           token,
-          userHasSubscription:userlogin.paid===true?userlogin.paid:false
+          userHasSubscription: userlogin.paid===true?userlogin.paid:false
 
         };
 

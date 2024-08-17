@@ -47,9 +47,7 @@
 </head>
 
 <body class="crm_body_bg">
-<% if (userHasSubscription) { %>
-  <%- include('eventModal/modal.html') %>
-<% } %>
+
   <div id="layout-wrapper">
     <!-- ============================================================== -->
     <!-- Start right Content here -->
@@ -509,6 +507,9 @@
     <!-- end main content-->
   </div>
   <div class="menu-overlay"></div>
+  <% if (userHasSubscription) { %>
+    <%- include('eventModal/modal.html') %>
+  <% } %>
   <style>
     .sidebar .logo .large_logo img {
       width: 70%;
