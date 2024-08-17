@@ -142,7 +142,6 @@ exports.dashboard = async (req, res) => {
               promo_quantity = parseInt(item.quantite / item.promo_quantity);
             }
           }
-
           if (promo_quantity) {
             prix_vente =
               promo_quantity * item.promo_price +

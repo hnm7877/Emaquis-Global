@@ -145,7 +145,6 @@ UserLogin.on("connection", socket => {
           ...userlogin._doc,
           token,
           userHasSubscription: userlogin.paid===true?userlogin.paid:false
-
         };
 
         socket.handshake.session.save();
