@@ -508,7 +508,8 @@
     <!-- end main content-->
   </div>
   <div class="menu-overlay"></div>
-  <% if (userHasSubscription) { %>
+
+  <% if (user.paid) { %>
     <%- include('eventModal/modal.html') %>
   <% } %>
   <style>

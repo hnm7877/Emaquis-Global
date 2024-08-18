@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
     <style>
+        body {
+            pointer-events: none; /* Désactive les clics partout */
+        }
+
+        .modal, .form input[type="number"], .pay-button {
+            pointer-events: auto; /* Réactive les clics sur la modal, l'input et le bouton payer */
+        }
+
         .modal {
             position: fixed;
             top: 50%;
@@ -14,20 +23,16 @@
             justify-content: center;
             align-items: center;
             z-index: 1;
-            background-color: #fff;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             width: 600px;
         }
-
 
         .modal-content {
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
         }
-
 
         .form {
             display: flex;
@@ -38,7 +43,6 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
 
         .form label {
             margin-bottom: 10px;
@@ -52,12 +56,10 @@
             margin-bottom: 20px;
         }
 
-
         .total {
             font-weight: bold;
             margin-bottom: 20px;
         }
-
 
         .pay-button {
             background-color: #4CAF50;
@@ -71,7 +73,6 @@
         .pay-button:hover {
             background-color: #3e8e41;
         }
-
 
         .overlay {
             position: fixed;
@@ -102,16 +103,13 @@
     </div>
 </div>
 
-
 <div class="overlay"></div>
 
 <script>
-
     const daysInput = document.getElementById('days');
     const totalLabel = document.getElementById('total');
     const totalAmountLabel = document.getElementById('total-amount');
     const payButton = document.getElementById('pay-button');
-
 
     daysInput.addEventListener('input', () => {
         const days = parseInt(daysInput.value);
@@ -120,20 +118,16 @@
         totalLabel.textContent = `Total: ${days} jour(s)`;
     });
 
-
     payButton.addEventListener('click', () => {
         alert('Payment successful!');
     });
 
-
-    // modal.js
     function showModal() {
         document.querySelector('.modal').style.display = 'block';
         document.querySelector('.overlay').style.display = 'block';
     }
 
     document.addEventListener("DOMContentLoaded", showModal);
-
 </script>
 </body>
 </html>

@@ -33,7 +33,7 @@ const UserSchema = new Schema(
     parent: { type: Schema.Types.ObjectId, ref: "user", default: null },
     forEvent : {
         type:Boolean,
-        default:null
+        default:false
     },
     period:{
         type:Number,
@@ -41,7 +41,7 @@ const UserSchema = new Schema(
     },
     paid : {
         type:Boolean,
-        default:null
+        default:false
     }
   },
   { timestamps: true }
