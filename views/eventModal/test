@@ -1,0 +1,222 @@
+CREATE SCHEMA delivery_app;
+
+-- Table des types d'utilisateurs (Particulier, Commerçant physique, e-commerce, Livreur)
+CREATE TABLE delivery_app.user_types (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    type_name VARCHAR(50) UNIQUE NOT NULL -- e.g., "Individual", "Physical Business", "E-commerce", "Driver"
+);
+
+-- Table des entreprises et commerces
+CREATE TABLE delivery_app.businesses (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    business_name VARCHAR(255) NOT NULL,
+    user_id UUID REFERENCES delivery_app.users(id),
+    business_type VARCHAR(50) NOT NULL, -- e.g., "Physical Store", "E-commerce"
+    tax_id VARCHAR(50) UNIQUE NOT NULL, -- Tax ID or other business identification number
+    address_id UUID REFERENCES delivery_app.addresses(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table des utilisateurs
+CREATE TABLE delivery_app.users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    phone_number VARCHAR(15) UNIQUE NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    user_type_id UUID REFERENCES delivery_app.user_types(id),
+    referral_code VARCHAR(50),
+    delivery_credit DECIMAL(10, 2) DEFAULT 0.00,
+    business_id UUID REFERENCES delivery_app.businesses(id), -- Optional, if user is linked to a business
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table des profils (Client ou Livreur)
+CREATE TABLE delivery_app.profiles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(50) UNIQUE NOT NULL -- "Client", "Driver"
+);
+
+-- Table des remises sur livraison pour les clients
+CREATE TABLE delivery_app.discounts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES delivery_app.users(id),
+    discount_percentage DECIMAL(5, 2) NOT NULL, -- e.g., 10.00 for 10% discount
+    is_active BOOLEAN DEFAULT TRUE,
+    valid_until TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table d'authentification par OTP
+CREATE TABLE delivery_app.authentication (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES delivery_app.users(id),
+    otp_code VARCHAR(6) NOT NULL,
+    otp_expiry TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table des codes de parrainage
+CREATE TABLE delivery_app.referrals (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES delivery_app.users(id),
+    referral_code VARCHAR(50) UNIQUE NOT NULL,
+    bonus_amount DECIMAL(10, 2) DEFAULT 0.00,
+    is_used BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table des types de véhicules
+CREATE TABLE delivery_app.vehicle_types (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    type_name VARCHAR(50) UNIQUE NOT NULL, -- e.g., "Moto", "Car", "Van"
+    base_rate DECIMAL(10, 2) NOT NULL, -- Rate per km or mile
+    speed_factor DECIMAL(5, 2) NOT NULL, -- Factor for speed calculation
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table des types de colis
+CREATE TABLE delivery_app.package_types (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    type_name VARCHAR(50) UNIQUE NOT NULL, -- e.g., "Documents", "Small Package", "Large Package", "Perishable Goods"
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table des livraisons
+CREATE TABLE delivery_app.deliveries (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    client_id UUID REFERENCES delivery_app.users(id),
+    driver_id UUID REFERENCES delivery_app.users(id),
+    pickup_address_id UUID REFERENCES delivery_app.addresses(id),
+    delivery_address_id UUID REFERENCES delivery_app.addresses(id),
+    recipient_phone_number VARCHAR(15) NOT NULL,
+    package_weight DECIMAL(10, 2),
+    package_size VARCHAR(50),
+    vehicle_type_id UUID REFERENCES delivery_app.vehicle_types(id) DEFAULT 'default_vehicle_uuid',
+    package_type_id UUID REFERENCES delivery_app.package_types(id), -- Link to the package type
+    package_amount DECIMAL(10, 2) DEFAULT 0.00,
+    payment_method VARCHAR(50) NOT NULL,
+    is_cod BOOLEAN DEFAULT FALSE,
+    delivery_fee DECIMAL(10, 2) NOT NULL,
+    distance DECIMAL(10, 2) NOT NULL,
+    payment_status VARCHAR(50) DEFAULT 'Pending',
+    status VARCHAR(50) DEFAULT 'Pending',
+    rating_delivery INTEGER CHECK (rating_delivery BETWEEN 1 AND 5),
+    rating_package INTEGER CHECK (rating_package BETWEEN 1 AND 5),
+    discount_id UUID REFERENCES delivery_app.discounts(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table des adresses
+CREATE TABLE delivery_app.addresses (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES delivery_app.users(id),
+    address_line1 VARCHAR(255) NOT NULL,
+    address_line2 VARCHAR(255),
+    city VARCHAR(100) NOT NULL,
+    postal_code VARCHAR(20) NOT NULL,
+    country VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table de gestion des paiements
+CREATE TABLE delivery_app.payments (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    delivery_id UUID REFERENCES delivery_app.deliveries(id),
+    payer_id UUID REFERENCES delivery_app.users(id),
+    payment_method VARCHAR(50) NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    payment_status VARCHAR(50) DEFAULT 'Pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table de suivi des positions des livreurs
+CREATE TABLE delivery_app.driver_locations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    driver_id UUID REFERENCES delivery_app.users(id),
+    latitude DECIMAL(9, 6) NOT NULL,
+    longitude DECIMAL(9, 6) NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table des préférences de zone des livreurs
+CREATE TABLE delivery_app.driver_preferences (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    driver_id UUID REFERENCES delivery_app.users(id),
+    preferred_areas JSONB,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table de gestion des sessions utilisateurs
+CREATE TABLE delivery_app.session_tokens (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES delivery_app.users(id),
+    token VARCHAR(255) UNIQUE NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table de réinitialisation des mots de passe
+CREATE TABLE delivery_app.password_resets (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES delivery_app.users(id),
+    reset_token VARCHAR(255) UNIQUE NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    is_used BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table pour la gestion des limites de requêtes (rate limits)
+CREATE TABLE delivery_app.rate_limits (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES delivery_app.users(id),
+    endpoint VARCHAR(255) NOT NULL,
+    request_count INTEGER DEFAULT 0,
+    time_window_start TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table pour gérer les vérifications par SMS (code de livraison)
+CREATE TABLE delivery_app.sms_verifications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    delivery_id UUID REFERENCES delivery_app.deliveries(id),
+    recipient_phone_number VARCHAR(15) NOT NULL,
+    sms_code VARCHAR(4) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table de gestion des crédits de livraison des livreurs
+CREATE TABLE delivery_app.delivery_credits (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    driver_id UUID REFERENCES delivery_app.users(id),
+    amount DECIMAL(10, 2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table pour les API publiques (seulement pour les entreprises)
+CREATE TABLE delivery_app.public_api_keys (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES delivery_app.users(id),
+    api_key VARCHAR(255) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CHECK (user_id IN (SELECT id FROM delivery_app.users WHERE user_type_id IN (
+        SELECT id FROM delivery_app.user_types WHERE type_name IN ('Physical Business', 'E-commerce')
+    )))
+);
+
+-- Table de configuration pour les bonus de parrainage et autres paramètres
+CREATE TABLE delivery_app.configs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    config_key VARCHAR(255) UNIQUE NOT NULL,
+    config_value VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
