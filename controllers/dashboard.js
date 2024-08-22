@@ -222,6 +222,7 @@ exports.dashboard = async (req, res) => {
         totalVenteWeek: formatAmount(totalVenteWeek || 0),
         currentWeekIndex,
         weeksInMonth,
+        userId:session._id ||session.id
       });
     } catch (e) {
       console.log("err", e);

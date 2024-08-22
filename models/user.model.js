@@ -42,7 +42,12 @@ const UserSchema = new Schema(
     paid : {
         type:Boolean,
         default:false
+    },
+    expiredPaymentDate:{
+        type:Date,
+        default: new Date(),
     }
+
   },
   { timestamps: true }
 );

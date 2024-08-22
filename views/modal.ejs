@@ -15,12 +15,12 @@
             text-align: left;
         }
 
-        /* Réactive les clics uniquement sur les éléments de la modale CinetPay */
-        .cp-content-wrapper,
+
+
         .cp-content-wrapper *,
         .cp-content-wrapper iframe,
         .cp-content-wrapper button,
-        .cp-content-wrapper .payment-method-box,
+        .cp-content-wrapper
         .cp-content-wrapper .payment-method-box img {
             pointer-events: auto;
         }
@@ -120,8 +120,16 @@
 </div>
 
 <div class="overlay"></div>
-
+<script src="plugins/jquery/jquery.min.js"></script>
+<script src="js/script.js"></script>
+<script src="/socket.io/socket.io.js"></script>
 <script>
+    const socket = io(window.location.origin + window.location.pathname);
+    console.log(window.location.origin + window.location.pathname);
+
+    console.log("<%=JSON.stringify( locals.user) %>","okokokokoko")
+    const user= <%-JSON.stringify( locals.user) %>
+    console.log(user,"suer")
     const daysInput = document.getElementById('days');
     const totalAmountLabel = document.getElementById('total-amount');
     const payButton = document.getElementById('pay-button');
@@ -167,10 +175,14 @@
         });
 
         CinetPay.waitResponse(function (data) {
+            console.log(data)
+            socket.emit("eventPaiement", {user,data});
+
             if (data.status === "REFUSED") {
                 alert("Votre paiement a échoué");
                 window.location.reload();
             } else if (data.status === "ACCEPTED") {
+                socket.emit("eventPaiement", {user,data});
                 alert("Votre paiement a été effectué avec succès");
                 window.location.reload();
             }

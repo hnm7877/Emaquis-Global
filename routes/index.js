@@ -419,4 +419,7 @@ router.post("/etablishmentProduct/:id", checkAuthUser, async (req, res) => {
   }
 });
 
+
+router.put("/updateUser",)
+
 module.exports = router;
