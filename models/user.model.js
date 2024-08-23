@@ -30,6 +30,22 @@ const UserSchema = new Schema(
       ],
       default: [],
     },
+      forEvent : {
+          type:Boolean,
+          default:false
+      },
+      period:{
+          type:Number,
+          default:1
+      },
+      paid : {
+          type:Boolean,
+          default:false
+      },
+      expiredPaymentDate:{
+          type:Date,
+          default: null,
+      }
   },
   { timestamps: true }
 );

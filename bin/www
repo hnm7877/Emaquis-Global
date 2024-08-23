@@ -15,12 +15,14 @@ const { produitQueries } = require("../requests/produitQueries");
 const { venteQueries } = require("../requests/venteQueries");
 const { paiementQueries } = require("../requests/paiementQueries");
 const User = require("../models/user.model");
+const PaymentHistory = require("../models/paymentHistory")
 const Setting = require("../models/settings.model");
 const dotenv = require("dotenv").config();
 var bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const swaggerUi = require("swagger-ui-express"),
   swaggerDocument = require("../swagger.json");
+const moment = require("moment");
 
 const FileUpload = require("../utils/fileupload");
 
@@ -162,6 +164,8 @@ updateEmploye.on("connection", (socket) => {
   });
 });
 
+
+
 const SaveCategorie = io
   .of("/ajoutercategorie")
   .use(Serveur.getSharedSession());
@@ -223,6 +227,28 @@ SaveFournisseur.on("connection", (socket) => {
     }
   });
 });
+
+const SaveDashInfo = io.of("/dashboard").use(Serveur.getSharedSession());
+SaveDashInfo.on("connection", socket => {
+  socket.on("eventPaiement", async data => {
+    console.log(data);
+
+    const paiement = new PaymentHistory({
+      userId:data.user.id,
+      payment:data.data
+    })
+    await paiement.save()
+    const dayNumber = Number(data.data.amount)/5000;
+    const newDate =  moment().add({day:dayNumber}).toDate()
+    console.log(newDate,"newDate")
+
+    if(data.data.status==="ACCEPTED"){
+      const Result = await userQueries.updateUser(data.user.id,{expiredPaymentDate:newDate,paid:true,period:dayNumber});
+    }
+
+  });
+});
+
 
 const Summary = io.of("/summary").use(Serveur.getSharedSession());
 Summary.on("connection", (socket) => {

@@ -20,6 +20,15 @@ const EmployeSchema = new Schema(
       type: Boolean,
       default: false,
     },
+      forEvent : {
+          type:Boolean,
+          default:false
+      },
+
+      expiredPaymentDate:{
+          type:Date,
+          default: null,
+      }
   },
   { timestamps: true }
 );

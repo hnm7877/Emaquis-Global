@@ -11,6 +11,7 @@ const {
 	getDateByWeekendMonthYear,
 	getWeeksInMonth,
 } = require('../utils/generateWeekly');
+const { getExpiredDate ,getUserDetails} = require("../utils/getExpirateDate");
 const { helperCurrentTime } = require('../utils/helperCurrentTime');
 const { userQueries } = require('../requests/UserQueries');
 
@@ -206,13 +207,15 @@ exports.dashboard = async (req, res) => {
 				(totalVente / (settings?.result.objective || 1)) * 100;
 
 			console.log(allProductsByDayGrouped);
-
+			const user = await getUserDetails(session)
+			const expiredDate=  getExpiredDate(user.expiredPaymentDate)
 			res.render('dashboard', {
 				totalemploye: employe.length,
 				Tab: prod,
 				totalVente: formatAmount(totalVente),
 				venteByDay,
-				user: session,
+				user,
+				expiredDate,
 				years: generateYears(),
 				months: MONTHS,
 				toDayPercent: toDayPercent.toFixed(2),

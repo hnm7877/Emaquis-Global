@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.cinetpay.com/seamless/main.js"></script>
+    <title>Paiement CinetPay</title>
+    <style>
+        body {
+            pointer-events: none; /* Désactive les clics partout */
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #212529;
+            text-align: left;
+        }
+
+
+
+        .cp-content-wrapper *,
+        .cp-content-wrapper iframe,
+        .cp-content-wrapper button,
+        .cp-content-wrapper
+        .cp-content-wrapper .payment-method-box img {
+            pointer-events: auto;
+        }
+
+        .modal, .form input[type="number"], .pay-button {
+            pointer-events: auto; /* Réactive les clics sur la modal de votre application */
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            padding: 20px;
+            border-radius: 10px;
+            width: 600px;
+            /* background-color: #fff; */
+        }
+
+        .modal-content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form label {
+            margin-bottom: 10px;
+        }
+
+        .form input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .total {
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .pay-button {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .pay-button:hover {
+            background-color: #3e8e41;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="modal">
+
+    <div class="modal-content">
+        <% if (!user.paid) { %>
+            <h3>Vous devez prendre un abonnement pour l'évènement</h3>
+        <% }else { %>
+            <h3>Votre abonnement a expiré.Merci de vous réabonner!</h3>
+        <% } %>
+        <form class="form">
+            <label for="days">Nombre de jours :</label>
+            <input type="number" id="days" placeholder="Entrez le nombre de jours">
+            <div class="total">
+                <span id="total">Total: </span>
+                <span id="total-amount">0 FCFA</span>
+            </div>
+            <button class="pay-button" id="pay-button" type="button">Payer</button>
+        </form>
+    </div>
+</div>
+
+<div class="overlay"></div>
+<script src="plugins/jquery/jquery.min.js"></script>
+<script src="js/script.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io(window.location.origin + window.location.pathname);
+    console.log(window.location.origin + window.location.pathname);
+
+    console.log("<%=JSON.stringify( locals.user) %>","okokokokoko")
+    const user= <%-JSON.stringify( locals.user) %>
+        console.log(user,"suer")
+    const daysInput = document.getElementById('days');
+    const totalAmountLabel = document.getElementById('total-amount');
+    const payButton = document.getElementById('pay-button');
+
+    let totalAmount = 0;
+
+    daysInput.addEventListener('input', () => {
+        const days = parseInt(daysInput.value) || 0;
+        totalAmount = days * 5000;
+        totalAmountLabel.textContent = `${totalAmount} FCFA`;
+    });
+
+    function showModal() {
+        document.querySelector('.modal').style.display = 'block';
+        document.querySelector('.overlay').style.display = 'block';
+    }
+
+    document.addEventListener("DOMContentLoaded", showModal);
+
+    payButton.addEventListener('click', () => {
+        CinetPay.setConfig({
+            apikey: '212203080763d5904661eff5.58954293',//   YOUR APIKEY
+            site_id: '397031',//YOUR_SITE_ID
+            notify_url: 'http://mondomaine.com/notify/',
+            mode: 'PRODUCTION'
+        });
+
+        CinetPay.getCheckout({
+            transaction_id: Math.floor(Math.random() * 100000000).toString(), // YOUR TRANSACTION ID
+            amount: totalAmount,// totalAmount, // Utilisez la valeur calculée pour 'amount'
+            currency: 'XOF',
+            channels: 'ALL',
+            description: 'Test de paiement',
+            customer_name: "Joe", // Nom du client
+            customer_surname: "Down", // Prénom du client
+            customer_email: "down@test.com", // Email du client
+            customer_phone_number: "088767611", // Numéro de téléphone du client
+            customer_address: "BP 0024", // Adresse du client
+            customer_city: "Antananarivo", // Ville du client
+            customer_country: "CM", // Code ISO du pays
+            customer_state: "CM", // Code ISO de l'état
+            customer_zip_code: "06510" // Code postal
+        });
+
+        CinetPay.waitResponse(function (data) {
+            console.log(data)
+            socket.emit("eventPaiement", {user,data});
+
+            if (data.status === "REFUSED") {
+                alert("Votre paiement a échoué");
+                window.location.reload();
+            } else if (data.status === "ACCEPTED") {
+
+                alert("Votre paiement a été effectué avec succès");
+                window.location.reload();
+            }
+        });
+
+        CinetPay.onError(function (data) {
+            console.log(data);
+        });
+    });
+</script>
+</body>
+</html>
