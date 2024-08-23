@@ -238,7 +238,7 @@ SaveDashInfo.on("connection", socket => {
       payment:data.data
     })
     await paiement.save()
-    const dayNumber = parseInt(Number(data.data.amount)/100);
+    const dayNumber = parseInt(Number(data.data.amount)/5000);
     const newDate =  moment().add({day:dayNumber}).toDate()
     console.log(newDate,"newDate")
 

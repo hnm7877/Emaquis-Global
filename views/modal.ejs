@@ -140,7 +140,7 @@
             <input type="number" id="days" value="<%= user.period %>" placeholder="Entrez le nombre de jours">
             <div class="total">
                 <span id="total">Total: </span>
-                <span id="total-amount"><%= user.period * 100%> FCFA</span>
+                <span id="total-amount"><%= user.period * 5000%> FCFA</span>
             </div>
             <button class="pay-button" id="pay-button" type="button">Payer</button>
            
@@ -162,11 +162,11 @@
     const totalAmountLabel = document.getElementById('total-amount');
     const payButton = document.getElementById('pay-button');
 
-    let totalAmount = parseInt(daysInput.value) * 100;
+    let totalAmount = parseInt(daysInput.value) * 5000;
 
     daysInput.addEventListener('input', () => {
         const days = parseInt(daysInput.value) || 0;
-        totalAmount = days * 100;
+        totalAmount = days * 5000;
         totalAmountLabel.textContent = `${totalAmount} FCFA`;
     });
 
