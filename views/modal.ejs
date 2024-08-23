@@ -131,7 +131,7 @@
             <input type="number" id="days" value="<%= user.period %>" placeholder="Entrez le nombre de jours">
             <div class="total">
                 <span id="total">Total: </span>
-                <span id="total-amount"><%= user.period * 5000%> FCFA</span>
+                <span id="total-amount"><%= user.period * 100%> FCFA</span>
             </div>
             <button class="pay-button" id="pay-button" type="button">Payer</button>
            
@@ -153,11 +153,11 @@
     const totalAmountLabel = document.getElementById('total-amount');
     const payButton = document.getElementById('pay-button');
 
-    let totalAmount = parseInt(daysInput.value) * 5000;
+    let totalAmount = parseInt(daysInput.value) * 100;
 
     daysInput.addEventListener('input', () => {
         const days = parseInt(daysInput.value) || 0;
-        totalAmount = days * 5000;
+        totalAmount = days * 100;
         totalAmountLabel.textContent = `${totalAmount} FCFA`;
     });
 
@@ -171,7 +171,7 @@
     payButton.addEventListener('click', () => {
         CinetPay.setConfig({
             apikey: '212203080763d5904661eff5.58954293',//   YOUR APIKEY
-            site_id: '397031',//YOUR_SITE_ID
+            site_id: '5878488',//YOUR_SITE_ID
             notify_url: 'http://mondomaine.com/notify/',
             mode: 'PRODUCTION'
         });
