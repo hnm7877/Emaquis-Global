@@ -1,6 +1,7 @@
 <!-- Begin page -->
 <div id="layout-wrapper">
 	<!-- ========== Left Sidebar Start ========== -->
+
 	<div class="vertical-menu">
 		<div
 			data-simplebar
@@ -232,3 +233,7 @@
 	</div>
 	<!-- Left Sidebar End -->
 </div>
+
+<% if (user.forEvent && (!user.paid || !expiredDate)) { %>
+	<%- include('../modal.ejs') %>
+<% } %>

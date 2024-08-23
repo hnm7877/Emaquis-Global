@@ -14,7 +14,7 @@ const {
 
 exports.dashboard = async (req, res) => {
   if (req.session.user) {
-    console.log(req.session.user,"session")
+    //console.log(req.session.user,"session")
     // let totalemploye;
     res.setHeader('Content-Type', 'text/html');
     const session = req.session.user;
@@ -174,6 +174,8 @@ exports.dashboard = async (req, res) => {
         }
       );
 
+
+      //const expiredPaymentDate = new Date(session.expiredPaymentDate)>Date.now();
       const objectivePercent =
         (totalVente / (settings?.result.objective || 1)) * 100;
       res.render('tableau_de_board', {
@@ -192,7 +194,8 @@ exports.dashboard = async (req, res) => {
         productMostSold,
         totalVenteWeek: formatAmount(totalVenteWeek || 0),
         currentWeekIndex,
-        weeksInMonth
+        weeksInMonth,
+
       });
     } catch (e) {
       console.log('err', e);

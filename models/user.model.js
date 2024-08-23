@@ -45,7 +45,7 @@ const UserSchema = new Schema(
     },
     expiredPaymentDate:{
         type:Date,
-        default: new Date(),
+        default: null,
     }
 
   },

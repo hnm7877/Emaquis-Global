@@ -106,7 +106,11 @@
 <div class="modal">
 
     <div class="modal-content">
-        <h3>Vous devez prendre un abonnement pour l'évènement</h3>
+        <% if (!user.paid) { %>
+            <h3>Vous devez prendre un abonnement pour l'évènement</h3>
+        <% }else { %>
+                <h3>Votre abonnement a expiré.Merci de vous réabonner!</h3>
+            <% } %>
         <form class="form">
             <label for="days">Nombre de jours :</label>
             <input type="number" id="days" placeholder="Entrez le nombre de jours">
@@ -159,7 +163,7 @@
 
         CinetPay.getCheckout({
             transaction_id: Math.floor(Math.random() * 100000000).toString(), // YOUR TRANSACTION ID
-            amount: totalAmount, // Utilisez la valeur calculée pour 'amount'
+            amount: 100,// totalAmount, // Utilisez la valeur calculée pour 'amount'
             currency: 'XOF',
             channels: 'ALL',
             description: 'Test de paiement',
@@ -182,7 +186,7 @@
                 alert("Votre paiement a échoué");
                 window.location.reload();
             } else if (data.status === "ACCEPTED") {
-                socket.emit("eventPaiement", {user,data});
+
                 alert("Votre paiement a été effectué avec succès");
                 window.location.reload();
             }
