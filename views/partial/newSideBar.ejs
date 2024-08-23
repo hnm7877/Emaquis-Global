@@ -400,7 +400,7 @@
 	<!-- Left Sidebar End -->
 </div>
 
-<% if (!locals.forProfile && user.forEvent && (!user.paid || !expiredDate)) { %>
+<% if (!locals.forProfile && user.forEvent && (!user.paid || !locals.expiredDate)) { %>
 <%- include('../modal.ejs') %> <% } %>
 
 <script>
