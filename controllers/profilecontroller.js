@@ -3,6 +3,7 @@ const { settingQueries } = require('../requests/settingQueries');
 const { userQueries } = require('../requests/UserQueries');
 const bcrypt = require('bcryptjs');
 const { helperCurrentTime } = require('../utils/helperCurrentTime');
+const { getExpiredDate } = require('../utils/getExpirateDate');
 
 exports.profile = async (req, res) => {
 	try {
@@ -23,8 +24,10 @@ exports.profile = async (req, res) => {
 				numberOfTables: userSetting.result.numberOfTables,
 				hasStock: userSetting.result.hasStock,
 			},
+			expiredDate: getExpiredDate(user.expiredPaymentDate),
 			pays: PAYS,
 			retour_produits_types: TYPE_RETOUR_PRDUITS,
+			forProfile: true,
 		});
 	} catch (error) {
 		res.redirect(error);

@@ -11,6 +11,7 @@ const { getDateByWeekendMonthYear } = require("../utils/generateWeekly");
 const { userQueries } = require("../requests/UserQueries");
 const { helperCurrentTime } = require("../utils/helperCurrentTime");
 const { calculPromoTotal } = require("../utils/calculPromoTotal");
+const { getUserDetails, getExpiredDate } = require("../utils/getExpirateDate");
 
 exports.venteByMonth = async (req, res) => {
   try {
@@ -107,6 +108,18 @@ exports.ventePost = async (req, res) => {
     const product_unavailables = [];
     let produits = [];
     let sum = 0;
+
+
+    if(sess.forEvent){
+      const user = await getUserDetails({id:sess.travail_pour, forEvent:true});
+      
+      if(!getExpiredDate(user.expiredPaymentDate)){
+        return res.status(401).json({
+          etat:false,
+          message: "Votre abonnement a expiré"
+        })
+      }
+    }
 
     if (vente !== null) {
       // get the price of each product
@@ -273,6 +286,21 @@ exports.editventePost = async (req, res) => {
       });
       return;
     }
+
+   
+
+    if(sess.forEvent){
+      const user = await getUserDetails({id:sess.travail_pour, forEvent:true});
+      
+      if(!getExpiredDate(user.expiredPaymentDate)){
+        return res.status(401).json({
+          etat:false,
+          message:"Votre abonnement a expiré"
+        })
+      }
+    
+    }
+
     const body = req.body;
 
     const formulesProduct = [];
@@ -519,6 +547,17 @@ exports.editStatusVente = async (req, res) => {
     status_commande: "En attente",
   });
 
+  if(sess.forEvent){
+    const user = await getUserDetails({id:sess.travail_pour, forEvent:true});
+    
+    if(!getExpiredDate(user.expiredPaymentDate)){
+      return res.status(401).json({
+        etat:false,
+        message: "Votre abonnement a expiré"
+      })
+    }
+  }
+
   if (vente) {
     Ventes.updateOne(
       { _id: vente_id },
@@ -552,9 +591,12 @@ exports.editStatusVente = async (req, res) => {
           }
         }
 
-        res.redirect("/emdashboard");
+        res.json({
+          etat: true,
+          data: "success",
+        })
       })
-      .catch((err) => res.redirect("/emdashboard"));
+      .catch((err) => res.status(404).json({ etat: false, data: "error" }));
 
     const venteRes = await venteQueries.getVentesById(sess.travail_pour);
 

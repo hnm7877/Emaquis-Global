@@ -1,13 +1,17 @@
 const { categorieQueries } = require('../requests/categorieQueries');
+const { getUserDetails, getExpiredDate } = require('../utils/getExpirateDate');
 
 exports.addcat = async (req, res) => {
   if (req.session.user) {
     try {
       sess = req.session.user;
 
+      const user = await getUserDetails(sess);
+
       //console.log(sess.id,"sqddsddqs")
       res.render('ajoutercategorie', {
-        user: sess,
+        user,
+        expiredDate: getExpiredDate(user.expiredPaymentDate),
         categorie: null,
       });
     } catch (error) {
@@ -26,13 +30,16 @@ exports.editCat = async (req, res) => {
       const catId = req.query.catId;
       let categorie = null;
 
+      const user = await getUserDetails(sess);
+
       if (catId) {
         categorie = await categorieQueries.getCategorieById(catId);
       }
 
       //console.log(sess.id,"sqddsddqs")
       res.render('ajoutercategorie', {
-        user: sess,
+        user,
+        expiredDate: getExpiredDate(user.expiredPaymentDate),
         categorie: categorie?.result,
       });
     } catch (error) {

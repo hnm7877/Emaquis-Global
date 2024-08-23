@@ -1,4 +1,5 @@
 const { venteQueries } = require('../requests/venteQueries');
+const { getUserDetails, getExpiredDate } = require('../utils/getExpirateDate');
 
 exports.data_table = async (req, res) => {
 	try {
@@ -7,6 +8,7 @@ exports.data_table = async (req, res) => {
 			const ventes = await venteQueries.getVentes({
 				travail_pour: user.id || user.travail_pour,
 			});
+			const userDetails = await getUserDetails(user);
 
 			res.render('data_table', {
 				ventes: ventes.result.map((el) => {
@@ -27,6 +29,8 @@ exports.data_table = async (req, res) => {
 						createdAt: new Date(el.createdAt).toLocaleString('fr-Fr'),
 					};
 				}),
+				user: userDetails,
+				expiredDate: getExpiredDate(userDetails.expiredPaymentDate),
 			});
 		} else {
 			res.redirect('connexion');

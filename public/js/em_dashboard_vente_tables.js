@@ -63,7 +63,13 @@ const TablesItem = ({
 				'Content-Type': 'application/json',
 			},
 		})
-			.then((res) => {
+			.then(async (res) => {
+				const data = await res.json();
+				if(data && data.etat === false && data.message){
+					alert(data.message);
+					setLoading(false);
+					return;
+				}
 				setShowSuccess(true);
 				confirmVente(venteId, type);
 				setLoading({
@@ -203,7 +209,14 @@ const ModalDelete = ({
 				'Content-Type': 'application/json',
 			},
 		})
-			.then((res) => {
+			.then(async (res) => {
+				const data = await res.json();
+
+				if(data && data.etat === false && data.message){
+					alert(data.message);
+					setLoading(false);
+					return;
+				}
 				setShowSuccess(true);
 				confirmVente(venteIdToDelete, 'Annulée');
 				setLoading(false);

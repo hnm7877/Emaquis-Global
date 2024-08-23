@@ -6,6 +6,7 @@ const { settingQueries } = require('../requests/settingQueries');
 const {
 	generateQuantityByLocker,
 } = require('../utils/generateQuantityByLocker');
+const { getUserDetails, getExpiredDate } = require('../utils/getExpirateDate');
 
 exports.addproduit = async (req, res) => {
 	if (req.session.user) {
@@ -26,15 +27,19 @@ exports.addproduit = async (req, res) => {
 			if (Categorie.result !== null) {
 				const categories = Categorie.result;
 
+				const user = await getUserDetails(sess);
+
+      
 				res.render('ajouterproduit', {
 					categories: categories,
 					globalProduits: resProduits.result,
 					produits: resProduitsBySession.result,
 					user: {
-						...sess,
+						...user,
 						id: sess.id || sess._id,
 						hasStock: setting.result.hasStock,
 					},
+					expiredDate: getExpiredDate(user.expiredPaymentDate),
 					product_sizes: PRODUCT_SIZE,
 					update: false,
 					product: null,
@@ -217,16 +222,19 @@ exports.editProduit = async (req, res) => {
 			return;
 		}
 
+		const user = await getUserDetails(sess);
+
 		res.render('ajouterproduit', {
 			categories: Categorie.result,
 			product: produit.result,
 			globalProduits: resProduits.result,
 			produits: resProduitsBySession.result,
 			user: {
-				...sess,
+				...user,
 				id: sess.id || sess._id,
 				hasStock: setting.result.hasStock,
 			},
+			expiredDate: getExpiredDate(user.expiredPaymentDate),
 			product_sizes: PRODUCT_SIZE,
 			update: true,
 		});
@@ -243,6 +251,16 @@ exports.editproduitPost = async (req, res) => {
 		const produit = await produitQueries.getGlobalProduitById(req.body.produit);
 
 		const setting = await settingQueries.getSettingByUserId(session || user.id);
+
+		const userDetails = await getUserDetails(user);
+
+		if(userDetails.forEvent && !getExpiredDate(userDetails.expiredPaymentDate)){
+			res.status(401).send({
+				message: "Votre abonnement a expiré",
+				success: false,
+			});
+			return;
+		}
 
 		const stock = await stockQueries.getOneStockByQuery({
 			produit: req.body.produit,

@@ -1,4 +1,5 @@
 const { produitQueries } = require("../requests/produitQueries");
+const { getUserDetails, getExpiredDate } = require("../utils/getExpirateDate");
 
 exports.produit = async (req, res) => {
   if (req.session.user) {
@@ -9,9 +10,12 @@ exports.produit = async (req, res) => {
         session.id || session.travail_pour
       );
 
+      const user = await getUserDetails({...session, id: session.id || session.travail_pour});
+
       res.render("listeproduit", {
         Result: products.result,
-        user: req.session.user,
+        user: user,
+        expiredDate: getExpiredDate(user.expiredPaymentDate),
       });
     } catch (e) {
       console.log("err", e);
