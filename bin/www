@@ -62,7 +62,7 @@ const SaveUSer = io.of("/inscription").use(Serveur.getSharedSession());
 SaveUSer.on("connection", (socket) => {
   socket.on("setUser", async (data) => {
     const Result = await userQueries.setUser(data);
-    if (Result.etat == false) {
+    if (Result.etat === false) {
       socket.emit("bad");
     } else {
       if (Result !== null) {
