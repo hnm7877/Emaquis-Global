@@ -136,4 +136,8 @@ exports.userQueries = class {
         });
     });
   }
+
+  static getCounts() {
+    return User.countDocuments() || 0;
+  }
 };

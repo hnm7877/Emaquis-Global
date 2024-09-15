@@ -220,4 +220,8 @@ exports.venteQueries = class {
         });
     });
   }
+
+  static getCounts() {
+    return Vente.countDocuments();
+  }
 };
