@@ -159,11 +159,11 @@
       const totalAmountLabel = document.getElementById('total-amount');
       const payButton = document.getElementById('pay-button');
 
-      let totalAmount = parseInt(daysInput.value) * 5000;
+      let totalAmount = parseInt(daysInput.value) * 1000;
 
       daysInput.addEventListener('input', () => {
           const days = parseInt(daysInput.value) || 0;
-          totalAmount = days * 5000;
+          totalAmount = days * 1000;
           totalAmountLabel.textContent = `${totalAmount} FCFA`;
       });
 
