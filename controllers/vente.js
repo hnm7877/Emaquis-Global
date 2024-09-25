@@ -12,6 +12,7 @@ const { userQueries } = require("../requests/UserQueries");
 const { helperCurrentTime } = require("../utils/helperCurrentTime");
 const { calculPromoTotal } = require("../utils/calculPromoTotal");
 const { getUserDetails, getExpiredDate } = require("../utils/getExpirateDate");
+const moment = require('moment');
 
 exports.venteByMonth = async (req, res) => {
   try {
@@ -757,6 +758,21 @@ exports.venteBilan = async (req, res) => {
           $in: users,
         };
       }
+
+			if (
+				moment(start).format('DD/MM/YYYY') === moment(end).format('DD/MM/YYYY')
+			) {
+				const userAdmin = await userQueries.getUserById(req.session.user._id);
+				const { startDate, endDate } = helperCurrentTime({
+					timings: userAdmin?.result?.timings || [],
+					defaultCurrentDay: new Date(start).getDay(),
+				});
+				filter.createdAt = {
+					$gte: startDate,
+					$lte: endDate,
+				};
+			}
+
 
       const ventes = await venteQueries.getVentes(filter);
 
