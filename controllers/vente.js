@@ -759,19 +759,22 @@ exports.venteBilan = async (req, res) => {
         };
       }
 
-			if (
-				moment(start).format('DD/MM/YYYY') === moment(end).format('DD/MM/YYYY')
-			) {
-				const userAdmin = await userQueries.getUserById(req.session.user._id);
+		
+			if(start){
+        const userAdmin = await userQueries.getUserById(req.session.user._id);
 				const { startDate, endDate } = helperCurrentTime({
 					timings: userAdmin?.result?.timings || [],
 					defaultCurrentDay: new Date(start).getDay(),
 				});
-				filter.createdAt = {
-					$gte: startDate,
-					$lte: endDate,
-				};
-			}
+			
+        if(filter.createdAt.$gte){
+          filter.createdAt.$gte.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds());
+        }
+
+        if(filter.createdAt.$lte){
+          filter.createdAt.$lte.setHours(endDate.getHours(), endDate.getMinutes(), endDate.getSeconds());
+        }
+      }
 
 
       const ventes = await venteQueries.getVentes(filter);
