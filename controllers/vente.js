@@ -767,11 +767,11 @@ exports.venteBilan = async (req, res) => {
 					defaultCurrentDay: new Date(start).getDay(),
 				});
 			
-        if(filter.createdAt.$gte){
+        if(filter.createdAt.$gte && startDate){
           filter.createdAt.$gte.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds());
         }
 
-        if(filter.createdAt.$lte){
+        if(filter.createdAt.$lte && endDate){
           filter.createdAt.$lte.setHours(endDate.getHours(), endDate.getMinutes(), endDate.getSeconds());
         }
       }
