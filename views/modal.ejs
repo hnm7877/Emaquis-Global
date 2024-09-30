@@ -200,7 +200,7 @@
           });
 
           CinetPay.waitResponse(function (data) {
-              console.log(data)
+
               socket.emit("eventPaiement", {user,data});
 
               if (data.status === "REFUSED") {
