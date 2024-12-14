@@ -95,6 +95,7 @@ exports.addproduitPost = async (req, res) => {
 				produit: req.body.produit,
 				categorie: produit.result?.categorie?._id,
 				size: req.body.taille,
+				travail_pour: user.id || user._id
 			});
 
 			if (setting.result.hasStock && !req.body.is_cocktail) {
@@ -266,6 +267,7 @@ exports.editproduitPost = async (req, res) => {
 			produit: req.body.produit,
 			categorie: produit.result?.categorie?._id,
 			size: req.body.taille,
+			travail_pour: user.id || user._id
 		});
 
 		if (setting.result.hasStock && !req.body.is_cocktail) {

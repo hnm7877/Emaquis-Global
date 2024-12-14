@@ -16,6 +16,7 @@ exports.stocksList = async (req, res) => {
     const result = await stockQueries.getStockBySession(
       user?.id || user?._id || user.travail_pour
     );
+    
 
     res.send({
       data: result.result,
@@ -34,10 +35,12 @@ exports.addStock = async (req, res) => {
   try {
     if (user) {
       const body = req.body;
+      console.log("🚀 ~ exports.addStock= ~ body:", body)
 
       const { produit, categorie, size, productId, stockType } = body;
 
       const findProduct = await produitQueries.getProduitById(productId);
+      console.log("🚀 ~ exports.addStock= ~ findProduct:", findProduct)
 
       // verifier si le produit existe sinon on renvoie une erreur
 
@@ -64,6 +67,7 @@ exports.addStock = async (req, res) => {
         produit,
         categorie,
         size,
+        travail_pour: user.id || user._id
       });
 
       // si le stock existe, on met a jour la quantite
@@ -74,6 +78,8 @@ exports.addStock = async (req, res) => {
           quantity: stock.result.quantity + quantity,
         });
 
+        
+
         res.send({
           data: result.result,
           success: result.etat,
@@ -82,13 +88,15 @@ exports.addStock = async (req, res) => {
         return;
       }
 
+      
+
       // si le stock n'existe pas, on le cree
 
       const result = await stockQueries.setStock({
         ...body,
         quantity,
         user: user.id || user._id,
-        travail_pour: user.id || user.travail_pour,
+        travail_pour: user.id || user._id || user.travail_pour,
       });
 
       res.send({
