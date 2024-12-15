@@ -286,6 +286,8 @@
                           <button
                             type="submit"
                             class="btn_1 radius_btn d-block text-center btn_1_Verif"
+                            data-toggle="modal"
+                            data-target="#roleModal"
                           >
                             <%= locals.update?"Modifier": "Ajouter"%> employé
                           </button>
@@ -398,6 +400,37 @@
             1000
           );
         });
+
+        // Determine the role and set the modal content
+        const role = $('select[name="role"]').val();
+        let modalContent = "";
+        let videoUrl = "";
+
+        if (
+          role === "serveur(euse)" ||
+          role === "Manager" ||
+          role === "gestionnaire"
+        ) {
+          modalContent =
+            "L'employé est maintenant enregistré dans votre établissement donc il peut maintenant télécharger l'application mobile sur le PlayStore ou AppStore pour les prises de commandes.";
+          videoUrl = "medias/barman.mp4"; // Replace with actual video path
+        } else if (role === "Barman") {
+          modalContent =
+            "L'employé est maintenant enregistré dans votre établissement donc il peut maintenant se connecter sur son espace barman à cette adresse : https://e-maquis.com/emconnexion";
+          videoUrl = "medias/barman.mp4"; // Replace with actual video path
+        }
+
+        // Set the modal content and video
+        $("#modalBodyContent").html(`
+          <p>${modalContent}</p>
+          <video autoplay controls style="width:100%; height:auto;">
+            <source src="${videoUrl}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        `);
+
+        // Show the modal
+        $("#roleModal").modal("show");
       });
       const driver = window.driver.js.driver;
       // Définir une variable pour garder une trace si l'action a déjà été effectuée
@@ -511,6 +544,44 @@
 
     <!-- App js -->
     <script src="assets/js/theme.js"></script>
+
+    <!-- Add this modal structure somewhere in your HTML body -->
+    <div
+      class="modal fade"
+      id="roleModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="roleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="roleModalLabel">Information</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="modalBodyContent">
+            <!-- Content and videos will be dynamically inserted here -->
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 
   <!-- Mirrored from demo.dashboardpack.com/user-management-html/add_new_user.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 05 Jul 2021 17:20:09 GMT -->
