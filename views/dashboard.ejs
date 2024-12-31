@@ -674,6 +674,56 @@
           transform: rotate(360deg);
         }
       }
+
+      .new-year-countdown {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      .countdown-content {
+        color: #333;
+      }
+
+      .countdown-content h2 {
+        margin-bottom: 10px;
+        font-size: 1.2em;
+        color: #ff9c2c;
+      }
+
+      #countdown-display {
+        font-size: 1.1em;
+        font-weight: bold;
+      }
+
+      #countdown-display span {
+        color: #ff9c2c;
+        padding: 0 5px;
+      }
+
+      @media (max-width: 768px) {
+        .new-year-countdown {
+          position: relative;
+          top: 0;
+          right: 0;
+          margin: 10px;
+        }
+      }
+
+      canvas#confetti-canvas {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 999 !important;
+        pointer-events: none;
+      }
     </style>
 
     <!-- Begin page -->
@@ -1093,8 +1143,10 @@
 
         // Vérifier si nous sommes dans les 10 premiers jours de janvier
         const isNewYearPeriod = now.getMonth() === 0 && now.getDate() <= 10;
+        // Vérifier si nous sommes dans les 5 premiers jours pour les confettis
+        const isConfettiPeriod = now.getMonth() === 0 && now.getDate() <= 5;
 
-        // Si nous sommes dans les 10 premiers jours, afficher directement le message
+        // Si nous sommes dans les 10 premiers jours, afficher le message
         if (isNewYearPeriod) {
           celebrateNewYear();
           return;
@@ -1142,6 +1194,11 @@
       function celebrateNewYear() {
         const countdown = document.getElementById("countdown-display");
         const currentYear = new Date().getFullYear();
+        const now = new Date();
+
+        // Vérifier si nous sommes dans les 5 premiers jours de janvier
+        const isWithinFirstFiveDays =
+          now.getMonth() === 0 && now.getDate() <= 5;
 
         countdown.innerHTML = `
           <div class="new-year-message">
@@ -1173,20 +1230,41 @@
         `;
         document.head.appendChild(style);
 
-        // Lancer les confettis seulement si on vient juste de passer à la nouvelle année
-        const now = new Date();
-        if (
-          now.getMonth() === 0 &&
-          now.getDate() === 1 &&
-          now.getHours() === 0
-        ) {
-          startConfetti({
-            particleCount: 150,
-            spread: 180,
-            origin: { y: 0.6 },
-          });
+        // Lancer les confettis seulement si on est dans les 5 premiers jours
+        if (isWithinFirstFiveDays) {
+          function launchConfettiWave() {
+            const commonConfig = {
+              particleCount: 50,
+              spread: 80,
+              startVelocity: 30,
+              gravity: 0.5,
+              ticks: 400,
+              colors: ["#ff9c2c", "#ffffff", "#000000", "#ff0000", "#00ff00"],
+              shapes: ["square", "circle"],
+              scalar: 1,
+              zIndex: 999,
+              disableForReducedMotion: true,
+            };
 
+            // Créer une grille de points de lancement
+            for (let i = 0; i <= 1; i += 0.2) {
+              startConfetti({
+                ...commonConfig,
+                origin: { x: i, y: 0.1 },
+                angle: 80 + Math.random() * 20,
+              });
+            }
+          }
+
+          // Lancer la première vague
+          launchConfettiWave();
+
+          // Créer un effet continu pendant 5 secondes
+          const confettiInterval = setInterval(launchConfettiWave, 200);
+
+          // Arrêter après 5 secondes
           setTimeout(() => {
+            clearInterval(confettiInterval);
             stopConfetti();
           }, 5000);
         }
