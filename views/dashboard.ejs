@@ -1071,5 +1071,127 @@
 
     <!-- App js -->
     <script src="assets/js/theme.js"></script>
+
+    <div id="new-year-countdown" class="new-year-countdown">
+      <div class="countdown-content">
+        <h2>Compte à rebours Nouvel An</h2>
+        <div id="countdown-display">
+          <span id="days">00</span> jours <span id="hours">00</span> heures
+          <span id="minutes">00</span> minutes
+          <span id="seconds">00</span> secondes
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Fonction pour le compte à rebours
+      function newYearCountdown() {
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const nextYear = currentYear + 1;
+        const newYear = new Date(`January 1, ${nextYear} 00:00:00`).getTime();
+
+        function updateCountdown() {
+          const now = new Date().getTime();
+          const timeLeft = newYear - now;
+
+          const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+          const hours = Math.floor(
+            (timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          );
+          const minutes = Math.floor(
+            (timeLeft % (1000 * 60 * 60)) / (1000 * 60)
+          );
+          const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+          document.getElementById("days").innerHTML = days
+            .toString()
+            .padStart(2, "0");
+          document.getElementById("hours").innerHTML = hours
+            .toString()
+            .padStart(2, "0");
+          document.getElementById("minutes").innerHTML = minutes
+            .toString()
+            .padStart(2, "0");
+          document.getElementById("seconds").innerHTML = seconds
+            .toString()
+            .padStart(2, "0");
+
+          // Quand on arrive à minuit le 1er janvier
+          if (timeLeft < 0) {
+            clearInterval(countdownTimer);
+            celebrateNewYear();
+          }
+        }
+
+        // Mettre à jour chaque seconde
+        const countdownTimer = setInterval(updateCountdown, 1000);
+        updateCountdown();
+      }
+
+      // Fonction pour célébrer le nouvel an
+      function celebrateNewYear() {
+        const countdown = document.getElementById("countdown-display");
+        countdown.innerHTML = `<h1>Bonne Année ${new Date().getFullYear()}! 🎉</h1>`;
+
+        // Lancer les confettis
+        startConfetti({
+          particleCount: 150,
+          spread: 180,
+          origin: { y: 0.6 },
+        });
+
+        // Arrêter les confettis après 5 secondes
+        setTimeout(() => {
+          stopConfetti();
+        }, 5000);
+      }
+
+      // Démarrer le compte à rebours
+      newYearCountdown();
+    </script>
+
+    <style>
+      .new-year-countdown {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      .countdown-content {
+        color: #333;
+      }
+
+      .countdown-content h2 {
+        margin-bottom: 10px;
+        font-size: 1.2em;
+        color: #ff9c2c;
+      }
+
+      #countdown-display {
+        font-size: 1.1em;
+        font-weight: bold;
+      }
+
+      #countdown-display span {
+        color: #ff9c2c;
+        padding: 0 5px;
+      }
+
+      @media (max-width: 768px) {
+        .new-year-countdown {
+          position: relative;
+          top: 0;
+          right: 0;
+          margin: 10px;
+        }
+      }
+    </style>
   </body>
 </html>
