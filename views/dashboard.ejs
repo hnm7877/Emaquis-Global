@@ -1091,6 +1091,15 @@
         const nextYear = currentYear + 1;
         const newYear = new Date(`January 1, ${nextYear} 00:00:00`).getTime();
 
+        // Vérifier si nous sommes dans les 10 premiers jours de janvier
+        const isNewYearPeriod = now.getMonth() === 0 && now.getDate() <= 10;
+
+        // Si nous sommes dans les 10 premiers jours, afficher directement le message
+        if (isNewYearPeriod) {
+          celebrateNewYear();
+          return;
+        }
+
         function updateCountdown() {
           const now = new Date().getTime();
           const timeLeft = newYear - now;
@@ -1129,22 +1138,58 @@
         updateCountdown();
       }
 
-      // Fonction pour célébrer le nouvel an
+      // Modifier la fonction celebrateNewYear()
       function celebrateNewYear() {
         const countdown = document.getElementById("countdown-display");
-        countdown.innerHTML = `<h1>Bonne Année ${new Date().getFullYear()}! 🎉</h1>`;
+        const currentYear = new Date().getFullYear();
 
-        // Lancer les confettis
-        startConfetti({
-          particleCount: 150,
-          spread: 180,
-          origin: { y: 0.6 },
-        });
+        countdown.innerHTML = `
+          <div class="new-year-message">
+            <h1>Bonne Année ${currentYear}! 🎉</h1>
+            <p>Que cette année vous apporte bonheur et prospérité!</p>
+          </div>
+        `;
 
-        // Arrêter les confettis après 5 secondes
-        setTimeout(() => {
-          stopConfetti();
-        }, 5000);
+        // Ajouter du style pour le message
+        const style = document.createElement("style");
+        style.textContent = `
+          .new-year-message {
+            animation: fadeIn 1s ease-in;
+            padding: 10px;
+          }
+          .new-year-message h1 {
+            color: #ff9c2c;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+          }
+          .new-year-message p {
+            color: #666;
+            font-size: 0.9em;
+          }
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+        `;
+        document.head.appendChild(style);
+
+        // Lancer les confettis seulement si on vient juste de passer à la nouvelle année
+        const now = new Date();
+        if (
+          now.getMonth() === 0 &&
+          now.getDate() === 1 &&
+          now.getHours() === 0
+        ) {
+          startConfetti({
+            particleCount: 150,
+            spread: 180,
+            origin: { y: 0.6 },
+          });
+
+          setTimeout(() => {
+            stopConfetti();
+          }, 5000);
+        }
       }
 
       // Démarrer le compte à rebours
