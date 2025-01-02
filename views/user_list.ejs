@@ -179,6 +179,13 @@
                               <a href="#" class="action_btn" onclick='buttonClick("<%=el.nom%> <%=el.prenom%>","<%=el._id%>")' data-toggle="modal" data-userId="<%=el._id%>" data-username="<%=el.nom%> <%=el.prenom%>" data-target="#delete_user_modal">
                                 <i class="fas fa-trash"></i>
                               </a>
+                             
+                              <%if(el.deletedItSelf){%>
+                                <a href="#" class="confirm_action_btn action_btn" style="color: red;" onclick='confirmButtonClick("<%=el.nom%> <%=el.prenom%>","<%=el._id%>")' data-toggle="modal" data-userId="<%=el._id%>" data-username="<%=el.nom%> <%=el.prenom%>" data-target="#confirmer_delete_user_modal">
+                                  <i class="fa fa-exclamation-triangle"></i>
+                                </a>
+                              <%}%>
+                             
                             </div>
                           </td>
                           <%})%>
@@ -252,9 +259,56 @@
     </div>
   </div>
 
+
+  <div class="modal fade" id="confirmer_delete_user_modal" tabindex="-1" role="dialog" aria-labelledby="confirmer_delete_user_modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">
+            Ce compte sera supprimé
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+         L'employé souhaite supprimer son compte
+        </div>
+        <form method="post" action="/confirm_delete_employee">
+          <input type="hidden" id="confirmer_user_delete_id" name="userId" />
+          <input type="checkbox" id="confirmer_user_delete_checkbox" name="confirmer" style="opacity: 0;" />
+
+          <label class="modal-footer" style="display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+           
+            <button type="submit" class="btn btn-danger">
+              <label for="confirmer_user_delete_checkbox" style="width: 100%;margin:0;padding:0;">
+             confirmer
+            </label>
+            </button>
+        
+         
+            <button type="submit" class="btn btn-success">
+             
+              Refuser
+          
+            </button>
+        
+            <button type="button" class="btn btn-info" data-dismiss="modal">
+             
+                Annuler
+             
+            </button>
+        
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   
   <script>
     const btns = $('.action_btn');
+    const confirmBtns = $('.confirm_action_btn');
 
     const buttonClick = (name, id) => {
 
@@ -274,9 +328,28 @@
       $('#user_delete_id').val(user_id);
     }
 
-    btns.each((index, btn) => {
-      $(btn).on('click', buttonClick);
-    });
+    const confirmButtonClick = (name, id) => {
+      let user_name = '';
+      let user_id = '';
+      if (name !== 'string' && typeof id !== 'string') {
+        user_name = $(this).attr('data-username');
+        user_id = $(this).attr('data-userId');
+      } else {
+        user_name = name;
+        user_id = id;
+      }
+
+      $('#confirmer_user_delete_name').text(user_name);
+      $('#confirmer_user_delete_id').val(user_id);
+    }
+
+    // btns.each((index, btn) => {
+    //   $(btn).on('click', buttonClick);
+    // });
+
+    // confirmBtns.each((index, btn) => {
+    //   $(btn).on('click', confirmButtonClick);
+    // });
   </script>
 
   <script src="assets/js/bootstrap.bundle.min.js"></script>

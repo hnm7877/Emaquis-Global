@@ -42,7 +42,7 @@ exports.employeQueries = class {
     return new Promise(async (next) => {
       await Employe.findOne({
         email: email,
-        deleted: false,
+        deleted: false
       })
         .then((data) => {
           next({
@@ -233,6 +233,18 @@ exports.employeQueries = class {
             etat: false,
             err: err,
           });
+        });
+    });
+  }
+
+  static updateEmployeDeletedItSelf(id, data) {
+    return new Promise((next) => {
+      Employe.updateOne({ _id: id }, { $set: { deletedItSelf: data } })
+        .then((data) => {
+          next({ etat: true, result: data });
+        })
+        .catch((err) => {
+          next({ etat: false, err: err });
         });
     });
   }

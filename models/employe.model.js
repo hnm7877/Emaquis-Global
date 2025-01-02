@@ -16,6 +16,10 @@ const EmployeSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    deletedItSelf: {
+      type: Boolean,
+      default: false,
+    },
     isAdmin: {
       type: Boolean,
       default: false,

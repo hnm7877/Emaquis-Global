@@ -17,13 +17,14 @@ exports.employeloginPost = async (req, res) => {
   try {
     const { numero, password } = req.body;
     if (!(numero && password)) {
-      res.status(400).send('veuillez remplir tous les champs');
+      return res.status(400).send('veuillez remplir tous les champs');
     }
     const employelogin = await Employe.findOne({ numero });
 
     if (
       employelogin &&
-      (await bcrypt.compare(password, employelogin.password))
+      (await bcrypt.compare(password, employelogin.password)) &&
+      !employelogin.deletedItSelf
     ) {
       const token = jwt.sign(
         { employe_id: employelogin._id, numero },

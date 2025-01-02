@@ -199,6 +199,8 @@ router.get('/barmanparuser', barmanparusercontroller.barmanparuser);
 router.post('/allbarmans', allemployecontroller.allBarmans);
 
 router.post('/employelogin', employelogincontroller.employeloginPost);
+router.post('/delete_self_account', allemployecontroller.deleteSelfEmployee);
+router.post('/confirm_delete_employee', allemployecontroller.confirmDeleteEmployee);
 
 router.get('/faq', faqcontroller.faq);
 router.get('/condition_general', conditiongeneral_controller.condition_general);
