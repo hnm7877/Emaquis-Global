@@ -1,4 +1,5 @@
 const Categorie = require('../models/categorie.model');
+const mongoose = require('mongoose');
 
 exports.categorieQueries = class {
 	static setCategorie(data) {
@@ -8,6 +9,7 @@ exports.categorieQueries = class {
 				categorie_pour: data.categorie_pour,
 				image: data.image,
 				color: data.color,
+				idParent: data.idParent || null,
 			});
 			await categorie
 				.save()
@@ -31,11 +33,22 @@ exports.categorieQueries = class {
 			return new Promise(async (next) => {
 				Categorie.find({
 					isDeleted: false,
+					idParent: null
 				})
-					.then((data) => {
+					.then(async (data) => {
+				
+
+						const newData2 = await Promise.all(data.map(async (categorie) => {
+							let childs = await Categorie.find({idParent: mongoose.Types.ObjectId(categorie._id), isDeleted: false});
+							
+							return {...categorie._doc, childs};
+						}));
+
+
+						
 						next({
 							etat: true,
-							result: data,
+							result: newData2,
 						});
 					})
 					.catch((err) => {
@@ -84,6 +97,7 @@ exports.categorieQueries = class {
 						categorie_pour: data.categorie_pour,
 						image: data.image,
 						color: data.color,
+						idParent: data.idParent || null,
 					},
 				}
 			)

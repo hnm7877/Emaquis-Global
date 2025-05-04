@@ -220,11 +220,17 @@
           const updateProduct = <%- JSON.stringify(update) %>;
           const hasStock = <%- JSON.stringify(user?.hasStock) %>;
 
+          const productCategoryId = <%- JSON.stringify(product?.produit?.categorie?._id || '') %>;
+
+          const categoryParent = categories.find(c => c._id == productCategoryId || c.childs.find(c => c._id == productCategoryId));
+
+
+
           const [productSelected,setProductSelected] = React.useState(<%- JSON.stringify(product) %>);
           const [productId, setProductId] = React.useState(<%- JSON.stringify(product?.produit?._id) %>);
           const [selectedSize, setSelectedSize] = React.useState(<%- JSON.stringify(product?.taille) %>);
-          const [ categoryId, setCategoryId ] = React.useState(<%- JSON.stringify(product?.produit?.categorie?._id) %>);
-
+          const [ categoryId, setCategoryId ] = React.useState(categoryParent?categoryParent._id:productCategoryId);
+          const [ subCategoryId, setSubCategoryId ] = React.useState(<%- JSON.stringify(product?.produit?.categorie?._id) %>);
           const [ prix_vente, setPrixVente ] = React.useState(<%- JSON.stringify(product?.prix_vente) %>);
           const [ prix_achat, setPrixAchat ] = React.useState(<%- JSON.stringify(product?.prix_achat) %>);
           const [ quantite, setQuantite ] = React.useState(0);
@@ -244,6 +250,7 @@
 
           const productInStock =  stocks.find(s => s.produit._id == productId && s.size == selectedSize);
           const categorySelected = categories.find(c => c._id == categoryId);
+          const catHasChild = categorySelected && categorySelected.childs && categorySelected.childs.length > 0;
           const is_cocktail = categorySelected && categorySelected.nom.toLowerCase().includes('cocktail');
 
 
@@ -274,16 +281,16 @@
           const handleSubmit = ()=>{
             const data = {
               produit: productId,
-              taille: is_cocktail? 'c' :selectedSize,
+              taille: is_cocktail || (catHasChild && !selectedSize)? 'c' :selectedSize,
               prix_vente: prix_vente,
               prix_achat: prix_achat,
-              quantite: is_cocktail?0:quantite,
+              quantite: is_cocktail || (catHasChild && !quantite)?0:quantite,
               session: adminSession,
               promo: promo,
               promo_quantity: promoQuantity,
               promo_price: promoPrice,
-              stockType,
-              is_cocktail
+              stockType: catHasChild ? 'bottle' : stockType,
+              is_cocktail: is_cocktail || (catHasChild && !quantite)
             }
 
 
@@ -313,15 +320,14 @@
 
 
             for(let key of Object.keys(data)){
-              const checkIsCocktail = is_cocktail && ['prix_vente','prix_achat','produit'].includes(key) && !data[key]
+              const checkIsCocktail = (is_cocktail) && ['prix_vente','prix_achat','produit'].includes(key) && !data[key]
 
 
                  if(updateProduct && key === "quantite" && data[key] === 0){
                    continue;
                  }
 
-              if((!['promo','promo_quantity','promo_price','is_cocktail'].includes(key) && (!data[key] && !is_cocktail)) || checkIsCocktail){
-
+              if((!['promo','promo_quantity','promo_price','is_cocktail'].includes(key) && (!data[key] && !(is_cocktail || (catHasChild && !quantite)))) || checkIsCocktail){
                 return alert("Veuillez remplir tous les champs");
               }else if(data.promo && (!data.promo_quantity || !data.promo_price)){
                 return alert("Veuillez remplir tous les champs");
@@ -357,7 +363,7 @@
                     if(p.produit._id == productId){
                       return {
                         ...p,
-                        quantite: is_cocktail? 0 :  p.quantite + parseInt(newQty)
+                        quantite: (is_cocktail || (catHasChild && !quantite))? 0 :  p.quantite + parseInt(newQty)
                       }
                     }
                     return p;
@@ -412,6 +418,9 @@
             $('#categorie').on('change', (e) => {
               const id = e.target.value;
               setCategoryId(id);
+              const categorySelected = categories.find(c => c._id == id);
+              const catHasChild = categorySelected && categorySelected.childs && categorySelected.childs.length > 0;
+           
               const products = allProducts.filter(p => p.categorie == id);
               $('#produit')
               .niceSelect('destroy')
@@ -423,8 +432,23 @@
               }
 
               $('#produit').niceSelect();
+              $('#subCategorie').niceSelect();
+
+              $('#taille').niceSelect('destroy').empty().append(`<option value="">Selectionner la taille du produit</option>`)
+
+             for(const size of sizesProduct){
+              if(catHasChild){
+                if(size.includes('g')){
+                  $('#taille').append(`<option value="${size}">${size}</option>`);
+                }
+              }else if(!size.includes('g')){
+                $('#taille').append(`<option value="${size}">${size}</option>`);
+              }
+             }
+              $('#taille').niceSelect();
             })
 
+           
             $('#produit').on('change', (e) => {
               const id = e.target.value;
               setProductId(id);
@@ -451,9 +475,9 @@
 
           React.useEffect(()=>{
 
-            if(products.length > 0 && productId  && categoryId){
+            if(products.length > 0 && productId  && (categoryId || subCategoryId)){
 
-              const product = products.find(p => p.produit._id == productId && p.produit.categorie._id == categoryId && (p.taille == selectedSize || is_cocktail));
+              const product = products.find(p => p.produit._id == productId && (p.produit.categorie._id == categoryId || p.produit.categorie._id == subCategoryId) && (p.taille == selectedSize || is_cocktail));
 
               if(product){
                 setPrixVente(product.prix_vente);
@@ -466,14 +490,14 @@
               }
             }
 
-          },[productId,products, selectedSize, categoryId])
+          },[productId,products, selectedSize, categoryId, subCategoryId])
 
           React.useEffect(()=>{
-            const productSelected = allProducts.find(p => p._id == productId && p.categorie == categoryId);
-            if(productId && categoryId){
+            const productSelected = allProducts.find(p => p._id == productId && (p.categorie._id == categoryId || p.categorie._id == subCategoryId));
+            if(productId && (categoryId || subCategoryId)){
                setProductSelected(productSelected);
             }
-          },[productId, categoryId,allProducts])
+          },[productId, categoryId,subCategoryId,allProducts])
 
           React.useEffect(()=>{
             setStockType(updateProduct?'bottle':'locker')
@@ -484,6 +508,49 @@
               setStocks(data.data);
             })
           },[])
+
+
+          React.useEffect(()=>{
+            if(categoryId){
+              $('#subCategorie').on('change', (e) => {
+              const id = e.target.value;
+              setSubCategoryId(id);
+
+              console.log({
+                allProducts
+              })
+
+              const products = allProducts.filter(p => p.categorie == id);
+              $('#produit')
+              .niceSelect('destroy')
+              .empty()
+              .append(`<option value="">Selectionner un produit</option>`)
+
+              for(let produit of products){
+                $('#produit').append(`<option value="${produit._id}">${produit.nom_produit}</option>`);
+              }
+
+              $('#produit').niceSelect();
+            })
+
+            }
+          },[categoryId])
+
+
+          React.useEffect(()=>{
+            if(categories){
+          const catId = <%- JSON.stringify(product?.produit?.categorie?._id || '') %>
+              const categorySelected = categories.find(c => c._id == subCategoryId || c.childs.find(c => c._id == subCategoryId));
+              // console.log("🚀 ~ React.useEffect ~ categorySelected:", categorySelected._id)
+              if(categorySelected){
+                setCategoryId(categorySelected._id);
+                setSubCategoryId(subCategoryId);
+             
+
+              }
+            }
+          },[categories])
+          
 
           return (
             <div className='white_card card_height_100 mb_30'>
@@ -539,6 +606,24 @@
                     </select>
                   </div>
 
+
+                 { catHasChild && <div className='col-lg-6 mb_15 common_input' id="subCategories">
+                    <select
+                    className="select wide selectProduit"
+                      name='subCategorie'
+                      id='subCategorie'
+                      required
+                      value={subCategoryId}
+                      disabled={updateProduct}
+                    >
+                    <option value="">Selectionner la sous catégorie</option>
+                       {categorySelected.childs.map(categorie =>(
+                          <option value={categorie._id}>{categorie.nom}</option>
+                          ))}
+
+                    </select>
+                  </div>}
+
                   <div className="col-lg-6 mb_15 common_input" id='productContainer produit'>
                     <select
                     className="select wide selectProduit"
@@ -560,14 +645,14 @@
 
                     </select>
                   </div>
-                    {!is_cocktail &&<div className='col-lg-6' id="taille">
+                    {!is_cocktail &&<div className='col-lg-6'>
                       <div className='common_input mb_15'>
 
       																		<select className="select wide selectProduit"
 
       																		name='taille'
       																		id="taille"
-      																		required
+      																		required={catHasChild ? false : true}
       																		value={selectedSize}
       																		disabled={updateProduct || is_cocktail}
       																>
@@ -630,9 +715,9 @@
                       <div className={'col-lg-6 common_input mb_15'} id="quantite">
                         <input
                           type='number'
-                          placeholder='quantite'
+                          placeholder={`quantite ${catHasChild ? '(Optionnel)':''}`}
                           name='quantite'
-                          required
+                          required={catHasChild ? false : true}
                           value={quantite}
 
                           onChange={(e) => {
@@ -641,7 +726,7 @@
                           }}
                         />
                       </div>
-                      <div className='col-lg-6 common_input mb_15' id="stockType">
+                      {!catHasChild &&<div className='col-lg-6 common_input mb_15' id="stockType">
                         <select
                           className='nice_Select2 nice_Select_line wide'
                           name='stockType'
@@ -662,12 +747,12 @@
 
 
                         </select>
-                      </div>
+                      </div>}
                       </div>
 
                     </div>}
 
-                     <div className="col-lg-12 pl-4">
+                   {!catHasChild && <div className="col-lg-12 pl-4">
                       <div className="form-check" id="formule">
                           <input className="form-check-input" checked={promo} onChange={(e)=>setPromo(e.target.checked)} type="checkbox" value="" id="flexCheckDefault"
 
@@ -675,7 +760,7 @@
                           <p className="form-check-label" for="flexSwitchCheckDefault">Voulez-vous ajouter cette boisson en formule ?</p>
                       </div>
 
-                     </div>
+                     </div>}
 
                      {
                       !!promo && <React.Fragment>

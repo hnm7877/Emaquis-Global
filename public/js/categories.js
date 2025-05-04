@@ -1,6 +1,6 @@
 const Categories = () => {
   const [categories, setCategories] = React.useState([]);
-  const { categorySelectedId, handleSelectCategory } =
+  const { categorySelectedId, handleSelectCategory, handleSelectCurrentCategory } =
     React.useContext(ProductsContext);
 
   const { products: allProducts, user } = React.useContext(AppContext);
@@ -10,6 +10,7 @@ const Categories = () => {
     if (cats.length > 0) {
       handleSelectCategory(cats[0]._id);
       setCategories(cats);
+      handleSelectCurrentCategory(cats[0]);
     }
   }, []);
 
@@ -38,7 +39,7 @@ const Categories = () => {
         {categories.map((category) => {
           if (
             allProducts.filter(
-              (prod) => prod.produit.categorie._id === category._id
+              (prod) => prod.produit.categorie._id === category._id || (category.childs && category.childs.find(c => c._id === prod.produit.categorie._id))
             ).length === 0
           )
             return null;
@@ -47,7 +48,7 @@ const Categories = () => {
             <li
               key={category._id}
               className={categorySelectedId === category._id ? 'active' : ''}
-              onClick={() => handleSelectCategory(category._id)}
+              onClick={() =>{ handleSelectCategory(category._id); handleSelectCurrentCategory(category)}}
             >
               {category.nom}
             </li>

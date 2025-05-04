@@ -228,6 +228,83 @@
           }
 
 
+        const SubCategoriesModal = () => {
+          const { catSelected, handleRemoveCat, handleOpenModalDelete, handlePressBtnUpdate, userConnect } = React.useContext(AppContext);
+          
+          return <div
+              className="modal fade"
+              id="subCategoriesModal"
+              tabIndex="-1"
+              role="dialog"
+              aria-labelledby="myModalTitle"
+            >
+              <div className="modal-dialog modal-dialog-centered" style={{
+                maxWidth: '800px',
+                width: '800px'
+              }} role="document">
+              <div className="modal-content">
+
+              {catSelected &&  <div className="modal-header">
+                  <h2 className="modal-title" id="exampleModalLongTitle">
+                    Sous categories de "{catSelected.nom}"
+                  </h2>
+                </div>}
+
+                <div className="QA_table">
+
+{
+  catSelected && catSelected.childs && catSelected.childs.length > 0 && <table className="table lms_table_active">
+  <thead>
+    <tr>
+      <th> Image </th>
+      <th scope="col">Categories</th>
+
+      {userConnect && userConnect.isAdmin && <th scope="col">Action</th>}
+
+    </tr>
+  </thead>
+  <tbody>
+    {catSelected.childs.map((cat) => {
+      return   <tr key={cat._id}>
+        <td>
+          {cat.image && <img src={cat.image} style={{
+            objectFit: 'contain',
+            width: '100px',
+            height: '100px'
+          }} />}
+
+
+          </td>
+        <td style={{
+          fontSize: '15px'
+        }}>{cat.nom}</td>
+
+        {userConnect && userConnect.isAdmin && <td>
+          <div className="d-flex">
+            <p  className="action_btn mr_10" onClick={()=>handlePressBtnUpdate(cat)}>
+              <i className="far fa-edit"></i>
+            </p>
+            <p  className="action_btn" onClick={()=>handleOpenModalDelete(cat)}>
+              <i className="fas fa-trash"></i>
+            </p>
+
+          </div>
+        </td>}
+
+      </tr>
+
+    })}
+  </tbody>
+</table>
+}
+</div>
+</div>
+
+              </div>
+              </div>
+        }
+
+
 
           const App = () => {
             const [cats,setCats] = React.useState(<%- JSON.stringify(categories) %>);
@@ -239,6 +316,7 @@
 
             const handleOpenModalDelete = (cat) => {
               setCatSelected(cat)
+              $('#subCategoriesModal').modal('hide');
               $('#deleteModal').modal('show');
             }
 
@@ -249,14 +327,27 @@
             const handleRemoveCat = (id) => {
               setCatSelected(null)
               const newCats = cats.filter((cat) => cat._id !== id)
-              setCats(newCats)
+              setCats(newCats.map((cat) => {
+                if(cat.childs && cat.childs.length > 0) {
+                  cat.childs = cat.childs.filter((child) => child._id !== id)
+                }
+                return cat
+              }))
+            }
+
+
+            const handleOpenSubCategoriesModal = (cat) => {
+              setCatSelected(cat)
+              $('#subCategoriesModal').modal('show');
             }
 
             return (
               <AppContext.Provider value={{
                 catSelected,
                 userConnect,
-                handleRemoveCat
+                handleRemoveCat,
+                handleOpenModalDelete,
+                handlePressBtnUpdate
               }}>
 
               <div className="QA_table mb_30">
@@ -273,7 +364,7 @@
                   </thead>
                   <tbody>
                     {cats && cats.map((cat) => {
-                      return <tr key={cat._id}>
+                      return   <tr key={cat._id}>
                         <td>
                           {cat.image && <img src={cat.image} style={{
                             objectFit: 'contain',
@@ -288,23 +379,29 @@
                         }}>{cat.nom}</td>
 
                         {userConnect && userConnect.isAdmin && <td>
-                          <div className="action_btn d-flex">
+                          <div className="d-flex">
                             <p  className="action_btn mr_10" onClick={()=>handlePressBtnUpdate(cat)}>
                               <i className="far fa-edit"></i>
                             </p>
                             <p  className="action_btn" onClick={()=>handleOpenModalDelete(cat)}>
                               <i className="fas fa-trash"></i>
                             </p>
+                           {cat.childs && cat.childs.length > 0 && <p  className="action_btn" onClick={()=>handleOpenSubCategoriesModal(cat)}>
+                              <i className="fas fa-eye"></i>
+                            </p>}
+
                           </div>
                         </td>}
 
                       </tr>
+
                     })}
                   </tbody>
                 </table>
               </div>
 
               <ModalDelete />
+              <SubCategoriesModal />
               </AppContext.Provider>
             );
           };

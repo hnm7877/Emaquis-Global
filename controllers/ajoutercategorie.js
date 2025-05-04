@@ -8,11 +8,14 @@ exports.addcat = async (req, res) => {
 
       const user = await getUserDetails(sess);
 
+      const categories = await categorieQueries.getCategorie();
+
       //console.log(sess.id,"sqddsddqs")
       res.render('ajoutercategorie', {
         user,
         expiredDate: getExpiredDate(user.expiredPaymentDate),
         categorie: null,
+        categories: categories?.result,
       });
     } catch (error) {
       console.log('👉 👉 👉  ~ file: ajoutercategorie.js:21 ~ error:', error);
@@ -36,11 +39,14 @@ exports.editCat = async (req, res) => {
         categorie = await categorieQueries.getCategorieById(catId);
       }
 
+      const categories = await categorieQueries.getCategorie();
+
       //console.log(sess.id,"sqddsddqs")
       res.render('ajoutercategorie', {
         user,
         expiredDate: getExpiredDate(user.expiredPaymentDate),
         categorie: categorie?.result,
+        categories: categories?.result,
       });
     } catch (error) {
       res.redirect(error);
