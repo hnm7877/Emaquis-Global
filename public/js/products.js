@@ -2,7 +2,7 @@ const ProductList = () => {
   const [products, setProducts] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
 
-  const { categorySelectedId } = React.useContext(ProductsContext);
+  const { categorySelectedId, currentCategory } = React.useContext(ProductsContext);
   const { products: allProducts } = React.useContext(AppContext);
 
   React.useEffect(() => {
@@ -40,6 +40,20 @@ const ProductList = () => {
             return <ProductCard key={product._id} product={product} />;
           })}
       </div>
+
+      {currentCategory && currentCategory.childs.map((child)=>{
+            const products = allProducts.filter((prod)=>prod.produit.categorie._id === child._id);
+            if(products.length === 0) return null;
+
+            return <div >
+              <h4 style={{marginBottom:10, marginTop:10, fontSize:'1.2rem', fontWeight:'bold', color:'#000', textTransform:'capitalize', textAlign:'center', backgroundColor:'#f0f0f0', padding:10, borderRadius:10}}>{child.nom}</h4>
+              <div className='product-list__grid'>
+                {products.map((product)=>{
+                  return <ProductCard key={product._id} product={product} />;
+                })}
+              </div>
+            </div>
+          })}
     </div>
   );
 };

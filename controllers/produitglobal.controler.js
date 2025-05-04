@@ -63,7 +63,7 @@ exports.postProduitGlobal = async (req, res) => {
 
 		let data = {
 			nom_produit: req.body.nom_produit.trim(),
-			categorie: req.body.categorie,
+			categorie: req.body.subCategorie || req.body.categorie,
 			country: req.body.country,
 			brand: req.body.brand,
 		};
@@ -81,7 +81,7 @@ exports.postProduitGlobal = async (req, res) => {
 
 			data = {
 				nom_produit: (req.body.nom_produit || product.nom_produit).trim(),
-				categorie: req.body.categorie || product.categorie,
+				categorie: req.body.subCategorie || req.body.categorie || product.categorie,
 				image: result?.Location || product.image,
 				country: req.body.country || product.country,
 				brand: req.body.brand || product.brand,

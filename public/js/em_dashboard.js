@@ -6,6 +6,7 @@ const AppRoot = () => {
 
   const [carts, setCarts] = React.useState([]);
   const [categorySelectedId, setCategorySelectedId] = React.useState(null);
+  const [currentCategory, setCurrentCategory] = React.useState(null);
   const [venteId, setVenteId] = React.useState(null);
   const [venteSelected, setVenteSelected] = React.useState(null);
   const [productUnvailable, setProductUnvailable] = React.useState([]);
@@ -15,6 +16,10 @@ const AppRoot = () => {
 
   const handleSelectCategory = (id) => {
     setCategorySelectedId(id);
+  };
+  
+  const handleSelectCurrentCategory = (category) => {
+    setCurrentCategory(category);
   };
 
   React.useEffect(() => {
@@ -312,6 +317,8 @@ const AppRoot = () => {
           handleUpdateProductQuantity,
           clearCarts,
           initCarts,
+          handleSelectCurrentCategory,
+          currentCategory,
           venteId,
           productUnvailable,
           initProductsUnvailable,

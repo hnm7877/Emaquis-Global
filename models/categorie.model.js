@@ -20,6 +20,11 @@ const CategorieSchema = new Schema(
 			type: Boolean,
 			default: false,
 		},
+		idParent: {
+			type: Schema.Types.ObjectId,
+			ref: 'categorie',
+			default: null,
+		},
 	},
 	{ timestamps: true }
 );

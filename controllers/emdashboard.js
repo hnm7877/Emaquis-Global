@@ -55,7 +55,25 @@ exports.emdashboard = async (req, res) => {
       req.session.user.travail_pour
     );
 
-    const Categories = await categorieModel.find({});
+    const Categories = await categorieModel.find({
+      idParent:null,
+      isDeleted:false
+    });
+
+    const CategoriesWithChilds = await categorieModel.find({
+      idParent: { $ne: null },
+      isDeleted:false
+    });
+
+
+    const newCategories = Categories.map(category => {
+
+      const childs = CategoriesWithChilds.filter(c => c.idParent.toString() === category._id.toString());
+      return {
+        ...category._doc,
+        childs
+      };
+    });
 
     const newSave = req.session.newSave;
 
@@ -96,7 +114,7 @@ exports.emdashboard = async (req, res) => {
         produits: produit.result,
         emplnum: employes.length || 0,
         sum,
-        categories: Categories,
+        categories: newCategories,
         billet,
         currentTiming:
           parentInfo?.result?.timings?.length > 0
