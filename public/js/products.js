@@ -3,7 +3,27 @@ const ProductList = () => {
   const [loading, setLoading] = React.useState(false);
 
   const { categorySelectedId, currentCategory } = React.useContext(ProductsContext);
+  const [currentCategoryId, setCurrentCategoryId] = React.useState(null);
   const { products: allProducts } = React.useContext(AppContext);
+
+  const containerRef = React.useRef(null);
+  const categoriesContainerRef = React.useRef(null);
+  const clickedCategoryRef = React.useRef(false);
+  const timerRef = React.useRef(null);
+
+ const subCategories = currentCategory && !!currentCategory.childs ? currentCategory.childs.map((item, index)=>({...item, newId: (item.nom + index).split(' ').join('')})) : [];
+
+
+  const handleSelectCategory = (id) => {
+    const container = containerRef.current;
+    const category = document.querySelector(`#${id}`);
+    if(category){
+     container.scrollTo({
+      top: category.offsetTop - category.offsetHeight,
+      behavior: 'smooth'
+     });
+    }
+  };
 
   React.useEffect(() => {
     if (categorySelectedId === 'tip') {
@@ -30,8 +50,101 @@ const ProductList = () => {
     setProducts(prods);
   }, [categorySelectedId, allProducts]);
 
+  React.useEffect(() => {
+    const container = containerRef.current;
+    if (!container || subCategories.length === 0) return;
+
+    const handleScroll = () => {
+      let closestId = null;
+      let minDistance = Infinity;
+
+      subCategories.forEach((child) => {
+        const section = document.getElementById(`c${child.newId}`);
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          const distance = Math.abs(rect.top - containerRect.top);
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestId = child.newId;
+          }
+        }
+      });
+
+      if (closestId !== null && closestId !== currentCategoryId && !clickedCategoryRef.current) {
+        const categoriesContainer = categoriesContainerRef.current;
+        const category = document.querySelector(`#${closestId}`);
+        if(category){
+          const scrollLeft =
+            category.offsetLeft
+            - categoriesContainer.offsetWidth / 2
+            + category.offsetWidth / 2;
+
+          categoriesContainer.scrollTo({
+            left: scrollLeft,
+            behavior: 'smooth'
+          });
+        }
+        setCurrentCategoryId(closestId);
+      }
+    };
+
+   
+
+    container.addEventListener('scroll', handleScroll);
+    handleScroll();
+
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+    };
+  }, [subCategories, currentCategoryId]);
+
+
+
+  React.useEffect(()=>{
+   if(subCategories.length > 0){
+    setCurrentCategoryId(subCategories[0].newId);
+   }
+  },[currentCategory])
+
   return (
-    <div className='product-list'>
+   <div style={{width:'60%'}}>
+     {subCategories.length > 0 && <div id='categories-container' ref={categoriesContainerRef} style={{display:'flex', flexDirection:'row', flexWrap:'nowrap', gap:10, overflowX:'auto'}}>
+        {subCategories.map((child)=>{
+            const products = allProducts.filter((prod)=>prod.produit.categorie._id === child._id);
+            if(products.length === 0) return null;
+
+            return <div
+              id={child.newId}
+              onClick={()=>{
+                clickedCategoryRef.current = true;
+                clearTimeout(timerRef.current);
+
+                handleSelectCategory(`c${child.newId}`);
+                setCurrentCategoryId(child.newId);
+                timerRef.current = setTimeout(()=>{
+                  clickedCategoryRef.current = false;
+                },1000)
+              }}
+              style={{
+                marginBottom:10,
+                marginTop:10,
+                fontSize:'1.2rem',
+                fontWeight:'bold',
+                color:currentCategoryId === child.newId ? '#fff' : '#000',
+                textTransform:'capitalize',
+                textAlign:'center',
+                backgroundColor: currentCategoryId === child.newId ? '#98ed58' : '#f0f0f0',
+                padding:10,
+                borderRadius:10,
+                flexShrink:0
+              }}>
+             {child.nom}
+            </div>
+        })}
+      </div>}
+
+    <div className='product-list'  ref={containerRef} style={{width:'100%'}}>
       <h4>Produits</h4>
       <div className='product-list__grid'>
         {loading && <p>Chargement...</p>}
@@ -41,12 +154,14 @@ const ProductList = () => {
           })}
       </div>
 
-      {currentCategory && currentCategory.childs.map((child)=>{
+   
+
+      {subCategories.map((child)=>{
             const products = allProducts.filter((prod)=>prod.produit.categorie._id === child._id);
             if(products.length === 0) return null;
 
-            return <div >
-              <h4 style={{marginBottom:10, marginTop:10, fontSize:'1.2rem', fontWeight:'bold', color:'#000', textTransform:'capitalize', textAlign:'center', backgroundColor:'#f0f0f0', padding:10, borderRadius:10}}>{child.nom}</h4>
+            return <div id={`c${child.newId}`}>
+              <h4  style={{marginBottom:10, marginTop:10, fontSize:'1.2rem', fontWeight:'bold', color:'#000', textTransform:'capitalize', textAlign:'center', backgroundColor:'#f0f0f0', padding:10, borderRadius:10}}>{child.nom}</h4>
               <div className='product-list__grid'>
                 {products.map((product)=>{
                   return <ProductCard key={product._id} product={product} />;
@@ -55,6 +170,7 @@ const ProductList = () => {
             </div>
           })}
     </div>
+   </div>
   );
 };
 
