@@ -73,7 +73,7 @@ exports.emdashboard = async (req, res) => {
         ...category._doc,
         childs
       };
-    });
+    }).filter(c => !parentSetting?.result?.hasSubCategories && c.childs.length > 0 ? false : true);
 
     const newSave = req.session.newSave;
 
