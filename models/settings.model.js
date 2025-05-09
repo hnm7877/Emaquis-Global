@@ -20,6 +20,10 @@ const SettingModel = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  hasSubCategories: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model('Setting', SettingModel);

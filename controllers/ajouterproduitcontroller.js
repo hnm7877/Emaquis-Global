@@ -28,8 +28,6 @@ exports.addproduit = async (req, res) => {
 				const categories = Categorie.result;
 
 				const user = await getUserDetails(sess);
-
-      
 				res.render('ajouterproduit', {
 					categories: categories,
 					globalProduits: resProduits.result,
@@ -38,6 +36,7 @@ exports.addproduit = async (req, res) => {
 						...user,
 						id: sess.id || sess._id,
 						hasStock: setting.result.hasStock,
+						hasSubCategories: setting.result.hasSubCategories,
 					},
 					expiredDate: getExpiredDate(user.expiredPaymentDate),
 					product_sizes: PRODUCT_SIZE,

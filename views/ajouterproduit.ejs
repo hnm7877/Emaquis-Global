@@ -171,6 +171,45 @@
       </a>
     </div>
 
+    <div
+    class="modal fade"
+    id="categoryModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="categoryModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="categoryModalLabel">Impossible de selectionner la categorie Nourritures</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="modalBodyContent">
+          <!-- Content and videos will be dynamically inserted here -->
+          <p>Pour avoir accès à la categorie Nourritures, veuillez contacter le service client sur whatsapp <a href="https://wa.me/2250767455041">Whatsapp(+225 07 67 45 50 41)</a> </p>
+
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
     <!-- footer  -->
     <%- include('partial/script.ejs') %>
     <script src="../jquery-3.4.1.min.js"></script>
@@ -219,6 +258,9 @@
           const adminSession = <%- JSON.stringify(user?.id) %>;
           const updateProduct = <%- JSON.stringify(update) %>;
           const hasStock = <%- JSON.stringify(user?.hasStock) %>;
+          const hasSubCategories = <%- JSON.stringify(user?.hasSubCategories || false) %>;
+
+        
 
           const productCategoryId = <%- JSON.stringify(product?.produit?.categorie?._id || '') %>;
 
@@ -417,16 +459,33 @@
 
             $('#categorie').on('change', (e) => {
               const id = e.target.value;
-              setCategoryId(id);
               const categorySelected = categories.find(c => c._id == id);
               const catHasChild = categorySelected && categorySelected.childs && categorySelected.childs.length > 0;
-           
-              const products = allProducts.filter(p => p.categorie == id);
+
               $('#produit')
               .niceSelect('destroy')
               .empty()
               .append(`<option value="">Selectionner un produit</option>`)
+              .niceSelect();
 
+
+              if(!hasSubCategories && catHasChild){
+                $('#categoryModal').modal('show');
+                return;
+              }
+
+
+              setCategoryId(id);
+
+           
+              const products = allProducts.filter(p => p.categorie == id);
+
+              $('#produit')
+              .niceSelect('destroy')
+              .empty()
+              .append(`<option value="">Selectionner un produit</option>`)
+       
+            
               for(let produit of products){
                 $('#produit').append(`<option value="${produit._id}">${produit.nom_produit}</option>`);
               }
@@ -514,11 +573,12 @@
             if(categoryId){
               $('#subCategorie').on('change', (e) => {
               const id = e.target.value;
+
+            
+
+
               setSubCategoryId(id);
 
-              console.log({
-                allProducts
-              })
 
               const products = allProducts.filter(p => p.categorie == id);
               $('#produit')
@@ -600,14 +660,14 @@
                     >
                     <option value="">Selectionner la catégorie</option>
                        {categories.map(categorie =>(
-                          <option value={categorie._id}>{categorie.nom}</option>
+                          <option value={categorie._id}>{categorie.nom} {!hasSubCategories && categorie.childs.length > 0 ? '🔒':''}</option>
                           ))}
 
                     </select>
                   </div>
 
 
-                 { catHasChild && <div className='col-lg-6 mb_15 common_input' id="subCategories">
+                 { catHasChild && hasSubCategories && <div className='col-lg-6 mb_15 common_input' id="subCategories">
                     <select
                     className="select wide selectProduit"
                       name='subCategorie'
@@ -638,7 +698,7 @@
                       value={productId}
                     >
                     <option value="">Selectionner un produit</option>
-                      {allProducts.sort((a,b) => a.nom_produit.localeCompare(b.nom_produit)).map(produit =>(
+                      {(categoryId ? allProducts:[]).sort((a,b) => a.nom_produit.localeCompare(b.nom_produit)).map(produit =>(
                           <option value={produit._id}>{produit.nom_produit}</option>
                           ))}
 
