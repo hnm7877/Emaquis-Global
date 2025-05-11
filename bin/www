@@ -14,6 +14,7 @@ const { fournisseurQueries } = require("../requests/fournisseurQueries");
 const { produitQueries } = require("../requests/produitQueries");
 const { venteQueries } = require("../requests/venteQueries");
 const { paiementQueries } = require("../requests/paiementQueries");
+const { settingQueries } = require("../requests/settingQueries");
 const User = require("../models/user.model");
 const PaymentHistory = require("../models/paymentHistory")
 const Setting = require("../models/settings.model");
@@ -114,6 +115,10 @@ UserLogin.on("connection", (socket) => {
 
         userlogin.token = token;
 
+        const setting = await settingQueries.getSettingByUserId(
+          userlogin._id
+        );
+
         socket.handshake.session.user = {
           id: userlogin._id,
           username: userlogin.username,
@@ -121,6 +126,7 @@ UserLogin.on("connection", (socket) => {
           isAdmin: userlogin.isAdmin,
           ...userlogin._doc,
           token,
+          hasOffer: setting?.result?.hasOffer,
         };
 
         socket.handshake.session.save();

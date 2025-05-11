@@ -287,6 +287,9 @@
 							aria-expanded="false"
 						>
 							<li><a href="/data_table"> Liste des ventes</a></li>
+						<% if(locals.user?.hasOffer){ %>
+						<li><a href="/data_table_vente_offert"> Liste des ventes offertes</a></li>
+						<% } %>
 						</ul>
 					</li>
 

@@ -88,6 +88,7 @@ const CartFooter = () => {
   const [loading, setLoading] = React.useState(false);
   const [collectedLater, setCollectedLater] = React.useState(false);
   const [tableNumber, setTableNumber] = React.useState(null);
+  const [offered, setOffered] = React.useState(false);
 
   const total = carts.reduce((acc, produit) => {
     let quantity;
@@ -122,20 +123,21 @@ const CartFooter = () => {
     const vente = {
       produit: carts.map((prod) => prod._id),
       quantite: carts.map((prod) => prod.quantity),
-      somme_encaisse: Number(sommeEncaisse),
-      amount_collected: collectedLater ? false : true,
-      table_number: tableNumber,
+      somme_encaisse: globalUser.hasOffer && offered ? 0 : Number(sommeEncaisse),
+      amount_collected: collectedLater && !vente.offered ? false : true,
+      table_number: globalUser.hasOffer && offered ? null : tableNumber,
       for_employe: user._id,
+      offered: globalUser.hasOffer && offered,
     };
 
-    if (collectedLater && !tableNumber) {
+    if (collectedLater && !tableNumber && !vente.offered) {
       return alert('Veuillez saisir le numéro de table');
     }
 
-    if (!vente.somme_encaisse && !collectedLater)
+    if (!vente.somme_encaisse && !collectedLater && !vente.offered)
       return alert('Veuillez saisir la somme encaissée');
 
-    if (vente.somme_encaisse < total && !collectedLater)
+    if (vente.somme_encaisse < total && !collectedLater && !vente.offered)
       return alert('La somme encaissée est insuffisante');
 
     setLoading(true);
@@ -181,13 +183,30 @@ const CartFooter = () => {
 
   return (
     <div className='carts-footer'>
-      <div class='form-check'>
+      {globalUser.hasOffer && (
+        <div class='form-check'>
         <input
           class='form-check-input'
-          checked={collectedLater}
-          onChange={handleChangeCollectedLater}
+          checked={offered}
+          onChange={() => setOffered(!offered)}
           type='checkbox'
           value=''
+        id='flexCheckDefault'
+      />
+      <p class='form-check-label' for='flexSwitchCheckDefault'>
+       Offert
+      </p>
+    </div>
+      )}
+      
+      {!offered && (<React.Fragment>
+        <div class='form-check'>
+          <input
+            class='form-check-input'
+            checked={collectedLater}
+            onChange={handleChangeCollectedLater}
+            type='checkbox'
+            value=''
           id='flexCheckDefault'
         />
         <p class='form-check-label' for='flexSwitchCheckDefault'>
@@ -218,6 +237,10 @@ const CartFooter = () => {
           onChange={(e) => setTableNumber(e.target.value)}
         />
       )}
+      </React.Fragment>
+      )}
+
+     
       <button
         onClick={handleSubmit}
         className='btn btn-valider'

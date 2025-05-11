@@ -128,11 +128,12 @@
 														<th scope="col">Prix</th>
 														<th scope="col">Status</th>
 														<th scope="col">Date</th>
+                            <th scope="col">Actions</th>
 													</tr>
 												</thead>
 												<tbody>
 													<% for(let vente of ventes) {%>
-													<tr class="<%=vente.prix<0 || vente.status_commande == "Annulée" ?'venteRed': '' %>">
+													<tr class="<%=vente.status_commande == "Annulée" ?'venteRed': '' %>">
 														<td><%= vente.code %></td>
 														<td><%= vente.produit %></td>
 														<td><%= vente.categories%></td>
@@ -142,9 +143,14 @@
 														<td><%= vente.quantite%></td>
 
 														<td><%= vente.prix%></td>
-														<td class="<%=vente.prix>0 ?vente.status_commande == "Validée" || (vente.status_commande === "Offert" && vente.offered_confirmed) ? "venteGreen":"venteOrange":""%>"><%= vente.offered && vente.status_commande == "Annulée" ? "Offert":"" %> <%= vente.status_commande %></td>
-												
-														<td data-order="<%= vente.createdAt %>"><%= new Date(vente.createdAt).toLocaleString('fr-Fr') %></td>
+														<td class="<%= vente.status_commande === "Offert" ? vente.offered_confirmed ? "venteGreen":"venteOrange":"venteRed"%>"><%= vente.status_commande %> <%= vente.status_commande === "Offert" ? vente.offered_confirmed ? "Validée" : "En attente": "" %></td>
+                            <td data-order="<%= vente.createdAt %>"><%= new Date(vente.createdAt).toLocaleString('fr-Fr') %></td>
+                            <td>
+                           <% if(vente.status_commande == 'Offert' && !vente.offered_confirmed){ %>
+                              <button class="btn btn-success" onclick="handleClickConfirmBtn('<%=vente._id%>')">Confirmer</button>
+                              <button class="btn btn-danger" onclick="handleClickCancelBtn('<%=vente._id%>')">Annuler</button>
+                            <% } %>
+                            </td>
 													</tr>
 													<% } %>
 												</tbody>
@@ -191,6 +197,86 @@
 		<!-- footer  -->
 		<!-- footer  -->
 		<!-- jquery slim -->
+
+    <!-- MODAL -->
+
+    <div class="modal fade" id="confirm_offer_modal" tabindex="-1" role="dialog" aria-labelledby="confirm_offer_modalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">
+            Validation de la vente offerte
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+           Voulez-vous valider la vente offerte ?
+          </div>
+          <form method="post" action="/confirm_vente_offert">
+            <input type="hidden" id="confirm_offer_id" name="offerId" />
+            <input type="checkbox" id="confirm_offer_checkbox" name="confirm" style="opacity: 0;" />
+  
+            <label class="modal-footer" style="display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+             
+              <button type="submit" class="btn btn-success">
+                <label for="confirm_offer_checkbox" style="width: 100%;margin:0;padding:0;">
+               Oui
+              </label>
+              </button>
+          
+              <button type="button" class="btn btn-danger" data-dismiss="modal">
+               
+                  Non
+               
+              </button>
+          
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="cancel_offer_modal" tabindex="-1" role="dialog" aria-labelledby="cancel_offer_modalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">
+             Annulation de la vente offerte
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+           Voulez-vous annuler la vente offerte ?
+          </div>
+          <form method="post" action="/cancel_vente_offert">
+            <input type="hidden" id="cancel_offer_id" name="offerId" />
+            <input type="checkbox" id="cancel_offer_checkbox" name="confirm" style="opacity: 0;" />
+            <label class="modal-footer" style="display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+             
+              <button type="submit" class="btn btn-success">
+                <label for="confirm_offer_checkbox" style="width: 100%;margin:0;padding:0;">
+               Oui
+              </label>
+              </button>
+          
+              <button type="button" class="btn btn-danger" data-dismiss="modal">
+               
+                  Non
+               
+              </button>
+          
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    
 		<script src="assets/js/bootstrap.bundle.min.js"></script>
 		<script src="assets/js/metismenu.min.js"></script>
 		<script src="assets/js/waves.js"></script>
@@ -206,6 +292,33 @@
 
 		<!-- App js -->
 		<script src="assets/js/theme.js"></script>
+    <script>
+      const handleClickConfirmBtn = (offerId) => {
+          // const offerId = btn.closest('tr').querySelector('td:first-child').textContent;
+          // document.getElementById('confirm_offer_id').value = offerId;
+          let vente_id = offerId;
+          if(typeof offerId !== 'string'){
+            vente_id = $(this).attr('data-venteId');
+          }else{
+            vente_id = offerId;
+          }
+          $('#confirm_offer_id').val(vente_id);
+        $('#confirm_offer_modal').modal('show');
+      }
+
+      const handleClickCancelBtn = (offerId) => {
+        let vente_id = offerId;
+        if(typeof offerId !== 'string'){
+          vente_id = $(this).attr('data-venteId');
+        }else{
+          vente_id = offerId;
+        }
+        $('#cancel_offer_id').val(vente_id);
+        $('#cancel_offer_modal').modal('show');
+      }
+      
+      
+    </script>
 	</body>
 
 	<!-- Mirrored from demo.dashboardpack.com/user-management-html/data_table.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 05 Jul 2021 17:20:14 GMT -->

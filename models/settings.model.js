@@ -24,6 +24,10 @@ const SettingModel = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  hasOffer: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model('Setting', SettingModel);

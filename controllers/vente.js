@@ -232,6 +232,7 @@ exports.ventePost = async (req, res) => {
         table_number: vente.table_number,
         amount_collected: vente.amount_collected,
         for_employe: vente.for_employe || barmans.result[0]?._id,
+        offered: vente.offered,
       };
       // il fait pas l setvente or il fait update  de produit
       Vente = await venteQueries.setVente(newVente);
@@ -479,6 +480,7 @@ exports.editventePost = async (req, res) => {
         table_number: body.table_number ?? oldVente.result.table_number,
         amount_collected:
           body.amount_collected ?? oldVente.result.amount_collected,
+        offered: body.offered ?? oldVente.result.offered,
       };
 
       if (body.update_for_collected_amount) {
@@ -563,7 +565,7 @@ exports.editStatusVente = async (req, res) => {
     Ventes.updateOne(
       { _id: vente_id },
       {
-        status_commande: req.body.type || "Validée",
+        status_commande: vente.offered && req.body.type !== "Annulée" ? "Offert" : req.body.type || "Validée",
         employe_validate_id: req.session.user._id,
       },
 

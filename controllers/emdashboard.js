@@ -110,6 +110,7 @@ exports.emdashboard = async (req, res) => {
         user: {
           ...data,
           product_return_type: parentSetting?.result?.product_return_type,
+          hasOffer: parentSetting?.result?.hasOffer,
         },
         produits: produit.result,
         emplnum: employes.length || 0,

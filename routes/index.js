@@ -103,6 +103,9 @@ router.post('/ajouteruser', ajouterusercontroller.ajouteruserPost);
 router.get('/edituser', ajouterusercontroller.edituser);
 
 router.get('/data_table', data_tablecontroller.data_table);
+router.get('/data_table_vente_offert', data_tablecontroller.data_table_offert);
+router.post('/confirm_vente_offert', data_tablecontroller.confim_vente_offert);
+router.post('/cancel_vente_offert', data_tablecontroller.cancel_vente_offert);
 router.post('/data_table', data_tablecontroller.data_tablePost);
 
 router.get('/inscription', inscriptioncontroller.inscription);

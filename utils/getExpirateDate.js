@@ -10,6 +10,7 @@ exports.getUserDetails = async (session) => {
 
         const user = await userQueries.getUserById(session.id);
         return {
+            ...session,
             ...user.result._doc,
             id: user.result._id
         };
