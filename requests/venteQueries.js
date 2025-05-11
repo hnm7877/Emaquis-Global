@@ -57,8 +57,6 @@ exports.venteQueries = class {
           path: "employe",
           select: "nom prenom",
         })
-        .sort("-_id")
-
         .select({
           _id: 1,
           "produit._id": 1,
@@ -83,7 +81,11 @@ exports.venteQueries = class {
           ...select,
         })
         .lean()
+        .sort({
+          createdAt: -1,
+        })
         .then((ventes) => {
+          
           next({
             success: true,
             result: ventes,

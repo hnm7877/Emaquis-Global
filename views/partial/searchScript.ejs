@@ -6,12 +6,16 @@
     if ($('table') && $('table').DataTable) {
       const table = $('table').DataTable();
 
+      const order = $('table').data('order') || [];
+      const orderColumn = order[0] ? order[0][0] : 0;
+      const orderDirection = order[0] ? order[0][1] : 'desc';
       table.destroy();
 
       $('.dataTables_info').hide();
 
       const list = $('table').DataTable({
-        scrollX: true
+        scrollX: true,
+        order: [[orderColumn, orderDirection]],
       });
 
       searchBtn.on('click', () => {
