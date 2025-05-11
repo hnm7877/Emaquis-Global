@@ -209,6 +209,13 @@ exports.ventePost = async (req, res) => {
         return;
       }
 
+
+      if(vente.offered && !setting.result.hasOffer){
+        return res.status(400).json({
+          message: "Vous n'avez pas le droit de faire une offre",
+        });
+      }
+
       if (product_unavailables.length > 0) {
         res.status(400).json({
           message: "Produits non disponible",
@@ -420,6 +427,12 @@ exports.editventePost = async (req, res) => {
           message: "Numéro de table invalide",
         });
         return;
+      }
+
+      if(body.offered && !setting.result.hasOffer){
+        return res.status(400).json({
+          message: "Vous n'avez pas le droit de faire une offre",
+        });
       }
 
       if (product_unavailables.length > 0) {
