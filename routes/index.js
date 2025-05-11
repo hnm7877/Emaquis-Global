@@ -244,6 +244,7 @@ router.get('/get-user-session', async (req, res) => {
 				objective: setting.result.objective,
 				numberOfTables: setting.result.numberOfTables,
 				hasStock: setting.result.hasStock,
+				hasOffer: setting.result.hasOffer,
 			},
 		});
 	} else {

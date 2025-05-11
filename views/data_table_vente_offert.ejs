@@ -132,6 +132,12 @@
 													</tr>
 												</thead>
 												<tbody>
+                           <tr>
+                            <td colspan="7">
+                              <p>Total Offert: <button class=" animationTotalPriceBorder"><%= totalOffert %> FCFA</button></p>
+
+                            </td>
+                          </tr>
 													<% for(let vente of ventes) {%>
 													<tr class="<%=vente.status_commande == "Annulée" ?'venteRed': '' %>">
 														<td><%= vente.code %></td>

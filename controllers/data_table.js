@@ -66,6 +66,11 @@ exports.data_table_offert = async (req, res) => {
 				return res.redirect('/data_table');
 			}
 
+
+			const totalOffert = ventes.result.reduce((acc, el) => {
+				return acc +(el.status_commande === "Annulée" || !el.offered_confirmed ? 0 : el.prix) ;
+			}, 0);
+
 			res.render('data_table_vente_offert', {
 				ventes: ventes.result.map((el) => {
 					return {
@@ -87,6 +92,7 @@ exports.data_table_offert = async (req, res) => {
 				}),
 				user: userDetails,
 				expiredDate: getExpiredDate(userDetails.expiredPaymentDate),
+				totalOffert,
 			});
 		} else {
 			res.redirect('connexion');
