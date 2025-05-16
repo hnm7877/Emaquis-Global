@@ -186,14 +186,12 @@
 	<div class="vertical-menu">
 		<div
 			data-simplebar
-			class="h-100"
-		>
+			class="h-100">
 			<div class="navbar-brand-box mt-10 logo_sidebar">
 				<a href="/dashboard">
 					<img
 						src="../img/paresseux_sous_officiel.png"
-						alt=""
-					/>
+						alt="" />
 				</a>
 			</div>
 
@@ -202,18 +200,15 @@
 				<!-- Left Menu Start -->
 				<ul
 					class="metismenu list-unstyled"
-					id="side-menu"
-				>
+					id="side-menu">
 					<li>
 						<a
 							href="javascript: void(0);"
 							class="has-arrow waves-effect"
-							aria-expanded="false"
-						>
+							aria-expanded="false">
 							<div
 								class="nav_icon_small"
-								id="element-bilan"
-							>
+								id="element-bilan">
 								<script src="https://cdn.lordicon.com/lordicon.js"></script>
 								<lord-icon
 									src="https://cdn.lordicon.com/ssmahvix.json"
@@ -221,8 +216,7 @@
 									delay="1000"
 									stroke="light"
 									state="hover-growth"
-									style="width: 25px; height: 25px"
-								>
+									style="width: 25px; height: 25px">
 								</lord-icon>
 								<span>E-Maquis-Bilan</span>
 							</div>
@@ -230,8 +224,7 @@
 
 						<ul
 							class="sub-menu"
-							aria-expanded="false"
-						>
+							aria-expanded="false">
 							<li class="">
 								<a href="/bilan">Bilan</a>
 							</li>
@@ -242,25 +235,21 @@
 						<a
 							href="javascript: void(0);"
 							class="has-arrow waves-effect"
-							aria-expanded="false"
-						>
+							aria-expanded="false">
 							<div
 								class="nav_icon_small"
-								id="element-employe"
-							>
+								id="element-employe">
 								<img
 									src="../img/icone_employee.png"
 									alt=""
-									style="height: 29px; width: 29px"
-								/>
+									style="height: 29px; width: 29px" />
 								<span>Employé(es)</span>
 							</div>
 						</a>
 
 						<ul
 							class="sub-menu"
-							aria-expanded="false"
-						>
+							aria-expanded="false">
 							<li><a href="/ajouteruser">ajouter</a></li>
 							<li><a href="/utilisateur"> Liste des employés</a></li>
 						</ul>
@@ -270,26 +259,27 @@
 						<a
 							href="javascript: void(0);"
 							class="has-arrow waves-effect"
-							aria-expanded="false"
-						>
+							aria-expanded="false">
 							<div class="nav_icon_small">
 								<img
 									src="../img/icone_ventes.png"
 									style="height: 22px; width: 37px; transform: rotate(-20deg)"
-									alt=""
-								/>
+									alt="" />
 								<span>Vente</span>
 							</div>
 						</a>
 
 						<ul
 							class="sub-menu"
-							aria-expanded="false"
-						>
+							aria-expanded="false">
 							<li><a href="/data_table"> Liste des ventes</a></li>
-						<% if(locals.user?.hasOffer){ %>
-						<li><a href="/data_table_vente_offert"> Liste des ventes offertes</a></li>
-						<% } %>
+
+							<li>
+								<a href="/data_table_vente_offert">
+									<% if(!locals.user?.hasOffer){ %> 🔒 <% } %> Liste des ventes
+									offertes</a
+								>
+							</li>
 						</ul>
 					</li>
 
@@ -297,17 +287,14 @@
 						<a
 							href="javascript: void(0);"
 							class="has-arrow waves-effect"
-							aria-expanded="false"
-						>
+							aria-expanded="false">
 							<div
 								class="nav_icon_small"
-								id="element-produit"
-							>
+								id="element-produit">
 								<img
 									src="img/menu-icon/bouteille.png"
 									style="height: 22px; width: 37px; transform: rotate(-20deg)"
-									alt=""
-								/>
+									alt="" />
 								<span>Produits</span>
 							</div>
 						</a>
@@ -333,14 +320,12 @@
 						<a
 							href="javascript: void(0);"
 							class="has-arrow waves-effect"
-							aria-expanded="false"
-						>
+							aria-expanded="false">
 							<div class="nav_icon_small">
 								<img
 									src="../img/categorie.svg"
 									style="height: 22px; width: 37px; transform: rotate(-20deg)"
-									alt=""
-								/>
+									alt="" />
 								<span>Catégories</span>
 							</div>
 						</a>
@@ -357,16 +342,14 @@
 						<a
 							href="javascript: void(0);"
 							class="has-arrow waves-effect"
-							aria-expanded="false"
-						>
+							aria-expanded="false">
 							<div class="nav_icon_small">
 								<script src="https://cdn.lordicon.com/lordicon.js"></script>
 								<lord-icon
 									src="https://cdn.lordicon.com/spajtpif.json"
 									trigger="hover"
 									stroke="light"
-									style="width: 35px; height: 35px; top: 15px"
-								>
+									style="width: 35px; height: 35px; top: 15px">
 								</lord-icon>
 								<span>Paramètres</span>
 							</div>
@@ -374,8 +357,7 @@
 
 						<ul
 							class="sub-menu"
-							aria-expanded="false"
-						>
+							aria-expanded="false">
 							<div class="profile_info_details">
 								<li><a href="/profile">Mon Profil </a></li>
 								<!--          <li><a href="/reglage" class="list-group-item disabled">Réglage<span class="badge badge-info">Bêta</span></a></li>-->
@@ -391,8 +373,7 @@
 						type="button"
 						class="btn btn-warning"
 						data-toggle="modal"
-						data-target="#donateModal"
-					>
+						data-target="#donateModal">
 						<span class="txt">Faites un don</span>
 					</button>
 				</span>
@@ -403,18 +384,18 @@
 	<!-- Left Sidebar End -->
 </div>
 
-<% if (!locals.forProfile && user.forEvent && (!user.paid || !locals.expiredDate)) { %>
-<%- include('../modal.ejs') %> <% } %>
+<% if (!locals.forProfile && user.forEvent && (!user.paid ||
+!locals.expiredDate)) { %> <%- include('../modal.ejs') %> <% } %>
 
 <script>
 	const expiredPaymentDate = <%- JSON.stringify(user.expiredPaymentDate) %>;
 	const expiredDate = new Date(expiredPaymentDate) < new Date()
-	
+
 
 	if(!expiredDate){
 	  let timeId = setInterval(()=>{
 	   const expiredDate = new Date(expiredPaymentDate) < new Date();
-	   
+
 	 if(expiredDate){
 	   clearInterval(timeId);
 	 window.location.reload();

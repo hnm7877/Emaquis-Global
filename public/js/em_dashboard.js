@@ -1,408 +1,421 @@
 const AppRoot = () => {
-  const [products, setProducts] = React.useState([]);
-  const [totalVentes, setTotalVentes] = React.useState(0);
-  const [totalEmployes, setTotalEmployes] = React.useState(0);
-  const [ventes, setVentes] = React.useState([]);
+	const [products, setProducts] = React.useState([]);
+	const [totalVentes, setTotalVentes] = React.useState(0);
+	const [totalEmployes, setTotalEmployes] = React.useState(0);
+	const [ventes, setVentes] = React.useState([]);
 
-  const [carts, setCarts] = React.useState([]);
-  const [categorySelectedId, setCategorySelectedId] = React.useState(null);
-  const [currentCategory, setCurrentCategory] = React.useState(null);
-  const [venteId, setVenteId] = React.useState(null);
-  const [venteSelected, setVenteSelected] = React.useState(null);
-  const [productUnvailable, setProductUnvailable] = React.useState([]);
-  const [billet, setBillet] = React.useState(null);
-  const [user, setUser] = React.useState(null);
-  const [currentTiming, setCurrentTiming] = React.useState(null);
+	const [carts, setCarts] = React.useState([]);
+	const [categorySelectedId, setCategorySelectedId] = React.useState(null);
+	const [currentCategory, setCurrentCategory] = React.useState(null);
+	const [venteId, setVenteId] = React.useState(null);
+	const [venteSelected, setVenteSelected] = React.useState(null);
+	const [productUnvailable, setProductUnvailable] = React.useState([]);
+	const [billet, setBillet] = React.useState(null);
+	const [user, setUser] = React.useState(null);
+	const [currentTiming, setCurrentTiming] = React.useState(null);
 
-  const handleSelectCategory = (id) => {
-    setCategorySelectedId(id);
-  };
-  
-  const handleSelectCurrentCategory = (category) => {
-    setCurrentCategory(category);
-  };
+	const handleSelectCategory = (id) => {
+		setCategorySelectedId(id);
+	};
 
-  React.useEffect(() => {
-    const socket = io();
+	const handleSelectCurrentCategory = (category) => {
+		setCurrentCategory(category);
+	};
 
-    socket.on('connect', () => {
-      socket.on(`${user_travail_pour}-vente`, (data) => {
-        const vente = data.vente;
+	React.useEffect(() => {
+		const socket = io();
 
-        if (
-          !vente.for_employe ||
-          (vente.for_employe && vente.for_employe === globalUser._id)
-        ) {
-          $.notify('Vous avez une nouvelle commande !', 'success');
-        }
+		socket.on('connect', () => {
+			console.log('connect');
+			socket.on(`${user_travail_pour}-vente`, (data) => {
+				const vente = data.vente;
 
-        let vente_exist = false;
+				if (
+					!vente.for_employe ||
+					(vente.for_employe && vente.for_employe === globalUser._id)
+				) {
+					$.notify('Vous avez une nouvelle commande !', 'success');
+				}
 
-        setVentes((prVentes) => {
-          if (prVentes.find((v) => v._id === vente._id)) {
-            vente_exist = true;
-            return prVentes;
-          }
+				let vente_exist = false;
 
-          if (vente.for_employe && vente.for_employe !== globalUser._id) {
-            return prVentes;
-          }
+				setVentes((prVentes) => {
+					if (prVentes.find((v) => v._id === vente._id)) {
+						vente_exist = true;
+						return prVentes;
+					}
 
-          return [...prVentes, vente];
-        });
+					if (vente.for_employe && vente.for_employe !== globalUser._id) {
+						return prVentes;
+					}
 
-        setProducts((prProducts) => {
-          const newProducts = prProducts.map((product) => {
-            const index = vente.produit.findIndex(
-              (el) => el.productId === product._id
-            );
+					return [...prVentes, vente];
+				});
 
-            if (index !== -1) {
-              const newProduct = { ...product };
-              newProduct.quantite -= vente.quantite[index];
-              return newProduct;
-            } else {
-              return product;
-            }
-          });
+				setProducts((prProducts) => {
+					const newProducts = prProducts.map((product) => {
+						const index = vente.produit.findIndex(
+							(el) => el.productId === product._id
+						);
 
-          return vente_exist ? prProducts : newProducts;
-        });
-      });
+						if (index !== -1) {
+							const newProduct = { ...product };
+							newProduct.quantite -= vente.quantite[index];
+							return newProduct;
+						} else {
+							return product;
+						}
+					});
 
-      socket.on(`${user_travail_pour}-edit-vente`, (data) => {
-        const vente = data.vente;
-        const allProducts = data.allProducts;
+					return vente_exist ? prProducts : newProducts;
+				});
+			});
 
-        setVentes((prVentes) => {
-          const newVentes = prVentes.map((el) => {
-            if (
-              el._id === vente._id &&
-              vente.for_employe &&
-              vente.for_employe === globalUser._id
-            ) {
-              return vente;
-            } else {
-              return el;
-            }
-          });
+			socket.on(`${user_travail_pour}-edit-vente`, (data) => {
+				const vente = data.vente;
+				const allProducts = data.allProducts;
 
-          return newVentes;
-        });
+				setVentes((prVentes) => {
+					const newVentes = prVentes.map((el) => {
+						if (
+							el._id === vente._id &&
+							vente.for_employe &&
+							vente.for_employe === globalUser._id
+						) {
+							return vente;
+						} else {
+							return el;
+						}
+					});
 
-        setProducts((prProducts) => {
-          const newProducts = prProducts.map((product) => {
-            const index = allProducts.findIndex((el) => el.id === product._id);
+					return newVentes;
+				});
 
-            if (index !== -1) {
-              const newProduct = { ...product };
-              newProduct.quantite -= allProducts[index].quantite;
-              return newProduct;
-            } else {
-              return product;
-            }
-          });
+				setProducts((prProducts) => {
+					const newProducts = prProducts.map((product) => {
+						const index = allProducts.findIndex((el) => el.id === product._id);
 
-          return newProducts;
-        });
-      });
+						if (index !== -1) {
+							const newProduct = { ...product };
+							newProduct.quantite -= allProducts[index].quantite;
+							return newProduct;
+						} else {
+							return product;
+						}
+					});
 
-      socket.on(`${user_travail_pour}-current-time`, (data) => {
-        console.log('current-time', data);
-        setCurrentTiming(data);
-      });
-    });
-  }, []);
+					return newProducts;
+				});
+			});
 
-  React.useEffect(() => {
-    $(document).ready(function () {
-      $('[data-toggle="tooltip"]').tooltip();
-    });
-  }, []);
+			socket.on(`${user_travail_pour}-update-product`, (data) => {
+				// setVentesByDay(data);
 
-  React.useEffect(() => {
-    setProducts(globalProducts);
-    setTotalVentes(Number(sumVentes));
-    setTotalEmployes(Number(sumEmployes));
-    setVentes(globalVentes);
-    setBillet(globalBillet);
-    setUser(globalUser);
-    setCurrentTiming(globalCurrentTiming);
-  }, []);
+				setProducts((prProducts) => {
+					const newProducts = prProducts.map((product) => {
+						if (product._id === data.product.produitId) {
+							return { ...product, quantite: data.product.quantite };
+						}
 
-  const updateTotalVentes = (total) => {
-    setTotalVentes((prTotal) => Number(prTotal) + Number(total));
-  };
+						return product;
+					});
 
-  const resetTotalVentes = () => {
-    setTotalVentes(0);
-  };
-  const confirmVente = (venteId, type) => {
-    const vente = ventes.find((el) => el._id === venteId);
+					return newProducts;
+				});
+			});
 
-    if (
-      type === 'Validée' &&
-      new Date(vente.createdAt).toLocaleDateString() >=
-        new Date(billet.open_hour).toLocaleDateString()
-    ) {
-      const total = vente.prix;
+			socket.on(`${user_travail_pour}-current-time`, (data) => {
+				console.log('current-time', data);
+				setCurrentTiming(data);
+			});
+		});
+	}, []);
 
-      updateTotalVentes(total);
-    } else if (type === 'Annulée') {
-      setProducts((prProducts) => {
-        const newProducts = prProducts.map((product) => {
-          const index = vente.produit.findIndex(
-            (el) => el.productId === product._id
-          );
+	React.useEffect(() => {
+		$(document).ready(function () {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}, []);
 
-          if (index !== -1) {
-            const newProduct = { ...product };
-            newProduct.quantite += vente.quantite[index];
-            return newProduct;
-          } else {
-            return product;
-          }
-        });
+	React.useEffect(() => {
+		setProducts(globalProducts);
+		setTotalVentes(Number(sumVentes));
+		setTotalEmployes(Number(sumEmployes));
+		setVentes(globalVentes);
+		setBillet(globalBillet);
+		setUser(globalUser);
+		setCurrentTiming(globalCurrentTiming);
+	}, []);
 
-        return newProducts;
-      });
-    }
+	const updateTotalVentes = (total) => {
+		setTotalVentes((prTotal) => Number(prTotal) + Number(total));
+	};
 
-    const newVentes = ventes.filter((el) => el._id !== venteId);
+	const resetTotalVentes = () => {
+		setTotalVentes(0);
+	};
+	const confirmVente = (venteId, type) => {
+		const vente = ventes.find((el) => el._id === venteId);
 
-    setVentes(newVentes);
-  };
+		if (
+			type === 'Validée' &&
+			new Date(vente.createdAt).toLocaleDateString() >=
+				new Date(billet.open_hour).toLocaleDateString()
+		) {
+			const total = vente.prix;
 
-  const addProductToCart = (product) => {
-    if (product.quantite <= 0 && !product.is_cocktail) {
-      return;
-    }
+			updateTotalVentes(total);
+		} else if (type === 'Annulée') {
+			setProducts((prProducts) => {
+				const newProducts = prProducts.map((product) => {
+					const index = vente.produit.findIndex(
+						(el) => el.productId === product._id
+					);
 
-    const cartItem = carts.find((cart) => cart._id === product._id);
+					if (index !== -1) {
+						const newProduct = { ...product };
+						newProduct.quantite += vente.quantite[index];
+						return newProduct;
+					} else {
+						return product;
+					}
+				});
 
-    if (cartItem) {
-      const qty = cartItem.quantity - (cartItem.quantity_already_sold || 0);
+				return newProducts;
+			});
+		}
 
-      if (
-        !product.is_cocktail &&
-        (qty + 1 > product.quantite ||
-          (categorySelectedId === 'formule' &&
-            qty + cartItem.promo_quantity > product.quantite))
-      ) {
-        alert('Vous ne pouvez pas ajouter plus de produits que le stock');
-        return;
-      }
+		const newVentes = ventes.filter((el) => el._id !== venteId);
 
-      if (categorySelectedId === 'formule') {
-        cartItem.quantity += cartItem.promo_quantity;
-      } else {
-        cartItem.quantity++;
-      }
+		setVentes(newVentes);
+	};
 
-      setCarts([...carts]);
-    } else {
-      setCarts([
-        ...carts,
-        {
-          ...product,
-          quantity:
-            categorySelectedId === 'formule' ? product.promo_quantity : 1,
-        },
-      ]);
-    }
-  };
+	const addProductToCart = (product) => {
+		if (product.quantite <= 0 && !product.is_cocktail) {
+			return;
+		}
 
-  const removeProductFromCart = (product) => {
-    const cartItem = carts.find((cart) => cart._id === product._id);
-    if (cartItem) {
-      setCarts([...carts].filter((cart) => cart._id !== product._id));
-    }
-  };
+		const cartItem = carts.find((cart) => cart._id === product._id);
 
-  const updateProductQuantity = (product, quantity) => {
-    const cartItem = carts.find((cart) => cart._id === product._id);
-    if (cartItem) {
-      if (!product.is_cocktail && quantity > product.quantite) {
-        alert('Vous ne pouvez pas ajouter plus de produits que le stock');
-        return;
-      }
+		if (cartItem) {
+			const qty = cartItem.quantity - (cartItem.quantity_already_sold || 0);
 
-      cartItem.quantity = quantity;
-      setCarts([...carts]);
-    } else {
-      setCarts([...carts, { ...product, quantity: 1 }]);
-    }
-  };
+			if (
+				!product.is_cocktail &&
+				(qty + 1 > product.quantite ||
+					(categorySelectedId === 'formule' &&
+						qty + cartItem.promo_quantity > product.quantite))
+			) {
+				alert('Vous ne pouvez pas ajouter plus de produits que le stock');
+				return;
+			}
 
-  const handleUpdateProductQuantity = (product, type) => {
-    const cartItem = carts.find((cart) => cart._id === product._id);
+			if (categorySelectedId === 'formule') {
+				cartItem.quantity += cartItem.promo_quantity;
+			} else {
+				cartItem.quantity++;
+			}
 
-    if (cartItem) {
-      if (type === 'decr' && cartItem.quantity > 1) {
-        cartItem.quantity--;
-      } else if (type === 'incr') {
-        cartItem.quantity++;
-      } else if (type === 'decr' && cartItem.quantity === 1) {
-        removeProductFromCart(cartItem);
-        return;
-      }
+			setCarts([...carts]);
+		} else {
+			setCarts([
+				...carts,
+				{
+					...product,
+					quantity:
+						categorySelectedId === 'formule' ? product.promo_quantity : 1,
+				},
+			]);
+		}
+	};
 
-      setCarts([...carts]);
-    }
-  };
+	const removeProductFromCart = (product) => {
+		const cartItem = carts.find((cart) => cart._id === product._id);
+		if (cartItem) {
+			setCarts([...carts].filter((cart) => cart._id !== product._id));
+		}
+	};
 
-  const clearCarts = () => {
-    setCarts([]);
-    setVenteId(null);
-  };
+	const updateProductQuantity = (product, quantity) => {
+		const cartItem = carts.find((cart) => cart._id === product._id);
+		if (cartItem) {
+			if (!product.is_cocktail && quantity > product.quantite) {
+				alert('Vous ne pouvez pas ajouter plus de produits que le stock');
+				return;
+			}
 
-  const initCarts = (vente) => {
-    const carts = [];
+			cartItem.quantity = quantity;
+			setCarts([...carts]);
+		} else {
+			setCarts([...carts, { ...product, quantity: 1 }]);
+		}
+	};
 
-    vente.produit.forEach((product, index) => {
-      const prProduct = products.find((el) => el._id === product.productId);
-      if (prProduct) {
-        product.quantite = prProduct.quantite;
-      }
-      carts.push({
-        ...product,
-        quantity: vente.quantite[index],
-        quantity_already_sold: vente.quantite[index],
-        is_cocktail: product.taille === 'c',
-        _id: product.productId,
-      });
-    });
+	const handleUpdateProductQuantity = (product, type) => {
+		const cartItem = carts.find((cart) => cart._id === product._id);
 
-    setVenteId(vente._id);
-    setVenteSelected(vente);
-    setCarts(carts);
-  };
+		if (cartItem) {
+			if (type === 'decr' && cartItem.quantity > 1) {
+				cartItem.quantity--;
+			} else if (type === 'incr') {
+				cartItem.quantity++;
+			} else if (type === 'decr' && cartItem.quantity === 1) {
+				removeProductFromCart(cartItem);
+				return;
+			}
 
-  const initProductsUnvailable = (products) => {
-    setProductUnvailable(products);
-  };
+			setCarts([...carts]);
+		}
+	};
 
-  const updateBillet = (billet) => {
-    setBillet(billet);
-  };
+	const clearCarts = () => {
+		setCarts([]);
+		setVenteId(null);
+	};
 
-  const resetProductsUnvailable = () => {
-    setProductUnvailable([]);
-  };
+	const initCarts = (vente) => {
+		const carts = [];
 
-  return (
-    <AppContext.Provider
-      value={{
-        products,
-        totalVentes,
-        totalEmployes,
-        ventes,
-        confirmVente,
-        billet,
-        updateBillet,
-        user,
-        resetTotalVentes,
-        currentTiming,
-      }}
-    >
-      <ProductsContext.Provider
-        value={{
-          carts,
-          setCarts,
-          addProductToCart,
-          removeProductFromCart,
-          updateProductQuantity,
-          categorySelectedId,
-          handleSelectCategory,
-          handleUpdateProductQuantity,
-          clearCarts,
-          initCarts,
-          handleSelectCurrentCategory,
-          currentCategory,
-          venteId,
-          productUnvailable,
-          initProductsUnvailable,
-          resetProductsUnvailable,
-          venteSelected,
-        }}
-      >
-        <React.Fragment>
-          <VenteRoot />
-          <EmDashboardBody />
-          <ModalUnvailableProducts />
-        </React.Fragment>
-      </ProductsContext.Provider>
-    </AppContext.Provider>
-  );
+		vente.produit.forEach((product, index) => {
+			const prProduct = products.find((el) => el._id === product.productId);
+			if (prProduct) {
+				product.quantite = prProduct.quantite;
+			}
+			carts.push({
+				...product,
+				quantity: vente.quantite[index],
+				quantity_already_sold: vente.quantite[index],
+				is_cocktail: product.taille === 'c',
+				_id: product.productId,
+			});
+		});
+
+		setVenteId(vente._id);
+		setVenteSelected(vente);
+		setCarts(carts);
+	};
+
+	const initProductsUnvailable = (products) => {
+		setProductUnvailable(products);
+	};
+
+	const updateBillet = (billet) => {
+		setBillet(billet);
+	};
+
+	const resetProductsUnvailable = () => {
+		setProductUnvailable([]);
+	};
+
+	return (
+		<AppContext.Provider
+			value={{
+				products,
+				totalVentes,
+				totalEmployes,
+				ventes,
+				confirmVente,
+				billet,
+				updateBillet,
+				user,
+				resetTotalVentes,
+				currentTiming,
+			}}>
+			<ProductsContext.Provider
+				value={{
+					carts,
+					setCarts,
+					addProductToCart,
+					removeProductFromCart,
+					updateProductQuantity,
+					categorySelectedId,
+					handleSelectCategory,
+					handleUpdateProductQuantity,
+					clearCarts,
+					initCarts,
+					handleSelectCurrentCategory,
+					currentCategory,
+					venteId,
+					productUnvailable,
+					initProductsUnvailable,
+					resetProductsUnvailable,
+					venteSelected,
+				}}>
+				<React.Fragment>
+					<VenteRoot />
+					<EmDashboardBody />
+					<ModalUnvailableProducts />
+				</React.Fragment>
+			</ProductsContext.Provider>
+		</AppContext.Provider>
+	);
 };
 
 const ModalUnvailableProducts = () => {
-  const { resetProductsUnvailable, productUnvailable } =
-    React.useContext(ProductsContext);
+	const { resetProductsUnvailable, productUnvailable } =
+		React.useContext(ProductsContext);
 
-  const handleClose = () => {
-    resetProductsUnvailable();
-    $('#productUnvailableModal').modal('hide');
-  };
+	const handleClose = () => {
+		resetProductsUnvailable();
+		$('#productUnvailableModal').modal('hide');
+	};
 
-  return (
-    <div
-      class='modal fade'
-      id='productUnvailableModal'
-      tabindex='-1'
-      role='dialog'
-      aria-labelledby='myModalTitle'
-    >
-      <div
-        class='modal-dialog modal-dialog-centered'
-        style={{
-          maxWidth: '600px',
-        }}
-        role='document'
-      >
-        (
-        <div class='modal-content'>
-          <div class='modal-header'>
-            <h2 class='modal-title' id='exampleModalLongTitle'>
-              Produits non disponible
-            </h2>
-            <button
-              type='button'
-              class='close close-modal'
-              data-dismiss='modal'
-              aria-label='Close'
-              id='close-modal'
-            >
-              <span aria-hidden='true'>&times;</span>
-            </button>
-          </div>
-          <div class='modal-body'>
-            {productUnvailable &&
-              productUnvailable.map((el, index) => {
-                return (
-                  <p key={index}>
-                    {el.nom_produit}{' '}
-                    {el.taille + `\n quantité restante: ${el.quantite}`}
-                  </p>
-                );
-              })}
-          </div>
+	return (
+		<div
+			class='modal fade'
+			id='productUnvailableModal'
+			tabindex='-1'
+			role='dialog'
+			aria-labelledby='myModalTitle'>
+			<div
+				class='modal-dialog modal-dialog-centered'
+				style={{
+					maxWidth: '600px',
+				}}
+				role='document'>
+				(
+				<div class='modal-content'>
+					<div class='modal-header'>
+						<h2
+							class='modal-title'
+							id='exampleModalLongTitle'>
+							Produits non disponible
+						</h2>
+						<button
+							type='button'
+							class='close close-modal'
+							data-dismiss='modal'
+							aria-label='Close'
+							id='close-modal'>
+							<span aria-hidden='true'>&times;</span>
+						</button>
+					</div>
+					<div class='modal-body'>
+						{productUnvailable &&
+							productUnvailable.map((el, index) => {
+								return (
+									<p key={index}>
+										{el.nom_produit}{' '}
+										{el.taille + `\n quantité restante: ${el.quantite}`}
+									</p>
+								);
+							})}
+					</div>
 
-          <div class='modal-footer'>
-            <button
-              type='button'
-              class='btn btn-success close-modal'
-              data-dismiss='modal'
-              onClick={handleClose}
-            >
-              Ok
-            </button>
-          </div>
-        </div>
-        )
-      </div>
-    </div>
-  );
+					<div class='modal-footer'>
+						<button
+							type='button'
+							class='btn btn-success close-modal'
+							data-dismiss='modal'
+							onClick={handleClose}>
+							Ok
+						</button>
+					</div>
+				</div>
+				)
+			</div>
+		</div>
+	);
 };
 
 ReactDOM.render(<AppRoot />, document.getElementById('root'));
