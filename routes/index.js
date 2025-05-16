@@ -77,13 +77,16 @@ const {
 	deleteProduitGlobal,
 } = require('../controllers/produitglobal.controler');
 const { produitBySession } = require('../controllers/produit');
-const { donatePage, donateWebhook, donateSuccess, donateError } = require('../controllers/donate.controller');
+const {
+	donatePage,
+	donateWebhook,
+	donateSuccess,
+	donateError,
+} = require('../controllers/donate.controller');
 
 var router = express.Router();
 
-
-router.use('/api/lists',listsRouter);
-
+router.use('/api/lists', listsRouter);
 
 /* GET home page. */
 
@@ -193,6 +196,11 @@ router.post(
 );
 
 router.post(
+	'/produit_par_categorie_parent',
+	produitparcategorie_controller.categorieParentProductPost
+);
+
+router.post(
 	'/categorie_par_client',
 	usercategoriecontroller.usercategoriesPost
 );
@@ -203,7 +211,10 @@ router.post('/allbarmans', allemployecontroller.allBarmans);
 
 router.post('/employelogin', employelogincontroller.employeloginPost);
 router.post('/delete_self_account', allemployecontroller.deleteSelfEmployee);
-router.post('/confirm_delete_employee', allemployecontroller.confirmDeleteEmployee);
+router.post(
+	'/confirm_delete_employee',
+	allemployecontroller.confirmDeleteEmployee
+);
 
 router.get('/faq', faqcontroller.faq);
 router.get('/condition_general', conditiongeneral_controller.condition_general);
@@ -348,12 +359,11 @@ router.use('/billet', billetRouter);
 router.use('/app', appConfigRouter);
 
 router.get('/lists/*', (req, res) => {
-	
-		res.setHeader('Content-Type', 'text/html');
+	res.setHeader('Content-Type', 'text/html');
 
-		// react build folder
+	// react build folder
 
-		res.sendFile(path.join(__dirname, '../emaquis-lists/index.html'));
+	res.sendFile(path.join(__dirname, '../emaquis-lists/index.html'));
 });
 
 router.get('*', (req, res) => {

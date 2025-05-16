@@ -33,22 +33,45 @@ exports.categorieQueries = class {
 			return new Promise(async (next) => {
 				Categorie.find({
 					isDeleted: false,
-					idParent: null
+					idParent: null,
 				})
 					.then(async (data) => {
-				
+						const newData2 = await Promise.all(
+							data.map(async (categorie) => {
+								let childs = await Categorie.find({
+									idParent: mongoose.Types.ObjectId(categorie._id),
+									isDeleted: false,
+								});
 
-						const newData2 = await Promise.all(data.map(async (categorie) => {
-							let childs = await Categorie.find({idParent: mongoose.Types.ObjectId(categorie._id), isDeleted: false});
-							
-							return {...categorie._doc, childs};
-						}));
+								return { ...categorie._doc, childs };
+							})
+						);
 
-
-						
 						next({
 							etat: true,
 							result: newData2,
+						});
+					})
+					.catch((err) => {
+						next({
+							etat: false,
+							err: err,
+						});
+					});
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
+	static getCategorieByParentId(id) {
+		try {
+			return new Promise(async (next) => {
+				Categorie.find({ idParent: id, isDeleted: false })
+					.then((data) => {
+						next({
+							etat: true,
+							result: data,
 						});
 					})
 					.catch((err) => {
