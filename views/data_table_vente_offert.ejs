@@ -48,6 +48,9 @@
 			rel="stylesheet"
 			type="text/css"
 		/>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+		<link href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css" rel="stylesheet" />
 
 		<%- include('partial/newHead.ejs') %> <%- include('partial/head.ejs') %> <%-
 		include('partial/script.ejs') %>
@@ -105,7 +108,7 @@
 								<div class="white_card_header">
 									<div class="box_header m-0">
 										<div class="main-title">
-											<h3 class="m-0">Liste des ventes</h3>
+											<h3 class="m-0">Liste des boissons offertes</h3>
 										</div>
 									</div>
 								</div>
@@ -113,6 +116,7 @@
 									<div class="QA_section">
 										<div class="white_box_tittle list_header">
 											<%- include('partial/inputSearch.ejs') %>
+											<%- include('partial/filterOffer.ejs') %>
 										</div>
 
 										<div class="QA_table mb_30">
@@ -134,7 +138,7 @@
 												<tbody>
                            <tr>
                             <td colspan="7">
-                              <p>Total Offert: <button class=" animationTotalPriceBorder"><%= totalOffert %> FCFA</button></p>
+                              <p>Total des boissons offertes: <button class=" animationTotalPriceBorder"><%= totalOffert %> FCFA</button></p>
 
                             </td>
                           </tr>
@@ -298,6 +302,7 @@
 
 		<!-- App js -->
 		<script src="assets/js/theme.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
       const handleClickConfirmBtn = (offerId) => {
           // const offerId = btn.closest('tr').querySelector('td:first-child').textContent;

@@ -1,0 +1,237 @@
+<form method="GET" class="row mb-4 filter-container">
+  <div class="col-md-3">
+    <div class="filter-group">
+      <label><i class="fas fa-box"></i> Produit</label>
+      <select name="produit" class="form-control select2">
+        <option value="">Tous les produits</option>
+        <% if (typeof ventes !== 'undefined' && ventes.length > 0) { %>
+          <% 
+            const produitsUniques = [...new Set(ventes.map(vente => vente.produit))].sort();
+            produitsUniques.forEach(function(produit) { 
+          %>
+            <option value="<%= produit %>" <%= (query && query.produit === produit) ? 'selected' : '' %>>
+              <%= produit %>
+            </option>
+          <% }); %>
+        <% } %>
+      </select>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="filter-group">
+      <label><i class="fas fa-user"></i> Vendeur / Vendeuse</label>
+      <select name="vendeur" class="form-control select2">
+        <option value="">Tous les vendeurs</option>
+        <% if (typeof ventes !== 'undefined' && ventes.length > 0) { %>
+          <% 
+            const vendeursUniques = [...new Set(ventes.map(vente => vente.employe))].sort();
+            vendeursUniques.forEach(function(vendeur) { 
+          %>
+            <option value="<%= vendeur %>" <%= (query && query.vendeur === vendeur) ? 'selected' : '' %>>
+              <%= vendeur %>
+            </option>
+          <% }); %>
+        <% } %>
+      </select>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="filter-group">
+      <label><i class="fas fa-tag"></i> Status</label>
+      <select name="status" class="form-control select2">
+        <option value="">Tous les statuts</option>
+        <% if (typeof ventes !== 'undefined' && ventes.length > 0) { %>
+          <% 
+            const statusUniques = [...new Set(ventes.map(vente => vente.status_commande))].sort();
+            statusUniques.forEach(function(status) { 
+              const statusText = status === 'Offert' ? 
+                (ventes.find(v => v.status_commande === status)?.offered_confirmed ? 'Offert - Validée' : 'Offert - En attente') : 
+                status;
+          %>
+            <option value="<%= status %>" <%= (query && query.status === status) ? 'selected' : '' %>>
+              <%= statusText %>
+            </option>
+          <% }); %>
+        <% } %>
+      </select>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="filter-group">
+      <label><i class="fas fa-calendar-day"></i> Date (unique)</label>
+      <input type="date" name="date" class="form-control" value="<%= query && query.date ? query.date : '' %>">
+    </div>
+  </div>
+
+  <div class="col-md-3 mt-3">
+    <div class="filter-group">
+      <label><i class="fas fa-calendar-alt"></i> Intervalle: début</label>
+      <input type="date" name="date_start" class="form-control" value="<%= query && query.date_start ? query.date_start : '' %>">
+    </div>
+  </div>
+
+  <div class="col-md-3 mt-3">
+    <div class="filter-group">
+      <label><i class="fas fa-calendar-alt"></i> Intervalle: fin</label>
+      <input type="date" name="date_end" class="form-control" value="<%= query && query.date_end ? query.date_end : '' %>">
+    </div>
+  </div>
+
+  <div class="col-md-3 mt-3">
+    <div class="filter-group">
+      <label><i class="fas fa-clock"></i> Période prédéfinie</label>
+      <select name="periode" class="form-control select2">
+        <option value="">-- Période --</option>
+        <option value="jour" <%= (query && query.periode === 'jour') ? 'selected' : '' %>>Aujourd'hui</option>
+        <option value="semaine" <%= (query && query.periode === 'semaine') ? 'selected' : '' %>>Cette semaine</option>
+        <option value="mois" <%= (query && query.periode === 'mois') ? 'selected' : '' %>>Ce mois</option>
+        <option value="trimestre" <%= (query && query.periode === 'trimestre') ? 'selected' : '' %>>Ce trimestre</option>
+        <option value="annee" <%= (query && query.periode === 'annee') ? 'selected' : '' %>>Cette année</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="col-md-12 mt-4 text-right">
+    <button type="submit" class="btn btn-primary filter-btn">
+      <i class="fas fa-filter"></i> Filtrer
+    </button>
+    <button type="reset" class="btn btn-secondary filter-btn ml-2">
+      <i class="fas fa-undo"></i> Réinitialiser
+    </button>
+  </div>
+</form>
+
+<style>
+.filter-container {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.filter-group {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.filter-group:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.filter-group label {
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.filter-group label i {
+  margin-right: 8px;
+  color: #3498db;
+}
+
+.filter-group .form-control {
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+}
+
+.filter-group .form-control:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+.filter-btn {
+  padding: 10px 25px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.filter-btn.btn-primary {
+  background: #3498db;
+}
+
+.filter-btn.btn-secondary {
+  background: #95a5a6;
+}
+
+.filter-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.filter-btn.btn-primary:hover {
+  background: #2980b9;
+}
+
+.filter-btn.btn-secondary:hover {
+  background: #7f8c8d;
+}
+
+.filter-btn i {
+  margin-right: 8px;
+}
+
+/* Select2 Customization */
+.select2-container--default .select2-selection--single {
+  height: 38px;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  line-height: 38px;
+  padding-left: 12px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 36px;
+}
+
+.select2-dropdown {
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+  background-color: #3498db;
+}
+</style>
+
+<script>
+$(document).ready(function() {
+  // Initialize Select2 for all select elements
+  $('.select2').select2({
+    theme: 'bootstrap4',
+    width: '100%',
+    placeholder: function() {
+      return $(this).data('placeholder');
+    }
+  });
+
+  // Reset form functionality
+  $('button[type="reset"]').click(function(e) {
+    e.preventDefault();
+    $('form')[0].reset();
+    $('.select2').val('').trigger('change');
+  });
+
+  // Debug log for form submission
+  $('form').on('submit', function(e) {
+    const formData = new FormData(this);
+    console.log('Form data being submitted:', Object.fromEntries(formData));
+  });
+});
+</script>
