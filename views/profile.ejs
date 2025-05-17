@@ -84,6 +84,309 @@
       cursor: pointer;
       border: solid 1px #98ED58
     }
+
+    .lock-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      font-size: 1.25rem;
+      background: rgba(152, 237, 88, 0.13);
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(152, 237, 88, 0.10);
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+      margin: 0;
+      cursor: pointer;
+    }
+    .lock-icon.lock-orange {
+      color: #FFA500;
+      background: rgba(255, 165, 0, 0.13);
+    }
+    .lock-icon.lock-green {
+      color: #98ED58;
+      background: rgba(152, 237, 88, 0.13);
+    }
+    .lock-icon.lock-orange:hover {
+      background: #FFA500;
+      color: #fff;
+    }
+    .lock-icon.lock-green:hover {
+      background: #98ED58;
+      color: #fff;
+    }
+    .checkbox-disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .subscription-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+
+    .subscription-modal-content {
+      position: relative;
+      background-color: #fff;
+      margin: 15% auto;
+      padding: 20px;
+      width: 50%;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      animation: modalFadeIn 0.3s;
+    }
+
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .subscription-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .subscription-modal-title {
+      color: #333;
+      font-size: 24px;
+      margin: 0;
+    }
+
+    .subscription-modal-close {
+      color: #666;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .subscription-modal-body {
+      color: #666;
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .subscription-modal-footer {
+      text-align: right;
+    }
+
+    .subscription-modal-button {
+      background-color: #98ED58;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    .subscription-modal-button:hover {
+      background-color: #7ed321;
+    }
+
+    .premium-row {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      min-height: 48px;
+      margin-bottom: 18px;
+    }
+    .premium-checkbox {
+      width: 22px;
+      height: 22px;
+      accent-color: #98ED58;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .premium-label {
+      display: flex;
+      align-items: center;
+      font-size: 1.13rem;
+      font-weight: 600;
+      color: #333;
+      gap: 0.7rem;
+      white-space: nowrap;
+      cursor: pointer;
+      position: relative;
+    }
+    .premium-tooltip {
+      display: none;
+      position: absolute;
+      left: 50%;
+      top: 120%;
+      transform: translateX(-50%);
+      min-width: 220px;
+      background: #fff;
+      color: #222;
+      font-size: 0.98rem;
+      font-weight: 400;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+      padding: 12px 16px;
+      z-index: 100;
+      text-align: left;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.18s;
+    }
+    .premium-label:hover .premium-tooltip,
+    .premium-label:focus .premium-tooltip {
+      display: block;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .premium-tooltip::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 0 8px 10px 8px;
+      border-style: solid;
+      border-color: transparent transparent #fff transparent;
+      filter: drop-shadow(0 -2px 2px rgba(0,0,0,0.07));
+    }
+
+    .forfait-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+    }
+    .forfait-modal-content {
+      background: #fff;
+      border-radius: 20px;
+      max-width: 650px;
+      margin: 60px auto;
+      padding: 36px 28px 32px 28px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      position: relative;
+      animation: fadeIn 0.4s;
+    }
+    .forfait-modal-close {
+      position: absolute;
+      top: 18px; right: 24px;
+      font-size: 2rem;
+      color: #FFA500;
+      cursor: pointer;
+      font-weight: bold;
+      transition: color 0.2s;
+    }
+    .forfait-modal-close:hover {
+      color: #FF4500;
+    }
+    .forfait-modal-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #FFA500;
+      margin-bottom: 32px;
+      letter-spacing: 0.5px;
+    }
+    .forfait-cards {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .forfait-card {
+      background: linear-gradient(135deg, #fff7e6 0%, #ffe5b4 100%);
+      border-radius: 18px;
+      box-shadow: 0 4px 18px rgba(255, 165, 0, 0.13);
+      padding: 32px 24px 28px 24px;
+      min-width: 240px;
+      max-width: 280px;
+      text-align: center;
+      transition: box-shadow 0.2s, transform 0.2s;
+      border: 2px solid #FFA50022;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .forfait-card.popular {
+      border: 2.5px solid #FF4500;
+      box-shadow: 0 8px 32px rgba(255, 69, 0, 0.13);
+    }
+    .forfait-badge-popular {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #FF4500;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: bold;
+      padding: 4px 16px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(255, 69, 0, 0.13);
+      z-index: 2;
+    }
+    .forfait-icon {
+      font-size: 3.2rem;
+      color: #FFA500;
+      margin-bottom: 18px;
+      margin-top: 8px;
+      filter: drop-shadow(0 2px 6px #ffa50033);
+    }
+    .forfait-card.popular .forfait-icon {
+      color: #FF4500;
+      filter: drop-shadow(0 2px 8px #ff450033);
+    }
+    .forfait-price {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: #FF4500;
+      margin: 10px 0 8px 0;
+      letter-spacing: 1px;
+    }
+    .forfait-desc {
+      font-size: 1.13rem;
+      color: #444;
+      margin-bottom: 22px;
+      font-weight: 500;
+    }
+    .forfait-btn {
+      background: linear-gradient(90deg, #FFA500 0%, #FF4500 100%);
+      color: #fff;
+      border: none;
+      border-radius: 24px;
+      padding: 12px 0;
+      width: 100%;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      margin-top: 8px;
+      box-shadow: 0 2px 8px rgba(255, 165, 0, 0.10);
+      letter-spacing: 0.5px;
+    }
+    .forfait-btn:hover {
+      background: linear-gradient(90deg, #FF4500 0%, #FFA500 100%);
+      transform: scale(1.04);
+    }
+    @media (max-width: 700px) {
+      .forfait-cards { flex-direction: column; gap: 24px; }
+      .forfait-modal-content { padding: 18px 4vw 18px 4vw; }
+    }
   </style>
 
   <%- include('partial/newSideBar.ejs') %>
@@ -195,47 +498,125 @@
                               <div class="d-flex justify-content-between align-items-center experience"><span>Changer votre mot de pass?</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;sinon laissez vide les champs</span></div><br>
                               <div class="col-md-12"><label class="labels">Nouveau mot de pass</label><input type="password" class="form-control" name='newPassword' placeholder="" value=""></div> <br>
                               <div class="col-md-12"><label class="labels">Confirmer</label><input type="password" class="form-control" name='confirmPassword' placeholder="" value=""></div>
-                              <hr>
-                              <!--
-                              <div class="row mt-3" style="align-items: center;">
-                                <% if (user?.hasStock) {%>
-                                <input type='checkbox' id='stock' checked name="hasStock" />
-                                <% } else { %>
-                                <input type='checkbox' id='stock' name="hasStock" />
-                                <% } %>
-                                <label class="labels" for="stock" style='margin: 0;margin-left: 0.5rem;'>Gestion du stock</label>
-                              </div>
-                              <hr>
-                              -->
-
-                              <div class="checkbox-wrapper-12">
-                                <div class="cbx" style="display: flex;">
-                                  <% if (user?.hasStock) {%>
-                                  <input id="cbx-12 stock" type="checkbox" checked name="hasStock">
-                                  <% } else { %>
-                                    <input type='checkbox' id='cbx-12 stock' name="hasStock" />
-                                <% } %>
-                               
-                                  <label for="cbx-12 stock" class="labels" >
-                                    <span style="position:relative; left:1.8rem; width:30px;">Réserve de stock</span>
-                                </label>
-                                  <svg width="15" height="14" viewBox="0 0 15 14" fill="none">
-                                    <path d="M2 8.36364L6.23077 12L13 2"></path>
-                                  </svg>
+                              <div class="premium-feature-title">
+                                <h2 class="animated-title">Fonctionnalités Premium <span class="new-badge">Nouveauté</span></h2>
+                                <div>
+                                  <span class="forfait-badge" id="openForfaitModal">Voir les forfaits</span>
                                 </div>
-                                
-                                <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-                                  <defs>
-                                    <filter id="goo-12">
-                                      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"></feGaussianBlur>
-                                      <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" result="goo-12"></feColorMatrix>
-                                      <feBlend in="SourceGraphic" in2="goo-12"></feBlend>
-                                    </filter>
-                                  </defs>
-                                </svg>
                               </div>
 
+                              <style>
+                                .premium-feature-title {
+                                  text-align: center;
+                                  margin: 20px 0;
+                                }
 
+                                .animated-title {
+                                  font-size: 1.8rem;
+                                  font-weight: bold;
+                                  color: #FFA500;
+                                  position: relative;
+                                  display: inline-block;
+                                  animation: fadeIn 2s ease-in-out;
+                                }
+
+                                .new-badge {
+                                  background-color: #FF4500;
+                                  color: #fff;
+                                  font-size: 0.8rem;
+                                  padding: 2px 8px;
+                                  border-radius: 12px;
+                                  margin-left: 10px;
+                                  animation: bounce 1.5s infinite;
+                                }
+
+                                .forfait-badge {
+                                  display: inline-block;
+                                  margin-top: 10px;
+                                  background: #FFA500;
+                                  color: #fff;
+                                  font-size: 1rem;
+                                  padding: 4px 16px;
+                                  border-radius: 16px;
+                                  font-weight: 600;
+                                  cursor: pointer;
+                                  box-shadow: 0 2px 8px rgba(255, 165, 0, 0.12);
+                                  transition: background 0.2s, color 0.2s, transform 0.2s;
+                                }
+
+                                .forfait-badge:hover {
+                                  background: #FF4500;
+                                  color: #fff;
+                                  transform: scale(1.05);
+                                }
+
+                                @keyframes fadeIn {
+                                  0% { opacity: 0; transform: translateY(-10px); }
+                                  100% { opacity: 1; transform: translateY(0); }
+                                }
+
+                                @keyframes bounce {
+                                  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+                                  40% { transform: translateY(-10px); }
+                                  60% { transform: translateY(-5px); }
+                                }
+                              </style>
+                              <hr>
+                              
+
+                              <div class="checkbox-wrapper-12 premium-row">
+                                <% if (user?.hasStock) { %>
+                                  <input id="cbx-12-stock" type="checkbox" checked name="hasStock" class="premium-checkbox">
+                                  <label for="cbx-12-stock" class="premium-label" data-locked="false" tabindex="0">
+                                    Réserve de stock
+                                    <span class="premium-tooltip">Activez la gestion avancée de votre stock pour éviter les ruptures et optimiser vos approvisionnements.</span>
+                                    <i class="fas fa-lock-open lock-icon lock-green" data-feature="stock" data-locked="false"></i>
+                                  </label>
+                                <% } else { %>
+                                  <input type='checkbox' id='cbx-12-stock' name="hasStock" class="premium-checkbox checkbox-disabled" />
+                                  <label for="cbx-12-stock" class="premium-label" data-locked="true" tabindex="0">
+                                    Réserve de stock
+                                    <span class="premium-tooltip">Activez la gestion avancée de votre stock pour éviter les ruptures et optimiser vos approvisionnements.</span>
+                                    <i class="fas fa-lock lock-icon lock-orange" data-feature="stock" data-locked="true"></i>
+                                  </label>
+                                <% } %>
+                              </div>
+                              <hr>
+                              <div class="checkbox-wrapper-12 premium-row">
+                                <% if (user?.hasOffer) { %>
+                                  <input id="cbx-12-offer" type="checkbox" checked name="hasOffer" class="premium-checkbox">
+                                  <label for="cbx-12-offer" class="premium-label" data-locked="false" tabindex="0">
+                                    Offre
+                                    <span class="premium-tooltip">Cette option vous donne l'opportunité d'offrir des boissons à vos clients tout en ayant la traçabilité des boissons offertes.</span>
+                                    <i class="fas fa-lock-open lock-icon lock-green" data-feature="offer" data-locked="false"></i>
+                                  </label>
+                                <% } else { %>
+                                  <input type='checkbox' id='cbx-12-offer' name="hasOffer" class="premium-checkbox checkbox-disabled" />
+                                  <label for="cbx-12-offer" class="premium-label" data-locked="true" tabindex="0">
+                                    Offre
+                                    <span class="premium-tooltip">Cette option vous donne l'opportunité d'offrir des boissons à vos clients tout en ayant la traçabilité des boissons offertes.</span>
+                                    <i class="fas fa-lock lock-icon lock-orange" data-feature="offer" data-locked="true"></i>
+                                  </label>
+                                <% } %>
+                              </div>
+                              <hr>
+                              <div class="checkbox-wrapper-12 premium-row">
+                                <% if (user?.hasSubCategories) { %>
+                                  <input id="cbx-12-SubCategories" type="checkbox" checked name="hasSubCategories" class="premium-checkbox">
+                                  <label for="cbx-12-SubCategories" class="premium-label" data-locked="false" tabindex="0">
+                                    Option nourriture
+                                    <span class="premium-tooltip">Permet de proposer et gérer des sous-catégories de plats pour une carte plus flexible et détaillée.</span>
+                                    <i class="fas fa-lock-open lock-icon lock-green" data-feature="subcategories" data-locked="false"></i>
+                                  </label>
+                                <% } else { %>
+                                  <input type='checkbox' id='cbx-12-SubCategories' name="hasSubCategories" class="premium-checkbox checkbox-disabled" />
+                                  <label for="cbx-12-SubCategories" class="premium-label" data-locked="true" tabindex="0">
+                                    Option nourriture
+                                    <span class="premium-tooltip">Permet de proposer et gérer des sous-catégories de plats pour une carte plus flexible et détaillée.</span>
+                                    <i class="fas fa-lock lock-icon lock-orange" data-feature="subcategories" data-locked="true"></i>
+                                  </label>
+                                <% } %>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -259,8 +640,7 @@
           <div class="col-lg-12">
             <div class="footer_iner text-center">
               <p>
-                2024 © E-MAQUIS - Designed by
-                <a href="#"> <i class="ti-gun"></i> </a><a href="#"> HNM</a> - <a href="/faq">FAQ</a>
+                2025 © E-MAQUIS - Designed by <a href="https://haut-numerique.com">HNM</a> - <a href="/faq">FAQ</a>
               </p>
             </div>
           </div>
@@ -393,6 +773,59 @@ if(nom.trim() === ''){
       }
 
     })
+
+    // Add Font Awesome for the lock icon
+    const fontAwesomeScript = document.createElement('link');
+    fontAwesomeScript.rel = 'stylesheet';
+    fontAwesomeScript.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
+    document.head.appendChild(fontAwesomeScript);
+
+    // Modal functionality
+    $(document).ready(function() {
+      // Subscription Modal
+      function openModal() {
+        var modal = document.getElementById('subscriptionModal');
+        if (modal) modal.style.display = 'block';
+      }
+      function closeModal() {
+        var modal = document.getElementById('subscriptionModal');
+        if (modal) modal.style.display = 'none';
+      }
+      $(document).on('click', '.premium-label[data-locked="true"], .lock-icon.lock-orange[data-locked="true"]', function(e) {
+        e.preventDefault();
+        openModal();
+      });
+      $(document).on('click', '.subscription-modal-close, .subscription-modal-button', function(e) {
+        e.preventDefault();
+        closeModal();
+      });
+      $(document).on('click', function(e) {
+        var modal = document.getElementById('subscriptionModal');
+        if (modal && e.target === modal) closeModal();
+      });
+
+      // Forfait Modal (même logique)
+      function openForfaitModal() {
+        var modal = document.getElementById('forfaitModal');
+        if (modal) modal.style.display = 'block';
+      }
+      function closeForfaitModal() {
+        var modal = document.getElementById('forfaitModal');
+        if (modal) modal.style.display = 'none';
+      }
+      $(document).on('click', '#openForfaitModal', function(e) {
+        e.preventDefault();
+        openForfaitModal();
+      });
+      $(document).on('click', '.forfait-modal-close, .forfait-modal-button', function(e) {
+        e.preventDefault();
+        closeForfaitModal();
+      });
+      $(document).on('click', function(e) {
+        var modal = document.getElementById('forfaitModal');
+        if (modal && e.target === modal) closeForfaitModal();
+      });
+    });
   </script>
 
   <!-- jQuery  -->
@@ -414,6 +847,66 @@ if(nom.trim() === ''){
 
   <!-- App js -->
   <script src="assets/js/theme.js"></script>
+
+  <!-- Subscription Modal -->
+  <div id="subscriptionModal" class="subscription-modal">
+    <div class="subscription-modal-content">
+      <div class="subscription-modal-header">
+        <h2 class="subscription-modal-title">Fonctionnalité Premium</h2>
+        <span class="subscription-modal-close">&times;</span>
+      </div>
+      <div class="subscription-modal-body" style="text-align:center; font-size:1.2rem; color:#FFA500; font-weight:600;">
+        Merci de contacter le service client via whatsapp <br>
+        <ul style="list-style-type: none; padding: 0;">
+          <li>
+            <a href="https://wa.me/33760484911">+33 0760484911</a>
+          
+        </li>
+        <li>
+          
+        <a href="https://wa.me/2250709454685">+225 0709454685</a>
+        
+      </li>
+      <li>
+        
+      <a href="https://wa.me/2250709031399">+225 0709031399</a>
+      
+    </li>
+    <li>
+      
+    <a href="https://wa.me/2250777129951">+225 0777129951</a>
+  </li>
+        </ul>
+        <br> pour effectuer votre abonnement afin de pouvoir utiliser toutes les fonctionnalités de l'application
+      </div>
+      <div class="subscription-modal-footer">
+        <button class="subscription-modal-button">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Forfait -->
+  <div id="forfaitModal" class="forfait-modal">
+    <div class="forfait-modal-content">
+      <span class="forfait-modal-close">&times;</span>
+      <div class="forfait-modal-title">Choisissez votre forfait Premium</div>
+      <div class="forfait-cards">
+        <div class="forfait-card">
+          <div class="forfait-icon"><i class="fas fa-unlock-alt"></i></div>
+          <div class="forfait-price">2 000 F</div>
+          <div class="forfait-desc">Débloquez <b>1 option premium</b> de votre choix<br><span style="color:#888; font-size:0.95em;">(mensuel)</span></div>
+          <button class="forfait-btn" onclick="window.open('https://wa.me/+33760484911','_blank')">Choisir ce forfait</button>
+        </div>
+        <div class="forfait-card popular">
+          <div class="forfait-badge-popular">Le plus populaire</div>
+          <div class="forfait-icon"><i class="fas fa-crown"></i></div>
+          <div class="forfait-price">5 000 F</div>
+          <div class="forfait-desc">Débloquez <b>les 3 options premium</b><br><span style="color:#888; font-size:0.95em;">(mensuel)</span></div>
+          <button class="forfait-btn" onclick="window.open('https://wa.me/+33760484911','_blank')">Choisir ce forfait</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>

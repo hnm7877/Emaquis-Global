@@ -276,6 +276,12 @@ td {
 .checkbox-wrapper-12 {
   position: relative;
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .checkbox-wrapper-12 > svg {
