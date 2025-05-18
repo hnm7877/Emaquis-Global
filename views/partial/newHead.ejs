@@ -86,7 +86,7 @@
     flex-wrap: wrap;
     min-height: 64px;
     position: relative;
-    z-index: 10;
+    z-index: 1000;
   }
   .main-navbar-pro .navbar-left {
     display: flex;
@@ -170,6 +170,54 @@
   #layout-wrapper {
     margin-top: 0 !important;
     padding-top: 0 !important;
+    margin-left: 250px;
+    transition: margin-left 0.3s ease;
+  }
+
+  /* Styles pour le menu vertical */
+  .vertical-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    background: #16213e;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    z-index: 2001;
+  }
+
+  @media (max-width: 991px) {
+    .vertical-menu {
+      transform: translateX(-100%);
+    }
+
+    .vertical-menu.show-sidebar {
+      transform: translateX(0);
+    }
+  }
+
+  /* Overlay pour le fond sombre quand le menu est ouvert */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+  }
+
+  .sidebar-overlay.show {
+    display: block;
+  }
+
+  /* Ajustement du contenu principal */
+  @media (max-width: 991px) {
+    #layout-wrapper {
+      margin-left: 0;
+    }
   }
 </style>
 <script>
@@ -189,10 +237,26 @@
     // Sidebar toggle functionality
     const sidebarToggle = document.getElementById("sidebar-toggle");
     const sidebar = document.querySelector(".vertical-menu");
+    const overlay = document.createElement("div");
+    overlay.className = "sidebar-overlay";
+    document.body.appendChild(overlay);
 
     if (sidebarToggle && sidebar) {
       sidebarToggle.addEventListener("click", function () {
         sidebar.classList.toggle("show-sidebar");
+        overlay.classList.toggle("show");
+        document.body.style.overflow = sidebar.classList.contains(
+          "show-sidebar"
+        )
+          ? "hidden"
+          : "";
+      });
+
+      // Close sidebar when clicking overlay
+      overlay.addEventListener("click", function () {
+        sidebar.classList.remove("show-sidebar");
+        overlay.classList.remove("show");
+        document.body.style.overflow = "";
       });
 
       // Close sidebar when clicking outside on mobile
@@ -204,6 +268,8 @@
           sidebar.classList.contains("show-sidebar")
         ) {
           sidebar.classList.remove("show-sidebar");
+          overlay.classList.remove("show");
+          document.body.style.overflow = "";
         }
       });
     }
