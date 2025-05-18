@@ -1,143 +1,141 @@
 <!-- Begin page -->
 
-<div id="layout-wrapper">
-  <!-- ========== Left Sidebar Start ========== -->
-  <div class="vertical-menu sidebar-animated">
-    <div data-simplebar class="h-100 sidebar-inner">
-      <div class="navbar-brand-box mt-10 logo_sidebar text-center">
-        <a href="/dashboard">
-          <img
-            src="../img/paresseux_sous_officiel.png"
-            alt="Logo E-Maquis"
-            class="sidebar-logo"
-          />
-        </a>
-      </div>
-      <div class="sidebar-title" tabindex="-1">MENU PRINCIPAL</div>
-      <!--- Sidemenu -->
-      <div id="sidebar-menu">
-        <!-- Left Menu Start -->
-        <ul class="metismenu list-unstyled sidebar-menu-list" id="side-menu">
-          <li class="sidebar-menu-item">
-            <a href="/bilan" class="sidebar-link">
-              <lord-icon
-                src="https://cdn.lordicon.com/ssmahvix.json"
-                trigger="hover"
-                delay="1000"
-                state="hover-growth"
-                style="width: 22px; height: 22px; margin-right: 6px"
-              ></lord-icon>
-              <span class="sidebar-label">Bilan</span>
-            </a>
-          </li>
-          <li class="sidebar-menu-item has-submenu">
-            <a href="#" class="sidebar-link sidebar-toggle">
-              <lord-icon
-                src="https://cdn.lordicon.com/tdrtiskw.json"
-                trigger="hover"
-                delay="1000"
-                style="width: 22px; height: 22px; margin-right: 6px"
-              ></lord-icon>
-              <span class="sidebar-label">Employé(es)</span>
-              <span class="submenu-arrow">&#9662;</span>
-            </a>
-            <ul class="sidebar-submenu">
-              <li><a href="/ajouteruser">Ajouter</a></li>
-              <li><a href="/utilisateur">Liste des employés</a></li>
-            </ul>
-          </li>
-          <li class="sidebar-menu-item has-submenu">
-            <a href="#" class="sidebar-link sidebar-toggle">
-              <lord-icon
-                src="https://cdn.lordicon.com/ajkxzzfb.json"
-                trigger="hover"
-                delay="1000"
-                style="width: 22px; height: 22px; margin-right: 6px"
-              ></lord-icon>
-              <span class="sidebar-label">Ventes</span>
-              <span class="submenu-arrow">&#9662;</span>
-            </a>
-            <ul class="sidebar-submenu">
-              <li><a href="/data_table">Liste des ventes</a></li>
-              <% if (locals.user && !locals.user.hasOffer) { %>
-              <li><a href="/data_table_vente_offert">🔒 Ventes offertes</a></li>
-              <% } else { %>
-              <li><a href="/data_table_vente_offert">Ventes offertes</a></li>
-              <% } %>
-            </ul>
-          </li>
-          <li class="sidebar-menu-item has-submenu">
-            <a href="#" class="sidebar-link sidebar-toggle">
-              <lord-icon
-                src="https://cdn.lordicon.com/ghhwiltn.json"
-                trigger="hover"
-                delay="1000"
-                style="width: 22px; height: 22px; margin-right: 6px"
-              ></lord-icon>
-              <span class="sidebar-label">Produits</span>
-              <span class="submenu-arrow">&#9662;</span>
-            </a>
-            <ul class="sidebar-submenu">
-              <li><a href="/ajouterproduit">Enregistrer un produit</a></li>
-              <li><a href="/listeproduit">Approvisionnement</a></li>
-              <% if(locals.user?.isAdmin){ %>
-              <li><a href="/listeproduitglobal">Liste produits global</a></li>
-              <li>
-                <a href="/ajouter-produit-global"
-                  >Enregistrer un produit global</a
-                >
-              </li>
-              <% } %>
-            </ul>
-          </li>
-          <li class="sidebar-menu-item has-submenu">
-            <a href="#" class="sidebar-link sidebar-toggle">
-              <lord-icon
-                src="https://cdn.lordicon.com/kthelypq.json"
-                trigger="hover"
-                delay="1000"
-                style="width: 22px; height: 22px; margin-right: 6px"
-              ></lord-icon>
-              <span class="sidebar-label">Catégories</span>
-              <span class="submenu-arrow">&#9662;</span>
-            </a>
-            <ul class="sidebar-submenu">
-              <li><a href="/listcategorie">Mes catégories</a></li>
-              <% if(locals.user?.isAdmin){ %>
-              <li><a href="/ajoutercategorie">Ajouter</a></li>
-              <% } %>
-            </ul>
-          </li>
-          <li class="sidebar-menu-item has-submenu">
-            <a href="#" class="sidebar-link sidebar-toggle">
-              <lord-icon
-                src="https://cdn.lordicon.com/spajtpif.json"
-                trigger="hover"
-                style="width: 22px; height: 22px; margin-right: 6px"
-              ></lord-icon>
-              <span class="sidebar-label">Paramètres</span>
-              <span class="submenu-arrow">&#9662;</span>
-            </a>
-            <ul class="sidebar-submenu">
-              <li><a href="/profile">Mon Profil</a></li>
-              <li><a href="/deconnexion">Déconnexion</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <div class="sidebar-donate text-center mt-4">
-        <button
-          type="button"
-          class="btn btn-warning sidebar-donate-btn"
-          data-toggle="modal"
-          data-target="#donateModal"
-        >
-          <span class="txt">Faites un don</span>
-        </button>
-      </div>
+<div class="vertical-menu sidebar-animated">
+  <div data-simplebar class="h-100 sidebar-inner">
+    <div class="navbar-brand-box mt-10 logo_sidebar text-center">
+      <a href="/dashboard">
+        <img
+          src="../img/paresseux_sous_officiel.png"
+          alt="Logo E-Maquis"
+          class="sidebar-logo"
+        />
+      </a>
+    </div>
+    <div class="sidebar-title" tabindex="-1">MENU PRINCIPAL</div>
+    <!--- Sidemenu -->
+    <div id="sidebar-menu">
+      <!-- Left Menu Start -->
+      <ul class="metismenu list-unstyled sidebar-menu-list" id="side-menu">
+        <li class="sidebar-menu-item">
+          <a href="/bilan" class="sidebar-link">
+            <lord-icon
+              src="https://cdn.lordicon.com/ssmahvix.json"
+              trigger="hover"
+              delay="1000"
+              state="hover-growth"
+              style="width: 22px; height: 22px; margin-right: 6px"
+            ></lord-icon>
+            <span class="sidebar-label">Bilan</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item has-submenu">
+          <a href="#" class="sidebar-link sidebar-toggle">
+            <lord-icon
+              src="https://cdn.lordicon.com/tdrtiskw.json"
+              trigger="hover"
+              delay="1000"
+              style="width: 22px; height: 22px; margin-right: 6px"
+            ></lord-icon>
+            <span class="sidebar-label">Employé(es)</span>
+            <span class="submenu-arrow">&#9662;</span>
+          </a>
+          <ul class="sidebar-submenu">
+            <li><a href="/ajouteruser">Ajouter</a></li>
+            <li><a href="/utilisateur">Liste des employés</a></li>
+          </ul>
+        </li>
+        <li class="sidebar-menu-item has-submenu">
+          <a href="#" class="sidebar-link sidebar-toggle">
+            <lord-icon
+              src="https://cdn.lordicon.com/ajkxzzfb.json"
+              trigger="hover"
+              delay="1000"
+              style="width: 22px; height: 22px; margin-right: 6px"
+            ></lord-icon>
+            <span class="sidebar-label">Ventes</span>
+            <span class="submenu-arrow">&#9662;</span>
+          </a>
+          <ul class="sidebar-submenu">
+            <li><a href="/data_table">Liste des ventes</a></li>
+            <% if (locals.user && !locals.user.hasOffer) { %>
+            <li>
+              <a href="/data_table_vente_offert">🔒 Boissons offertes</a>
+            </li>
+            <% } else { %>
+            <li><a href="/data_table_vente_offert">Boissons offertes</a></li>
+            <% } %>
+          </ul>
+        </li>
+        <li class="sidebar-menu-item has-submenu">
+          <a href="#" class="sidebar-link sidebar-toggle">
+            <lord-icon
+              src="https://cdn.lordicon.com/ghhwiltn.json"
+              trigger="hover"
+              delay="1000"
+              style="width: 22px; height: 22px; margin-right: 6px"
+            ></lord-icon>
+            <span class="sidebar-label">Produits</span>
+            <span class="submenu-arrow">&#9662;</span>
+          </a>
+          <ul class="sidebar-submenu">
+            <li><a href="/ajouterproduit">Enregistrer un produit</a></li>
+            <li><a href="/listeproduit">Approvisionnement</a></li>
+            <% if(locals.user?.isAdmin){ %>
+            <li><a href="/listeproduitglobal">Liste produits global</a></li>
+            <li>
+              <a href="/ajouter-produit-global"
+                >Enregistrer un produit global</a
+              >
+            </li>
+            <% } %>
+          </ul>
+        </li>
+        <li class="sidebar-menu-item has-submenu">
+          <a href="#" class="sidebar-link sidebar-toggle">
+            <lord-icon
+              src="https://cdn.lordicon.com/kthelypq.json"
+              trigger="hover"
+              delay="1000"
+              style="width: 22px; height: 22px; margin-right: 6px"
+            ></lord-icon>
+            <span class="sidebar-label">Catégories</span>
+            <span class="submenu-arrow">&#9662;</span>
+          </a>
+          <ul class="sidebar-submenu">
+            <li><a href="/listcategorie">Mes catégories</a></li>
+            <% if(locals.user?.isAdmin){ %>
+            <li><a href="/ajoutercategorie">Ajouter</a></li>
+            <% } %>
+          </ul>
+        </li>
+        <li class="sidebar-menu-item has-submenu">
+          <a href="#" class="sidebar-link sidebar-toggle">
+            <lord-icon
+              src="https://cdn.lordicon.com/spajtpif.json"
+              trigger="hover"
+              style="width: 22px; height: 22px; margin-right: 6px"
+            ></lord-icon>
+            <span class="sidebar-label">Paramètres</span>
+            <span class="submenu-arrow">&#9662;</span>
+          </a>
+          <ul class="sidebar-submenu">
+            <li><a href="/profile">Mon Profil</a></li>
+            <li><a href="/deconnexion">Déconnexion</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-donate text-center mt-4">
+      <button
+        type="button"
+        class="btn btn-warning sidebar-donate-btn"
+        data-toggle="modal"
+        data-target="#donateModal"
+      >
+        <span class="txt">Faites un don</span>
+      </button>
     </div>
   </div>
-  <!-- Left Sidebar End -->
 </div>
 
 <% if (!locals.forProfile && user.forEvent && (!user.paid ||

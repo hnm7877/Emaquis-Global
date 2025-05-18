@@ -49,7 +49,7 @@
 
     <%- include('partial/head.ejs') %>
   </head>
-
+  <%- include('partial/newHead.ejs') %>
   <body class="crm_body_bg">
     <%- include(user.role ===
     "Barman"?'partial/emsidebar.ejs':'partial/newSideBar.ejs') %>
@@ -62,7 +62,7 @@
 
     <section class="main_content dashboard_part large_header_bg">
       <!-- menu  -->
-      <%- include('partial/newHead.ejs') %>
+
       <!--/ menu  -->
       <div class="main_content_iner overly_inner mt-10">
         <div class="container-fluid p-0">
@@ -172,43 +172,50 @@
     </div>
 
     <div
-    class="modal fade"
-    id="categoryModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="categoryModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="categoryModalLabel">Impossible de selectionner la categorie Nourritures</h5>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body" id="modalBodyContent">
-          <!-- Content and videos will be dynamically inserted here -->
-          <p>Pour avoir accès à la categorie Nourritures, veuillez contacter le service client sur whatsapp <a href="https://wa.me/2250767455041">Whatsapp(+225 07 67 45 50 41)</a> </p>
-
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-dismiss="modal"
-          >
-            Close
-          </button>
+      class="modal fade"
+      id="categoryModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="categoryModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="categoryModalLabel">
+              Impossible de selectionner la categorie Nourritures
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="modalBodyContent">
+            <!-- Content and videos will be dynamically inserted here -->
+            <p>
+              Pour avoir accès à la categorie Nourritures, veuillez contacter le
+              service client sur whatsapp
+              <a href="https://wa.me/2250767455041"
+                >Whatsapp(+225 07 67 45 50 41)</a
+              >
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
     <!-- footer  -->
     <%- include('partial/script.ejs') %>
@@ -260,7 +267,7 @@
           const hasStock = <%- JSON.stringify(user?.hasStock) %>;
           const hasSubCategories = <%- JSON.stringify(user?.hasSubCategories || false) %>;
 
-        
+
 
           const productCategoryId = <%- JSON.stringify(product?.produit?.categorie?._id || '') %>;
 
@@ -477,15 +484,15 @@
 
               setCategoryId(id);
 
-           
+
               const products = allProducts.filter(p => p.categorie == id);
 
               $('#produit')
               .niceSelect('destroy')
               .empty()
               .append(`<option value="">Selectionner un produit</option>`)
-       
-            
+
+
               for(let produit of products){
                 $('#produit').append(`<option value="${produit._id}">${produit.nom_produit}</option>`);
               }
@@ -507,7 +514,7 @@
               $('#taille').niceSelect();
             })
 
-           
+
             $('#produit').on('change', (e) => {
               const id = e.target.value;
               setProductId(id);
@@ -574,7 +581,7 @@
               $('#subCategorie').on('change', (e) => {
               const id = e.target.value;
 
-            
+
 
 
               setSubCategoryId(id);
@@ -605,12 +612,12 @@
               if(categorySelected){
                 setCategoryId(categorySelected._id);
                 setSubCategoryId(subCategoryId);
-             
+
 
               }
             }
           },[categories])
-          
+
 
           return (
             <div className='white_card card_height_100 mb_30'>

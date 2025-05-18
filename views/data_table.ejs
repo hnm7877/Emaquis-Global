@@ -48,8 +48,16 @@
 			rel="stylesheet"
 			type="text/css"
 		/>
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+		<%- include('partial/newHead.ejs') %>
+		<!--/ navbar  -->
+		<%- include('partial/newSideBar.ejs') %>
+		<!--/ sidebar  -->
 
-		<%- include('partial/newHead.ejs') %> <%- include('partial/head.ejs') %> <%-
+	
+
+		<%- include('partial/head.ejs') %> <%-
 		include('partial/script.ejs') %>
 	</head>
 	<body class="crm_body_bg">
@@ -89,10 +97,131 @@
 			.venteOrange {
 				color: rgb(255, 165, 0) !important;
 			}
-		</style>
 
-		<%- include('partial/newSideBar.ejs') %>
-		<!--/ sidebar  -->
+			/* Modern Table Styles */
+			.table {
+				border-radius: 10px;
+				overflow: hidden;
+				box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+			}
+
+			.table thead th {
+				background: #2c3e50;
+				color: white;
+				font-weight: 500;
+				padding: 15px;
+				text-transform: uppercase;
+				font-size: 0.85rem;
+				letter-spacing: 0.5px;
+			}
+
+			.table tbody tr {
+				transition: all 0.3s ease;
+			}
+
+			.table tbody tr:hover {
+				background-color: #f8f9fa;
+				transform: scale(1.01);
+			}
+
+			.table td {
+				padding: 15px;
+				vertical-align: middle;
+			}
+
+			/* Status Badge Styles */
+			.status-badge {
+				padding: 6px 12px;
+				border-radius: 20px;
+				font-size: 0.85rem;
+				font-weight: 500;
+				display: inline-block;
+				text-align: center;
+				min-width: 100px;
+			}
+
+			.status-validated {
+				background-color: #2ecc71;
+				color: white;
+			}
+
+			.status-cancelled {
+				background-color: #e74c3c;
+				color: white;
+			}
+
+			.status-pending {
+				background-color: #f1c40f;
+				color: white;
+			}
+
+			.status-offered {
+				background-color: #3498db;
+				color: white;
+			}
+
+			/* Column Icons */
+			.column-icon {
+				margin-right: 8px;
+				color: #2c3e50;
+			}
+
+			/* Price Styles */
+			.price-positive {
+				color: #2ecc71;
+				font-weight: 600;
+			}
+
+			.price-negative {
+				color: #e74c3c;
+				font-weight: 600;
+			}
+
+			/* Header Styles */
+			.white_card_header {
+				background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+				color: white;
+				padding: 20px;
+				border-radius: 10px 10px 0 0;
+			}
+
+			.main-title h3 {
+				color: white;
+				font-weight: 600;
+				margin: 0;
+			}
+
+			/* Search Box Enhancement */
+			.search-box {
+				border-radius: 20px;
+				padding: 10px 20px;
+				border: 1px solid #e0e0e0;
+				box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+				transition: all 0.3s ease;
+			}
+
+			.search-box:focus {
+				border-color: #3498db;
+				box-shadow: 0 2px 10px rgba(52,152,219,0.2);
+			}
+
+			/* Footer Enhancement */
+			.footer_part {
+				background: #2c3e50;
+				color: white;
+				padding: 20px 0;
+			}
+
+			.footer_iner a {
+				color: #3498db;
+				text-decoration: none;
+				transition: color 0.3s ease;
+			}
+
+			.footer_iner a:hover {
+				color: #2980b9;
+			}
+		</style>
 
 		<section class="main_content dashboard_part large_header_bg">
 			<!-- menu  -->
@@ -105,7 +234,7 @@
 								<div class="white_card_header">
 									<div class="box_header m-0">
 										<div class="main-title">
-											<h3 class="m-0">Liste des ventes</h3>
+											<h3 class="m-0"><i class="fas fa-chart-line me-2"></i>Liste des ventes</h3>
 										</div>
 									</div>
 								</div>
@@ -120,14 +249,14 @@
 											<table class="table lms_table_active3" data-order='[[7, "desc"]]'>
 												<thead>
 													<tr>
-														<th scope="col">Code</th>
-														<th scope="col">Produit</th>
-														<th scope="col">Categories</th>
-														<th scope="col">Vendeur / Vendeuse</th>
-														<th scope="col">Quantité</th>
-														<th scope="col">Prix</th>
-														<th scope="col">Status</th>
-														<th scope="col">Date</th>
+														<th scope="col"><i class="fas fa-barcode column-icon"></i>Code</th>
+														<th scope="col"><i class="fas fa-box column-icon"></i>Produit</th>
+														<th scope="col"><i class="fas fa-tags column-icon"></i>Categories</th>
+														<th scope="col"><i class="fas fa-user column-icon"></i>Vendeur / Vendeuse</th>
+														<th scope="col"><i class="fas fa-sort-numeric-up column-icon"></i>Quantité</th>
+														<th scope="col"><i class="fas fa-money-bill-wave column-icon"></i>Prix</th>
+														<th scope="col"><i class="fas fa-info-circle column-icon"></i>Status</th>
+														<th scope="col"><i class="fas fa-calendar-alt column-icon"></i>Date</th>
 													</tr>
 												</thead>
 												<tbody>
@@ -141,10 +270,23 @@
 
 														<td><%= vente.quantite%></td>
 
-														<td><%= vente.prix%></td>
-														<td class="<%=vente.prix>0 ?vente.status_commande == "Validée" || (vente.status_commande === "Offert" && vente.offered_confirmed) ? "venteGreen":"venteOrange":""%>"><%= vente.offered && vente.status_commande == "Annulée" ? "Offert":"" %> <%= vente.status_commande %></td>
+														<td class="<%= vente.prix >= 0 ? 'price-positive' : 'price-negative' %>">
+															<%= vente.prix%> €
+														</td>
+														<td>
+															<span class="status-badge <%= 
+																vente.status_commande === "Validée" ? 'status-validated' :
+																vente.status_commande === "Annulée" ? 'status-cancelled' :
+																vente.offered && vente.status_commande === "Offert" ? 'status-offered' :
+																'status-pending'
+															%>">
+																<%= vente.offered && vente.status_commande == "Annulée" ? "Offert" : vente.status_commande %>
+															</span>
+														</td>
 												
-														<td data-order="<%= vente.createdAt %>"><%= new Date(vente.createdAt).toLocaleString('fr-Fr') %></td>
+														<td data-order="<%= vente.createdAt %>">
+															<i class="far fa-clock me-2"></i><%= new Date(vente.createdAt).toLocaleString('fr-Fr') %>
+														</td>
 													</tr>
 													<% } %>
 												</tbody>
@@ -165,7 +307,7 @@
 							<div class="footer_iner text-center">
 								<p>
 									2023 © HNM - Designed by
-									<a href="#"> <i class="ti-gun"></i> </a><a href="#"> HNM</a> -
+									<a href="#"> <i class="fas fa-rocket"></i> </a><a href="#"> HNM</a> -
 									<a href="/faq">FAQ</a>
 								</p>
 							</div>
@@ -185,7 +327,7 @@
 				title="Go to Top"
 				href="#"
 			>
-				<i class="ti-angle-up"></i>
+				<i class="fas fa-arrow-up"></i>
 			</a>
 		</div>
 		<!-- footer  -->

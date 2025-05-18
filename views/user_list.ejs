@@ -39,6 +39,161 @@
     
   </head>
 
+  <style>
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #3498db;
+      --success-color: #2ecc71;
+      --danger-color: #e74c3c;
+      --warning-color: #f1c40f;
+      --light-bg: #f8f9fa;
+      --dark-text: #2c3e50;
+      --border-color: #e9ecef;
+    }
+
+    body {
+      background-color: var(--light-bg);
+      color: var(--dark-text);
+    }
+
+    .white_card {
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.05);
+      border: none;
+    }
+
+    .white_card_body {
+      padding: 2rem;
+    }
+
+    .page_title_box {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.05);
+      margin-bottom: 2rem;
+    }
+
+    .QA_table {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .table {
+      margin-bottom: 0;
+    }
+
+    .table thead th {
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 500;
+      padding: 1rem;
+      border: none;
+    }
+
+    .table tbody td {
+      padding: 1rem;
+      vertical-align: middle;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .table tbody tr:hover {
+      background-color: rgba(52, 152, 219, 0.05);
+    }
+
+    .action_btns .action_btn {
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      margin: 0 5px;
+    }
+
+    .action_btns .action_btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .action_btns .action_btn i {
+      font-size: 1rem;
+    }
+
+    .status_btn {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .modal-content {
+      border-radius: 15px;
+      border: none;
+    }
+
+    .modal-header {
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 15px 15px 0 0;
+      padding: 1.5rem;
+    }
+
+    .modal-body {
+      padding: 2rem;
+    }
+
+    .modal-footer {
+      padding: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .btn {
+      padding: 0.6rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background-color: var(--success-color);
+      border-color: var(--success-color);
+    }
+
+    .btn-danger {
+      background-color: var(--danger-color);
+      border-color: var(--danger-color);
+    }
+
+    .btn-info {
+      background-color: var(--secondary-color);
+      border-color: var(--secondary-color);
+    }
+
+    .footer_part {
+      background: white;
+      padding: 1.5rem 0;
+      box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+    }
+
+    .footer_iner {
+      color: var(--dark-text);
+    }
+
+    .footer_iner a {
+      color: var(--secondary-color);
+      text-decoration: none;
+    }
+
+    .footer_iner a:hover {
+      color: var(--primary-color);
+    }
+  </style>
 
 <body class="crm_body_bg">
   <style>
@@ -48,9 +203,12 @@
     }
   </style>
 
-
+  <%- include('partial/newHead.ejs') %>
+  <!--/ navbar  -->
   <%- include('partial/newSideBar.ejs') %>
   <!--/ sidebar  -->
+
+  
 
   <section class="main_content dashboard_part large_header_bg">
     <!-- menu  -->
@@ -137,7 +295,7 @@
               <div class="white_card_body">
                 <div class="QA_section">
                   <div class="white_box_tittle list_header">
-                    <h4>Liste des employés</h4>
+                    <h4><i class="fas fa-users mr-2"></i>Liste des employés</h4>
                     <%- include('partial/inputSearch.ejs') %>
                   </div>
 
@@ -173,19 +331,17 @@
                           </td>
                           <td>
                             <div class="action_btns d-flex">
-                              <a href="/edituser?user_id=<%=el._id%>" class="action_btn mr_10">
-                                <i class="far fa-edit"></i>
+                              <a href="/edituser?user_id=<%=el._id%>" class="action_btn mr_10" title="Modifier">
+                                <i class="far fa-edit text-primary"></i>
                               </a>
-                              <a href="#" class="action_btn" onclick='buttonClick("<%=el.nom%> <%=el.prenom%>","<%=el._id%>")' data-toggle="modal" data-userId="<%=el._id%>" data-username="<%=el.nom%> <%=el.prenom%>" data-target="#delete_user_modal">
-                                <i class="fas fa-trash"></i>
+                              <a href="#" class="action_btn" onclick='buttonClick("<%=el.nom%> <%=el.prenom%>","<%=el._id%>")' data-toggle="modal" data-userId="<%=el._id%>" data-username="<%=el.nom%> <%=el.prenom%>" data-target="#delete_user_modal" title="Supprimer">
+                                <i class="fas fa-trash text-danger"></i>
                               </a>
-                             
                               <%if(el.deletedItSelf){%>
-                                <a href="#" class="confirm_action_btn action_btn" style="color: red;" onclick='confirmButtonClick("<%=el.nom%> <%=el.prenom%>","<%=el._id%>")' data-toggle="modal" data-userId="<%=el._id%>" data-username="<%=el.nom%> <%=el.prenom%>" data-target="#confirmer_delete_user_modal">
+                                <a href="#" class="action_btn" style="color: var(--warning-color);" onclick='confirmButtonClick("<%=el.nom%> <%=el.prenom%>","<%=el._id%>")' data-toggle="modal" data-userId="<%=el._id%>" data-username="<%=el.nom%> <%=el.prenom%>" data-target="#confirmer_delete_user_modal" title="Demande de suppression">
                                   <i class="fa fa-exclamation-triangle"></i>
                                 </a>
                               <%}%>
-                             
                             </div>
                           </td>
                           <%})%>

@@ -147,6 +147,30 @@
       font-size: 0.98rem;
     }
   }
+
+  #sidebar-toggle {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  #sidebar-toggle:hover {
+    transform: scale(1.1);
+  }
+
+  @media (min-width: 992px) {
+    #sidebar-toggle {
+      display: none;
+    }
+  }
+
+  #layout-wrapper {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
 </style>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
@@ -159,6 +183,28 @@
       });
       document.addEventListener("click", function () {
         menu.classList.remove("show");
+      });
+    }
+
+    // Sidebar toggle functionality
+    const sidebarToggle = document.getElementById("sidebar-toggle");
+    const sidebar = document.querySelector(".vertical-menu");
+
+    if (sidebarToggle && sidebar) {
+      sidebarToggle.addEventListener("click", function () {
+        sidebar.classList.toggle("show-sidebar");
+      });
+
+      // Close sidebar when clicking outside on mobile
+      document.addEventListener("click", function (e) {
+        if (
+          window.innerWidth < 992 &&
+          !sidebar.contains(e.target) &&
+          !sidebarToggle.contains(e.target) &&
+          sidebar.classList.contains("show-sidebar")
+        ) {
+          sidebar.classList.remove("show-sidebar");
+        }
       });
     }
   });
@@ -176,6 +222,12 @@
   <header id="page-topbar">
     <nav class="main-navbar-pro">
       <div class="navbar-left">
+        <button
+          id="sidebar-toggle"
+          class="btn btn-link text-white d-lg-none mr-2"
+        >
+          <i class="fas fa-bars"></i>
+        </button>
         <span class="navbar-icon"><i class="fas fa-utensils"></i></span>
         <span class="navbar-title">E-MAQUIS</span>
       </div>
