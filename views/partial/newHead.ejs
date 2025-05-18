@@ -163,7 +163,7 @@
 
   @media (min-width: 992px) {
     #sidebar-toggle {
-      display: none;
+      display: block;
     }
   }
 
@@ -181,7 +181,7 @@
     left: 0;
     width: 250px;
     height: 100vh;
-    background: #16213e;
+    background: #16213e !important;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
     z-index: 2001;
@@ -190,10 +190,22 @@
   @media (max-width: 991px) {
     .vertical-menu {
       transform: translateX(-100%);
+      transition: transform 0.3s ease, z-index 0s;
+      z-index: 2001;
+      display: block !important;
     }
-
     .vertical-menu.show-sidebar {
-      transform: translateX(0);
+      transform: translateX(0) !important;
+      z-index: 3000 !important;
+    }
+    #layout-wrapper {
+      margin-left: 0;
+    }
+  }
+
+  @media (min-width: 992px) {
+    .vertical-menu {
+      display: none !important;
     }
   }
 
@@ -213,11 +225,49 @@
     display: block;
   }
 
-  /* Ajustement du contenu principal */
-  @media (max-width: 991px) {
-    #layout-wrapper {
-      margin-left: 0;
-    }
+  /* Styles pour les éléments du menu vertical */
+  .menu-header {
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .menu-logo {
+    width: 120px;
+    height: auto;
+  }
+
+  .menu-items {
+    padding: 1rem 0;
+  }
+
+  .menu-item {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1.5rem;
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+
+  .menu-item i {
+    margin-right: 1rem;
+    width: 20px;
+    text-align: center;
+  }
+
+  .menu-item span {
+    font-size: 0.95rem;
+  }
+
+  .vertical-menu.show-sidebar {
+    transform: translateX(0) !important;
+    z-index: 3000 !important;
   }
 </style>
 <script>
@@ -334,6 +384,130 @@
       </div>
     </nav>
   </header>
+
+  <!-- Vertical Menu -->
+  <div class="vertical-menu">
+    <div class="menu-header">
+      <img src="/img/emaquis.png" alt="Logo E-Maquis" class="menu-logo" />
+    </div>
+    <ul class="metismenu list-unstyled sidebar-menu-list" id="side-menu">
+      <li class="sidebar-menu-item">
+        <a href="/bilan" class="sidebar-link">
+          <lord-icon
+            src="https://cdn.lordicon.com/ssmahvix.json"
+            trigger="hover"
+            delay="1000"
+            state="hover-growth"
+            style="width: 22px; height: 22px; margin-right: 6px"
+          ></lord-icon>
+          <span class="sidebar-label">Bilan</span>
+        </a>
+      </li>
+      <li class="sidebar-menu-item has-submenu">
+        <a href="#" class="sidebar-link sidebar-toggle">
+          <lord-icon
+            src="https://cdn.lordicon.com/tdrtiskw.json"
+            trigger="hover"
+            delay="1000"
+            style="width: 22px; height: 22px; margin-right: 6px"
+          ></lord-icon>
+          <span class="sidebar-label">Employé(es)</span>
+          <span class="submenu-arrow">&#9662;</span>
+        </a>
+        <ul class="sidebar-submenu">
+          <li><a href="/ajouteruser">Ajouter</a></li>
+          <li><a href="/utilisateur">Liste des employés</a></li>
+        </ul>
+      </li>
+      <li class="sidebar-menu-item has-submenu">
+        <a href="#" class="sidebar-link sidebar-toggle">
+          <lord-icon
+            src="https://cdn.lordicon.com/ajkxzzfb.json"
+            trigger="hover"
+            delay="1000"
+            style="width: 22px; height: 22px; margin-right: 6px"
+          ></lord-icon>
+          <span class="sidebar-label">Ventes</span>
+          <span class="submenu-arrow">&#9662;</span>
+        </a>
+        <ul class="sidebar-submenu">
+          <li><a href="/data_table">Liste des ventes</a></li>
+          <% if (locals.user && !locals.user.hasOffer) { %>
+          <li>
+            <a href="/data_table_vente_offert">🔒 Boissons offertes</a>
+          </li>
+          <% } else { %>
+          <li><a href="/data_table_vente_offert">Boissons offertes</a></li>
+          <% } %>
+        </ul>
+      </li>
+      <li class="sidebar-menu-item has-submenu">
+        <a href="#" class="sidebar-link sidebar-toggle">
+          <lord-icon
+            src="https://cdn.lordicon.com/ghhwiltn.json"
+            trigger="hover"
+            delay="1000"
+            style="width: 22px; height: 22px; margin-right: 6px"
+          ></lord-icon>
+          <span class="sidebar-label">Produits</span>
+          <span class="submenu-arrow">&#9662;</span>
+        </a>
+        <ul class="sidebar-submenu">
+          <li><a href="/ajouterproduit">Enregistrer un produit</a></li>
+          <li><a href="/listeproduit">Approvisionnement</a></li>
+          <% if(locals.user?.isAdmin){ %>
+          <li><a href="/listeproduitglobal">Liste produits global</a></li>
+          <li>
+            <a href="/ajouter-produit-global">Enregistrer un produit global</a>
+          </li>
+          <% } %>
+        </ul>
+      </li>
+      <li class="sidebar-menu-item has-submenu">
+        <a href="#" class="sidebar-link sidebar-toggle">
+          <lord-icon
+            src="https://cdn.lordicon.com/kthelypq.json"
+            trigger="hover"
+            delay="1000"
+            style="width: 22px; height: 22px; margin-right: 6px"
+          ></lord-icon>
+          <span class="sidebar-label">Catégories</span>
+          <span class="submenu-arrow">&#9662;</span>
+        </a>
+        <ul class="sidebar-submenu">
+          <li><a href="/listcategorie">Mes catégories</a></li>
+          <% if(locals.user?.isAdmin){ %>
+          <li><a href="/ajoutercategorie">Ajouter</a></li>
+          <% } %>
+        </ul>
+      </li>
+      <li class="sidebar-menu-item has-submenu">
+        <a href="#" class="sidebar-link sidebar-toggle">
+          <lord-icon
+            src="https://cdn.lordicon.com/spajtpif.json"
+            trigger="hover"
+            style="width: 22px; height: 22px; margin-right: 6px"
+          ></lord-icon>
+          <span class="sidebar-label">Paramètres</span>
+          <span class="submenu-arrow">&#9662;</span>
+        </a>
+        <ul class="sidebar-submenu">
+          <li><a href="/profile">Mon Profil</a></li>
+          <li><a href="/deconnexion">Déconnexion</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="sidebar-donate text-center mt-4">
+      <button
+        type="button"
+        class="btn btn-warning sidebar-donate-btn"
+        data-toggle="modal"
+        data-target="#donateModal"
+      >
+        <span class="txt">Faites un don</span>
+      </button>
+    </div>
+  </div>
 
   <!-- Modal -->
   <div
