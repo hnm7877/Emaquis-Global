@@ -3,12 +3,9 @@
   font-style: normal;
   font-weight: normal;
   src: url("fonts/summernote.eot");
-  src: url("fonts/summernote.eot")
-      format("embedded-opentype"),
-    url("fonts/summernote.woff")
-      format("woff"),
-    url("fonts/summernote.ttf")
-      format("truetype");
+  src: url("fonts/summernote.eot") format("embedded-opentype"),
+    url("fonts/summernote.woff") format("woff"),
+    url("fonts/summernote.ttf") format("truetype");
 }
 [class^="note-icon-"]:before,
 [class*=" note-icon-"]:before {
@@ -879,9 +876,9 @@ a.note-dropdown-item:hover {
 .note-editor.note-frame .note-editing-area .note-editable {
   padding: 16px 20px 0 25px;
   overflow: auto;
-  color: #9C9C9C;
+  color: #9c9c9c;
   word-wrap: break-word;
-  background-color: #F6F8FA;
+  background-color: #f6f8fa;
 }
 .note-editor.note-frame
   .note-editing-area
@@ -953,7 +950,7 @@ a.note-dropdown-item:hover {
   color: #31708f;
 }
 .note-editor.note-frame .note-status-output .text-warning {
-  color: #8a6d3b;
+  color: #f7f5f3;
 }
 .note-editor.note-frame .note-status-output .text-danger {
   color: #a94442;
@@ -1008,7 +1005,7 @@ a.note-dropdown-item:hover {
   display: none;
 }
 .note-editor.note-frame .note-placeholder {
-    padding: 18px 25px 0 25px;
+  padding: 18px 25px 0 25px;
 }
 .note-popover {
   max-width: none;
