@@ -36,36 +36,166 @@
   <link rel="stylesheet" href="../plugins/aos/aos.css" />
   <link rel="stylesheet" href="/css/vente.css" />
   <link rel="stylesheet" href="/css/btnReturn.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Favicon -->
   <link rel="shortcut icon" type="image/x-icon" href="../img/paresseux_sous_officiel.png" />
-</head>
 
-<body class="crm_body_bg">
   <style>
+    :root {
+      --primary-color: #4a90e2;
+      --secondary-color: #2c3e50;
+      --accent-color: #e74c3c;
+      --background-color: #f8f9fa;
+      --text-color: #2c3e50;
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition-speed: 0.3s;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+    }
+
     .sidebar .logo .large_logo img {
       width: 70%;
       margin-left: 15%;
+      transition: transform var(--transition-speed);
+    }
+
+    .sidebar .logo .large_logo img:hover {
+      transform: scale(1.05);
     }
 
     .my-custom-scrollbar {
       position: relative;
       height: 330px;
       overflow: auto;
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+      background: white;
+      padding: 1rem;
     }
 
     .table-wrapper-scroll-y {
       display: block;
     }
-    
+
+    .page_title_box {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 2rem;
+      transition: transform var(--transition-speed);
+    }
+
+    .page_title_box:hover {
+      transform: translateY(-2px);
+    }
+
+    .page_title_left h3 {
+      color: var(--primary-color);
+      font-weight: 600;
+      margin-bottom: 0;
+    }
+
+    .breadcrumb {
+      background: transparent;
+      padding: 0;
+      margin: 0;
+    }
+
+    .breadcrumb-item a {
+      color: var(--secondary-color);
+      text-decoration: none;
+      transition: color var(--transition-speed);
+    }
+
+    .breadcrumb-item a:hover {
+      color: var(--primary-color);
+    }
+
+    .profile_author_name h3 {
+      color: var(--secondary-color);
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .emRole.badge {
+      background: var(--primary-color);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      transition: background-color var(--transition-speed);
+    }
+
+    .emRole.badge:hover {
+      background: var(--accent-color);
+    }
+
+    #back-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--primary-color);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-speed);
+      box-shadow: var(--card-shadow);
+    }
+
+    #back-top:hover {
+      background: var(--accent-color);
+      transform: translateY(-3px);
+    }
+
+    .main_content_iner {
+      padding: 2rem;
+    }
+
+    .container-fluid {
+      padding: 0 2rem;
+    }
+
+    /* Animation classes */
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .slide-in {
+      animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(-20px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
   </style>
+</head>
+
+<body class="crm_body_bg">
   <!-- main content part here -->
   <!-- sidebar  -->
   <%- include('partial/emside_global.ejs') %>
   <%-include('partial/reactScript.ejs') %>
   <!--/ sidebar  -->
 
-  <section class="main_content em_main_content dashboard_part large_header_bg">
+  <section class="main_content em_main_content dashboard_part large_header_bg fade-in">
     <!-- menu  -->
 
     <!--/ menu  -->
@@ -74,7 +204,7 @@
         <!-- page title  -->
         <div class="row">
           <div class="col-12">
-            <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+            <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between slide-in">
               <div class="page_title_left d-flex align-items-center">
                 <h3 class="f_s_25 f_w_700 dark_text mr_30">Barman(aid)</h3>
                 <ol class="breadcrumb page_bradcam mb-0">
@@ -92,8 +222,8 @@
                       <%= locals.user?.nom %> <%= locals.user?.prenom %>
                     </h3>
                     <h3 class="emRole badge"><%= locals.user?.role %></h3>
-                    <!--<h3 class="emRole badge">Politique: 
-                      <%= locals.product_return_type %></h3> -->
+                    
+                  </h3>
                   </div>
                 </div>
               </div>
@@ -103,7 +233,7 @@
         </div>
       </div>
 
-      <div id="root"></div>
+      <div id="root" class="fade-in"></div>
     </div>
     </div>
   </section>
