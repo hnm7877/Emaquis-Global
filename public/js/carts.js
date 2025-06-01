@@ -3,7 +3,7 @@ const CartList = () => {
 
   return (
     <div
-      className="carts"
+      className={`carts ${carts.length === 0 ? "cart-empty" : "cart-filled"}`}
       style={{
         background: "#ffffff",
         borderRadius: "12px",
@@ -18,6 +18,8 @@ const CartList = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        position: "relative",
+        transition: "border-color 0.3s",
       }}
     >
       <h4
@@ -47,269 +49,123 @@ const CartList = () => {
           <div
             style={{
               width: "100%",
-              maxWidth: "320px",
+              maxWidth: "220px",
               margin: "0 auto 10px auto",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            {/* SVG animé de la femme assoupie au bar */}
+            {/* SVG animé de kadi (chariot de course) */}
             <svg
-              width="100%"
-              height="auto"
-              viewBox="0 0 400 300"
+              width="120"
+              height="120"
+              viewBox="0 0 120 120"
+              fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <rect x="0" y="0" width="400" height="300" fill="#FFFFFF" />
-              <rect x="50" y="180" width="300" height="20" fill="#8d6e63" />
-              <rect x="50" y="200" width="300" height="80" fill="#6d4c41" />
-              <circle cx="150" cy="130" r="30" fill="#ffdbac">
-                <animate
-                  attributeName="cy"
-                  values="130;128;130"
-                  dur="3s"
-                  repeatCount="indefinite"
-                />
-              </circle>
-              <path d="M120 130 Q150 90 180 130" fill="#5d4037" />
-              <rect x="120" y="130" width="60" height="40" fill="#5d4037" />
-              <rect x="135" y="160" width="30" height="50" fill="#78909c">
-                <animate
-                  attributeName="y"
-                  values="160;158;160"
-                  dur="3s"
-                  repeatCount="indefinite"
-                />
-              </rect>
-              <rect x="125" y="165" width="10" height="40" fill="#ffdbac">
-                <animate
-                  attributeName="y"
-                  values="165;167;165"
-                  dur="2s"
-                  repeatCount="indefinite"
-                />
-              </rect>
-              <rect x="165" y="165" width="10" height="40" fill="#ffdbac">
-                <animateTransform
-                  attributeName="transform"
-                  type="rotate"
-                  values="0 165 185; 5 165 185; 0 165 185"
-                  dur="4s"
-                  repeatCount="indefinite"
-                />
-              </rect>
-              <g>
-                <line
-                  x1="140"
-                  y1="125"
-                  x2="145"
-                  y2="125"
-                  stroke="black"
-                  strokeWidth="2"
-                >
-                  <animate
-                    attributeName="x1"
-                    values="140;138;140;142;140"
-                    dur="5s"
-                    repeatCount="indefinite"
-                  />
-                  <animate
-                    attributeName="x2"
-                    values="145;143;145;147;145"
-                    dur="5s"
-                    repeatCount="indefinite"
-                  />
-                </line>
-                <line
-                  x1="155"
-                  y1="125"
-                  x2="160"
-                  y2="125"
-                  stroke="black"
-                  strokeWidth="2"
-                >
-                  <animate
-                    attributeName="x1"
-                    values="155;153;155;157;155"
-                    dur="5s"
-                    repeatCount="indefinite"
-                  />
-                  <animate
-                    attributeName="x2"
-                    values="160;158;160;162;160"
-                    dur="5s"
-                    repeatCount="indefinite"
-                  />
-                </line>
-              </g>
-              <path
-                d="M140 145 Q150 135 160 145"
-                fill="none"
-                stroke="black"
-                strokeWidth="2"
-              >
-                <animate
-                  attributeName="d"
-                  values="M140 145 Q150 135 160 145;M140 145 Q150 140 160 145;M140 145 Q150 150 160 145;M140 145 Q150 140 160 145;M140 145 Q150 135 160 145"
-                  dur="6s"
-                  repeatCount="indefinite"
-                />
-              </path>
-              <g>
-                <rect
-                  x="250"
-                  y="160"
-                  width="20"
-                  height="40"
-                  fill="#e0e0e0"
-                  opacity="0.7"
-                >
-                  <animate
-                    attributeName="opacity"
-                    values="0.7;0.4;0.7"
-                    dur="3s"
-                    repeatCount="indefinite"
-                  />
-                </rect>
-                <rect x="255" y="160" width="10" height="40" fill="#f5f5f5">
-                  <animate
-                    attributeName="width"
-                    values="10;8;10"
-                    dur="2s"
-                    repeatCount="indefinite"
-                  />
-                </rect>
-              </g>
-              <path
-                d="M190 100 Q220 80 250 100 Q260 120 240 130 Q220 140 190 120 Z"
-                fill="white"
-                opacity="0.8"
-              >
-                <animate
-                  attributeName="opacity"
-                  values="0.8;0.6;0.8"
-                  dur="3s"
-                  repeatCount="indefinite"
-                />
-                <animateTransform
-                  attributeName="transform"
-                  type="scale"
-                  values="1;1.02;1"
-                  dur="3s"
-                  repeatCount="indefinite"
-                  additive="sum"
-                />
-              </path>
-              {/* <text
-                x="220"
-                y="115"
-                fontFamily="Arial"
-                fontSize="33"
-                textAnchor="middle"
-                fill="#333"
-              >
-                Où sont les clients?
-                <animate
-                  attributeName="opacity"
-                  values="1;0.8;1"
-                  dur="3s"
-                  repeatCount="indefinite"
-                />
-              </text> */}
-              <rect x="70" y="50" width="260" height="20" fill="#8d6e63" />
-              <g>
-                <rect x="80" y="70" width="20" height="40" fill="#4caf50">
-                  <animate
-                    attributeName="opacity"
-                    values="1;0.7;1"
-                    dur="4s"
-                    repeatCount="indefinite"
-                  />
-                </rect>
-                <rect x="120" y="70" width="20" height="40" fill="#f44336">
-                  <animate
-                    attributeName="opacity"
-                    values="1;0.7;1"
-                    dur="3s"
-                    repeatCount="indefinite"
-                  />
-                </rect>
-                <rect x="160" y="70" width="20" height="40" fill="#2196f3">
-                  <animate
-                    attributeName="opacity"
-                    values="1;0.7;1"
-                    dur="5s"
-                    repeatCount="indefinite"
-                  />
-                </rect>
-                <rect x="200" y="70" width="20" height="40" fill="#ffeb3b">
-                  <animate
-                    attributeName="opacity"
-                    values="1;0.7;1"
-                    dur="3.5s"
-                    repeatCount="indefinite"
-                  />
-                </rect>
-                <rect x="240" y="70" width="20" height="40" fill="#9c27b0">
-                  <animate
-                    attributeName="opacity"
-                    values="1;0.7;1"
-                    dur="4.5s"
-                    repeatCount="indefinite"
-                  />
-                </rect>
-                <rect x="280" y="70" width="20" height="40" fill="#000000">
-                  <animate
-                    attributeName="opacity"
-                    values="1;0.7;1"
-                    dur="3s"
-                    repeatCount="indefinite"
-                  />
-                </rect>
-              </g>
+              {/* Roues */}
               <circle
-                cx="350"
-                cy="80"
-                r="20"
-                fill="white"
-                stroke="#333"
+                cx="40"
+                cy="95"
+                r="8"
+                fill="#b0bec5"
+                stroke="#2c3e50"
+                strokeWidth="2"
+              />
+              <circle
+                cx="90"
+                cy="95"
+                r="8"
+                fill="#b0bec5"
+                stroke="#2c3e50"
+                strokeWidth="2"
+              />
+              {/* Corps du chariot */}
+              <rect
+                x="30"
+                y="50"
+                width="60"
+                height="30"
+                rx="6"
+                fill="#f8f9fa"
+                stroke="#2c3e50"
+                strokeWidth="3"
+              />
+              {/* Grille du chariot */}
+              <line
+                x1="40"
+                y1="55"
+                x2="40"
+                y2="75"
+                stroke="#b0bec5"
                 strokeWidth="2"
               />
               <line
-                x1="350"
-                y1="80"
-                x2="350"
-                y2="70"
-                stroke="#333"
+                x1="50"
+                y1="55"
+                x2="50"
+                y2="75"
+                stroke="#b0bec5"
                 strokeWidth="2"
-              >
-                <animateTransform
-                  attributeName="transform"
-                  type="rotate"
-                  from="0 350 80"
-                  to="360 350 80"
-                  dur="10s"
-                  repeatCount="indefinite"
-                />
-              </line>
+              />
               <line
-                x1="350"
-                y1="80"
-                x2="350"
-                y2="65"
-                stroke="#333"
-                strokeWidth="3"
+                x1="60"
+                y1="55"
+                x2="60"
+                y2="75"
+                stroke="#b0bec5"
+                strokeWidth="2"
+              />
+              <line
+                x1="70"
+                y1="55"
+                x2="70"
+                y2="75"
+                stroke="#b0bec5"
+                strokeWidth="2"
+              />
+              <line
+                x1="80"
+                y1="55"
+                x2="80"
+                y2="75"
+                stroke="#b0bec5"
+                strokeWidth="2"
+              />
+              {/* Poignée animée */}
+              <path
+                id="handle"
+                d="M30 50 Q20 35 40 35"
+                stroke="#2c3e50"
+                strokeWidth="4"
+                fill="none"
               >
-                <animateTransform
-                  attributeName="transform"
-                  type="rotate"
-                  from="0 350 80"
-                  to="360 350 80"
-                  dur="120s"
+                <animate
+                  attributeName="d"
+                  values="M30 50 Q20 35 40 35;M30 50 Q20 30 40 40;M30 50 Q20 35 40 35"
+                  dur="1.5s"
                   repeatCount="indefinite"
                 />
-              </line>
+              </path>
+              {/* Texte panier vide */}
+              {/* <text
+                x="60"
+                y="90"
+                fontFamily="Arial"
+                fontSize="15"
+                textAnchor="middle"
+                fill="#b0bec5"
+                opacity="0.7"
+              >
+                Panier vide
+                <animate
+                  attributeName="opacity"
+                  values="0.7;1;0.7"
+                  dur="2s"
+                  repeatCount="indefinite"
+                />
+              </text> */}
             </svg>
           </div>
         </div>
@@ -354,6 +210,22 @@ const CartList = () => {
 					.carts-footer {
 						padding: 10px !important;
 					}
+				}
+				.cart-empty {
+					animation: borderPulseRed 1.5s infinite;
+				}
+				.cart-filled {
+					animation: borderPulseGreen 1.5s infinite;
+				}
+				@keyframes borderPulseRed {
+					0% { box-shadow: 0 0 0 0 #e74c3c44; }
+					70% { box-shadow: 0 0 0 8px #e74c3c22; }
+					100% { box-shadow: 0 0 0 0 #e74c3c44; }
+				}
+				@keyframes borderPulseGreen {
+					0% { box-shadow: 0 0 0 0 #27ae6044; }
+					70% { box-shadow: 0 0 0 8px #27ae6022; }
+					100% { box-shadow: 0 0 0 0 #27ae6044; }
 				}
 			`}</style>
     </div>

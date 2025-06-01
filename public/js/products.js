@@ -219,9 +219,12 @@ const ProductList = () => {
           className="product-list__grid"
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-            gap: "25px",
-            padding: "10px",
+            gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
+            gap: "10px",
+            padding: "8px",
+            width: "100%",
+            maxWidth: "100%",
+            margin: "0 auto",
           }}
         >
           {loading && (
@@ -278,9 +281,12 @@ const ProductList = () => {
                 className="product-list__grid"
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-                  gap: "25px",
-                  padding: "10px",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
+                  gap: "10px",
+                  padding: "8px",
+                  width: "100%",
+                  maxWidth: "100%",
+                  margin: "0 auto",
                 }}
               >
                 {products.map((product) => {
@@ -305,14 +311,17 @@ const ProductCard = ({ product }) => {
       className="product-card"
       style={{
         backgroundColor: "#fff",
-        borderRadius: "16px",
-        boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+        borderRadius: "12px",
+        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
         overflow: "hidden",
         transition: "all 0.3s ease",
         position: "relative",
-        transform: isHovered ? "translateY(-5px)" : "none",
+        transform: isHovered ? "translateY(-3px)" : "none",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
         "&:hover": {
-          boxShadow: "0 8px 15px rgba(0,0,0,0.2)",
+          boxShadow: "0 4px 8px rgba(0,0,0,0.15)",
         },
       }}
       onMouseEnter={() => setIsHovered(true)}
@@ -335,9 +344,9 @@ const ProductCard = ({ product }) => {
             style={{
               backgroundColor: "#24d3f5",
               color: "#fff",
-              padding: "6px 12px",
-              borderRadius: "20px",
-              fontSize: "0.9rem",
+              padding: "3px 8px",
+              borderRadius: "12px",
+              fontSize: "0.7rem",
               margin: 0,
             }}
           >
@@ -349,9 +358,9 @@ const ProductCard = ({ product }) => {
             style={{
               backgroundColor: "#e74c3c",
               color: "#fff",
-              padding: "6px 12px",
-              borderRadius: "20px",
-              fontSize: "0.9rem",
+              padding: "3px 8px",
+              borderRadius: "12px",
+              fontSize: "0.7rem",
               margin: 0,
             }}
           >
@@ -363,7 +372,7 @@ const ProductCard = ({ product }) => {
       <div
         style={{
           position: "relative",
-          paddingTop: "75%",
+          paddingTop: "70%",
           overflow: "hidden",
         }}
       >
@@ -376,23 +385,27 @@ const ProductCard = ({ product }) => {
             left: 0,
             width: "100%",
             height: "100%",
-            objectFit: "cover",
+            objectFit: "contain",
             transition: "transform 0.3s ease",
             transform: isHovered ? "scale(1.05)" : "scale(1)",
+            padding: "5px",
           }}
         />
       </div>
 
       <div
         style={{
-          padding: "20px",
+          padding: "10px",
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <h4
           style={{
-            fontSize: "1.2rem",
+            fontSize: "0.9rem",
             color: "#2c3e50",
-            marginBottom: "10px",
+            marginBottom: "6px",
             fontWeight: "600",
             overflow: "hidden",
             textOverflow: "ellipsis",
@@ -405,10 +418,10 @@ const ProductCard = ({ product }) => {
         {!product.isReturnProduct && (
           <p
             style={{
-              fontSize: "1.3rem",
+              fontSize: "1rem",
               color: "#2c3e50",
               fontWeight: "700",
-              marginBottom: "15px",
+              marginBottom: "8px",
             }}
           >{`${product.prix_vente} FCFA`}</p>
         )}
@@ -479,9 +492,10 @@ const ProductCard = ({ product }) => {
             billet && !billet.is_closed ? addProductToCart(product) : null
           }
           style={{
-            padding: "15px 20px",
+            padding: "8px 10px",
             borderTop: "1px solid #eee",
             textAlign: "center",
+            marginTop: "auto",
           }}
         >
           <button
@@ -491,9 +505,9 @@ const ProductCard = ({ product }) => {
                 billet && !billet.is_closed ? "#98ed58" : "#95a5a6",
               color: "#fff",
               border: "none",
-              padding: "12px 30px",
-              borderRadius: "25px",
-              fontSize: "1rem",
+              padding: "6px 15px",
+              borderRadius: "15px",
+              fontSize: "0.8rem",
               fontWeight: "600",
               cursor: billet && !billet.is_closed ? "pointer" : "not-allowed",
               transition: "all 0.3s ease",
@@ -502,7 +516,7 @@ const ProductCard = ({ product }) => {
                 transform: billet && !billet.is_closed ? "scale(1.02)" : "none",
                 boxShadow:
                   billet && !billet.is_closed
-                    ? "0 4px 8px rgba(0,0,0,0.1)"
+                    ? "0 2px 4px rgba(0,0,0,0.1)"
                     : "none",
               },
             }}
