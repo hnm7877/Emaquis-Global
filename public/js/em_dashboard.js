@@ -142,6 +142,7 @@ const AppRoot = () => {
     setTotalVentes(Number(sumVentes));
     setTotalEmployes(Number(sumEmployes));
     setVentes(globalVentes);
+    console.log("[DEBUG] globalBillet injecté:", globalBillet);
     setBillet(globalBillet);
     setUser(globalUser);
     setCurrentTiming(globalCurrentTiming);

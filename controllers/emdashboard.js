@@ -6,31 +6,45 @@ const { BilletQueries } = require("../requests/BilletQueries");
 const { settingQueries } = require("../requests/settingQueries");
 const { helperCurrentTime } = require("../utils/helperCurrentTime");
 const { userQueries } = require("../requests/UserQueries");
+const mongoose = require("mongoose");
 
 exports.emdashboard = async (req, res) => {
+  console.log("ROUTE EMDASHBOARD APPELEE");
   try {
     if (!req.session.user) {
       res.redirect("/emconnexion");
       return;
     }
 
-    let billet = await BilletQueries.getBilletByEmployeId(req.session.user._id);
-
-    if (!billet.result) {
-      const billets = await BilletQueries.getBilletByQuery({
-        employe_id: req.session.user._id,
-        is_closed: true,
-        close_hour: {
-          $gte: new Date(new Date().setHours(0, 0, 0)),
-        },
+    // DEBUG: Afficher tout le contenu de l'utilisateur connecté
+    console.log("[DEBUG] req.session.user complet:", req.session.user);
+    // DEBUG: Afficher l'ID employé utilisé et son type
+    console.log(
+      "[DEBUG] employe_id utilisé:",
+      req.session.user._id,
+      typeof req.session.user._id
+    );
+    // Récupération du billet ouvert (caisse ouverte) pour l'employé
+    let billetData = await BilletQueries.getBilletByQuery({
+      employe_id: mongoose.Types.ObjectId(req.session.user._id),
+      is_closed: false,
+    });
+    // DEBUG: Afficher le résultat de la requête billetData
+    console.log("[DEBUG] billetData trouvé:", billetData);
+    let billet =
+      billetData.result && billetData.result.length > 0
+        ? billetData.result[0]
+        : null;
+    // Si aucun billet ouvert n'existe pour cet employé, on en crée un automatiquement
+    if (!billet) {
+      const newBillet = await BilletQueries.setBillet({
+        employe_id: mongoose.Types.ObjectId(req.session.user._id),
+        open_hour: new Date(),
+        travail_pour: req.session.user.travail_pour,
+        is_closed: false,
       });
-      if (billets && billets.result.length > 0) {
-        billet = billets.result[0];
-      } else {
-        billet = null;
-      }
-    } else {
-      billet = billet.result;
+      billet = newBillet.result || null;
+      console.log("[DEBUG] Nouveau billet ouvert automatiquement:", billet);
     }
 
     const Vente = await venteQueries.getVentes({

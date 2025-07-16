@@ -309,7 +309,7 @@ const CartItem = ({ product }) => {
               fontSize: "1.2rem",
             }}
           >
-            {product.prix_vente} FCFA
+            {product.prix_vente} {currency}
           </p>
         </div>
       </div>
@@ -624,7 +624,7 @@ const CartFooter = () => {
               fontWeight: 600,
             }}
           >
-            Total: {total} FCFA
+            Total: {total} {currency}
           </h4>
           {!collectedLater && (
             <input

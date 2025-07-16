@@ -24,10 +24,17 @@ const TablesStocksHead = () => {
 
 const TablesStocksBody = () => {
   const { products } = React.useContext(AppContext);
-  const currency =
-    typeof window !== "undefined" && document.getElementById("currency-data")
-      ? JSON.parse(document.getElementById("currency-data").textContent)
-      : "FCFA";
+  // Récupération de la devise dynamique selon le pays de l'utilisateur
+  let currency = "";
+  if (typeof window !== "undefined" && window.globalUser && window.PAYS) {
+    const countryObj = window.PAYS.find(
+      (p) => p.code === (window.globalUser.country || "cote_d_ivoire")
+    );
+    currency = countryObj ? countryObj.devise : "";
+  }
+  if (!currency) {
+    currency = "XOF"; // fallback si non trouvé
+  }
 
   return (
     <tbody>
