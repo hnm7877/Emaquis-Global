@@ -599,7 +599,7 @@
                   </div>
                   <div class="dashboard-card-content">
                     <div class="dashboard-card-label">Ventes du jour</div>
-                    <div class="dashboard-card-value animated-counter"><a class="vente-jour" href="/data_table"><%= totalVente %></a></div>
+                    <div class="dashboard-card-value animated-counter"><a class="vente-jour" href="/data_table"><%= totalVente %> <%= currency %></a></div>
                   </div>
                 </div>
               </div>
@@ -628,7 +628,7 @@
                   </div>
                   <div class="dashboard-card-content">
                     <div class="dashboard-card-label">Chiffre d'affaires Cette semaine</div>
-                    <div class="dashboard-card-value animated-counter"><a class="chiffre-affaires-semaine" href="/bilan"><%= totalVenteWeek %></a></div>
+                    <div class="dashboard-card-value animated-counter"><a class="chiffre-affaires-semaine" href="/bilan"><%= totalVenteWeek %> <%= currency %></a></div>
                   </div>
                 </div>
               </div>
@@ -757,8 +757,8 @@
                                 <span class="inventaire-nom"><%= el.produit.nom_produit %></span>
                               </div>
                             </td>
-                            <td><%= el.prix_achat %> FCFA</td>
-                            <td><span class="badge badge-soft-secondary p-2"><%= el.prix_vente %> FCFA</span></td>
+                            <td><%= el.prix_achat %> <%= currency %></td>
+                            <td><span class="badge badge-soft-secondary p-2"><%= el.prix_vente %> <%= currency %></span></td>
                             <td>
                               <% if(el.quantite <= 100 && !el.is_cocktail){ %>
                               <span class="inventaire-quantite inventaire-quantite-low"><%= el.quantite %></span>
@@ -796,7 +796,7 @@
                               </div>
                             </td>
                             <td>
-                              <h5 class="font-size-15 mb-1 font-weight-normal"><%= product.prix_vente %> FCFA</h5>
+                              <h5 class="font-size-15 mb-1 font-weight-normal"><%= product.prix_vente %> <%= currency %></h5>
                               <span class="text-muted font-size-12">vente total</span>
                             </td>
                             <td>

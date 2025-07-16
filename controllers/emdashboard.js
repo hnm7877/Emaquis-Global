@@ -1,16 +1,16 @@
-const { venteQueries } = require('../requests/venteQueries');
-const { produitQueries } = require('../requests/produitQueries');
-const { employeQueries } = require('../requests/EmployeQueries');
-const categorieModel = require('../models/categorie.model');
-const { BilletQueries } = require('../requests/BilletQueries');
-const { settingQueries } = require('../requests/settingQueries');
-const { helperCurrentTime } = require('../utils/helperCurrentTime');
-const { userQueries } = require('../requests/UserQueries');
+const { venteQueries } = require("../requests/venteQueries");
+const { produitQueries } = require("../requests/produitQueries");
+const { employeQueries } = require("../requests/EmployeQueries");
+const categorieModel = require("../models/categorie.model");
+const { BilletQueries } = require("../requests/BilletQueries");
+const { settingQueries } = require("../requests/settingQueries");
+const { helperCurrentTime } = require("../utils/helperCurrentTime");
+const { userQueries } = require("../requests/UserQueries");
 
 exports.emdashboard = async (req, res) => {
   try {
     if (!req.session.user) {
-      res.redirect('/emconnexion');
+      res.redirect("/emconnexion");
       return;
     }
 
@@ -34,7 +34,7 @@ exports.emdashboard = async (req, res) => {
     }
 
     const Vente = await venteQueries.getVentes({
-      status_commande: { $in: ['Validée', 'Retour'] },
+      status_commande: { $in: ["Validée", "Retour"] },
       employe_validate_id: req.session.user?._id,
       createdAt: {
         $gte: new Date(new Date(billet?.open_hour)),
@@ -44,7 +44,7 @@ exports.emdashboard = async (req, res) => {
     });
 
     const VenteEntente = await venteQueries.getVentes({
-      status_commande: 'En attente',
+      status_commande: "En attente",
       travail_pour: req.session?.user?.travail_pour,
     });
 
@@ -56,24 +56,28 @@ exports.emdashboard = async (req, res) => {
     );
 
     const Categories = await categorieModel.find({
-      idParent:null,
-      isDeleted:false
+      idParent: null,
+      isDeleted: false,
     });
 
     const CategoriesWithChilds = await categorieModel.find({
       idParent: { $ne: null },
-      isDeleted:false
+      isDeleted: false,
     });
 
-
-    const newCategories = Categories.map(category => {
-
-      const childs = CategoriesWithChilds.filter(c => c.idParent.toString() === category._id.toString());
+    const newCategories = Categories.map((category) => {
+      const childs = CategoriesWithChilds.filter(
+        (c) => c.idParent.toString() === category._id.toString()
+      );
       return {
         ...category._doc,
-        childs
+        childs,
       };
-    }).filter(c => !parentSetting?.result?.hasSubCategories && c.childs.length > 0 ? false : true);
+    }).filter((c) =>
+      !parentSetting?.result?.hasSubCategories && c.childs.length > 0
+        ? false
+        : true
+    );
 
     const newSave = req.session.newSave;
 
@@ -89,22 +93,26 @@ exports.emdashboard = async (req, res) => {
     const ventes = Vente.result?.filter((vente) => {
       return (
         !vente.for_employe ||
-        '' + vente.for_employe === '' + req.session.user._id
+        "" + vente.for_employe === "" + req.session.user._id
       );
     });
 
     const ventesEntente = VenteEntente.result.filter((vente) => {
       return (
         !vente.for_employe ||
-        '' + vente.for_employe === '' + req.session.user._id
+        "" + vente.for_employe === "" + req.session.user._id
       );
     });
 
     const sum = ventes?.reduce((total, vente) => total + vente.prix, 0) || 0;
 
-    if (req.session.user.role === 'Barman') {
+    const country = require("../constants").PAYS.find(
+      (p) => p.code === (req.session.user.country || "cote_d_ivoire")
+    );
+    const currency = country ? country.devise : "XOF";
+    if (req.session.user.role === "Barman") {
       const { password, ...data } = req.session.user;
-      res.render('emdashboard', {
+      res.render("emdashboard", {
         ventes: ventesEntente,
         newSave: newSave,
         user: {
@@ -123,21 +131,22 @@ exports.emdashboard = async (req, res) => {
                 timings: parentInfo?.result?.timings || [],
               })
             : null,
+        currency,
       });
     } else {
-      res.redirect('/emconnexion');
+      res.redirect("/emconnexion");
     }
   } catch (e) {
-    console.log('err', e);
+    console.log("err", e);
   }
 };
 
 exports.emdashboardPost = async (req, res) => {
-  res.setHeader('Content-Type', 'text/html');
+  res.setHeader("Content-Type", "text/html");
   try {
-    res.render('emdashboard');
+    res.render("emdashboard");
   } catch (e) {
-    console.log('err', e);
+    console.log("err", e);
     res.redirect(e);
   }
 };

@@ -18,6 +18,12 @@ exports.data_table = async (req, res) => {
       );
       const userDetails = await getUserDetails(user);
 
+      // Ajout de la devise dynamique
+      const country = require("../constants").PAYS.find(
+        (p) => p.code === (user.country || "cote_d_ivoire")
+      );
+      const currency = country ? country.devise : "XOF";
+
       res.render("data_table", {
         ventes: ventes.result.map((el) => {
           return {
@@ -39,6 +45,7 @@ exports.data_table = async (req, res) => {
         }),
         user: userDetails,
         expiredDate: getExpiredDate(userDetails.expiredPaymentDate),
+        currency, // Ajout de la devise
       });
     } else {
       res.redirect("connexion");
@@ -164,6 +171,10 @@ exports.data_table_offert = async (req, res) => {
         );
       }, 0);
 
+      const country = require("../constants").PAYS.find(
+        (p) => p.code === (user.country || "cote_d_ivoire")
+      );
+      const currency = country ? country.devise : "XOF";
       res.render("data_table_vente_offert", {
         ventes: ventes.result.map((el) => {
           return {
@@ -180,13 +191,14 @@ exports.data_table_offert = async (req, res) => {
               ),
             ].join(","),
             employe: `${el.employe?.nom} ${el.employe?.prenom}`,
-            createdAt: el.createdAt,
+            createdAt: new Date(el.createdAt).getTime(),
           };
         }),
         user: userDetails,
         expiredDate: getExpiredDate(userDetails.expiredPaymentDate),
         totalOffert,
         query: req.query,
+        currency,
       });
     } else {
       res.redirect("connexion");
@@ -276,6 +288,11 @@ exports.data_tablePost = async (req, res) => {
       );
       const userDetails = await getUserDetails(user);
 
+      // Ajout de la devise dynamique
+      const country = require("../constants").PAYS.find(
+        (p) => p.code === (user.country || "cote_d_ivoire")
+      );
+      const currency = country ? country.devise : "XOF";
       res.render("data_table", {
         ventes: ventes.result.map((el) => {
           return {
@@ -297,6 +314,7 @@ exports.data_tablePost = async (req, res) => {
         }),
         user: userDetails,
         expiredDate: getExpiredDate(userDetails.expiredPaymentDate),
+        currency,
       });
     } else {
       res.redirect("connexion");

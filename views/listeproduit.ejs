@@ -328,7 +328,7 @@
         return (
           <div>
             <div className="total-price-container">
-              <p>Reste à vendre: <span className="total-price">{totalPrixVente} FCFA</span></p>
+              <p>Reste à vendre: <span className="total-price">{totalPrixVente} {currency}</span></p>
             </div>
             <div className="product-grid-container">
               <div className="product-grid">
@@ -354,7 +354,7 @@
                         </div>
                         <div className="product-detail">
                           <span>Prix:</span>
-                          <span>{el.prix_vente} FCFA</span>
+                          <span>{el.prix_vente} {currency}</span>
                         </div>
                         <div className="product-detail">
                           <span>Quantité:</span>

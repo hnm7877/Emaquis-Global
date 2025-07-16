@@ -136,7 +136,9 @@
           />
           <div class="total">
             <span id="total">Total: </span>
-            <span id="total-amount"><%= user.period * 1000%> FCFA</span>
+            <span id="total-amount"
+              ><%= user.period * 1000%> <%= currency %></span
+            >
           </div>
           <button class="pay-button" id="pay-button" type="button">
             Payer
@@ -164,7 +166,7 @@
       daysInput.addEventListener('input', () => {
           const days = parseInt(daysInput.value) || 0;
           totalAmount = days * 1000;
-          totalAmountLabel.textContent = `${totalAmount} FCFA`;
+          totalAmountLabel.textContent = `${totalAmount} <%= currency %>`;
       });
 
       function showModal() {

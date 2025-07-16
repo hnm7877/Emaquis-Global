@@ -15,6 +15,10 @@ exports.profile = async (req, res) => {
     const { result: user } = await userQueries.getUserById(req.session.user.id);
     const userSetting = await settingQueries.getSettingByUserId(user._id);
 
+    const country = require("../constants").PAYS.find(
+      (p) => p.code === (user.country || "cote_d_ivoire")
+    );
+    const currency = country ? country.devise : "XOF";
     res.render("profile", {
       user: {
         ...req.session.user,
@@ -30,6 +34,7 @@ exports.profile = async (req, res) => {
       pays: PAYS,
       retour_produits_types: TYPE_RETOUR_PRDUITS,
       forProfile: true,
+      currency,
     });
   } catch (error) {
     res.redirect(error);
