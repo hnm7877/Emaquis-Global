@@ -15,8 +15,8 @@
       }
     </style>
     <script>
-      // Injection de l'ID utilisateur courant (doit être passé côté serveur lors du render)
-      const userId = "<%= user?._id || user?.id %>";
+      // Injection de l'ID travail_pour (user principal) côté frontend
+      const travailPourId = "<%= user.travail_pour || user._id || user.id %>";
 
       function checkout() {
         // Récupère l'option sélectionnée dynamiquement (exemple : via un select)
@@ -69,7 +69,7 @@
                 token: userToken || "",
               },
               body: JSON.stringify({
-                userId: userId,
+                userId: travailPourId,
                 options: optionsToActivate,
               }),
             })
