@@ -306,6 +306,25 @@ const ProductCard = ({ product }) => {
   const { billet } = React.useContext(AppContext);
   const [isHovered, setIsHovered] = React.useState(false);
 
+  // Récupération de la devise dynamique
+  let currency = "";
+  if (typeof window !== "undefined") {
+    console.log("[DEBUG] window.globalUser:", window.globalUser);
+    console.log("[DEBUG] window.PAYS:", window.PAYS);
+    if (window.globalUser && window.PAYS) {
+      const countryCode = window.globalUser.country || "cote_d_ivoire";
+      const countryObj = window.PAYS.find((p) => p.code === countryCode);
+      console.log("[DEBUG] countryCode:", countryCode);
+      console.log("[DEBUG] countryObj:", countryObj);
+      currency = countryObj ? countryObj.devise : "";
+    }
+    if (!currency) {
+      console.warn("[WARN] Devise non trouvée, fallback sur 'FCFA'");
+      currency = "XOF";
+    }
+    console.log("[DEBUG] currency:", currency);
+  }
+
   return (
     <div
       className="product-card"
@@ -423,7 +442,7 @@ const ProductCard = ({ product }) => {
               fontWeight: "700",
               marginBottom: "8px",
             }}
-          >{`${product.prix_vente} FCFA`}</p>
+          >{`${product.prix_vente} ${currency}`}</p>
         )}
 
         {(product.quantite > 0 || product.is_cocktail) && (

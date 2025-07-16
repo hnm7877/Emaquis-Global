@@ -275,6 +275,15 @@ const TablesItem = ({
   const { confirmVente } = React.useContext(AppContext);
   const { initCarts, venteId } = React.useContext(ProductsContext);
 
+  // Récupération de la devise dynamique
+  let currency = "";
+  if (typeof window !== "undefined" && window.globalUser && window.PAYS) {
+    const countryObj = window.PAYS.find(
+      (p) => p.code === (window.globalUser.country || "cote_d_ivoire")
+    );
+    currency = countryObj ? countryObj.devise : "FCFA";
+  }
+
   const handleSubmit = (venteId, type) => {
     if (type === "edit") {
       initCarts(vente);
@@ -367,7 +376,9 @@ const TablesItem = ({
     >
       <td className="py-3">{produits}</td>
       <td className="py-3">{vente.quantite.join(",")}</td>
-      <td className="py-3 font-weight-bold">{vente.prix} FCFA</td>
+      <td className="py-3 font-weight-bold">
+        {vente.prix} {currency}
+      </td>
       <td className="py-3">{vente.somme_encaisse}</td>
       <td className="py-3">{vente.monnaie}</td>
       <td className="py-3">
@@ -428,6 +439,15 @@ const ModalDelete = ({
 
   const { confirmVente } = React.useContext(AppContext);
 
+  // Récupération de la devise dynamique
+  let currency = "";
+  if (typeof window !== "undefined" && window.globalUser && window.PAYS) {
+    const countryObj = window.PAYS.find(
+      (p) => p.code === (window.globalUser.country || "cote_d_ivoire")
+    );
+    currency = countryObj ? countryObj.devise : "FCFA";
+  }
+
   const handleClose = () => {
     onClose();
     $("#deleteVenteModal").modal("hide");
@@ -469,7 +489,7 @@ const ModalDelete = ({
     <div
       className="modal fade"
       id="deleteVenteModal"
-      tabindex="-1"
+      tabIndex="-1"
       role="dialog"
       aria-labelledby="myModalTitle"
       data-backdrop="false"
@@ -533,11 +553,20 @@ const ModalConfirmOrder = ({ venteIdToConfirm, onClose }) => {
     $("#confirmOrder").modal("hide");
   };
 
+  // Récupération de la devise dynamique
+  let currency = "";
+  if (typeof window !== "undefined" && window.globalUser && window.PAYS) {
+    const countryObj = window.PAYS.find(
+      (p) => p.code === (window.globalUser.country || "cote_d_ivoire")
+    );
+    currency = countryObj ? countryObj.devise : "FCFA";
+  }
+
   return (
     <div
       className="modal fade"
       id="confirmOrder"
-      tabindex="-1"
+      tabIndex="-1"
       role="dialog"
       aria-labelledby="myModalTitle"
       data-backdrop="false"
@@ -603,7 +632,16 @@ const ModalCollectedAmount = ({ vente, onClose }) => {
 
   const { confirmVente } = React.useContext(AppContext);
 
-  const [sommeEncaisse, setSommeEncaisse] = React.useState(null);
+  // Récupération de la devise dynamique
+  let currency = "";
+  if (typeof window !== "undefined" && window.globalUser && window.PAYS) {
+    const countryObj = window.PAYS.find(
+      (p) => p.code === (window.globalUser.country || "cote_d_ivoire")
+    );
+    currency = countryObj ? countryObj.devise : "FCFA";
+  }
+
+  const [sommeEncaisse, setSommeEncaisse] = React.useState("");
 
   const handleClose = (orderUpdated) => {
     onClose();
@@ -622,14 +660,20 @@ const ModalCollectedAmount = ({ vente, onClose }) => {
       return;
     }
 
+    // Construction du payload SANS doublon de clé
     const data = {
-      produit: vente.produit.map((prod) => prod.productId),
-      quantite: vente.quantite,
+      produit: [...vente.produit.map((prod) => prod.productId)],
+      quantite: [...vente.quantite],
       somme_encaisse: Number(sommeEncaisse),
       amount_collected: true,
       table_number: vente.table_number,
       update_for_collected_amount: true,
     };
+    console.log(
+      "[DEBUG] Payload envoyé à /editvente:",
+      data,
+      JSON.stringify(data)
+    );
 
     setLoading(true);
     fetch(`/editvente/${vente._id}`, {
@@ -661,7 +705,7 @@ const ModalCollectedAmount = ({ vente, onClose }) => {
     <div
       className="modal fade"
       id="collectedAmount"
-      tabindex="-1"
+      tabIndex="-1"
       role="dialog"
       aria-labelledby="myModalTitle"
       data-backdrop="false"
@@ -692,20 +736,23 @@ const ModalCollectedAmount = ({ vente, onClose }) => {
             </div>
             <div className="modal-body">
               <h4>
-                Prix: <b>{vente.prix} FCFA</b>
+                Prix:{" "}
+                <b>
+                  {vente.prix} {currency}
+                </b>
               </h4>
               <input
                 type="number"
                 placeholder="Somme encaissé"
                 className="form-control mb-1"
-                value={sommeEncaisse}
+                value={sommeEncaisse || ""}
                 onChange={(e) => setSommeEncaisse(e.target.value)}
               />
               <p>
                 Monnaie à rendre:{" "}
                 <b>
                   {vente.prix < sommeEncaisse ? sommeEncaisse - vente.prix : 0}{" "}
-                  FCFA
+                  {currency}
                 </b>
               </p>
             </div>
@@ -840,3 +887,5 @@ const EmDashboardVenteTables = () => {
     </React.Fragment>
   );
 };
+
+window.EmDashboardVenteTables = EmDashboardVenteTables;

@@ -283,12 +283,27 @@
     <!-- jquery slim -->
     <%- include('partial/script.ejs') %>
 
+    <!-- Données pour React (doivent être AVANT le script React) -->
+    <script id="employee-data" type="application/json">
+      <%- JSON.stringify(user) %>
+    </script>
+    <script id="products-data" type="application/json">
+      <%- JSON.stringify(Result) %>
+    </script>
+    <script id="currency-data" type="application/json">
+      <%- JSON.stringify(currency) %>
+    </script>
     <script type="text/babel">
+      const currency = JSON.parse(
+        document.getElementById("currency-data").textContent
+      );
       const AppContext = React.createContext();
 
       const ListProduits = ({ search }) => {
         const { handleSelectProduct, products } = React.useContext(AppContext);
-        const employee = <%- JSON.stringify(user) %>;
+        const employee = JSON.parse(
+          document.getElementById("employee-data").textContent
+        );
         const [quantities, setQuantities] = React.useState(
           products.reduce((acc, product) => {
             acc[product._id] = product.quantite;
@@ -312,7 +327,7 @@
         };
 
         // Filtrage selon la recherche
-        const filteredProducts = products.filter(el => {
+        const filteredProducts = products.filter((el) => {
           const q = search.toLowerCase();
           return (
             el.produit.nom_produit.toLowerCase().includes(q) ||
@@ -328,7 +343,12 @@
         return (
           <div>
             <div className="total-price-container">
-              <p>Reste à vendre: <span className="total-price">{totalPrixVente} {currency}</span></p>
+              <p>
+                Reste à vendre:{" "}
+                <span className="total-price">
+                  {totalPrixVente} {currency}
+                </span>
+              </p>
             </div>
             <div className="product-grid-container">
               <div className="product-grid">
@@ -354,17 +374,22 @@
                         </div>
                         <div className="product-detail">
                           <span>Prix:</span>
-                          <span>{el.prix_vente} {currency}</span>
+                          <span>
+                            {el.prix_vente} {currency}
+                          </span>
                         </div>
                         <div className="product-detail">
                           <span>Quantité:</span>
-                          <span>{el.is_cocktail ? '∞' : el.quantite}</span>
+                          <span>{el.is_cocktail ? "∞" : el.quantite}</span>
                         </div>
                       </div>
                     </div>
                     <div className="product-actions">
-                      {employee.role !== 'Barman' && (
-                        <button onClick={() => handleEdit(el._id)} className="btn btn-success">
+                      {employee.role !== "Barman" && (
+                        <button
+                          onClick={() => handleEdit(el._id)}
+                          className="btn btn-success"
+                        >
                           <i className="ti-pencil"></i> Modifier
                         </button>
                       )}
@@ -376,7 +401,7 @@
                       >
                         <i className="ti-time"></i> Historiques
                       </button>
-                      {employee.role !== 'Barman' && (
+                      {employee.role !== "Barman" && (
                         <button
                           onClick={() => handleOpenModal(el)}
                           className="btn btn-danger"
@@ -395,135 +420,178 @@
         );
       };
 
-      const ModalHistoriques = ()=>{
-        const {productSelected} = React.useContext(AppContext);
-        return  <div
-          className="modal fade"
-          id="myModal"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="myModalTitle"
-        >
-          <div className="modal-dialog modal-dialog-centered" style={{
-            maxWidth: '600px',
-          }} role="document">
-          {!!productSelected && productSelected.produit &&  <div className="modal-content">
-              <div className="modal-header">
-                <h2 className="modal-title" id="exampleModalLongTitle">
-               Historiques des modifications
-                </h2>
-                <button
-                  type="button"
-                  className="close close-modal"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                  id="close-modal"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <h4> {productSelected.produit.nom_produit} {productSelected.taille}</h4>
-                {productSelected.historiques && productSelected.historiques.reverse().map((el, index)=>{
-                  return <p key={index}>{el.add_by} a {el.update?`modifiée la quantité de ${el.prev_quantite} à ${el.stockType === "locker"?`${el.lockerQty} casier(s) de ${el.quantite} bouteilles`:el.quantite}`:`ajoutée ${el.stockType === "locker"?`${el.lockerQty} casier(s) de ${el.quantite} bouteilles`:`${el.quantite} quantité(s)`}`} le {new Date(el.date).toLocaleDateString('fr-FR',{
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: 'numeric',
-                    minute: 'numeric',
-                    second: 'numeric',
-                  })}</p>
-                })
-              }
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-success close-modal"
-                  data-dismiss="modal"
-                >
-                  Ok
-                </button>
-              </div>
-            </div>}
+      const ModalHistoriques = () => {
+        const { productSelected } = React.useContext(AppContext);
+        return (
+          <div
+            className="modal fade"
+            id="myModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="myModalTitle"
+          >
+            <div
+              className="modal-dialog modal-dialog-centered"
+              style={{
+                maxWidth: "600px",
+              }}
+              role="document"
+            >
+              {!!productSelected && productSelected.produit && (
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h2 className="modal-title" id="exampleModalLongTitle">
+                      Historiques des modifications
+                    </h2>
+                    <button
+                      type="button"
+                      className="close close-modal"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                      id="close-modal"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div className="modal-body">
+                    <h4>
+                      {" "}
+                      {productSelected.produit.nom_produit}{" "}
+                      {productSelected.taille}
+                    </h4>
+                    {productSelected.historiques &&
+                      productSelected.historiques.reverse().map((el, index) => {
+                        return (
+                          <p key={index}>
+                            {el.add_by} a{" "}
+                            {el.update
+                              ? `modifiée la quantité de ${
+                                  el.prev_quantite
+                                } à ${
+                                  el.stockType === "locker"
+                                    ? `${el.lockerQty} casier(s) de ${el.quantite} bouteilles`
+                                    : el.quantite
+                                }`
+                              : `ajoutée ${
+                                  el.stockType === "locker"
+                                    ? `${el.lockerQty} casier(s) de ${el.quantite} bouteilles`
+                                    : `${el.quantite} quantité(s)`
+                                }`}{" "}
+                            le{" "}
+                            {new Date(el.date).toLocaleDateString("fr-FR", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                              hour: "numeric",
+                              minute: "numeric",
+                              second: "numeric",
+                            })}
+                          </p>
+                        );
+                      })}
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-success close-modal"
+                      data-dismiss="modal"
+                    >
+                      Ok
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      }
+        );
+      };
 
-      const ModalDelete = ()=>{
-        const {productSelected,handleRemoveProduct} = React.useContext(AppContext);
+      const ModalDelete = () => {
+        const { productSelected, handleRemoveProduct } =
+          React.useContext(AppContext);
         const [loading, setLoading] = React.useState(false);
 
-        const handleDelete =  ()=>{
-          setLoading(true)
-          fetch('/deleteproduit/'+productSelected._id, {
-            method: 'DELETE',
+        const handleDelete = () => {
+          setLoading(true);
+          fetch("/deleteproduit/" + productSelected._id, {
+            method: "DELETE",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
           })
             .then((res) => res.json())
             .then((data) => {
-              $('.close-modal').each(function () {
-                $(this).trigger('click');
+              $(".close-modal").each(function () {
+                $(this).trigger("click");
               });
-              setLoading(false)
-              handleRemoveProduct(productSelected._id)
-            })
-        }
+              setLoading(false);
+              handleRemoveProduct(productSelected._id);
+            });
+        };
 
-        return  <div
-        className="modal fade"
-        id="deleteModal"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="myModalDeleteTitle"
-        >
-        <div className="modal-dialog modal-dialog-centered" style={{
-        maxWidth: '600px',
-        }} role="document">
-        {!!productSelected && productSelected.produit &&  <div className="modal-content">
-        <div className="modal-header">
-        <h2 className="modal-title" id="exampleModalLongTitle">
-       Suppression du produit
-        </h2>
-        <button
-          type="button"
-          className="close close-modal"
-          data-dismiss="modal"
-          aria-label="Close"
-          id="close-delete-modal"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-        </div>
-        <div className="modal-body">
-        <h4> Voulez-vous supprimer le produit {productSelected.produit.nom_produit} {productSelected.taille} ?</h4>
-        </div>
+        return (
+          <div
+            className="modal fade"
+            id="deleteModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="myModalDeleteTitle"
+          >
+            <div
+              className="modal-dialog modal-dialog-centered"
+              style={{
+                maxWidth: "600px",
+              }}
+              role="document"
+            >
+              {!!productSelected && productSelected.produit && (
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h2 className="modal-title" id="exampleModalLongTitle">
+                      Suppression du produit
+                    </h2>
+                    <button
+                      type="button"
+                      className="close close-modal"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                      id="close-delete-modal"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div className="modal-body">
+                    <h4>
+                      {" "}
+                      Voulez-vous supprimer le produit{" "}
+                      {productSelected.produit.nom_produit}{" "}
+                      {productSelected.taille} ?
+                    </h4>
+                  </div>
 
-        <div className="modal-footer">
-
-        <button
-          type="button"
-          className="btn btn-danger close-modal"
-          onClick={handleDelete}
-          disabled={loading}
-        >
-          {loading?'Suppression en cours...':'Oui'}
-        </button>
-        <button
-          type="button"
-          className="btn btn-success close-modal"
-          data-dismiss="modal"
-        >
-          Non
-        </button>
-        </div>
-
-        </div>}
-        </div>
-        </div>
-      }
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-danger close-modal"
+                      onClick={handleDelete}
+                      disabled={loading}
+                    >
+                      {loading ? "Suppression en cours..." : "Oui"}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-success close-modal"
+                      data-dismiss="modal"
+                    >
+                      Non
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      };
 
       const App = () => {
         const [search, setSearch] = React.useState("");
@@ -550,11 +618,15 @@
                               className="form-control"
                               placeholder="Rechercher un produit, une catégorie, une taille..."
                               value={search}
-                              onChange={e => setSearch(e.target.value)}
-                              style={{ maxWidth: 350, margin: '0 auto', marginBottom: 18 }}
+                              onChange={(e) => setSearch(e.target.value)}
+                              style={{
+                                maxWidth: 350,
+                                margin: "0 auto",
+                                marginBottom: 18,
+                              }}
                             />
                           </div>
-                          <div className='QA_table mb_30'>
+                          <div className="QA_table mb_30">
                             <ListProduits search={search} />
                           </div>
                         </div>
@@ -572,7 +644,9 @@
 
       const AppRoot = () => {
         const [productSelected, setProductSelected] = React.useState(null);
-        const [products, setProducts] = React.useState(<%- JSON.stringify(Result) %>);
+        const [products, setProducts] = React.useState(
+          JSON.parse(document.getElementById("products-data").textContent)
+        );
 
         const handleSelectProduct = (product) => {
           setProductSelected(product);
@@ -584,13 +658,20 @@
         };
 
         return (
-          <AppContext.Provider value={{ productSelected, handleSelectProduct,handleRemoveProduct, products }}>
+          <AppContext.Provider
+            value={{
+              productSelected,
+              handleSelectProduct,
+              handleRemoveProduct,
+              products,
+            }}
+          >
             <App />
           </AppContext.Provider>
         );
-      }
+      };
 
-      ReactDOM.render(<AppRoot />, document.getElementById('root'));
+      ReactDOM.render(<AppRoot />, document.getElementById("root"));
     </script>
 
     <script src="assets/js/bootstrap.bundle.min.js"></script>

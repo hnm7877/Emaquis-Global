@@ -19,11 +19,9 @@ const formatAmount = (montant) => {
   while (tab[0] === ".") {
     tab.splice(0, 1);
   }
-  return (
-    (isNaN(montant) || "" + montant === "0"
-      ? "0"
-      : (montant >= 0 ? "" : "-") + tab.join("")) + " FCFA"
-  );
+  return isNaN(montant) || "" + montant === "0"
+    ? "0"
+    : (montant >= 0 ? "" : "-") + tab.join("");
 };
 
 const EmDashboardEmployes = () => {
@@ -34,6 +32,16 @@ const EmDashboardEmployes = () => {
   const [loading, setLoading] = React.useState(false);
   const [message, setMessage] = React.useState(null);
   const [productsReturn, setProductsReturn] = React.useState([]);
+
+  // Récupération de la devise dynamiquement selon le pays de l'utilisateur
+  // On suppose que la variable globale 'globalUser' et 'PAYS' sont injectées dans le HTML
+  let currency = "";
+  if (typeof window !== "undefined" && window.globalUser && window.PAYS) {
+    const countryObj = window.PAYS.find(
+      (p) => p.code === (window.globalUser.country || "cote_d_ivoire")
+    );
+    currency = countryObj ? countryObj.devise : "";
+  }
 
   const handleToggleOpenDay = () => {
     // open billet
@@ -175,7 +183,15 @@ const EmDashboardEmployes = () => {
                     textAlign: "center",
                   }}
                 >
-                  <span>{formatAmount(totalVentes)}</span>
+                  <span>
+                    {formatAmount(totalVentes)} {currency}
+                  </span>
+                  <span
+                    className="badge badge-info ml-2"
+                    style={{ fontSize: "1rem", verticalAlign: "middle" }}
+                  >
+                    {currency}
+                  </span>
                 </h4>
                 <p
                   style={{
@@ -224,7 +240,7 @@ const EmDashboardEmployes = () => {
       <div
         className="modal fade"
         id="modalMessage"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-labelledby="modalMessageTitle"
         aria-hidden="true"
@@ -312,7 +328,7 @@ const EmDashboardEmployes = () => {
       <div
         className="modal fade"
         id="modalMessageProductsReturn"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-labelledby="modalMessageProductsReturnTitle"
         aria-hidden="true"

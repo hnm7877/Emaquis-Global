@@ -10,12 +10,20 @@ exports.produit = async (req, res) => {
         session.id || session.travail_pour
       );
 
-      const user = await getUserDetails({...session, id: session.id || session.travail_pour});
-
+      const user = await getUserDetails({
+        ...session,
+        id: session.id || session.travail_pour,
+      });
+      // Ajout de la devise dynamique
+      const { PAYS } = require("../constants");
+      const country = user.country || "cote_d_ivoire";
+      const countryObj = PAYS.find((p) => p.code === country);
+      const currency = countryObj ? countryObj.devise : "XOF";
       res.render("listeproduit", {
         Result: products.result,
         user: user,
         expiredDate: getExpiredDate(user.expiredPaymentDate),
+        currency,
       });
     } catch (e) {
       console.log("err", e);

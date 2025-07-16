@@ -24,6 +24,10 @@ const TablesStocksHead = () => {
 
 const TablesStocksBody = () => {
   const { products } = React.useContext(AppContext);
+  const currency =
+    typeof window !== "undefined" && document.getElementById("currency-data")
+      ? JSON.parse(document.getElementById("currency-data").textContent)
+      : "FCFA";
 
   return (
     <tbody>
@@ -59,7 +63,7 @@ const TablesStocksBody = () => {
             <td className="f_s_14 f_w_400 color_text_6">{product.taille}</td>
             <td className="f_s_14 f_w_400 color_text_6">
               <span className="badge bg-light text-dark px-3 py-2 rounded-pill">
-                {product.prix_vente} FCFA
+                {product.prix_vente} {currency}
               </span>
             </td>
             <td className="f_s_14 f_w_400 text-center">

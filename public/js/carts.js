@@ -449,6 +449,15 @@ const CartFooter = () => {
     );
   }, 0);
 
+  // Récupération de la devise dynamique
+  let currency = "";
+  if (typeof window !== "undefined" && window.globalUser && window.PAYS) {
+    const countryObj = window.PAYS.find(
+      (p) => p.code === (window.globalUser.country || "cote_d_ivoire")
+    );
+    currency = countryObj ? countryObj.devise : "FCFA";
+  }
+
   const handleChangeCollectedLater = (e) => {
     if (e.target.checked) {
       setTableNumber(null);

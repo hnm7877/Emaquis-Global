@@ -641,15 +641,14 @@
                                 <div class="row mt-3">
                                   <div class="col-md-6">
                                     <label class="labels" for="country">Pays</label>
-                                    <select class='form-control' id="country" name="country">
-                                      <% pays.forEach((p)=> { %>
-                                        <% if(p.code == user.country) { %>
-                                          <option value="<%= p.code %>" selected><%= p.nom %></option>
-                                        <% } else { %>
-                                          <option value="<%= p.code %>"><%= p.nom %></option>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                      <select class='form-control' id="country" name="country">
+                                        <% for (var i = 0; i < pays.length; i++) { %>
+                                          <option value="<%= pays[i].code %>" <% if (pays[i].code == user.country) { %>selected<% } %>><%= pays[i].nom %></option>
                                         <% } %>
-                                      <% }); %>
-                                    </select>
+                                      </select>
+                                      <span class="badge badge-info" style="font-size:1rem;"> <%= currency %> </span>
+                                    </div>
                                   </div>
                                   <div class="col-md-6">
                                     <label class="labels" for="city">ville</label>

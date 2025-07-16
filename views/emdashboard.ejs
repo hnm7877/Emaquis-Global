@@ -261,10 +261,15 @@
     document.getElementById("dates").innerHTML = "date";
   </script>
 
+  <!-- Injection des variables globales AVANT les scripts React/Babel -->
+  <script>
+    window.globalUser = <%- JSON.stringify(globalUser) %>;
+    window.PAYS = <%- JSON.stringify(PAYS) %>;
+  </script>
 
   <script>
     const user_travail_pour = <%- JSON.stringify(user.travail_pour) %>;
-    const globalUser = <%- JSON.stringify(user) %>;
+    const globalUser = <%- JSON.stringify(globalUser) %>; // user principal
     const globalCategories = <%- JSON.stringify(categories) %>;
     const globalProducts = <%- JSON.stringify(produits) %>;
     const globalVentes = <%- JSON.stringify(ventes) %>;
@@ -272,6 +277,10 @@
     const sumVentes = <%- JSON.stringify(sum) %>;
     const globalBillet = <%- JSON.stringify(billet) %>;
     const globalCurrentTiming = <%- JSON.stringify(currentTiming) %>;
+    const currency = <%- JSON.stringify(currency) %>;
+  </script>
+  <script id="currency-data" type="application/json">
+    <%- JSON.stringify(currency) %>
   </script>
 
   <script src="../utils/formatAmount.js" type="module"></script>

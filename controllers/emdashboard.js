@@ -112,6 +112,9 @@ exports.emdashboard = async (req, res) => {
     const currency = country ? country.devise : "XOF";
     if (req.session.user.role === "Barman") {
       const { password, ...data } = req.session.user;
+      const globalUser = parentInfo?.result || null;
+      const PAYS = require("../constants").PAYS;
+      console.log("BILLET DEBUG", billet);
       res.render("emdashboard", {
         ventes: ventesEntente,
         newSave: newSave,
@@ -132,6 +135,8 @@ exports.emdashboard = async (req, res) => {
               })
             : null,
         currency,
+        globalUser, // user principal pour le front
+        PAYS, // liste des pays pour le front
       });
     } else {
       res.redirect("/emconnexion");
