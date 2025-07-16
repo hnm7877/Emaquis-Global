@@ -179,26 +179,26 @@
                         </select>
                       </div>
 
-                      <% if(categories.find(c => c.childs && c.childs.length > 0)){ %>
-                      <div class="col-lg-6"  id="subCategories" >
+                      <% if(categories.find(c => c.childs && c.childs.length >
+                      0)){ %>
+                      <div class="col-lg-6" id="subCategories">
                         <select
-                        class="nice_Select2 nice_Select_line wide"
-                        style="display: none"
-                        name="subCategorie"
-                        required="<%= categories.find(c => c.childs && c.childs.length > 0) ? 'true' : 'false' %>"
-                      >
-                      <option value="">Selectionner la sous catégorie</option>
-                      <% categories.forEach(categorie =>{%>
-                       
-                      <% if(categorie.childs && categorie.childs.length > 0){ %>
-                      <% categorie.childs.forEach(child =>{%>
-                      <option value="<%= child._id %>">
-                        <%= child.nom %>
-                      </option>
-                      <%})%>
-                      <% } %>
-                      <%})%>
-                      </select>
+                          class="nice_Select2 nice_Select_line wide"
+                          style="display: none"
+                          name="subCategorie"
+                          required="<%= categories.find(c => c.childs && c.childs.length > 0) ? 'true' : 'false' %>"
+                        >
+                          <option value="">
+                            Selectionner la sous catégorie
+                          </option>
+                          <% categories.forEach(categorie =>{%> <%
+                          if(categorie.childs && categorie.childs.length > 0){
+                          %> <% categorie.childs.forEach(child =>{%>
+                          <option value="<%= child._id %>">
+                            <%= child.nom %>
+                          </option>
+                          <%})%> <% } %> <%})%>
+                        </select>
                       </div>
                       <% } %>
                       <div class="col-lg-6">
@@ -373,11 +373,13 @@
 
         if (findCategory && findCategory.childs && findCategory.childs.length > 0) {
           $("#subCategories").show();
+          $('select[name="subCategorie"]').attr('required', true);
         } else {
           $("#subCategories").hide();
+          $('select[name="subCategorie"]').removeAttr('required');
         }
       });
-      
+
 
       $("#button").click(function () {
         setTimeout(1000, () => {
