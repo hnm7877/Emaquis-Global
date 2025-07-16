@@ -136,7 +136,11 @@
 
         socket.emit("login", data);
       });
-      socket.on("loginsuccess", () => {
+      socket.on("loginsuccess", (data) => {
+        // Si le backend renvoie le token dans data.token, on le stocke dans le localStorage
+        if (data && data.token) {
+          localStorage.setItem("token", data.token);
+        }
         setTimeout(() => {
           // Ajoutez la classe 'success-animation' à l'élément du formulaire ou à l'élément de confirmation
           document

@@ -15,7 +15,9 @@
         }
     </style>
     <script>
-      // Modifiez la définition de la fonction checkout() pour qu'elle prenne un paramètre 'price'
+      // Injection de l'ID utilisateur courant (doit être passé côté serveur lors du render)
+      const userId = '<%= user?._id || user?.id %>';
+      
 function checkout() {
     CinetPay.setConfig({
         apikey: '212203080763d5904661eff5.58954293',//   YOUR APIKEY
@@ -29,16 +31,15 @@ function checkout() {
         currency: '<%= currency %>',
         channels: 'ALL',
         description: 'Test de paiement',
-        //Fournir ces variables pour le paiements par carte bancaire
-        customer_name:"Joe",//Le nom du client
-        customer_surname:"Down",//Le prenom du client
-        customer_email: "down@test.com",//l'email du client
-        customer_phone_number: "088767611",//l'email du client
-        customer_address : "BP 0024",//addresse du client
-        customer_city: "Antananarivo",// La ville du client
-        customer_country : "CM",// le code ISO du pays
-        customer_state : "CM",// le code ISO l'état
-        customer_zip_code : "06510", // code postal
+        customer_name:"Joe",
+        customer_surname:"Down",
+        customer_email: "down@test.com",
+        customer_phone_number: "088767611",
+        customer_address : "BP 0024",
+        customer_city: "Antananarivo",
+        customer_country : "CI",
+        customer_state : "CI",
+        customer_zip_code : "00225",
     });
     CinetPay.waitResponse(function(data) {
         if (data.status == "REFUSED") {
@@ -46,9 +47,26 @@ function checkout() {
                 window.location.reload();
             }
         } else if (data.status == "ACCEPTED") {
-            if (alert("Votre paiement a été effectué avec succès")) {
+            // Récupère le token utilisateur depuis le localStorage
+            const userToken = localStorage.getItem('token');
+            // Appel AJAX pour activer les options côté backend
+            fetch('/api/settings/activate-options', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'token': userToken || ''
+                },
+                body: JSON.stringify({ userId: userId })
+            })
+            .then(response => response.json())
+            .then(result => {
+                alert("Votre paiement a été effectué avec succès");
                 window.location.reload();
-            }
+            })
+            .catch(error => {
+                alert("Paiement réussi, mais erreur lors de l'activation des options.");
+                window.location.reload();
+            });
         }
     });
     CinetPay.onError(function(data) {

@@ -937,28 +937,26 @@ if(nom.trim() === ''){
 
     });
 
-    const countries = <%- JSON.stringify(pays) %>;
-    const user_connected = <%- JSON.stringify(user) %>;
+  </script>
+<script>
+  const countries = <%- JSON.stringify(pays) %>;
+  const user_connected = <%- JSON.stringify(user) %>;
+  $('#country').change(function() {
+    const countryValue = $(this).val();
+    const country = countries.find((c) => c.code === countryValue);
+    $('#city').html('');
+    if (country) {
+      country.cities.forEach((ville) => {
+        $('#city').append(`<option value="${ville}">${ville}</option>`);
+      });
+    }
+  });
+</script>
+  <!-- Add Font Awesome for the lock icon -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"></script>
 
-    $('#country').change(function() {
-      const countryValue = $(this).val();
-      const country = countries.find((c) => c.code === countryValue);
-
-      $('#city').html('');
-      if (country) {
-        country.cities.forEach((ville) => {
-          $('#city').append(`<option value="${ville}">${ville}</option>`);
-        });
-      }
-    });
-
-    // Add Font Awesome for the lock icon
-    const fontAwesomeScript = document.createElement('link');
-    fontAwesomeScript.rel = 'stylesheet';
-    fontAwesomeScript.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
-    document.head.appendChild(fontAwesomeScript);
-
-    // Modal functionality
+  <!-- Modal functionality -->
+  <script>
     $(document).ready(function() {
       // Subscription Modal
       function openModal() {
@@ -1073,18 +1071,160 @@ if(nom.trim() === ''){
           <div class="forfait-icon"><i class="fas fa-unlock-alt"></i></div>
           <div class="forfait-price">2 000 F</div>
           <div class="forfait-desc">Débloquez <b>1 option premium</b> de votre choix<br><span style="color:#888; font-size:0.95em;">(mensuel)</span></div>
-          <button class="forfait-btn" onclick="window.open('https://wa.me/+33760484911','_blank')">Choisir ce forfait</button>
+          <div style="margin-bottom: 12px;">
+            <select id="premiumOptionSelect" class="form-control">
+              <option value="hasSubCategories">Option nourriture</option>
+              <option value="hasStock">Réserve de stock</option>
+              <option value="hasOffer">Boissons offertes</option>
+            </select>
+          </div>
+          <button class="forfait-btn" id="payOneOptionBtn">Payer via Mobile Money</button>
         </div>
         <div class="forfait-card popular">
           <div class="forfait-badge-popular">Le plus populaire</div>
           <div class="forfait-icon"><i class="fas fa-crown"></i></div>
           <div class="forfait-price">5 000 F</div>
           <div class="forfait-desc">Débloquez <b>les 3 options premium</b><br><span style="color:#888; font-size:0.95em;">(mensuel)</span></div>
-          <button class="forfait-btn" onclick="window.open('https://wa.me/+33760484911','_blank')">Choisir ce forfait</button>
+          <button class="forfait-btn" id="payAllOptionsBtn">Tout débloquer via Mobile Money</button>
         </div>
       </div>
     </div>
   </div>
+  <script src="https://cdn.cinetpay.com/seamless/main.js"></script>
+  <script>
+    // Paiement forfait 1 option
+    document.getElementById('payOneOptionBtn').onclick = function() {
+      const selectedOption = document.getElementById('premiumOptionSelect').value;
+      const userId = '<%= user?._id || user?.id %>';
+      const userToken = localStorage.getItem('token');
+      // Préparation des champs client avec fallback de test
+      const customer_name = '<%= user?.nom || "TestNom" %>';
+      const customer_surname = '<%= user?.prenoms || "TestPrenom" %>';
+      const customer_email = '<%= user?.email || "test@email.com" %>';
+      const customer_phone_number = '<%= user?.numero || "0102030405" %>';
+      const customer_address = '<%= user?.adresse || "TestAdresse" %>';
+      const customer_city = '<%= user?.city || "ABIDJAN" %>';
+      const customer_country = '<%= (user?.country || "CI").toUpperCase().slice(0,2) %>';
+      const customer_state = '<%= (user?.country || "CI").toUpperCase().slice(0,2) %>';
+      const customer_zip_code = '00000';
+      const params = {
+        transaction_id: Math.floor(Math.random() * 100000000).toString(),
+        amount: 100,
+        currency: 'XOF',
+        channels: 'ALL',
+        description: 'Abonnement 1 option premium',
+        customer_name,
+        customer_surname,
+        customer_email,
+        customer_phone_number,
+        customer_address,
+        customer_city,
+        customer_country,
+        customer_state,
+        customer_zip_code
+      };
+      console.log('CinetPay params (1 option):', params);
+      CinetPay.setConfig({
+        apikey: '212203080763d5904661eff5.58954293',
+        site_id: '397031',
+        notify_url: 'http://mondomaine.com/notify/',
+        mode: 'PRODUCTION'
+      });
+      CinetPay.getCheckout(params);
+      CinetPay.waitResponse(function(data) {
+        if (data.status === "ACCEPTED") {
+          fetch('/api/settings/activate-options', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'token': userToken || ''
+            },
+            body: JSON.stringify({ userId: userId, options: [selectedOption] })
+          })
+          .then(response => response.json())
+          .then(result => {
+            alert('Option premium activée avec succès !');
+            window.location.reload();
+          })
+          .catch(error => {
+            alert("Paiement réussi, mais erreur lors de l'activation de l'option premium.");
+            window.location.reload();
+          });
+        } else if (data.status === "REFUSED") {
+          alert("Votre paiement a échoué");
+        }
+      });
+      CinetPay.onError(function(data) {
+        alert("Erreur de paiement : " + JSON.stringify(data));
+      });
+    };
+
+    // Paiement forfait toutes options
+    document.getElementById('payAllOptionsBtn').onclick = function() {
+      const userId = '<%= user?._id || user?.id %>';
+      const userToken = localStorage.getItem('token');
+      // Préparation des champs client avec fallback de test
+      const customer_name = '<%= user?.nom || "TestNom" %>';
+      const customer_surname = '<%= user?.prenoms || "TestPrenom" %>';
+      const customer_email = '<%= user?.email || "test@email.com" %>';
+      const customer_phone_number = '<%= user?.numero || "0102030405" %>';
+      const customer_address = '<%= user?.adresse || "TestAdresse" %>';
+      const customer_city = '<%= user?.city || "ABIDJAN" %>';
+      const customer_country = '<%= (user?.country || "CI").toUpperCase().slice(0,2) %>';
+      const customer_state = '<%= (user?.country || "CI").toUpperCase().slice(0,2) %>';
+      const customer_zip_code = '00000';
+      const params = {
+        transaction_id: Math.floor(Math.random() * 100000000).toString(),
+        amount: 5000,
+        currency: 'XOF',
+        channels: 'ALL',
+        description: 'Abonnement toutes options premium',
+        customer_name,
+        customer_surname,
+        customer_email,
+        customer_phone_number,
+        customer_address,
+        customer_city,
+        customer_country,
+        customer_state,
+        customer_zip_code
+      };
+      console.log('CinetPay params (all options):', params);
+      CinetPay.setConfig({
+        apikey: '212203080763d5904661eff5.58954293',
+        site_id: '397031',
+        notify_url: 'http://mondomaine.com/notify/',
+        mode: 'PRODUCTION'
+      });
+      CinetPay.getCheckout(params);
+      CinetPay.waitResponse(function(data) {
+        if (data.status === "ACCEPTED") {
+          fetch('/api/settings/activate-options', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'token': userToken || ''
+            },
+            body: JSON.stringify({ userId: userId, options: ["hasStock","hasOffer","hasSubCategories"] })
+          })
+          .then(response => response.json())
+          .then(result => {
+            alert('Toutes les options premium sont activées !');
+            window.location.reload();
+          })
+          .catch(error => {
+            alert("Paiement réussi, mais erreur lors de l'activation des options premium.");
+            window.location.reload();
+          });
+        } else if (data.status === "REFUSED") {
+          alert("Votre paiement a échoué");
+        }
+      });
+      CinetPay.onError(function(data) {
+        alert("Erreur de paiement : " + JSON.stringify(data));
+      });
+    };
+  </script>
 </body>
 
 </html>
