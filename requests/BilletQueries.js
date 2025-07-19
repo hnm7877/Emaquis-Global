@@ -1,4 +1,5 @@
-const billetModel = require('../models/billet.model');
+const billetModel = require("../models/billet.model");
+const mongoose = require("mongoose");
 
 exports.BilletQueries = class {
   static setBillet(data) {
@@ -25,7 +26,7 @@ exports.BilletQueries = class {
     return new Promise(async (next) => {
       billetModel
         .findOne({
-          employe_id: id,
+          employe_id: mongoose.Types.ObjectId(id),
           is_closed: false,
         })
         .then((data) => {

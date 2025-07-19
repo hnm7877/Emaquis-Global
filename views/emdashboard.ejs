@@ -263,21 +263,17 @@
 
   <!-- Injection des variables globales AVANT les scripts React/Babel -->
   <script>
-    window.globalUser = <%- JSON.stringify(globalUser) %>;
+    window.globalUser = <%- JSON.stringify(user) %>;
     window.PAYS = <%- JSON.stringify(PAYS) %>;
-  </script>
-
-  <script>
-    const user_travail_pour = <%- JSON.stringify(user.travail_pour) %>;
-    const globalUser = <%- JSON.stringify(globalUser) %>; // user principal
-    const globalCategories = <%- JSON.stringify(categories) %>;
-    const globalProducts = <%- JSON.stringify(produits) %>;
-    const globalVentes = <%- JSON.stringify(ventes) %>;
-    const sumEmployes = <%- JSON.stringify(emplnum) %>;
-    const sumVentes = <%- JSON.stringify(sum) %>;
-    const globalBillet = <%- JSON.stringify(billet) %>;
-    const globalCurrentTiming = <%- JSON.stringify(currentTiming) %>;
-    const currency = <%- JSON.stringify(currency) %>;
+    window.user_travail_pour = <%- JSON.stringify(user.travail_pour) %>;
+    window.globalCategories = <%- JSON.stringify(categories) %>;
+    window.globalProducts = <%- JSON.stringify(produits) %>;
+    window.globalVentes = <%- JSON.stringify(ventes) %>;
+    window.sumEmployes = <%- JSON.stringify(emplnum) %>;
+    window.sumVentes = <%- JSON.stringify(sum) %>;
+    window.globalBillet = <%- JSON.stringify(billet) %>;
+    window.globalCurrentTiming = <%- JSON.stringify(currentTiming) %>;
+    window.currency = <%- JSON.stringify(currency) %>;
   </script>
   <script id="currency-data" type="application/json">
     <%- JSON.stringify(currency) %>
