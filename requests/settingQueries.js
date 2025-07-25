@@ -1,4 +1,4 @@
-const settingsModel = require('../models/settings.model');
+const settingsModel = require("../models/settings.model");
 
 exports.settingQueries = class {
   static setSetting(data) {
@@ -42,7 +42,7 @@ exports.settingQueries = class {
             } else {
               const newSetting = await this.setSetting({
                 travail_pour,
-                product_return_type: 'full',
+                product_return_type: "full",
               });
               next(newSetting);
             }
@@ -61,6 +61,8 @@ exports.settingQueries = class {
 
   static updateSetting(travail_pour, data) {
     return new Promise(async (next) => {
+      const settingsModel = require("../models/settings.model");
+      const Employe = require("../models/employe.model");
       settingsModel
         .updateOne(
           {
@@ -68,10 +70,17 @@ exports.settingQueries = class {
           },
           data
         )
-        .then((data) => {
+        .then(async (dataResult) => {
+          // Synchronisation du champ hasOffer avec tous les employés si présent dans la mise à jour
+          if (typeof data.hasOffer !== "undefined") {
+            await Employe.updateMany(
+              { travail_pour },
+              { $set: { hasOffer: data.hasOffer } }
+            );
+          }
           next({
             etat: true,
-            result: data,
+            result: dataResult,
           });
         })
         .catch((err) => {
