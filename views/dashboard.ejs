@@ -634,13 +634,156 @@
               </div>
             </div>
 
+            <!-- SECTION MEILLEUR EMPLOYÉ ET CLASSEMENT -->
+            <div class="row dashboard-meilleur-employe-row animated-fadeInUp mb-4">
+              <div class="col-lg-6 col-md-12 mb-4">
+                <!-- Carte du meilleur employé -->
+                <div class="dashboard-block-meilleur-employe">
+                  <div class="meilleur-employe-header">
+                    <div class="meilleur-employe-title">
+                      <lord-icon src="https://cdn.lordicon.com/ryqjzqbk.json" trigger="loop" delay="2000" style="width: 32px; height: 32px"></lord-icon>
+                      <h3>🏆 Meilleur employé de la semaine</h3>
+                    </div>
+                    <div class="meilleur-employe-badge">
+                      <span class="badge-text">Performance</span>
+                    </div>
+                  </div>
+                  
+                  <div class="meilleur-employe-content">
+                    <div class="employe-profile">
+                      <div class="employe-avatar">
+                        <div class="avatar-circle">
+                          <span class="avatar-initials"><%= meilleurEmploye?.nom?.charAt(0) || 'E' %><%= meilleurEmploye?.prenom?.charAt(0) || 'M' %></span>
+                        </div>
+                        <div class="crown-icon">👑</div>
+                      </div>
+                      
+                      <div class="employe-info">
+                        <h4 class="employe-name"><%= meilleurEmploye?.nom || 'Employé' %> <%= meilleurEmploye?.prenom || 'Modèle' %></h4>
+                        <p class="employe-role"><%= meilleurEmploye?.role || 'Barman' %></p>
+                        
+                        <div class="employe-stats">
+                          <div class="stat-item">
+                            <div class="stat-icon">💰</div>
+                            <div class="stat-content">
+                              <div class="stat-value"><%= formatAmount(meilleurEmploye && meilleurEmploye.totalMontant ? meilleurEmploye.totalMontant : 0) %> <%= currency %></div>
+                              <div class="stat-label">Chiffre d'affaires</div>
+                            </div>
+                          </div>
+                          
+                          <div class="stat-item">
+                            <div class="stat-icon">📊</div>
+                            <div class="stat-content">
+                              <div class="stat-value"><%= meilleurEmploye && meilleurEmploye.nombreCommandes ? meilleurEmploye.nombreCommandes : 0 %></div>
+                              <div class="stat-label">Commandes</div>
+                            </div>
+                          </div>
+                          
+                          <div class="stat-item">
+                            <div class="stat-icon">📈</div>
+                            <div class="stat-content">
+                              <div class="stat-value"><%= meilleurEmploye && meilleurEmploye.moyenneParCommande ? formatAmount(meilleurEmploye.moyenneParCommande) : formatAmount(0) %> <%= currency %></div>
+                              <div class="stat-label">Moyenne/commande</div>
+                            </div>
+                          </div>
+                          
+                          <div class="stat-item">
+                            <div class="stat-icon">🎯</div>
+                            <div class="stat-content">
+                              <div class="stat-value"><%= meilleurEmploye && meilleurEmploye.pourcentageObjectif ? meilleurEmploye.pourcentageObjectif : 0 %>%</div>
+                              <div class="stat-label">Objectif atteint</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="employe-progress">
+                      <div class="progress-container">
+                        <div class="progress-bar">
+                          <div class="progress-fill" style="width: <%= meilleurEmploye && meilleurEmploye.pourcentageObjectif ? Math.min(meilleurEmploye.pourcentageObjectif, 100) : 0 %>%"></div>
+                        </div>
+                        <div class="progress-text">Progression vers l'objectif</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-lg-6 col-md-12 mb-4">
+                <!-- Classement des employés -->
+                <div class="dashboard-block-classement-employes">
+                  <div class="classement-header">
+                    <div class="classement-title">
+                      <lord-icon src="https://cdn.lordicon.com/ryqjzqbk.json" trigger="loop" delay="2000" style="width: 28px; height: 28px"></lord-icon>
+                      <h3>🏁 Classement des employés</h3>
+                    </div>
+                    <div class="classement-badge">
+                      <span class="badge-text">Compétition</span>
+                    </div>
+                  </div>
+                  
+                  <div class="classement-content">
+                    <!-- Compte à rebours vers la prochaine réinitialisation -->
+                    <div class="countdown-container">
+                      <div class="countdown-title">
+                        <i class="fas fa-clock"></i>
+                        <span>Prochaine réinitialisation</span>
+                      </div>
+                      <div class="countdown-timer" id="countdownTimer">
+                        <div class="countdown-item">
+                          <span class="countdown-number" id="countdownDays">00</span>
+                          <span class="countdown-label">Jours</span>
+                        </div>
+                        <div class="countdown-separator">:</div>
+                        <div class="countdown-item">
+                          <span class="countdown-number" id="countdownHours">00</span>
+                          <span class="countdown-label">Heures</span>
+                        </div>
+                        <div class="countdown-separator">:</div>
+                        <div class="countdown-item">
+                          <span class="countdown-number" id="countdownMinutes">00</span>
+                          <span class="countdown-label">Min</span>
+                        </div>
+                        <div class="countdown-separator">:</div>
+                        <div class="countdown-item">
+                          <span class="countdown-number" id="countdownSeconds">00</span>
+                          <span class="countdown-label">Sec</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="classement-list" id="classementEmployes">
+                      <!-- Le classement sera généré dynamiquement via JavaScript -->
+                    </div>
+                    
+                    <div class="classement-footer">
+                      <div class="challenge-text">
+                        <i class="fas fa-trophy"></i>
+                        <span>Défiez vos collègues et montez en première place !</span>
+                      </div>
+                      <div class="reset-info">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Les scores se réinitialisent chaque lundi à 12h00</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- SECTION VENTES / OBJECTIF / PRODUITS EN RUPTURE (juste en dessous) -->
             <div class="row dashboard-ventes-row animated-fadeInUp">
-              <!-- Ventes (Graphique) -->
+              <!-- Graphiques de ventes (Chiffre d'affaires + Nombre de commandes) -->
               <div class="col-lg-7 col-md-12 mb-4">
                 <div class="dashboard-block dashboard-block-ventes">
                   <div class="dashboard-block-header">
-                    <span class="dashboard-block-title"><i class="fas fa-chart-line"></i> Ventes</span>
+                    <span class="dashboard-block-title">
+                      <i class="fas fa-chart-line"></i> Ventes
+                      <span class="tooltip-hint" title="Passez la souris sur les barres pour voir les détails">
+                        <i class="fas fa-info-circle" style="font-size: 0.8rem; color: #98ED58; margin-left: 8px;"></i>
+                      </span>
+                    </span>
                     <div class="dashboard-block-filters">
                       <select class="nice_Select2 form-control" id="chart_week">
                         <option value="">Semaine</option>
@@ -663,7 +806,21 @@
                     </div>
                   </div>
                   <div class="dashboard-block-body">
-                    <div id="management_bar"></div>
+                    <!-- Onglets pour basculer entre les graphiques -->
+                    <div class="chart-tabs mb-3">
+                      <button class="chart-tab active" data-chart="sales">
+                        <i class="fas fa-chart-line"></i> Chiffre d'affaires
+                      </button>
+                      <button class="chart-tab" data-chart="orders">
+                        <i class="fas fa-shopping-cart"></i> Nombre de commandes
+                      </button>
+                    </div>
+                    
+                    <!-- Conteneur des graphiques -->
+                    <div class="chart-container">
+                      <div id="management_bar" class="chart-active"></div>
+                      <div id="orders_chart" class="chart-hidden"></div>
+                    </div>
                     <div class="loader_container"><div class="loader"></div></div>
                   </div>
                 </div>
@@ -1208,6 +1365,1286 @@
         background: linear-gradient(135deg, #fff7e6 0%, #ffe5b4 100%);
         min-height: 320px;
       }
+      .dashboard-block-commandes {
+        background: linear-gradient(135deg, #e6f7ff 0%, #b4e5ff 100%);
+        min-height: 320px;
+      }
+
+      /* Styles pour les onglets des graphiques */
+      .chart-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .chart-tab {
+        background: rgba(255, 156, 44, 0.1);
+        border: 2px solid transparent;
+        color: #FF9C2C;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .chart-tab:hover {
+        background: rgba(255, 156, 44, 0.2);
+        transform: translateY(-1px);
+      }
+
+      .chart-tab.active {
+        background: #FF9C2C;
+        color: white;
+        border-color: #FF9C2C;
+        box-shadow: 0 2px 8px rgba(255, 156, 44, 0.3);
+      }
+
+      .chart-container {
+        position: relative;
+        min-height: 400px;
+      }
+
+      .chart-active {
+        display: block;
+        animation: fadeIn 0.3s ease-in;
+      }
+
+      .chart-hidden {
+        display: none;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Styles pour le classement des employés */
+      .dashboard-block-classement-employes {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 50%, #a93226 100%);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 8px 32px rgba(231, 76, 60, 0.3);
+        position: relative;
+        overflow: hidden;
+        min-height: 500px;
+        
+      }
+
+      /* Styles pour le meilleur employé - même taille */
+      .dashboard-block-meilleur-employe {
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 50%, #1f618d 100%);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 8px 32px rgba(52, 152, 219, 0.3);
+        position: relative;
+        overflow: hidden;
+        min-height: 500px;
+        
+      }
+
+      .dashboard-block-meilleur-employe::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+        pointer-events: none;
+      }
+
+      .dashboard-block-classement-employes::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+        pointer-events: none;
+      }
+
+      .classement-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .classement-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .classement-title h3 {
+        color: white;
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      }
+
+      .classement-badge {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 25px;
+        padding: 8px 18px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+      }
+
+      .classement-badge .badge-text {
+        color: white;
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+
+      .classement-content {
+        position: relative;
+        z-index: 2;
+      }
+
+             .classement-list {
+         max-height: 200px;
+         overflow-y: auto;
+         margin-bottom: 16px;
+         flex: 1;
+       }
+
+       .meilleur-employe-content {
+         display: flex;
+         flex-direction: column;
+         height: 100%;
+         justify-content: space-between;
+       }
+
+       .employe-profile {
+         flex: 1;
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         animation: fadeInUp 1s ease-out 0.5s both;
+       }
+
+       .employe-stats {
+         animation: fadeInUp 1s ease-out 0.8s both;
+       }
+
+       .employe-stats .stat-item {
+         animation: fadeInScale 0.6s ease-out both;
+       }
+
+       .employe-stats .stat-item:nth-child(1) { animation-delay: 1s; }
+       .employe-stats .stat-item:nth-child(2) { animation-delay: 1.2s; }
+       .employe-stats .stat-item:nth-child(3) { animation-delay: 1.4s; }
+       .employe-stats .stat-item:nth-child(4) { animation-delay: 1.6s; }
+
+       .employe-progress {
+         animation: fadeInUp 1s ease-out 1.8s both;
+       }
+
+       .classement-content {
+         animation: fadeInUp 1s ease-out 0.5s both;
+       }
+
+       .countdown-container {
+         animation: pulseIn 1s ease-out 0.8s both;
+       }
+
+       .classement-list {
+         animation: fadeInUp 1s ease-out 1s both;
+       }
+
+       .classement-footer {
+         animation: fadeInUp 1s ease-out 1.5s both;
+       }
+
+       @keyframes fadeInUp {
+         0% {
+           opacity: 0;
+           transform: translateY(30px);
+         }
+         100% {
+           opacity: 1;
+           transform: translateY(0);
+         }
+       }
+
+       @keyframes fadeInScale {
+         0% {
+           opacity: 0;
+           transform: scale(0.8);
+         }
+         100% {
+           opacity: 1;
+           transform: scale(1);
+         }
+       }
+
+       @keyframes pulseIn {
+         0% {
+           opacity: 0;
+           transform: scale(0.9);
+         }
+         50% {
+           opacity: 0.7;
+           transform: scale(1.05);
+         }
+         100% {
+           opacity: 1;
+           transform: scale(1);
+         }
+       }
+
+      .classement-list::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .classement-list::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+      }
+
+      .classement-list::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 3px;
+      }
+
+      .classement-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+        margin-bottom: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .classement-item:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateX(4px);
+      }
+
+      .classement-item.first {
+        background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 193, 7, 0.2) 100%);
+        border: 1px solid rgba(255, 215, 0, 0.4);
+      }
+
+      .classement-item.second {
+        background: linear-gradient(135deg, rgba(192, 192, 192, 0.3) 0%, rgba(169, 169, 169, 0.2) 100%);
+        border: 1px solid rgba(192, 192, 192, 0.4);
+      }
+
+      .classement-item.third {
+        background: linear-gradient(135deg, rgba(205, 127, 50, 0.3) 0%, rgba(184, 115, 51, 0.2) 100%);
+        border: 1px solid rgba(205, 127, 50, 0.4);
+      }
+
+      .classement-rank {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin-right: 12px;
+        position: relative;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      .classement-rank.first {
+        background: linear-gradient(135deg, #FFD700, #FFA500);
+        color: #333;
+        box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+      }
+
+      .classement-rank.second {
+        background: linear-gradient(135deg, #C0C0C0, #A9A9A9);
+        color: #333;
+        box-shadow: 0 4px 12px rgba(192, 192, 192, 0.4);
+      }
+
+      .classement-rank.third {
+        background: linear-gradient(135deg, #CD7F32, #B87333);
+        color: white;
+        box-shadow: 0 4px 12px rgba(205, 127, 50, 0.4);
+      }
+
+      .classement-rank.other {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+      }
+
+      .classement-rank::after {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .classement-item:hover .classement-rank::after {
+        opacity: 1;
+      }
+
+      .classement-employe-info {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .classement-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: white;
+        font-size: 0.9rem;
+        position: relative;
+        box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+      }
+
+      .classement-avatar.first::after {
+        content: '👑';
+        position: absolute;
+        top: -8px;
+        right: -4px;
+        font-size: 14px;
+        animation: bounce 2s infinite;
+      }
+
+      .classement-details {
+        flex: 1;
+      }
+
+      .classement-name {
+        color: white;
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin: 0 0 2px 0;
+      }
+
+      .classement-role {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.8rem;
+        margin: 0;
+      }
+
+      .classement-stats {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 4px;
+      }
+
+      .classement-ca {
+        color: #FFD700;
+        font-weight: 700;
+        font-size: 0.9rem;
+      }
+
+      .classement-commandes {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.8rem;
+      }
+
+      .classement-footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        padding-top: 16px;
+        text-align: center;
+      }
+
+      .challenge-text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+
+             .challenge-text i {
+         color: #FFD700;
+         animation: pulse 2s infinite;
+       }
+
+       /* Styles pour le compte à rebours */
+       .countdown-container {
+         background: rgba(255, 255, 255, 0.1);
+         border-radius: 16px;
+         padding: 16px;
+         margin-bottom: 20px;
+         backdrop-filter: blur(10px);
+         border: 1px solid rgba(255, 255, 255, 0.2);
+       }
+
+       .countdown-title {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         gap: 8px;
+         color: white;
+         font-size: 0.9rem;
+         font-weight: 600;
+         margin-bottom: 12px;
+       }
+
+       .countdown-title i {
+         color: #FFD700;
+         animation: pulse 1.5s infinite;
+       }
+
+       .countdown-timer {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         gap: 8px;
+       }
+
+       .countdown-item {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         background: rgba(255, 255, 255, 0.15);
+         border-radius: 12px;
+         padding: 8px 12px;
+         min-width: 50px;
+         backdrop-filter: blur(5px);
+         border: 1px solid rgba(255, 255, 255, 0.1);
+       }
+
+       .countdown-number {
+         color: #FFD700;
+         font-size: 1.2rem;
+         font-weight: 700;
+         line-height: 1;
+         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+       }
+
+       .countdown-label {
+         color: rgba(255, 255, 255, 0.8);
+         font-size: 0.7rem;
+         font-weight: 500;
+         margin-top: 2px;
+       }
+
+       .countdown-separator {
+         color: #FFD700;
+         font-size: 1.5rem;
+         font-weight: 700;
+         margin: 0 4px;
+         animation: blink 1s infinite;
+       }
+
+       @keyframes blink {
+         0%, 50% { opacity: 1; }
+         51%, 100% { opacity: 0.3; }
+       }
+
+       .reset-info {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         gap: 6px;
+         color: rgba(255, 255, 255, 0.7);
+         font-size: 0.8rem;
+         margin-top: 8px;
+         padding-top: 8px;
+         border-top: 1px solid rgba(255, 255, 255, 0.1);
+       }
+
+       .reset-info i {
+         color: #FFD700;
+         font-size: 0.7rem;
+       }
+
+       /* Animation urgente pour le compte à rebours */
+       .countdown-container.urgent {
+         animation: urgentPulse 1s infinite;
+         border-color: #FF6B6B;
+       }
+
+       .countdown-container.urgent .countdown-number {
+         color: #FF6B6B;
+         animation: urgentBlink 0.5s infinite;
+       }
+
+       @keyframes urgentPulse {
+         0%, 100% { 
+           box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4);
+         }
+         50% { 
+           box-shadow: 0 0 0 10px rgba(255, 107, 107, 0);
+         }
+       }
+
+       @keyframes urgentBlink {
+         0%, 50% { opacity: 1; }
+         51%, 100% { opacity: 0.5; }
+       }
+
+       /* Animations pour les changements de position */
+       .classement-item.ranking-up {
+         animation: rankingUp 0.8s ease-out;
+         transform: scale(1.05);
+         box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+       }
+
+       .classement-item.ranking-down {
+         animation: rankingDown 0.6s ease-out;
+         opacity: 0.7;
+       }
+
+       .classement-item.new-position-up {
+         animation: newPositionUp 0.5s ease-out;
+         border: 2px solid #FFD700;
+       }
+
+       .classement-item.new-position-down {
+         animation: newPositionDown 0.5s ease-out;
+         border: 2px solid #FF6B6B;
+       }
+
+       .classement-rank.pulse-gold {
+         animation: pulseGold 0.8s ease-out;
+         transform: scale(1.2);
+       }
+
+       @keyframes rankingUp {
+         0% {
+           transform: scale(1) translateY(0);
+           box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+         }
+         50% {
+           transform: scale(1.1) translateY(-10px);
+           box-shadow: 0 12px 35px rgba(255, 215, 0, 0.6);
+         }
+         100% {
+           transform: scale(1.05) translateY(0);
+           box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+         }
+       }
+
+       @keyframes rankingDown {
+         0% {
+           transform: scale(1) translateY(0);
+           opacity: 1;
+         }
+         50% {
+           transform: scale(0.95) translateY(5px);
+           opacity: 0.5;
+         }
+         100% {
+           transform: scale(1) translateY(0);
+           opacity: 0.7;
+         }
+       }
+
+       @keyframes newPositionUp {
+         0% {
+           transform: translateY(-20px);
+           opacity: 0;
+           border-color: #FFD700;
+         }
+         50% {
+           transform: translateY(-5px);
+           opacity: 0.8;
+           border-color: #FFD700;
+         }
+         100% {
+           transform: translateY(0);
+           opacity: 1;
+           border-color: transparent;
+         }
+       }
+
+       @keyframes newPositionDown {
+         0% {
+           transform: translateY(20px);
+           opacity: 0;
+           border-color: #FF6B6B;
+         }
+         50% {
+           transform: translateY(5px);
+           opacity: 0.8;
+           border-color: #FF6B6B;
+         }
+         100% {
+           transform: translateY(0);
+           opacity: 1;
+           border-color: transparent;
+         }
+       }
+
+       @keyframes pulseGold {
+         0% {
+           transform: scale(1);
+           box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+         }
+         50% {
+           transform: scale(1.3);
+           box-shadow: 0 8px 20px rgba(255, 215, 0, 0.8);
+         }
+         100% {
+           transform: scale(1.2);
+           box-shadow: 0 6px 16px rgba(255, 215, 0, 0.6);
+         }
+       }
+
+       /* Effet de particules */
+       .ranking-particle {
+         position: absolute;
+         width: 6px;
+         height: 6px;
+         border-radius: 50%;
+         pointer-events: none;
+         z-index: 10;
+         animation: particleFloat 2s ease-out forwards;
+       }
+
+       @keyframes particleFloat {
+         0% {
+           transform: translateY(0) scale(1);
+           opacity: 1;
+         }
+         50% {
+           transform: translateY(-30px) scale(1.5);
+           opacity: 0.8;
+         }
+         100% {
+           transform: translateY(-60px) scale(0.5);
+           opacity: 0;
+         }
+       }
+
+             @keyframes pulse {
+         0%, 100% { transform: scale(1); }
+         50% { transform: scale(1.1); }
+       }
+
+       .no-data-message {
+         text-align: center;
+         padding: 40px 20px;
+         color: rgba(255, 255, 255, 0.8);
+       }
+
+       .no-data-message i {
+         font-size: 3rem;
+         margin-bottom: 16px;
+         opacity: 0.6;
+       }
+
+       .no-data-message p {
+         font-size: 1rem;
+         margin: 0;
+         font-weight: 500;
+       }
+
+             /* Styles pour les cartes en pleine largeur */
+       .dashboard-block-meilleur-employe,
+       .dashboard-block-classement-employes {
+         display: flex;
+         flex-direction: column;
+         justify-content: space-between;
+         height: 400px;
+         min-height: 400px;
+         width: 100%;
+         margin: 0;
+       }
+
+       /* Animation d'apparition pour les cartes */
+       .dashboard-block-meilleur-employe {
+         animation: slideInFromLeft 0.8s ease-out;
+       }
+
+       .dashboard-block-classement-employes {
+         animation: slideInFromRight 0.8s ease-out 0.2s both;
+       }
+
+       @keyframes slideInFromLeft {
+         0% {
+           opacity: 0;
+           transform: translateX(-100px);
+         }
+         100% {
+           opacity: 1;
+           transform: translateX(0);
+         }
+       }
+
+       @keyframes slideInFromRight {
+         0% {
+           opacity: 0;
+           transform: translateX(100px);
+         }
+         100% {
+           opacity: 1;
+           transform: translateX(0);
+         }
+       }
+
+       .dashboard-block-meilleur-employe .meilleur-employe-content,
+       .dashboard-block-classement-employes .classement-content {
+         flex: 1;
+         display: flex;
+         flex-direction: column;
+         justify-content: space-between;
+       }
+
+       /* Alignement des cartes côte à côte */
+       .dashboard-meilleur-employe-row .col-lg-6 {
+         display: flex;
+         flex-direction: column;
+       }
+
+       .dashboard-meilleur-employe-row .col-lg-6 > div {
+         flex: 1;
+         display: flex;
+         flex-direction: column;
+       }
+
+       /* Responsive pour le classement */
+       @media (max-width: 768px) {
+        .dashboard-block-classement-employes {
+          min-height: 350px;
+        }
+        
+        .classement-list {
+          max-height: 220px;
+        }
+        
+        .classement-item {
+          padding: 10px 12px;
+        }
+        
+        .classement-rank {
+          width: 28px;
+          height: 28px;
+          font-size: 0.8rem;
+        }
+        
+        .classement-avatar {
+          width: 32px;
+          height: 32px;
+          font-size: 0.8rem;
+        }
+      }
+
+      /* Styles pour le bouton d'assistance WhatsApp */
+      .whatsapp-help-button {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        animation: bounce 2s infinite;
+      }
+
+      .whatsapp-help-button:hover {
+        transform: scale(1.1);
+        animation: none;
+      }
+
+      .whatsapp-help-button.clicked {
+        transform: scale(0.95);
+      }
+
+      .help-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #25D366, #128C7E);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .help-icon i {
+        font-size: 28px;
+        color: white;
+      }
+
+      .help-tooltip {
+        position: absolute;
+        right: 70px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: white;
+        color: #333;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        white-space: nowrap;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid #e0e0e0;
+      }
+
+      .help-tooltip::after {
+        content: '';
+        position: absolute;
+        right: -6px;
+        top: 50%;
+        transform: translateY(-50%);
+        border-width: 6px 0 6px 6px;
+        border-style: solid;
+        border-color: transparent transparent transparent white;
+      }
+
+      .whatsapp-help-button:hover .help-tooltip {
+        opacity: 1;
+        visibility: visible;
+        right: 80px;
+      }
+
+      @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-10px);
+        }
+        60% {
+          transform: translateY(-5px);
+        }
+      }
+
+      /* Responsive pour mobile */
+      @media (max-width: 768px) {
+        .whatsapp-help-button {
+          bottom: 20px;
+          right: 20px;
+        }
+        
+        .help-icon {
+          width: 50px;
+          height: 50px;
+        }
+        
+        .help-icon i {
+          font-size: 24px;
+        }
+        
+        .help-tooltip {
+          right: 60px;
+          font-size: 12px;
+          padding: 6px 10px;
+        }
+        
+        .whatsapp-help-button:hover .help-tooltip {
+          right: 70px;
+        }
+      }
+
+      /* Styles pour la section Meilleur Employé */
+      .dashboard-block-meilleur-employe {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+        padding: 30px;
+        color: white;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        position: relative;
+        overflow: hidden;
+        animation: slideInFromTop 0.8s ease-out;
+      }
+
+      .dashboard-block-meilleur-employe::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        animation: rotate 20s linear infinite;
+      }
+
+      @keyframes slideInFromTop {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      .meilleur-employe-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .meilleur-employe-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .meilleur-employe-title h3 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+
+      .meilleur-employe-badge {
+        background: rgba(255,255,255,0.2);
+        padding: 8px 16px;
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+      }
+
+      .badge-text {
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .meilleur-employe-content {
+        position: relative;
+        z-index: 2;
+      }
+
+      .employe-profile {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        margin-bottom: 25px;
+      }
+
+      .employe-avatar {
+        position: relative;
+        flex-shrink: 0;
+      }
+
+      .avatar-circle {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #ffd700, #ffed4e);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+      }
+
+      .avatar-initials {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #333;
+      }
+
+      .crown-icon {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        font-size: 1.5rem;
+        animation: bounce 2s infinite;
+      }
+
+      @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        60% { transform: translateY(-5px); }
+      }
+
+      .employe-info {
+        flex: 1;
+      }
+
+      .employe-name {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin: 0 0 5px 0;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+
+      .employe-role {
+        color: rgba(255,255,255,0.8);
+        margin: 0 0 20px 0;
+        font-size: 1rem;
+      }
+
+      .employe-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+      }
+
+      .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(255,255,255,0.1);
+        padding: 15px;
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+        transition: transform 0.3s ease;
+      }
+
+      .stat-item:hover {
+        transform: translateY(-2px);
+        background: rgba(255,255,255,0.15);
+      }
+
+      .stat-icon {
+        font-size: 1.5rem;
+        flex-shrink: 0;
+      }
+
+      .stat-content {
+        flex: 1;
+      }
+
+      .stat-value {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 2px;
+      }
+
+      .stat-label {
+        font-size: 0.85rem;
+        color: rgba(255,255,255,0.8);
+      }
+
+      .employe-progress {
+        margin-top: 20px;
+      }
+
+      .progress-container {
+        background: rgba(255,255,255,0.1);
+        border-radius: 10px;
+        padding: 20px;
+        backdrop-filter: blur(10px);
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 12px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 10px;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #ffd700, #ffed4e);
+        border-radius: 6px;
+        transition: width 1.5s ease-out;
+        animation: progressGlow 2s infinite;
+      }
+
+      @keyframes progressGlow {
+        0%, 100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+        50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+      }
+
+      .progress-text {
+        text-align: center;
+        font-size: 0.9rem;
+        color: rgba(255,255,255,0.9);
+        font-weight: 500;
+      }
+
+      /* Responsive pour la section Meilleur Employé */
+      @media (max-width: 768px) {
+        .dashboard-block-meilleur-employe {
+          padding: 20px;
+        }
+
+        .employe-profile {
+          flex-direction: column;
+          text-align: center;
+          gap: 20px;
+        }
+
+        .employe-stats {
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
+
+        .meilleur-employe-title h3 {
+          font-size: 1.2rem;
+        }
+
+        .avatar-circle {
+          width: 60px;
+          height: 60px;
+        }
+
+        .avatar-initials {
+          font-size: 1.4rem;
+        }
+      }
+
+      /* Styles pour la modal WhatsApp */
+      .whatsapp-modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        animation: fadeIn 0.3s ease;
+      }
+
+      .whatsapp-modal-content {
+        background-color: white;
+        margin: 10% auto;
+        padding: 0;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        animation: slideIn 0.3s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .whatsapp-modal-header {
+        background: linear-gradient(135deg, #25D366, #128C7E);
+        color: white;
+        padding: 20px;
+        border-radius: 12px 12px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .whatsapp-modal-header h3 {
+        margin: 0;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .whatsapp-modal-close {
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: opacity 0.3s;
+      }
+
+      .whatsapp-modal-close:hover {
+        opacity: 0.7;
+      }
+
+      .whatsapp-modal-body {
+        padding: 20px;
+      }
+
+      .whatsapp-modal-body p {
+        margin: 0 0 15px 0;
+        color: #666;
+        font-size: 14px;
+      }
+
+      .whatsapp-numbers {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .whatsapp-number {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+      }
+
+      .whatsapp-number:hover {
+        border-color: #25D366;
+        background: rgba(37, 211, 102, 0.1);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+      }
+
+      .whatsapp-number i {
+        font-size: 20px;
+        color: #25D366;
+      }
+
+      .whatsapp-number span {
+        font-weight: 600;
+        color: #333;
+        font-size: 14px;
+      }
+
+      .whatsapp-number small {
+        color: #666;
+        font-size: 12px;
+        margin-left: auto;
+      }
+
       .dashboard-block-objectif {
         background: linear-gradient(135deg, #e0ffe6 0%, #b2f7cc 100%);
         min-height: 320px;
@@ -1260,6 +2697,55 @@
         .dashboard-ventes-row > div { width: 100% !important; max-width: 100%; }
         .dashboard-block { min-height: 180px; padding: 12px 6px; }
         .dashboard-block-title { font-size: 1rem; }
+      }
+
+      /* Styles pour les tooltips personnalisés */
+      .apexcharts-tooltip {
+        border: none !important;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+        border-radius: 12px !important;
+        background: white !important;
+      }
+
+      .custom-tooltip {
+        animation: tooltipFadeIn 0.3s ease-out;
+      }
+
+      @keyframes tooltipFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      /* Amélioration de l'interactivité du graphique */
+      .apexcharts-canvas {
+        cursor: pointer;
+      }
+
+      .apexcharts-bar-area:hover {
+        opacity: 0.8;
+        transition: opacity 0.2s ease;
+      }
+
+      /* Style pour les icônes dans les tooltips */
+      .custom-tooltip i {
+        width: 16px;
+        text-align: center;
+      }
+
+      /* Style pour l'indicateur de tooltip */
+      .tooltip-hint {
+        cursor: help;
+        transition: transform 0.2s ease;
+      }
+
+      .tooltip-hint:hover {
+        transform: scale(1.1);
       }
 
       .dashboard-inventaire-row {
@@ -1319,6 +2805,56 @@
     <!-- Begin page -->
     <%- include('partial/newSideBar.ejs') %>
     <!--/ sidebar  -->
+
+    <!-- Bouton d'assistance WhatsApp flottant -->
+    <div class="whatsapp-help-button" id="whatsappHelpBtn">
+      <div class="help-icon">
+        <i class="fab fa-whatsapp"></i>
+      </div>
+      <div class="help-tooltip">
+        Besoin d'aide ? Contactez-nous sur WhatsApp
+      </div>
+    </div>
+
+    <!-- Modal de sélection WhatsApp -->
+    <div id="whatsappModal" class="whatsapp-modal">
+      <div class="whatsapp-modal-content">
+        <div class="whatsapp-modal-header">
+          <h3><i class="fab fa-whatsapp"></i> Contactez-nous sur WhatsApp</h3>
+          <span class="whatsapp-modal-close">&times;</span>
+        </div>
+        <div class="whatsapp-modal-body">
+          <p>Choisissez un numéro pour nous contacter :</p>
+          <div class="whatsapp-numbers">
+            <div class="whatsapp-number" data-number="33760484911">
+              <i class="fab fa-whatsapp"></i>
+              <span>+33 0760484911</span>
+              <small>Support France</small>
+            </div>
+            <div class="whatsapp-number" data-number="2250709454685">
+              <i class="fab fa-whatsapp"></i>
+              <span>+225 0709454685</span>
+              <small>Support Côte d'Ivoire</small>
+            </div>
+            <div class="whatsapp-number" data-number="2250709031399">
+              <i class="fab fa-whatsapp"></i>
+              <span>+225 0709031399</span>
+              <small>Support Côte d'Ivoire</small>
+            </div>
+            <div class="whatsapp-number" data-number="2250777129951">
+              <i class="fab fa-whatsapp"></i>
+              <span>+225 0777129951</span>
+              <small>Support Côte d'Ivoire</small>
+            </div>
+            <div class="whatsapp-number" data-number="225049601753">
+              <i class="fab fa-whatsapp"></i>
+              <span>+225 0749601753</span>
+              <small>Support Côte d'Ivoire</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div id="back-top" style="display: none">
       <a title="Go to Top" href="#">
@@ -1463,6 +2999,19 @@
                     }).map((vente) => vente[1]);
                   }
 
+                  const filterVentesCountByMonth = (data, month, year) => {
+                    return Object.entries(data).map((vente) => {
+                      return [vente[0], vente[1].length]
+                    }).filter(vente => {
+                      const dateSplit = vente[0].split('/');
+                      return Number(dateSplit[0]) == month && dateSplit[2] == year;
+                    }).sort((a, b) => {
+                      if (new Date(a[0]) > new Date(b[0])) return -1;
+                      if (new Date(a[0]) < new Date(b[0])) return 1;
+                      return 0;
+                    }).map((vente) => vente[1]);
+                  }
+
 
                   const fetchData = async () => {
                     const week = $('#chart_week').val();
@@ -1495,18 +3044,35 @@
 
                     if (data.success) {
                       const ventesLabels = filterLabelsByMonth(data?.data, month, year);
-
                       const ventesValues = filterVentesValuesByMonth(data?.data, month, year);
+                      const ventesCount = filterVentesCountByMonth(data?.data, month, year);
 
+                      // Stocker les données pour les tooltips
+                      window.chartData = {
+                        labels: ventesLabels.reverse(),
+                        values: ventesValues.reverse(),
+                        counts: ventesCount.reverse()
+                      };
 
                       chart_management.updateOptions({
-                        labels: ventesLabels.reverse(),
+                        labels: window.chartData.labels,
                         series: [{
-                          name: 'total',
-                          type: 'column',
-                          data: ventesValues.reverse(),
+                          name: 'Ventes',
+                          data: window.chartData.values,
                         }]
                       })
+
+                      // Mettre à jour aussi le graphique des commandes
+                      if (chart_orders) {
+                        chart_orders.updateOptions({
+                          labels: window.chartData.labels,
+                          series: [{
+                            name: 'Commandes',
+                            data: window.chartData.counts,
+                          }]
+                        });
+                        console.log('Graphique des commandes mis à jour depuis fetchData');
+                      }
                     }
 
                     $('.loader_container').css('display', 'none');
@@ -1517,9 +3083,17 @@
 
 
                   const ventesLabels = filterLabelsByMonth(ventes, month, year);
-
-
                   const ventesValues = filterVentesValuesByMonth(ventes, month, year);
+                  const ventesCount = filterVentesCountByMonth(ventes, month, year);
+
+                  // Initialiser les données pour les tooltips
+                  window.chartData = {
+                    labels: ventesLabels.reverse(),
+                    values: ventesValues.reverse(),
+                    counts: ventesCount.reverse()
+                  };
+
+                  console.log('Données initiales du graphique:', window.chartData);
 
                   var options = {
                     series: [objectivePercent],
@@ -1580,10 +3154,10 @@
                   options = {
                     chart: {
                       height: 500,
-                      type: 'line',
-                      stacked: !1,
+                      type: 'bar',
+                      stacked: false,
                       toolbar: {
-                        show: !1
+                        show: false
                       },
                     },
                     stroke: {
@@ -1597,9 +3171,8 @@
                     },
                     colors: ['#FF9C2C', '#dfe2e6', '#98ED58'],
                     series: [{
-                      name: 'total',
-                      type: 'column',
-                      data: ventesValues.reverse(),
+                      name: 'Ventes',
+                      data: window.chartData ? window.chartData.values : ventesValues.reverse(),
                     }],
                     fill: {
                       opacity: [0.85, 0.25, 1],
@@ -1625,11 +3198,20 @@
                       }
                     },
                     tooltip: {
-                      shared: !0,
-                      intersect: !1,
+                      enabled: true,
+                      shared: false,
+                      intersect: true,
+                      theme: 'light',
+                      style: {
+                        fontSize: '14px',
+                        fontFamily: 'Poppins, sans-serif'
+                      },
                       y: {
-                        formatter: function(e) {
-                          return void 0 !== e ? e.toFixed(0) + ' ' + currency : e;
+                        formatter: function(value) {
+                          if (value !== undefined) {
+                            return new Intl.NumberFormat('fr-FR').format(value.toFixed(0)) + ' ' + currency;
+                          }
+                          return value;
                         },
                       },
                     },
@@ -1645,8 +3227,107 @@
 
                   chart_management.render();
                   console.log("chart management")
-                  //
+                  
+                  // Test des tooltips
+                  setTimeout(() => {
+                    console.log('Test des tooltips - données disponibles:', window.chartData);
+                    if (window.chartData && window.chartData.labels.length > 0) {
+                      console.log('Premier label:', window.chartData.labels[0]);
+                      console.log('Première valeur:', window.chartData.values[0]);
+                    }
+                  }, 1000);
+                  
                   console.log("chart management 11")
+
+                  /* -------------------------------------------------------------------------- */
+                  /*                              Graphique Commandes                             */
+                  /* -------------------------------------------------------------------------- */
+
+                  // Configuration du graphique des commandes
+                  var options_orders = {
+                    chart: {
+                      height: 500,
+                      type: 'bar',
+                      stacked: false,
+                      toolbar: {
+                        show: false
+                      },
+                    },
+                    stroke: {
+                      width: [0, 2, 4],
+                      curve: 'smooth'
+                    },
+                    plotOptions: {
+                      bar: {
+                        columnWidth: '30%'
+                      }
+                    },
+                    colors: ['#3498DB', '#dfe2e6', '#98ED58'],
+                    series: [{
+                      name: 'Commandes',
+                      data: window.chartData && window.chartData.counts ? window.chartData.counts : [],
+                    }],
+                    fill: {
+                      opacity: [0.85, 0.25, 1],
+                      gradient: {
+                        inverseColors: !1,
+                        shade: 'light',
+                        type: 'vertical',
+                        opacityFrom: 0.85,
+                        opacityTo: 0.55,
+                        stops: [0, 100, 100, 100],
+                      },
+                    },
+                    labels: window.chartData && window.chartData.labels ? window.chartData.labels : [],
+                    markers: {
+                      size: 0
+                    },
+                    xaxis: {
+                      type: 'datetime'
+                    },
+                    yaxis: {
+                      title: {
+                        text: 'Nombre de commandes'
+                      }
+                    },
+                    tooltip: {
+                      enabled: true,
+                      shared: false,
+                      intersect: true,
+                      theme: 'light',
+                      style: {
+                        fontSize: '14px',
+                        fontFamily: 'Poppins, sans-serif'
+                      },
+                      y: {
+                        formatter: function(value) {
+                          if (value !== undefined) {
+                            return value + ' commande' + (value > 1 ? 's' : '');
+                          }
+                          return value;
+                        },
+                      },
+                    },
+                    grid: {
+                      borderColor: '#f1f1f1'
+                    },
+                  };
+
+                  let chart_orders = new ApexCharts(
+                    document.querySelector('#orders_chart'),
+                    options_orders
+                  )
+
+                  chart_orders.render();
+                  console.log("chart orders créé")
+                  
+                  // Test du graphique des commandes
+                  setTimeout(() => {
+                    console.log('Test du graphique des commandes - données disponibles:', window.chartData);
+                    if (window.chartData && window.chartData.counts) {
+                      console.log('Données des commandes:', window.chartData.counts);
+                    }
+                  }, 1500);
 
 
                   // socket.on('connect', () => {
@@ -1684,6 +3365,501 @@
 
                   // force update data
                   fetchData();
+
+                  // Fonction pour mettre à jour le graphique des commandes
+                  const fetchOrdersData = async () => {
+                    const week = $('#chart_week').val();
+                    const month = $('#chart_month').val();
+                    const year = $('#chart_year').val();
+
+                    $('.loader_container').css('display', 'flex');
+
+                    chart_orders.updateOptions({
+                      labels: [],
+                      series: [{
+                        name: 'Commandes',
+                        data: [],
+                      }]
+                    })
+
+                    const res = await fetch(`vente-by-month?month=${month>9?month:'0'+month}&year=${year}&week=${week}`);
+                    const data = await res.json();
+
+                    if (data.success) {
+                      const ventesLabels = filterLabelsByMonth(data?.data, month, year);
+                      const ventesCount = filterVentesCountByMonth(data?.data, month, year);
+
+                      // Mettre à jour les données globales
+                      if (window.chartData) {
+                        window.chartData.labels = ventesLabels.reverse();
+                        window.chartData.counts = ventesCount.reverse();
+                      }
+
+                      chart_orders.updateOptions({
+                        labels: window.chartData.labels,
+                        series: [{
+                          name: 'Commandes',
+                          data: window.chartData.counts,
+                        }]
+                      })
+                    }
+
+                    $('.loader_container').css('display', 'none');
+                  };
+
+                  // Synchroniser les filtres pour les deux graphiques
+                  $('#chart_week').on('change', function() {
+                    fetchOrdersData();
+                  });
+
+                  $('#chart_month').on('change', function() {
+                    fetchOrdersData();
+                  });
+
+                  $('#chart_year').on('change', function() {
+                    fetchOrdersData();
+                  });
+
+                  // Initialiser le graphique des commandes
+                  fetchOrdersData();
+
+                  // Générer le classement des employés
+                  generateClassementEmployes();
+
+                  // Initialiser le compte à rebours
+                  initCountdown();
+
+                  // Mettre à jour le classement automatiquement
+                  setInterval(() => {
+                    updateClassementFromServer();
+                  }, 30000); // Toutes les 30 secondes
+
+                  // Fonction pour formater les montants en JavaScript
+                  function formatAmountJS(amount) {
+                    if (amount === 0) return '0';
+                    return new Intl.NumberFormat('fr-FR').format(amount);
+                  }
+
+                  // Variables globales pour le suivi des positions
+                  let previousRankings = {};
+
+                  // Fonction pour générer le classement des employés
+                  function generateClassementEmployes() {
+                    const classementData = <%- JSON.stringify(classementEmployes || []) %>;
+                    const container = $('#classementEmployes');
+                    const currencySymbol = '<%= currency %>';
+                    
+                    console.log('Données du classement:', classementData); // Debug
+                    console.log('Devise:', currencySymbol); // Debug
+                    
+                    if (!classementData || classementData.length === 0) {
+                      // Données de test pour vérifier l'affichage
+                      const testData = [
+                        {
+                          id: '1',
+                          nom: 'Jean',
+                          prenom: 'Eric',
+                          role: 'Barman',
+                          totalMontant: 18600,
+                          nombreCommandes: 2
+                        },
+                        {
+                          id: '2',
+                          nom: 'Marie',
+                          prenom: 'Claire',
+                          role: 'Serveur(euse)',
+                          totalMontant: 15200,
+                          nombreCommandes: 3
+                        },
+                        {
+                          id: '3',
+                          nom: 'Pierre',
+                          prenom: 'Dupont',
+                          role: 'Barman',
+                          totalMontant: 8900,
+                          nombreCommandes: 1
+                        }
+                      ];
+                      
+                      console.log('Utilisation des données de test');
+                      classementData = testData;
+                    }
+                    
+                    // Créer le nouveau classement
+                    let html = '';
+                    classementData.forEach((employe, index) => {
+                      const rank = index + 1;
+                      const rankClass = rank === 1 ? 'first' : rank === 2 ? 'second' : rank === 3 ? 'third' : 'other';
+                      const initials = (employe.nom?.charAt(0) || 'E') + (employe.prenom?.charAt(0) || 'M');
+                      
+                      html += `
+                        <div class="classement-item ${rankClass}" data-employe-id="${employe.id}" data-rank="${rank}">
+                          <div class="classement-rank ${rankClass}">
+                            ${rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank}
+                          </div>
+                          <div class="classement-employe-info">
+                            <div class="classement-avatar ${rank === 1 ? 'first' : ''}">
+                              ${initials}
+                            </div>
+                            <div class="classement-details">
+                              <h5 class="classement-name">${employe.nom} ${employe.prenom}</h5>
+                              <p class="classement-role">${employe.role || 'Barman'}</p>
+                            </div>
+                          </div>
+                          <div class="classement-stats">
+                            <div class="classement-ca">${formatAmountJS(employe.totalMontant)} ${currencySymbol}</div>
+                            <div class="classement-commandes">${employe.nombreCommandes} commande${employe.nombreCommandes > 1 ? 's' : ''}</div>
+                          </div>
+                        </div>
+                      `;
+                    });
+                    
+                    // Animer les changements de position
+                    animateRankingChanges(container, html, classementData);
+                  }
+
+                  // Fonction pour animer les changements de position
+                  function animateRankingChanges(container, newHtml, classementData) {
+                    const currentItems = container.find('.classement-item');
+                    const currentRankings = {};
+                    
+                    // Récupérer les positions actuelles
+                    currentItems.each(function() {
+                      const employeId = $(this).data('employe-id');
+                      const currentRank = parseInt($(this).data('rank')) || 0;
+                      currentRankings[employeId] = currentRank;
+                    });
+                    
+                    // Créer les nouvelles positions
+                    const newRankings = {};
+                    classementData.forEach((employe, index) => {
+                      newRankings[employe.id] = index + 1;
+                    });
+                    
+                    // Détecter les changements de position
+                    const positionChanges = {};
+                    Object.keys(newRankings).forEach(employeId => {
+                      const oldRank = currentRankings[employeId] || 0;
+                      const newRank = newRankings[employeId];
+                      
+                      if (oldRank !== 0 && newRank < oldRank) {
+                        // L'employé a monté en position
+                        positionChanges[employeId] = {
+                          type: 'up',
+                          oldRank: oldRank,
+                          newRank: newRank,
+                          difference: oldRank - newRank
+                        };
+                      } else if (oldRank !== 0 && newRank > oldRank) {
+                        // L'employé a descendu en position
+                        positionChanges[employeId] = {
+                          type: 'down',
+                          oldRank: oldRank,
+                          newRank: newRank,
+                          difference: newRank - oldRank
+                        };
+                      }
+                    });
+                    
+                    // Si c'est la première fois, juste afficher
+                    if (Object.keys(currentRankings).length === 0) {
+                      container.html(newHtml);
+                      animateInitialAppearance(container);
+                      return;
+                    }
+                    
+                    // Animer les changements
+                    if (Object.keys(positionChanges).length > 0) {
+                      animatePositionChanges(container, newHtml, positionChanges);
+                    } else {
+                      // Pas de changement, mettre à jour silencieusement
+                      container.html(newHtml);
+                    }
+                    
+                    // Sauvegarder les nouvelles positions
+                    previousRankings = newRankings;
+                  }
+
+                  // Animation d'apparition initiale
+                  function animateInitialAppearance(container) {
+                    container.find('.classement-item').each(function(index) {
+                      $(this).css({
+                        'opacity': '0',
+                        'transform': 'translateX(-20px)'
+                      }).delay(index * 100).animate({
+                        'opacity': '1',
+                        'transform': 'translateX(0)'
+                      }, 300);
+                    });
+                  }
+
+                  // Animation des changements de position
+                  function animatePositionChanges(container, newHtml, positionChanges) {
+                    // Marquer les éléments qui vont changer
+                    Object.keys(positionChanges).forEach(employeId => {
+                      const change = positionChanges[employeId];
+                      const item = container.find(`[data-employe-id="${employeId}"]`);
+                      
+                      if (change.type === 'up') {
+                        // Animation de montée
+                        item.addClass('ranking-up');
+                        item.find('.classement-rank').addClass('pulse-gold');
+                        
+                        // Effet de particules dorées
+                        createParticleEffect(item, 'gold');
+                        
+                        // Son de victoire (optionnel)
+                        // playVictorySound();
+                      } else if (change.type === 'down') {
+                        // Animation de descente
+                        item.addClass('ranking-down');
+                      }
+                    });
+                    
+                    // Attendre un peu puis mettre à jour
+                    setTimeout(() => {
+                      container.html(newHtml);
+                      
+                      // Animer les nouvelles positions
+                      container.find('.classement-item').each(function(index) {
+                        const employeId = $(this).data('employe-id');
+                        const change = positionChanges[employeId];
+                        
+                        if (change && change.type === 'up') {
+                          $(this).addClass('new-position-up');
+                        } else if (change && change.type === 'down') {
+                          $(this).addClass('new-position-down');
+                        }
+                        
+                        $(this).css({
+                          'opacity': '0',
+                          'transform': 'translateY(20px)'
+                        }).delay(index * 50).animate({
+                          'opacity': '1',
+                          'transform': 'translateY(0)'
+                        }, 400);
+                      });
+                    }, 800);
+                  }
+
+                  // Créer un effet de particules
+                  function createParticleEffect(element, type) {
+                    const colors = {
+                      gold: ['#FFD700', '#FFA500', '#FF8C00'],
+                      silver: ['#C0C0C0', '#A9A9A9', '#808080'],
+                      bronze: ['#CD7F32', '#B87333', '#A0522D']
+                    };
+                    
+                    const particleColors = colors[type] || colors.gold;
+                    
+                    for (let i = 0; i < 8; i++) {
+                      const particle = $('<div class="ranking-particle"></div>');
+                      particle.css({
+                        'background': particleColors[Math.floor(Math.random() * particleColors.length)],
+                        'left': Math.random() * 100 + '%',
+                        'top': Math.random() * 100 + '%',
+                        'animation-delay': Math.random() * 0.5 + 's'
+                      });
+                      
+                      element.append(particle);
+                      
+                      // Supprimer la particule après l'animation
+                      setTimeout(() => {
+                        particle.remove();
+                                           }, 2000);
+                   }
+
+                   // Fonction pour mettre à jour le classement depuis le serveur
+                   function updateClassementFromServer() {
+                     $.ajax({
+                       url: '/api/dashboard/classement',
+                       method: 'GET',
+                       success: function(data) {
+                         if (data.success && data.classementEmployes) {
+                           // Mettre à jour le classement avec les nouvelles données
+                           const container = $('#classementEmployes');
+                           const currencySymbol = '<%= currency %>';
+                           
+                           let html = '';
+                           data.classementEmployes.forEach((employe, index) => {
+                             const rank = index + 1;
+                             const rankClass = rank === 1 ? 'first' : rank === 2 ? 'second' : rank === 3 ? 'third' : 'other';
+                             const initials = (employe.nom?.charAt(0) || 'E') + (employe.prenom?.charAt(0) || 'M');
+                             
+                             html += `
+                               <div class="classement-item ${rankClass}" data-employe-id="${employe.id}" data-rank="${rank}">
+                                 <div class="classement-rank ${rankClass}">
+                                   ${rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank}
+                                 </div>
+                                 <div class="classement-employe-info">
+                                   <div class="classement-avatar ${rank === 1 ? 'first' : ''}">
+                                     ${initials}
+                                   </div>
+                                   <div class="classement-details">
+                                     <h5 class="classement-name">${employe.nom} ${employe.prenom}</h5>
+                                     <p class="classement-role">${employe.role || 'Barman'}</p>
+                                   </div>
+                                 </div>
+                                 <div class="classement-stats">
+                                   <div class="classement-ca">${formatAmountJS(employe.totalMontant)} ${currencySymbol}</div>
+                                   <div class="classement-commandes">${employe.nombreCommandes} commande${employe.nombreCommandes > 1 ? 's' : ''}</div>
+                                 </div>
+                               </div>
+                             `;
+                           });
+                           
+                           // Animer les changements
+                           animateRankingChanges(container, html, data.classementEmployes);
+                         }
+                       },
+                       error: function() {
+                         console.log('Erreur lors de la mise à jour du classement');
+                       }
+                     });
+                   }
+                  }
+
+                  // Fonction pour initialiser le compte à rebours
+                  function initCountdown() {
+                    function updateCountdown() {
+                      const now = new Date();
+                      const currentDay = now.getDay(); // 0 = Dimanche, 1 = Lundi
+                      const currentHour = now.getHours();
+                      const currentMinute = now.getMinutes();
+                      const currentSecond = now.getSeconds();
+
+                      // Calculer le prochain lundi à 12h00
+                      let daysUntilMonday = 1 - currentDay; // Lundi = 1
+                      if (daysUntilMonday <= 0) daysUntilMonday += 7; // Si on est déjà lundi ou après
+                      
+                      // Si on est lundi et qu'il est avant 12h00, c'est aujourd'hui
+                      if (currentDay === 1 && currentHour < 12) {
+                        daysUntilMonday = 0;
+                      }
+
+                      const nextMonday = new Date();
+                      nextMonday.setDate(now.getDate() + daysUntilMonday);
+                      nextMonday.setHours(12, 0, 0, 0);
+
+                      const timeDiff = nextMonday - now;
+
+                      if (timeDiff <= 0) {
+                        // Réinitialisation ! Mettre à jour les données
+                        location.reload();
+                        return;
+                      }
+
+                      const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                      const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                      const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                      const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+                      // Mettre à jour l'affichage
+                      $('#countdownDays').text(days.toString().padStart(2, '0'));
+                      $('#countdownHours').text(hours.toString().padStart(2, '0'));
+                      $('#countdownMinutes').text(minutes.toString().padStart(2, '0'));
+                      $('#countdownSeconds').text(seconds.toString().padStart(2, '0'));
+
+                      // Animation spéciale quand il reste moins d'1 heure
+                      if (timeDiff < 3600000) { // 1 heure en millisecondes
+                        $('.countdown-container').addClass('urgent');
+                      }
+                    }
+
+                    // Mettre à jour immédiatement
+                    updateCountdown();
+                    
+                    // Mettre à jour toutes les secondes
+                    setInterval(updateCountdown, 1000);
+                  }
+
+                  // Gestion du bouton d'assistance WhatsApp
+                  $('#whatsappHelpBtn').on('click', function() {
+                    // Afficher la modal WhatsApp
+                    $('#whatsappModal').fadeIn(300);
+                    
+                    // Animation de clic
+                    $(this).addClass('clicked');
+                    setTimeout(() => {
+                      $(this).removeClass('clicked');
+                    }, 200);
+                  });
+
+                  // Fermer la modal WhatsApp
+                  $('.whatsapp-modal-close, #whatsappModal').on('click', function(e) {
+                    if (e.target === this) {
+                      $('#whatsappModal').fadeOut(300);
+                    }
+                  });
+
+                  // Gestion des numéros WhatsApp
+                  $('.whatsapp-number').on('click', function() {
+                    const number = $(this).data('number');
+                    const message = encodeURIComponent("Bonjour, j'ai besoin d'aide avec l'application E-maquis. Pouvez-vous m'aider ?");
+                    const whatsappUrl = `https://wa.me/${number}?text=${message}`;
+                    
+                    // Fermer la modal
+                    $('#whatsappModal').fadeOut(300);
+                    
+                    // Ouvrir WhatsApp dans un nouvel onglet
+                    window.open(whatsappUrl, '_blank');
+                  });
+
+                  // Test d'affichage du graphique des commandes
+                  setTimeout(() => {
+                    console.log('Test d\'affichage du graphique des commandes');
+                    console.log('Élément orders_chart existe:', $('#orders_chart').length > 0);
+                    console.log('Données disponibles:', window.chartData);
+                    if (window.chartData) {
+                      console.log('Labels:', window.chartData.labels);
+                      console.log('Counts:', window.chartData.counts);
+                    }
+                  }, 2000);
+
+                  // Fonction pour mettre à jour le graphique des commandes avec les nouvelles données
+                  const updateOrdersChart = () => {
+                    if (chart_orders && window.chartData && window.chartData.counts) {
+                      chart_orders.updateOptions({
+                        labels: window.chartData.labels,
+                        series: [{
+                          name: 'Commandes',
+                          data: window.chartData.counts,
+                        }]
+                      });
+                      console.log('Graphique des commandes mis à jour avec:', window.chartData.counts);
+                    }
+                  };
+
+                  // Gestion des onglets pour basculer entre les graphiques
+                  $('.chart-tab').on('click', function() {
+                    const chartType = $(this).data('chart');
+                    
+                    console.log('Onglet cliqué:', chartType);
+                    
+                    // Mettre à jour l'état actif des onglets
+                    $('.chart-tab').removeClass('active');
+                    $(this).addClass('active');
+                    
+                    // Masquer tous les graphiques
+                    $('.chart-container > div').removeClass('chart-active').addClass('chart-hidden');
+                    
+                    // Afficher le graphique sélectionné
+                    if (chartType === 'sales') {
+                      $('#management_bar').removeClass('chart-hidden').addClass('chart-active');
+                      console.log('Graphique des ventes affiché');
+                    } else if (chartType === 'orders') {
+                      $('#orders_chart').removeClass('chart-hidden').addClass('chart-active');
+                      console.log('Graphique des commandes affiché');
+                      
+                      // Forcer le rendu du graphique des commandes
+                      setTimeout(() => {
+                        if (chart_orders) {
+                          chart_orders.render();
+                          console.log('Graphique des commandes re-rendu');
+                        }
+                      }, 100);
+                    }
+                  });
     </script>
 
     <script>

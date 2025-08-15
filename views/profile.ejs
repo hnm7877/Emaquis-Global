@@ -171,6 +171,8 @@
       background: rgba(52, 152, 219, 0.1);
       color: var(--secondary-color);
       transition: all 0.3s ease;
+      margin-top: 4px;
+      align-self: flex-start;
     }
 
     .lock-icon:hover {
@@ -402,30 +404,38 @@
 
     .premium-row {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 1.2rem;
-      min-height: 48px;
+      min-height: 80px;
       margin-bottom: 18px;
+      padding: 16px;
+      position: relative;
     }
     .premium-tooltip {
-      display: none;
-      position: absolute;
-      left: 50%;
-      top: 120%;
-      transform: translateX(-50%);
-      min-width: 220px;
-      background: #fff;
-      color: #222;
-      font-size: 0.98rem;
+      display: block;
+      position: static;
+      transform: none;
+      min-width: auto;
+      background: transparent;
+      color: #666;
+      font-size: 0.9rem;
       font-weight: 400;
-      border-radius: 8px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.13);
-      padding: 12px 16px;
-      z-index: 100;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 8px 0 0 0;
+      z-index: auto;
       text-align: left;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.18s;
+      pointer-events: auto;
+      opacity: 1;
+      transition: none;
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+    .premium-label {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
     }
     .premium-label:hover .premium-tooltip,
     .premium-label:focus .premium-tooltip {
@@ -434,15 +444,7 @@
       pointer-events: auto;
     }
     .premium-tooltip::before {
-      content: '';
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-width: 0 8px 10px 8px;
-      border-style: solid;
-      border-color: transparent transparent #fff transparent;
-      filter: drop-shadow(0 -2px 2px rgba(0,0,0,0.07));
+      display: none;
     }
 
     .forfait-modal {
@@ -1028,35 +1030,39 @@ if(nom.trim() === ''){
   <div id="subscriptionModal" class="subscription-modal">
     <div class="subscription-modal-content">
       <div class="subscription-modal-header">
-        <h2 class="subscription-modal-title">Fonctionnalité Premium</h2>
+                 <h2 class="subscription-modal-title">🔒 Fonctionnalité Premium</h2>
         <span class="subscription-modal-close">&times;</span>
       </div>
-      <div class="subscription-modal-body" style="text-align:center; font-size:1.2rem; color:#FFA500; font-weight:600;">
-        Merci de contacter le service client via whatsapp <br>
-        <ul style="list-style-type: none; padding: 0;">
-          <li>
-            <a href="https://wa.me/33760484911">+33 0760484911</a>
-          
-        </li>
-        <li>
-          
-        <a href="https://wa.me/2250709454685">+225 0709454685</a>
-        
-      </li>
-      <li>
-        
-      <a href="https://wa.me/2250709031399">+225 0709031399</a>
-      
-    </li>
-    <li>
-      
-    <a href="https://wa.me/2250777129951">+225 0777129951</a>
-  </li>
-        </ul>
-        <br> pour effectuer votre abonnement afin de pouvoir utiliser toutes les fonctionnalités de l'application
-      </div>
+             <div class="subscription-modal-body" style="text-align:center; font-size:1.2rem; color:#FFA500; font-weight:600;">
+         <p style="margin-bottom: 20px;">Pour activer cette fonctionnalité premium, cliquez sur "Voir les forfaits" ci-dessous.</p>
+         
+         <p style="margin-bottom: 15px; font-size: 1rem; color: #666;">Le paiement se fait automatiquement via Mobile Money (Moov, MTN, Orange) ou carte bancaire.</p>
+         
+         <p style="margin-bottom: 20px; font-size: 1rem; color: #666;">Besoin d'aide ? Contactez-nous sur WhatsApp :</p>
+         
+         <ul style="list-style-type: none; padding: 0; margin-bottom: 20px;">
+           <li style="margin-bottom: 8px;">
+             <a href="https://wa.me/33760484911" style="color: #25D366; text-decoration: none;">🇫🇷 +33 0760484911</a>
+           </li>
+           <li style="margin-bottom: 8px;">
+             <a href="https://wa.me/2250709454685" style="color: #25D366; text-decoration: none;">🇨🇮 +225 0709454685</a>
+           </li>
+           <li style="margin-bottom: 8px;">
+             <a href="https://wa.me/2250709031399" style="color: #25D366; text-decoration: none;">🇨🇮 +225 0709031399</a>
+           </li>
+           <li style="margin-bottom: 8px;">
+             <a href="https://wa.me/2250777129951" style="color: #25D366; text-decoration: none;">🇨🇮 +225 0777129951</a>
+           </li>
+         </ul>
+         
+         <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px;">
+           <p style="margin: 0; font-size: 0.95rem; color: #666;">
+             💳 <strong>Paiement sécurisé</strong> - Votre transaction est protégée par CinetPay
+           </p>
+         </div>
+       </div>
       <div class="subscription-modal-footer">
-        <button class="subscription-modal-button">Fermer</button>
+                 <button class="subscription-modal-button">Compris</button>
       </div>
     </div>
   </div>
@@ -1069,7 +1075,7 @@ if(nom.trim() === ''){
       <div class="forfait-cards">
         <div class="forfait-card">
           <div class="forfait-icon"><i class="fas fa-unlock-alt"></i></div>
-          <div class="forfait-price">2 000 F</div>
+          <div class="forfait-price">7 000 F</div>
           <div class="forfait-desc">Débloquez <b>1 option premium</b> de votre choix<br><span style="color:#888; font-size:0.95em;">(mensuel)</span></div>
           <div style="margin-bottom: 12px;">
             <select id="premiumOptionSelect" class="form-control">
@@ -1083,7 +1089,7 @@ if(nom.trim() === ''){
         <div class="forfait-card popular">
           <div class="forfait-badge-popular">Le plus populaire</div>
           <div class="forfait-icon"><i class="fas fa-crown"></i></div>
-          <div class="forfait-price">5 000 F</div>
+          <div class="forfait-price">12 000 F</div>
           <div class="forfait-desc">Débloquez <b>les 3 options premium</b><br><span style="color:#888; font-size:0.95em;">(mensuel)</span></div>
           <button class="forfait-btn" id="payAllOptionsBtn">Tout débloquer via Mobile Money</button>
         </div>
@@ -1109,7 +1115,7 @@ if(nom.trim() === ''){
       const customer_zip_code = '00000';
       const params = {
         transaction_id: Math.floor(Math.random() * 100000000).toString(),
-        amount: 2000,
+        amount: 7000,
         currency: 'XOF',
         channels: 'ALL',
         description: 'Abonnement 1 option premium',
@@ -1175,7 +1181,7 @@ if(nom.trim() === ''){
       const customer_zip_code = '00000';
       const params = {
         transaction_id: Math.floor(Math.random() * 100000000).toString(),
-        amount: 5000,
+        amount: 12000,
         currency: 'XOF',
         channels: 'ALL',
         description: 'Abonnement toutes options premium',

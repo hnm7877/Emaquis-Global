@@ -39,6 +39,29 @@ exports.dashboard = async (req, res) => {
         moment(currentDate).startOf("month").isoWeek() +
         1;
 
+      // Calculer le dernier lundi à 12h00
+      const getLastMondayNoon = () => {
+        const now = new Date();
+        const currentDay = now.getDay(); // 0 = Dimanche, 1 = Lundi
+        const currentHour = now.getHours();
+
+        let daysToSubtract = currentDay - 1; // Lundi = 1
+        if (daysToSubtract < 0) daysToSubtract += 7; // Si on est dimanche
+
+        // Si on est lundi et qu'il est avant 12h00, prendre le lundi précédent
+        if (currentDay === 1 && currentHour < 12) {
+          daysToSubtract = 7;
+        }
+
+        const lastMonday = new Date(now);
+        lastMonday.setDate(now.getDate() - daysToSubtract);
+        lastMonday.setHours(12, 0, 0, 0);
+
+        return lastMonday;
+      };
+
+      const lastMondayNoon = getLastMondayNoon();
+
       const { start, end } = getDateByWeekendMonthYear(
         currentWeekIndex,
         month + 1,
@@ -57,7 +80,7 @@ exports.dashboard = async (req, res) => {
         status_commande: { $in: ["Validée", "Retour"] },
       });
       const Vente = await venteQueries.getVentes({
-        createdAt: { $gte: start, $lte: end },
+        createdAt: { $gte: lastMondayNoon, $lte: new Date() },
         travail_pour: userId,
         status_commande: { $in: ["Validée", "Retour"] },
       });
@@ -83,16 +106,82 @@ exports.dashboard = async (req, res) => {
         return acc;
       }, []);
 
-      // afficher l'employe qui a fait le plus de vente
-
+      // Calculer les performances des employés
       const venteByEmploye = vente.reduce((acc, item) => {
-        const key = item.travail_pour;
-        if (!acc[key]) {
-          acc[key] = [];
+        const employeId = item.employe?._id || item.for_employe;
+        if (employeId) {
+          if (!acc[employeId]) {
+            acc[employeId] = {
+              employe: item.employe,
+              ventes: [],
+              totalVentes: 0,
+              totalMontant: 0,
+              nombreCommandes: 0,
+            };
+          }
+          acc[employeId].ventes.push(item);
+          acc[employeId].totalMontant += item.prix;
+          acc[employeId].nombreCommandes += 1;
         }
-        acc[key].push(item);
         return acc;
-      }, []);
+      }, {});
+
+      // Calculer les performances de tous les employés
+      let classementEmployes = [];
+      let meilleurEmploye = null;
+      let maxMontant = 0;
+
+      // Utiliser uniquement la liste des employés de l'établissement
+      employe.forEach((emp) => {
+        // Chercher les ventes de cet employé
+        const employeVentes = Object.values(venteByEmploye).find(
+          (venteData) =>
+            venteData.employe?._id?.toString() === emp._id.toString()
+        );
+
+        const employeInfo = {
+          id: emp._id.toString(),
+          nom: emp.nom || "Employé",
+          prenom: emp.prenom || "",
+          role: emp.role || "Barman", // Ajouter le vrai rôle
+          totalMontant: employeVentes ? employeVentes.totalMontant : 0,
+          nombreCommandes: employeVentes ? employeVentes.nombreCommandes : 0,
+          moyenneParCommande: employeVentes
+            ? employeVentes.totalMontant / employeVentes.nombreCommandes
+            : 0,
+          pourcentageObjectif: employeVentes
+            ? (
+                (employeVentes.totalMontant /
+                  (settings?.result.objective || 1)) *
+                100
+              ).toFixed(1)
+            : 0,
+        };
+
+        classementEmployes.push(employeInfo);
+
+        if (employeInfo.totalMontant > maxMontant) {
+          maxMontant = employeInfo.totalMontant;
+          meilleurEmploye = employeInfo;
+        }
+      });
+
+      // Trier par chiffre d'affaires décroissant
+      classementEmployes.sort((a, b) => b.totalMontant - a.totalMontant);
+
+      // Si aucun employé n'a de ventes, créer un employé par défaut
+      if (!meilleurEmploye && employe.length > 0) {
+        const premierEmploye = employe[0];
+        meilleurEmploye = {
+          nom: premierEmploye.nom || "Employé",
+          prenom: premierEmploye.prenom || "",
+          role: premierEmploye.role || "Barman",
+          totalMontant: 0,
+          nombreCommandes: 0,
+          moyenneParCommande: 0,
+          pourcentageObjectif: 0,
+        };
+      }
 
       const toDayKey = formatDate(new Date());
 
@@ -237,6 +326,9 @@ exports.dashboard = async (req, res) => {
         weeksInMonth,
         totalVentesValidate: totalVentesValidate.result,
         currency, // Ajout de la devise
+        meilleurEmploye, // Ajout du meilleur employé
+        classementEmployes, // Ajout du classement des employés
+        formatAmount, // Ajout de la fonction formatAmount
       });
     } catch (e) {
       console.log("err", e);
