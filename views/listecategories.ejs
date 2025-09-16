@@ -275,14 +275,40 @@
           {catSelected.childs.map((cat) => {
             return   <tr key={cat._id}>
               <td>
-                {cat.image && <img src={cat.image} style={{
-                  objectFit: 'contain',
+                {cat.image ? (
+                                  <img
+                                    src={cat.image}
+                                    crossOrigin="anonymous"
+                                    style={{
+                                      objectFit: 'contain',
+                                      width: '100px',
+                                      height: '100px',
+                                      border: '1px solid #ddd',
+                                      borderRadius: '4px'
+                                    }}
+                                    onError={(e) => {
+                                      console.log('Erreur chargement image pour', cat.nom, ':', cat.image);
+                                      e.target.style.display = 'none';
+                                      e.target.nextSibling.style.display = 'block';
+                                    }}
+                                  />
+                ) : null}
+                <div style={{
+                  display: cat.image ? 'none' : 'block',
                   width: '100px',
-                  height: '100px'
-                }} />}
-
-
-                </td>
+                  height: '100px',
+                  backgroundColor: '#f8f9fa',
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#6c757d',
+                  fontSize: '12px'
+                }}>
+                  Pas d'image
+                </div>
+              </td>
               <td style={{
                 fontSize: '15px'
               }}>{cat.nom}</td>
@@ -317,6 +343,11 @@
                 const App = () => {
                   const [cats,setCats] = React.useState(<%- JSON.stringify(categories) %>);
                   console.log('👉 👉 👉  ~ file: listecategories.ejs:318 ~ cats:', cats)
+
+                  // Debug des images
+                  cats.forEach((cat, index) => {
+                    console.log(`Catégorie ${index}:`, cat.nom, 'Image:', cat.image);
+                  });
                   const [userConnect] =React.useState(<%- JSON.stringify(user) %>);
 
                   const [catSelected, setCatSelected] = React.useState(null);
@@ -374,14 +405,40 @@
                           {cats && cats.map((cat) => {
                             return   <tr key={cat._id}>
                               <td>
-                                {cat.image && <img src={cat.image} style={{
-                                  objectFit: 'contain',
+                                {cat.image ? (
+                                  <img
+                                    src={cat.image}
+                                    crossOrigin="anonymous"
+                                    style={{
+                                      objectFit: 'contain',
+                                      width: '100px',
+                                      height: '100px',
+                                      border: '1px solid #ddd',
+                                      borderRadius: '4px'
+                                    }}
+                                    onError={(e) => {
+                                      console.log('Erreur chargement image pour', cat.nom, ':', cat.image);
+                                      e.target.style.display = 'none';
+                                      e.target.nextSibling.style.display = 'block';
+                                    }}
+                                  />
+                                ) : null}
+                                <div style={{
+                                  display: cat.image ? 'none' : 'block',
                                   width: '100px',
-                                  height: '100px'
-                                }} />}
-
-
-                                </td>
+                                  height: '100px',
+                                  backgroundColor: '#f8f9fa',
+                                  border: '1px solid #ddd',
+                                  borderRadius: '4px',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  color: '#6c757d',
+                                  fontSize: '12px'
+                                }}>
+                                  Pas d'image
+                                </div>
+                              </td>
                               <td style={{
                                 fontSize: '15px'
                               }}>{cat.nom}</td>

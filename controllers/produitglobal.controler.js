@@ -73,7 +73,10 @@ exports.postProduitGlobal = async (req, res) => {
 
     let data = {
       nom_produit: req.body.nom_produit.trim(),
-      categorie: req.body.subCategorie || req.body.categorie,
+      categorie:
+        req.body.subCategorie && req.body.subCategorie.trim() !== ""
+          ? req.body.subCategorie
+          : req.body.categorie,
       country: req.body.country,
       brand: req.body.brand,
     };
@@ -87,24 +90,39 @@ exports.postProduitGlobal = async (req, res) => {
         throw new Error("product not found");
       }
 
-      result = file ? await uploadFile(file) : { Location: product.image };
+      // Gérer l'upload d'image pour la modification
+      if (file) {
+        console.log("Configuration Cloudinary:", {
+          cloud_name: process.env.CLOUDNAME,
+          api_key: process.env.APYKEY ? "***" : "NON DÉFINI",
+          api_secret: process.env.API_SECRET ? "***" : "NON DÉFINI",
+        });
+
+        result = await uploadFile(file);
+      }
 
       data = {
         nom_produit: (req.body.nom_produit || product.nom_produit).trim(),
         categorie:
-          req.body.subCategorie || req.body.categorie || product.categorie,
-        image: result?.Location || product.image,
+          req.body.subCategorie && req.body.subCategorie.trim() !== ""
+            ? req.body.subCategorie
+            : req.body.categorie || product.categorie,
+        image: result?.Location || product.image, // Garde l'ancienne image si pas de nouvelle
         country: req.body.country || product.country,
         brand: req.body.brand || product.brand,
       };
-    }
+    } else {
+      // Création d'un nouveau produit
+      if (file) {
+        console.log("Configuration Cloudinary:", {
+          cloud_name: process.env.CLOUDNAME,
+          api_key: process.env.APYKEY ? "***" : "NON DÉFINI",
+          api_secret: process.env.API_SECRET ? "***" : "NON DÉFINI",
+        });
 
-    if (!result && file) {
-      result = await uploadFile(file);
-    }
-
-    if (result) {
-      data.image = result.Location;
+        result = await uploadFile(file);
+        data.image = result?.Location;
+      }
     }
 
     if (productId) {

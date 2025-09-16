@@ -16,7 +16,7 @@ const { venteQueries } = require("../requests/venteQueries");
 const { paiementQueries } = require("../requests/paiementQueries");
 const { settingQueries } = require("../requests/settingQueries");
 const User = require("../models/user.model");
-const PaymentHistory = require("../models/paymentHistory")
+const PaymentHistory = require("../models/paymentHistory");
 const Setting = require("../models/settings.model");
 const dotenv = require("dotenv").config();
 var bcrypt = require("bcryptjs");
@@ -115,9 +115,7 @@ UserLogin.on("connection", (socket) => {
 
         userlogin.token = token;
 
-        const setting = await settingQueries.getSettingByUserId(
-          userlogin._id
-        );
+        const setting = await settingQueries.getSettingByUserId(userlogin._id);
 
         socket.handshake.session.user = {
           id: userlogin._id,
@@ -170,8 +168,6 @@ updateEmploye.on("connection", (socket) => {
   });
 });
 
-
-
 const SaveCategorie = io
   .of("/ajoutercategorie")
   .use(Serveur.getSharedSession());
@@ -195,7 +191,11 @@ io.of("/modifiercategorie")
   .use(Serveur.getSharedSession())
   .on("connection", (socket) => {
     socket.on("updatecategorie", async (data, id) => {
+      console.log("🔧 Modification catégorie - ID:", id);
+      console.log("🔧 Données reçues:", data);
+
       const cat = await categorieQueries.getCategorieById(id);
+      console.log("🔧 Catégorie existante:", cat.result);
 
       if (cat.result) {
         if (data.image && data.image !== cat.result.image) {
@@ -209,13 +209,24 @@ io.of("/modifiercategorie")
           data.image = cat.result.image;
         }
 
+        // S'assurer que idParent est null si vide
+        if (data.idParent === "" || data.idParent === undefined) {
+          data.idParent = null;
+        }
+
+        console.log("🔧 Données finales pour update:", data);
+
         const Result = await categorieQueries.updateCategorie(id, data);
-        if (Result.result !== null) {
+        console.log("🔧 Résultat update:", Result);
+
+        if (Result.etat) {
           socket.emit("saved");
         } else {
+          console.log("❌ Erreur lors de l'update:", Result.err);
           socket.emit("bad");
         }
       } else {
+        console.log("❌ Catégorie non trouvée");
         socket.emit("bad");
       }
     });
@@ -235,26 +246,28 @@ SaveFournisseur.on("connection", (socket) => {
 });
 
 const SaveDashInfo = io.of("/dashboard").use(Serveur.getSharedSession());
-SaveDashInfo.on("connection", socket => {
-  socket.on("eventPaiement", async data => {
+SaveDashInfo.on("connection", (socket) => {
+  socket.on("eventPaiement", async (data) => {
     console.log(data);
 
     const paiement = new PaymentHistory({
-      userId:data.user.id,
-      payment:data.data
-    })
-    await paiement.save()
-    const dayNumber = parseInt(Number(data.data.amount)/5000);
-    const newDate =  moment().add({day:dayNumber}).toDate()
-    console.log(newDate,"newDate")
+      userId: data.user.id,
+      payment: data.data,
+    });
+    await paiement.save();
+    const dayNumber = parseInt(Number(data.data.amount) / 5000);
+    const newDate = moment().add({ day: dayNumber }).toDate();
+    console.log(newDate, "newDate");
 
-    if(data.data.status==="ACCEPTED"){
-      const Result = await userQueries.updateUser(data.user.id,{expiredPaymentDate:newDate,paid:true,period:dayNumber});
+    if (data.data.status === "ACCEPTED") {
+      const Result = await userQueries.updateUser(data.user.id, {
+        expiredPaymentDate: newDate,
+        paid: true,
+        period: dayNumber,
+      });
     }
-
   });
 });
-
 
 const Summary = io.of("/summary").use(Serveur.getSharedSession());
 Summary.on("connection", (socket) => {

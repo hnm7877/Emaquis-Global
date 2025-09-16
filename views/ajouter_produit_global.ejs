@@ -179,17 +179,18 @@
                         </select>
                       </div>
 
-                      <% if(categories.find(c => c.childs && c.childs.length >
-                      0)){ %>
-                      <div class="col-lg-6" id="subCategories">
+                      <div
+                        class="col-lg-6"
+                        id="subCategories"
+                        style="display: none"
+                      >
                         <select
                           class="nice_Select2 nice_Select_line wide"
-                          style="display: none"
                           name="subCategorie"
-                          required="<%= categories.find(c => c.childs && c.childs.length > 0) ? 'true' : 'false' %>"
+                          disabled
                         >
-                          <option value="">
-                            Selectionner La sous catégorie
+                          <option value="" selected>
+                            Selectionner La sous catégorie (optionnel)
                           </option>
                           <% categories.forEach(categorie =>{%> <%
                           if(categorie.childs && categorie.childs.length > 0){
@@ -200,7 +201,6 @@
                           <%})%> <% } %> <%})%>
                         </select>
                       </div>
-                      <% } %>
                       <div class="col-lg-6">
                         <p>photo</p>
                         <input
@@ -366,6 +366,25 @@
         }
       });
 
+      // Initialiser l'état des sous-catégories au chargement de la page
+      $(document).ready(function() {
+        const _categories = <%- JSON.stringify(categories) %>;
+        const product = <%- JSON.stringify(product) %>;
+
+        if (product && product.categorie) {
+          const findCategory = _categories.find(c => c._id === product.categorie._id);
+          if (findCategory && findCategory.childs && findCategory.childs.length > 0) {
+            $("#subCategories").show();
+            $('select[name="subCategorie"]').prop('disabled', false).attr('required', true);
+
+            // Pré-sélectionner la sous-catégorie si elle existe
+            if (product.subCategorie) {
+              $('select[name="subCategorie"]').val(product.subCategorie._id);
+            }
+          }
+        }
+      });
+
       categorie.on("change", (e) => {
         const value = e.target.value;
         const _categories = <%- JSON.stringify(categories) %>;
@@ -373,13 +392,31 @@
 
         if (findCategory && findCategory.childs && findCategory.childs.length > 0) {
           $("#subCategories").show();
-          $('select[name="subCategorie"]').attr('required', true);
+          $('select[name="subCategorie"]').prop('disabled', false).attr('required', true);
         } else {
           $("#subCategories").hide();
-          $('select[name="subCategorie"]').removeAttr('required');
+          $('select[name="subCategorie"]').prop('disabled', true).removeAttr('required').val('');
         }
       });
 
+
+      // Validation du formulaire avant soumission
+      $('form').on('submit', function(e) {
+        const subCategorieSelect = $('select[name="subCategorie"]');
+
+        // Si le champ subCategorie est visible et required mais vide
+        if (subCategorieSelect.is(':visible') && subCategorieSelect.prop('required') && !subCategorieSelect.val()) {
+          e.preventDefault();
+          alert('Veuillez sélectionner une sous-catégorie ou changer de catégorie principale.');
+          return false;
+        }
+
+        // Si le champ subCategorie est disabled, on le retire du formulaire
+        if (subCategorieSelect.prop('disabled')) {
+          subCategorieSelect.prop('disabled', false);
+          subCategorieSelect.removeAttr('name');
+        }
+      });
 
       $("#button").click(function () {
         setTimeout(1000, () => {
