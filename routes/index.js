@@ -55,7 +55,7 @@ const upload = multer({ storage: storage });
 
 require('dotenv').config();
 const fs = require('fs');
-const S3 = require('aws-sdk/clients/s3');
+const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
 const { authSuperAdmin, checkAuthUser } = require('../middleware/auth');
 const { uploadFile } = require('../utils/uploadFile');
 const conditiongeneral_controller = require('../controllers/conditiongeneral_controller');
@@ -314,7 +314,7 @@ router.post('/emajouterproduit', upload.single('image'), async (req, res) => {
 	const accessKeyId = process.env.AWS_ACCESS_KEY;
 	const secretAccessKey = process.env.AWS_SECRET_KEY;
 
-	const s3 = new S3({
+	const s3 = new S3Client({
 		region,
 		accessKeyId,
 		secretAccessKey,

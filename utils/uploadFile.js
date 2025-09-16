@@ -1,4 +1,4 @@
-const S3 = require('aws-sdk/clients/s3');
+const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
 const fs = require('fs');
 
 exports.uploadFile = async (file, filename) => {
@@ -7,10 +7,12 @@ exports.uploadFile = async (file, filename) => {
   const accessKeyId = process.env.AWS_ACCESS_KEY;
   const secretAccessKey = process.env.AWS_SECRET_KEY;
 
-  const s3 = new S3({
+  const s3 = new S3Client({
     region,
-    accessKeyId,
-    secretAccessKey,
+    credentials: {
+      accessKeyId,
+      secretAccessKey,
+    },
   });
 
   // uploads a file to AWS Cloud s3
@@ -23,5 +25,6 @@ exports.uploadFile = async (file, filename) => {
     acl: 'public-read',
   };
 
-  return s3.upload(uploadParams).promise();
+  const command = new PutObjectCommand(uploadParams);
+  return await s3.send(command);
 };
