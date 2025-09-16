@@ -1,30 +1,51 @@
-const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
+const cloudinary = require('../utils/cloudinary');
 const fs = require('fs');
 
 exports.uploadFile = async (file, filename) => {
-  const bucketName = process.env.AWS_BUCKET_NAME;
-  const region = process.env.AWS_BUCKET_REGION;
-  const accessKeyId = process.env.AWS_ACCESS_KEY;
-  const secretAccessKey = process.env.AWS_SECRET_KEY;
-
-  const s3 = new S3Client({
-    region,
-    credentials: {
-      accessKeyId,
-      secretAccessKey,
-    },
-  });
-
-  // uploads a file to AWS Cloud s3
-  const fileStream = file.path ? fs.createReadStream(file.path) : file;
-
-  const uploadParams = {
-    Bucket: bucketName,
-    Body: fileStream,
-    Key: file?.originalname || filename,
-    acl: 'public-read',
-  };
-
-  const command = new PutObjectCommand(uploadParams);
-  return await s3.send(command);
+  try {
+    const fileNameWithoutExt = (file?.originalname || filename)?.replace(/\.[^/.]+$/, "") || 'file';
+    const uniqueFileName = `${fileNameWithoutExt}-${Date.now()}`;
+    
+    let uploadResult;
+    
+    if (file.path) {
+   
+      uploadResult = await new Promise((resolve, reject) => {
+        cloudinary.uploader.upload(
+          file.path,
+          { public_id: `images/${uniqueFileName}`, resource_type: "auto" },
+          (error, result) => {
+            if (error) {
+              reject(new Error('Erreur lors de l\'upload sur Cloudinary'));
+            }
+            resolve(result);
+          }
+        );
+      });
+    } else {
+     
+      uploadResult = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { public_id: `images/${uniqueFileName}`, resource_type: "auto" },
+          (error, result) => {
+            if (error) {
+              reject(new Error('Erreur lors de l\'upload sur Cloudinary'));
+            }
+            resolve(result);
+          }
+        );
+        uploadStream.end(file.buffer || file);
+      });
+    }
+    
+   
+    return {
+      Location: uploadResult.secure_url,
+      ETag: uploadResult.etag,
+      key: uploadResult.public_id
+    };
+  } catch (error) {
+    console.error('Erreur lors de l\'upload du fichier sur Cloudinary:', error);
+    throw error;
+  }
 };

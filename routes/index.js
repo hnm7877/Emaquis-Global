@@ -55,7 +55,6 @@ const upload = multer({ storage: storage });
 
 require('dotenv').config();
 const fs = require('fs');
-const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
 const { authSuperAdmin, checkAuthUser } = require('../middleware/auth');
 const { uploadFile } = require('../utils/uploadFile');
 const conditiongeneral_controller = require('../controllers/conditiongeneral_controller');
@@ -309,45 +308,32 @@ router.get('/donate-error', donateError);
 
 router.post('/emajouterproduit', upload.single('image'), async (req, res) => {
 	const file = req.file;
-	const bucketName = process.env.AWS_BUCKET_NAME;
-	const region = process.env.AWS_BUCKET_REGION;
-	const accessKeyId = process.env.AWS_ACCESS_KEY;
-	const secretAccessKey = process.env.AWS_SECRET_KEY;
-
-	const s3 = new S3Client({
-		region,
-		accessKeyId,
-		secretAccessKey,
-	});
-
-	// uploads a file to s3
-	function uploadFile(file) {
-		const fileStream = fs.createReadStream(file.path);
-
-		const uploadParams = {
-			Bucket: bucketName,
-			Body: fileStream,
-			Key: file.originalname,
-			acl: 'public-read',
-		};
-		return s3.upload(uploadParams).promise();
-	}
-
-	const result = await uploadFile(file);
-	if (result) {
-		const data = {
-			nom_produit: req.body.nom_produit,
-			categorie: req.body.categorie,
-			prix_vente: parseInt(req.body.prix_vente),
-			prix_achat: parseInt(req.body.prix_achat),
-			quantite: parseInt(req.body.quantite),
-			image: result.Location,
-			session: req.body.session,
-		};
-		const Result = await produitQueries.setProduit(data);
-		console.log(Result);
-		res.send(200);
-		res.redirect('/listeproduit');
+	
+	try {
+		
+		const result = await uploadFile(file);
+		
+		if (result) {
+			const data = {
+				nom_produit: req.body.nom_produit,
+				categorie: req.body.categorie,
+				prix_vente: parseInt(req.body.prix_vente),
+				prix_achat: parseInt(req.body.prix_achat),
+				quantite: parseInt(req.body.quantite),
+				image: result.Location, 
+				session: req.body.session,
+			};
+			
+			const Result = await produitQueries.setProduit(data);
+			console.log(Result);
+			
+			res.redirect('/listeproduit');
+		} else {
+			res.status(400).send("Échec de l'upload de l'image");
+		}
+	} catch (error) {
+		console.error("Erreur lors de l'upload:", error);
+		res.status(500).send("Une erreur est survenue lors de l'upload de l'image");
 	}
 
 	const description = req.body.description;
