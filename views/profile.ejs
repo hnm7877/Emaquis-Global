@@ -18,7 +18,7 @@
   <!-- End Google tag (gtag.js) -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <title>E-maquis Admin</title>
+  <title>E-maquis Profile</title>
 
   <!-- App css -->
   <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -41,22 +41,229 @@
 
 <body class="crm_body_bg">
   <style>
-    .form-control:focus {
-      box-shadow: none;
-      border-color: #98ED58
+    :root {
+      --primary-color: #2C3E50;
+      --secondary-color: #3498DB;
+      --accent-color: #E74C3C;
+      --success-color: #2ECC71;
+      --text-color: #2C3E50;
+      --light-bg: #F8F9FA;
+      --border-radius: 12px;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      background-color: var(--light-bg);
+      color: var(--text-color);
+    }
+
+    .white_card {
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      background: white;
+      transition: transform 0.3s ease;
+    }
+
+    .white_card:hover {
+      transform: translateY(-5px);
+    }
+
+    .white_card_header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 1.5rem;
+      border-radius: var(--border-radius) var(--border-radius) 0 0;
+    }
+
+    .main-title h3 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin: 0;
+      color: white;
+    }
+
+    .form-control, .form-select {
+      border: 2px solid #E9ECEF !important;
+      border-radius: 8px;
+      background: #fff;
+      color: #2C3E50;
+      font-size: 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: #3498DB !important; /* bleu doux */
+      box-shadow: 0 0 0 2px rgba(52,152,219,0.15);
+      outline: none;
+    }
+
+    .form-control option, .form-select option {
+      color: #2C3E50;
+      background: #fff;
+    }
+
+    .labels {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
     }
 
     .profile-button {
-      background: #98ED58;
-      box-shadow: none;
-      border: none
+      background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
     }
 
     .profile-button:hover {
-      background-color: #FFFFFF;
-      border: 1px solid #98ED58;
-      color: #98ED58;
-      letter-spacing: .25em;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    }
+
+    .premium-feature-title {
+      background: linear-gradient(135deg, #FFA500, #FF4500);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      margin: 2rem 0;
+      text-align: center;
+      color: white;
+    }
+
+    .premium-feature-title h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .premium-row {
+      background: white;
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      margin-bottom: 1rem;
+      box-shadow: var(--box-shadow);
+      transition: all 0.3s ease;
+    }
+
+    .premium-row:hover {
+      transform: translateX(5px);
+    }
+
+    .premium-checkbox {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--secondary-color);
+    }
+
+    .premium-label {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    .lock-icon {
+      background: rgba(52, 152, 219, 0.1);
+      color: var(--secondary-color);
+      transition: all 0.3s ease;
+      margin-top: 4px;
+      align-self: flex-start;
+    }
+
+    .lock-icon:hover {
+      background: var(--secondary-color);
+      color: white;
+    }
+
+    .forfait-modal-content {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .forfait-card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      transition: all 0.3s ease;
+    }
+
+    .forfait-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .forfait-btn {
+      background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .forfait-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    }
+
+    .profile-image-container {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+
+    .profile-image {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--secondary-color);
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+    }
+
+    .profile-info {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .profile-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin: 0.5rem 0;
+    }
+
+    .profile-email {
+      color: var(--secondary-color);
+      font-size: 1rem;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--secondary-color);
+    }
+
+    .form-section {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      margin-bottom: 2rem;
+    }
+
+    .form-control:focus {
+      box-shadow: none;
+      border-color: #98ED58
     }
 
     .profile-button:focus {
@@ -74,15 +281,286 @@
       cursor: pointer
     }
 
-    .labels {
-      font-size: 11px
-    }
-
     .add-experience:hover {
       background: #98ED58;
       color: #fff;
       cursor: pointer;
       border: solid 1px #98ED58
+    }
+
+    .lock-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      font-size: 1.25rem;
+      background: rgba(152, 237, 88, 0.13);
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(152, 237, 88, 0.10);
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+      margin: 0;
+      cursor: pointer;
+    }
+    .lock-icon.lock-orange {
+      color: #FFA500;
+      background: rgba(255, 165, 0, 0.13);
+    }
+    .lock-icon.lock-green {
+      color: #98ED58;
+      background: rgba(152, 237, 88, 0.13);
+    }
+    .lock-icon.lock-orange:hover {
+      background: #FFA500;
+      color: #fff;
+    }
+    .lock-icon.lock-green:hover {
+      background: #98ED58;
+      color: #fff;
+    }
+    .checkbox-disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .subscription-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+
+    .subscription-modal-content {
+      position: relative;
+      background-color: #fff;
+      margin: 15% auto;
+      padding: 20px;
+      width: 50%;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      animation: modalFadeIn 0.3s;
+    }
+
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .subscription-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .subscription-modal-title {
+      color: #333;
+      font-size: 24px;
+      margin: 0;
+    }
+
+    .subscription-modal-close {
+      color: #666;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .subscription-modal-body {
+      color: #666;
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .subscription-modal-footer {
+      text-align: right;
+    }
+
+    .subscription-modal-button {
+      background-color: #98ED58;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    .subscription-modal-button:hover {
+      background-color: #7ed321;
+    }
+
+    .premium-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.2rem;
+      min-height: 80px;
+      margin-bottom: 18px;
+      padding: 16px;
+      position: relative;
+    }
+    .premium-tooltip {
+      display: block;
+      position: static;
+      transform: none;
+      min-width: auto;
+      background: transparent;
+      color: #666;
+      font-size: 0.9rem;
+      font-weight: 400;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 8px 0 0 0;
+      z-index: auto;
+      text-align: left;
+      pointer-events: auto;
+      opacity: 1;
+      transition: none;
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+    .premium-label {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+    }
+    .premium-label:hover .premium-tooltip,
+    .premium-label:focus .premium-tooltip {
+      display: block;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .premium-tooltip::before {
+      display: none;
+    }
+
+    .forfait-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+    }
+    .forfait-modal-close {
+      position: absolute;
+      top: 18px; right: 24px;
+      font-size: 2rem;
+      color: #FFA500;
+      cursor: pointer;
+      font-weight: bold;
+      transition: color 0.2s;
+    }
+    .forfait-modal-close:hover {
+      color: #FF4500;
+    }
+    .forfait-modal-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #FFA500;
+      margin-bottom: 32px;
+      letter-spacing: 0.5px;
+    }
+    .forfait-cards {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .forfait-card {
+      background: linear-gradient(135deg, #fff7e6 0%, #ffe5b4 100%);
+      border-radius: 18px;
+      box-shadow: 0 4px 18px rgba(255, 165, 0, 0.13);
+      padding: 32px 24px 28px 24px;
+      min-width: 240px;
+      max-width: 280px;
+      text-align: center;
+      transition: box-shadow 0.2s, transform 0.2s;
+      border: 2px solid #FFA50022;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .forfait-card.popular {
+      border: 2.5px solid #FF4500;
+      box-shadow: 0 8px 32px rgba(255, 69, 0, 0.13);
+    }
+    .forfait-badge-popular {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #FF4500;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: bold;
+      padding: 4px 16px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(255, 69, 0, 0.13);
+      z-index: 2;
+    }
+    .forfait-icon {
+      font-size: 3.2rem;
+      color: #FFA500;
+      margin-bottom: 18px;
+      margin-top: 8px;
+      filter: drop-shadow(0 2px 6px #ffa50033);
+    }
+    .forfait-card.popular .forfait-icon {
+      color: #FF4500;
+      filter: drop-shadow(0 2px 8px #ff450033);
+    }
+    .forfait-price {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: #FF4500;
+      margin: 10px 0 8px 0;
+      letter-spacing: 1px;
+    }
+    .forfait-desc {
+      font-size: 1.13rem;
+      color: #444;
+      margin-bottom: 22px;
+      font-weight: 500;
+    }
+    .forfait-btn {
+      background: linear-gradient(90deg, #FFA500 0%, #FF4500 100%);
+      color: #fff;
+      border: none;
+      border-radius: 24px;
+      padding: 12px 0;
+      width: 100%;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      margin-top: 8px;
+      box-shadow: 0 2px 8px rgba(255, 165, 0, 0.10);
+      letter-spacing: 0.5px;
+    }
+    .forfait-btn:hover {
+      background: linear-gradient(90deg, #FF4500 0%, #FFA500 100%);
+      transform: scale(1.04);
+    }
+    @media (max-width: 700px) {
+      .forfait-cards { flex-direction: column; gap: 24px; }
+      .forfait-modal-content { padding: 18px 4vw 18px 4vw; }
     }
   </style>
 
@@ -116,75 +594,88 @@
                       <div class="container rounded bg-white mt-5 mb-5">
                         <div class="row">
                           <div class="col-md-3 border-right">
-                            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold"><%= user?.nom %> <%= user?.prenom %></span><span class="text-black-50"><%= user.email %></span><span> </span></div>
+                            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                              <div class="profile-image-container">
+                                <img class="profile-image" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                              </div>
+                              <div class="profile-info">
+                                <h2 class="profile-name"><%= user?.nom %> <%= user?.prenom %></h2>
+                                <p class="profile-email"><%= user.email %></p>
+                              </div>
+                            </div>
                           </div>
                           <div class="col-md-5 border-right">
                             <div class="p-3 py-5">
-                              <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h4 class="text-right">Paramètre </h4>
-                              </div>
-                              <div class="row mt-2">
-                                <div class="col-md-6" id="element-nom"><label class="labels">Nom</label><input  type="text" class="form-control" placeholder="Nom" name='nom' value="<%= user.nom %>" required></div>
-                                <div class="col-md-6" id="element-prenom"><label class="labels">Prenom</label><input type="text" class="form-control" name='prenoms' value="<%= user.prenoms %>" placeholder="Prenom" required></div>
-                              </div>
-                              <div class="row mt-3">
-                                <div class="col-md-12"><label class="labels">Nom de l'établissement</label><input type="text" class="form-control" name='nom_etablissement' placeholder="Entrer le nom de l'établissement" value="<%= user.nom_etablissement %>"></div>
+                              <h4 class="section-title">Paramètres du profil</h4>
+                              <div class="form-section">
+                                <div class="row mt-2">
+                                  <div class="col-md-6" id="element-nom">
+                                    <label class="labels">Nom</label>
+                                    <input type="text" class="form-control" placeholder="Nom" name='nom' value="<%= user.nom %>" required>
+                                  </div>
+                                  <div class="col-md-6" id="element-prenom">
+                                    <label class="labels">Prénom</label>
+                                    <input type="text" class="form-control" name='prenoms' value="<%= user.prenoms %>" placeholder="Prénom" required>
+                                  </div>
+                                </div>
+                                <div class="row mt-3">
+                                  <div class="col-md-12"><label class="labels">Nom de l'établissement</label><input type="text" class="form-control" name='nom_etablissement' placeholder="Entrer le nom de l'établissement" value="<%= user.nom_etablissement %>"></div>
 
-                                <div class="col-md-12"><label class="labels">Telephone</label><input type="text" class="form-control" name='numero' placeholder="Entrer le numero" value="<%= user.numero %>"></div>
-                                <div class="col-md-12"><label class="labels">Adresse</label><input type="text" class="form-control" name="adresse" placeholder="Entrer l'adresse" value="<%= user.adresse %>"></div>
-                                <div class="col-md-12"><label class="labels">Choisir le mode retour produit</label>
-                                  <select class="form-control" name='product_return_type' value="<%user.product_return_type%>">
-                                    <% retour_produits_types.forEach((p)=> { %>
-                                    <% if(p.type == user.product_return_type) { %>
-                                    <option value="<%= p.type %>" selected><%= p.nom %></option>
-                                    <% } else { %>
-                                    <option value="<%= p.type %>"><%= p.nom %></option>
-                                    <% } %>
-                                    <% }) %>
+                                  <div class="col-md-12"><label class="labels">Telephone</label><input type="text" class="form-control" name='numero' placeholder="Entrer le numero" value="<%= user.numero %>"></div>
+                                  <div class="col-md-12"><label class="labels">Adresse</label><input type="text" class="form-control" name="adresse" placeholder="Entrer l'adresse" value="<%= user.adresse %>"></div>
+                                  <div class="col-md-12"><label class="labels">Choisir le mode retour produit</label>
+                                    <select class="form-control" name='product_return_type' value="<%user.product_return_type%>">
+                                      <% retour_produits_types.forEach((p)=> { %>
+                                      <% if(p.type == user.product_return_type) { %>
+                                      <option value="<%= p.type %>" selected><%= p.nom %></option>
+                                      <% } else { %>
+                                      <option value="<%= p.type %>"><%= p.nom %></option>
+                                      <% } %>
+                                      <% }) %>
 
-                                  </select>
+                                    </select>
+                                  </div>
+
+                                  <div class="col-md-12"><label class="labels">Email </label><input type="text" class="form-control" name="email" placeholder="Entrer l'email" value="<%= user.email %>"></div>
+                                  <div class="col-md-12"><label class="labels">Objectif à atteindre par jour</label><input type="number" class="form-control" name="objective" placeholder="Objectif" value="<%= user.objective %>"></div>
+                                  <div class="col-md-12"><label class="labels">Nombre de table</label><input type="number" class="form-control" name="numberOfTables" placeholder="Nombre de table" value="<%= user.numberOfTables %>"></div>
+                                </div>
+                                <div class="row mt-3">
+                                  <div class="col-md-6">
+                                    <label class="labels" for="country">Pays</label>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                      <select class='form-control' id="country" name="country">
+                                        <% for (var i = 0; i < pays.length; i++) { %>
+                                          <option value="<%= pays[i].code %>" <% if (pays[i].code == user.country) { %>selected<% } %>><%= pays[i].nom %></option>
+                                        <% } %>
+                                      </select>
+                                      <span class="badge badge-info" style="font-size:1rem;"> <%= currency %> </span>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <label class="labels" for="city">ville</label>
+                                    <select class='form-control' id="city" name="city">
+                                      <% pays.forEach((p)=> { %>
+                                        <% if(p.code == user.country) { %>
+                                          <% for(ville of p.cities) {%>
+                                            <% if(ville == user.city) { %>
+                                              <option value="<%=ville%>" selected><%= ville %></option>
+                                            <% } else { %>
+                                              <option value="<%=ville%>"><%= ville %></option>
+                                            <% } %>
+                                          <% } %>
+                                        <% } %>
+                                      <% }); %>
+                                    </select>
+                                  </div>
                                 </div>
 
-                                <div class="col-md-12"><label class="labels">Email </label><input type="text" class="form-control" name="email" placeholder="Entrer l'email" value="<%= user.email %>"></div>
-                                <div class="col-md-12"><label class="labels">Objectif à atteindre par jour</label><input type="number" class="form-control" name="objective" placeholder="Objectif" value="<%= user.objective %>"></div>
-                                <div class="col-md-12"><label class="labels">Nombre de table</label><input type="number" class="form-control" name="numberOfTables" placeholder="Nombre de table" value="<%= user.numberOfTables %>"></div>
+
+                                
+
+
+                                <div class="mt-5 text-center" id="element-save"><button class="btn btn-primary profile-button" type="submit">Enregistrer Profil</button></div>
                               </div>
-                              <div class="row mt-3">
-                                <div class="col-md-6"><label class="labels">Pays</label>
-                                  <select class='form-control' id="pays" name="country">
-                                    <% pays.forEach((p)=> { %>
-                                    <% if(p.code == user.country) { %>
-                                    <option value="<%= p.code %>" selected><%= p.nom %></option>
-                                    <% } else { %>
-                                    <option value="<%= p.code %>"><%= p.nom %></option>
-                                    <% } %>
-                                    <% }); %>
-                                  </select>
-                                </div>
-                                <div class="col-md-6">
-
-                                  <label class="labels">ville</label>
-                                  <select class='form-control' id="city" name="city">
-                                    <% pays.forEach((p)=> { %>
-                                    <% if(p.code == user.country) { %>
-                                    <% for(ville of p.cities) {%>
-                                    <% if(ville == user.city) { %>
-                                    <option value="<%=ville%>" selected><%= ville %></option>
-                                    <% } else { %>
-                                    <option value="<%=ville%>"><%= ville %></option>
-                                    <% } %>
-                                    <% } %>
-                                    <% } %>
-                                    <% }); %>
-                                  </select>
-                                </div>
-                              </div>
-
-
-                              
-
-
-                              <div class="mt-5 text-center" id="element-save"><button class="btn btn-primary profile-button" type="submit">Enregistrer Profil</button></div>
                             </div>
                           </div>
                           <div class="col-md-4">
@@ -195,47 +686,125 @@
                               <div class="d-flex justify-content-between align-items-center experience"><span>Changer votre mot de pass?</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;sinon laissez vide les champs</span></div><br>
                               <div class="col-md-12"><label class="labels">Nouveau mot de pass</label><input type="password" class="form-control" name='newPassword' placeholder="" value=""></div> <br>
                               <div class="col-md-12"><label class="labels">Confirmer</label><input type="password" class="form-control" name='confirmPassword' placeholder="" value=""></div>
-                              <hr>
-                              <!--
-                              <div class="row mt-3" style="align-items: center;">
-                                <% if (user?.hasStock) {%>
-                                <input type='checkbox' id='stock' checked name="hasStock" />
-                                <% } else { %>
-                                <input type='checkbox' id='stock' name="hasStock" />
-                                <% } %>
-                                <label class="labels" for="stock" style='margin: 0;margin-left: 0.5rem;'>Gestion du stock</label>
-                              </div>
-                              <hr>
-                              -->
-
-                              <div class="checkbox-wrapper-12">
-                                <div class="cbx" style="display: flex;">
-                                  <% if (user?.hasStock) {%>
-                                  <input id="cbx-12 stock" type="checkbox" checked name="hasStock">
-                                  <% } else { %>
-                                    <input type='checkbox' id='cbx-12 stock' name="hasStock" />
-                                <% } %>
-                               
-                                  <label for="cbx-12 stock" class="labels" >
-                                    <span style="position:relative; left:1.8rem; width:30px;">Réserve de stock</span>
-                                </label>
-                                  <svg width="15" height="14" viewBox="0 0 15 14" fill="none">
-                                    <path d="M2 8.36364L6.23077 12L13 2"></path>
-                                  </svg>
+                              <div class="premium-feature-title">
+                                <h2 class="animated-title">Fonctionnalités Premium <span class="new-badge">Nouveauté</span></h2>
+                                <div>
+                                  <span class="forfait-badge" id="openForfaitModal">Voir les forfaits</span>
                                 </div>
-                                
-                                <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-                                  <defs>
-                                    <filter id="goo-12">
-                                      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"></feGaussianBlur>
-                                      <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" result="goo-12"></feColorMatrix>
-                                      <feBlend in="SourceGraphic" in2="goo-12"></feBlend>
-                                    </filter>
-                                  </defs>
-                                </svg>
                               </div>
 
+                              <style>
+                                .premium-feature-title {
+                                  text-align: center;
+                                  margin: 20px 0;
+                                }
 
+                                .animated-title {
+                                  font-size: 1.8rem;
+                                  font-weight: bold;
+                                  color: #f5f3ef;
+                                  position: relative;
+                                  display: inline-block;
+                                  animation: fadeIn 2s ease-in-out;
+                                }
+
+                                .new-badge {
+                                  background-color: #FF4500;
+                                  color: #fff;
+                                  font-size: 0.8rem;
+                                  padding: 2px 8px;
+                                  border-radius: 12px;
+                                  margin-left: 10px;
+                                  animation: bounce 1.5s infinite;
+                                }
+
+                                .forfait-badge {
+                                  display: inline-block;
+                                  margin-top: 10px;
+                                  background: #FFA500;
+                                  color: #fff;
+                                  font-size: 1rem;
+                                  padding: 4px 16px;
+                                  border-radius: 16px;
+                                  font-weight: 600;
+                                  cursor: pointer;
+                                  box-shadow: 0 2px 8px rgba(255, 165, 0, 0.12);
+                                  transition: background 0.2s, color 0.2s, transform 0.2s;
+                                }
+
+                                .forfait-badge:hover {
+                                  background: #FF4500;
+                                  color: #fff;
+                                  transform: scale(1.05);
+                                }
+
+                                @keyframes fadeIn {
+                                  0% { opacity: 0; transform: translateY(-10px); }
+                                  100% { opacity: 1; transform: translateY(0); }
+                                }
+
+                                @keyframes bounce {
+                                  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+                                  40% { transform: translateY(-10px); }
+                                  60% { transform: translateY(-5px); }
+                                }
+                              </style>
+                              <hr>
+                              
+
+                              <div class="checkbox-wrapper-12 premium-row">
+                                <% if (user?.hasStock) { %>
+                                  <input id="cbx-12-stock" type="checkbox" checked name="hasStock" class="premium-checkbox">
+                                  <label for="cbx-12-stock" class="premium-label" data-locked="false" tabindex="0">
+                                    Réserve de stock
+                                    <span class="premium-tooltip">Activez la gestion avancée de votre stock pour éviter les ruptures et optimiser vos approvisionnements.</span>
+                                    <i class="fas fa-lock-open lock-icon lock-green" data-feature="stock" data-locked="false"></i>
+                                  </label>
+                                <% } else { %>
+                                  <input type='checkbox' id='cbx-12-stock' name="hasStock" class="premium-checkbox checkbox-disabled" />
+                                  <label for="cbx-12-stock" class="premium-label" data-locked="true" tabindex="0">
+                                    Réserve de stock
+                                    <span class="premium-tooltip">Activez la gestion avancée de votre stock pour éviter les ruptures et optimiser vos approvisionnements.</span>
+                                    <i class="fas fa-lock lock-icon lock-orange" data-feature="stock" data-locked="true"></i>
+                                  </label>
+                                <% } %>
+                              </div>
+                              <hr>
+                              <div class="checkbox-wrapper-12 premium-row">
+                                <% if (user?.hasOffer) { %>
+                                  <input id="cbx-12-offer" type="checkbox" checked name="hasOffer" class="premium-checkbox">
+                                  <label for="cbx-12-offer" class="premium-label" data-locked="false" tabindex="0">
+                                    Boissons offertes
+                                    <span class="premium-tooltip">Cette option vous donne l'opportunité d'offrir des boissons à vos clients tout en ayant la traçabilité des boissons offertes.</span>
+                                    <i class="fas fa-lock-open lock-icon lock-green" data-feature="offer" data-locked="false"></i>
+                                  </label>
+                                <% } else { %>
+                                  <input type='checkbox' id='cbx-12-offer' name="hasOffer" class="premium-checkbox checkbox-disabled" />
+                                  <label for="cbx-12-offer" class="premium-label" data-locked="true" tabindex="0">
+                                    Boissons offertes
+                                    <span class="premium-tooltip">Cette option vous donne l'opportunité d'offrir des boissons à vos clients tout en ayant la traçabilité des boissons offertes.</span>
+                                    <i class="fas fa-lock lock-icon lock-orange" data-feature="offer" data-locked="true"></i>
+                                  </label>
+                                <% } %>
+                              </div>
+                              <hr>
+                              <div class="checkbox-wrapper-12 premium-row">
+                                <% if (user?.hasSubCategories) { %>
+                                  <input id="cbx-12-SubCategories" type="checkbox" checked name="hasSubCategories" class="premium-checkbox">
+                                  <label for="cbx-12-SubCategories" class="premium-label" data-locked="false" tabindex="0">
+                                    Option nourriture
+                                    <span class="premium-tooltip">Permet de proposer et gérer des sous-catégories de plats pour une carte plus flexible et détaillée.</span>
+                                    <i class="fas fa-lock-open lock-icon lock-green" data-feature="subcategories" data-locked="false"></i>
+                                  </label>
+                                <% } else { %>
+                                  <input type='checkbox' id='cbx-12-SubCategories' name="hasSubCategories" class="premium-checkbox checkbox-disabled" />
+                                  <label for="cbx-12-SubCategories" class="premium-label" data-locked="true" tabindex="0">
+                                    Option nourriture
+                                    <span class="premium-tooltip">Permet de proposer et gérer des sous-catégories de plats pour une carte plus flexible et détaillée.</span>
+                                    <i class="fas fa-lock lock-icon lock-orange" data-feature="subcategories" data-locked="true"></i>
+                                  </label>
+                                <% } %>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -259,8 +828,7 @@
           <div class="col-lg-12">
             <div class="footer_iner text-center">
               <p>
-                2024 © E-MAQUIS - Designed by
-                <a href="#"> <i class="ti-gun"></i> </a><a href="#"> HNM</a> - <a href="/faq">FAQ</a>
+                2025 © E-MAQUIS - Designed by <a href="https://haut-numerique.com">HNM</a> - <a href="/faq">FAQ</a>
               </p>
             </div>
           </div>
@@ -371,28 +939,71 @@ if(nom.trim() === ''){
 
     });
 
-    const countries = <%- JSON.stringify(pays) %>
-    const user_connected = <%- JSON.stringify(user) %>
+  </script>
+<script>
+  const countries = <%- JSON.stringify(pays) %>;
+  const user_connected = <%- JSON.stringify(user) %>;
+  $('#country').change(function() {
+    const countryValue = $(this).val();
+    const country = countries.find((c) => c.code === countryValue);
+    $('#city').html('');
+    if (country) {
+      country.cities.forEach((ville) => {
+        $('#city').append(`<option value="${ville}">${ville}</option>`);
+      });
+    }
+  });
+</script>
+  <!-- Add Font Awesome for the lock icon -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"></script>
 
-    $('#pays').change(() => {
-      const countryValue = $('#pays').val();
-      const country = countries.find((c) => c.code === countryValue);
-      
-      if (country) {
-        $('#city').html('<option value="" selected>Selection ta ville</option>');
-        country.cities.forEach((ville) => {
-
-          if (ville === user_connected.city) {
-            $('#city').append(`<option value="${ville}" selected>${ville}</option>`)
-
-          } else {
-            $('#city').append(`<option value="${ville}">${ville}</option>`)
-          }
-
-        })
+  <!-- Modal functionality -->
+  <script>
+    $(document).ready(function() {
+      // Subscription Modal
+      function openModal() {
+        var modal = document.getElementById('subscriptionModal');
+        if (modal) modal.style.display = 'block';
       }
+      function closeModal() {
+        var modal = document.getElementById('subscriptionModal');
+        if (modal) modal.style.display = 'none';
+      }
+      $(document).on('click', '.premium-label[data-locked="true"], .lock-icon.lock-orange[data-locked="true"]', function(e) {
+        e.preventDefault();
+        openModal();
+      });
+      $(document).on('click', '.subscription-modal-close, .subscription-modal-button', function(e) {
+        e.preventDefault();
+        closeModal();
+      });
+      $(document).on('click', function(e) {
+        var modal = document.getElementById('subscriptionModal');
+        if (modal && e.target === modal) closeModal();
+      });
 
-    })
+      // Forfait Modal (même logique)
+      function openForfaitModal() {
+        var modal = document.getElementById('forfaitModal');
+        if (modal) modal.style.display = 'block';
+      }
+      function closeForfaitModal() {
+        var modal = document.getElementById('forfaitModal');
+        if (modal) modal.style.display = 'none';
+      }
+      $(document).on('click', '#openForfaitModal', function(e) {
+        e.preventDefault();
+        openForfaitModal();
+      });
+      $(document).on('click', '.forfait-modal-close, .forfait-modal-button', function(e) {
+        e.preventDefault();
+        closeForfaitModal();
+      });
+      $(document).on('click', function(e) {
+        var modal = document.getElementById('forfaitModal');
+        if (modal && e.target === modal) closeForfaitModal();
+      });
+    });
   </script>
 
   <!-- jQuery  -->
@@ -414,6 +1025,212 @@ if(nom.trim() === ''){
 
   <!-- App js -->
   <script src="assets/js/theme.js"></script>
+
+  <!-- Subscription Modal -->
+  <div id="subscriptionModal" class="subscription-modal">
+    <div class="subscription-modal-content">
+      <div class="subscription-modal-header">
+                 <h2 class="subscription-modal-title">🔒 Fonctionnalité Premium</h2>
+        <span class="subscription-modal-close">&times;</span>
+      </div>
+             <div class="subscription-modal-body" style="text-align:center; font-size:1.2rem; color:#FFA500; font-weight:600;">
+         <p style="margin-bottom: 20px;">Pour activer cette fonctionnalité premium, cliquez sur "Voir les forfaits" ci-dessous.</p>
+         
+         <p style="margin-bottom: 15px; font-size: 1rem; color: #666;">Le paiement se fait automatiquement via Mobile Money (Moov, MTN, Orange) ou carte bancaire.</p>
+         
+         <p style="margin-bottom: 20px; font-size: 1rem; color: #666;">Besoin d'aide ? Contactez-nous sur WhatsApp :</p>
+         
+         <ul style="list-style-type: none; padding: 0; margin-bottom: 20px;">
+           <li style="margin-bottom: 8px;">
+             <a href="https://wa.me/33760484911" style="color: #25D366; text-decoration: none;">🇫🇷 +33 0760484911</a>
+           </li>
+           <li style="margin-bottom: 8px;">
+             <a href="https://wa.me/2250709454685" style="color: #25D366; text-decoration: none;">🇨🇮 +225 0709454685</a>
+           </li>
+           <li style="margin-bottom: 8px;">
+             <a href="https://wa.me/2250709031399" style="color: #25D366; text-decoration: none;">🇨🇮 +225 0709031399</a>
+           </li>
+           <li style="margin-bottom: 8px;">
+             <a href="https://wa.me/2250777129951" style="color: #25D366; text-decoration: none;">🇨🇮 +225 0777129951</a>
+           </li>
+         </ul>
+         
+         <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px;">
+           <p style="margin: 0; font-size: 0.95rem; color: #666;">
+             💳 <strong>Paiement sécurisé</strong> - Votre transaction est protégée par CinetPay
+           </p>
+         </div>
+       </div>
+      <div class="subscription-modal-footer">
+                 <button class="subscription-modal-button">Compris</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Forfait -->
+  <div id="forfaitModal" class="forfait-modal">
+    <div class="forfait-modal-content">
+      <span class="forfait-modal-close">&times;</span>
+      <div class="forfait-modal-title">Choisissez votre forfait Premium</div>
+      <div class="forfait-cards">
+        <div class="forfait-card">
+          <div class="forfait-icon"><i class="fas fa-unlock-alt"></i></div>
+          <div class="forfait-price">7 000 F</div>
+          <div class="forfait-desc">Débloquez <b>1 option premium</b> de votre choix<br><span style="color:#888; font-size:0.95em;">(mensuel)</span></div>
+          <div style="margin-bottom: 12px;">
+            <select id="premiumOptionSelect" class="form-control">
+              <option value="hasSubCategories">Option nourriture</option>
+              <option value="hasStock">Réserve de stock</option>
+              <option value="hasOffer">Boissons offertes</option>
+            </select>
+          </div>
+          <button class="forfait-btn" id="payOneOptionBtn">Payer via Mobile Money</button>
+        </div>
+        <div class="forfait-card popular">
+          <div class="forfait-badge-popular">Le plus populaire</div>
+          <div class="forfait-icon"><i class="fas fa-crown"></i></div>
+          <div class="forfait-price">12 000 F</div>
+          <div class="forfait-desc">Débloquez <b>les 3 options premium</b><br><span style="color:#888; font-size:0.95em;">(mensuel)</span></div>
+          <button class="forfait-btn" id="payAllOptionsBtn">Tout débloquer via Mobile Money</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.cinetpay.com/seamless/main.js"></script>
+  <script>
+    // Paiement forfait 1 option
+    document.getElementById('payOneOptionBtn').onclick = function() {
+      const selectedOption = document.getElementById('premiumOptionSelect').value;
+      const userId = '<%= user?._id || user?.id %>';
+      const userToken = localStorage.getItem('token');
+      // Préparation des champs client avec fallback de test
+      const customer_name = '<%= user?.nom || "TestNom" %>';
+      const customer_surname = '<%= user?.prenoms || "TestPrenom" %>';
+      const customer_email = '<%= user?.email || "test@email.com" %>';
+      const customer_phone_number = '<%= user?.numero || "0102030405" %>';
+      const customer_address = '<%= user?.adresse || "TestAdresse" %>';
+      const customer_city = '<%= user?.city || "YAOUNDE" %>';
+      const customer_country = '<%= (user?.country || "CM").toUpperCase().slice(0,2) %>';
+      const customer_state = '<%= (user?.country || "CM").toUpperCase().slice(0,2) %>';
+      const customer_zip_code = '00000';
+      const params = {
+        transaction_id: Math.floor(Math.random() * 100000000).toString(),
+        amount: 7000,
+        currency: 'XOF',
+        channels: 'ALL',
+        description: 'Abonnement 1 option premium',
+        customer_name,
+        customer_surname,
+        customer_email,
+        customer_phone_number,
+        customer_address,
+        customer_city,
+        customer_country,
+        customer_state,
+        customer_zip_code
+      };
+      console.log('CinetPay params (1 option):', params);
+      CinetPay.setConfig({
+        apikey: '212203080763d5904661eff5.58954293',
+        site_id: '397031',
+        notify_url: 'http://mondomaine.com/notify/',
+        mode: 'PRODUCTION'
+      });
+      CinetPay.getCheckout(params);
+      CinetPay.waitResponse(function(data) {
+        if (data.status === "ACCEPTED") {
+          fetch('/api/settings/activate-options', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'token': userToken || ''
+            },
+            body: JSON.stringify({ userId: userId, options: [selectedOption] })
+          })
+          .then(response => response.json())
+          .then(result => {
+            alert('Option premium activée avec succès !');
+            window.location.reload();
+          })
+          .catch(error => {
+            alert("Paiement réussi, mais erreur lors de l'activation de l'option premium.");
+            window.location.reload();
+          });
+        } else if (data.status === "REFUSED") {
+          alert("Votre paiement a échoué");
+        }
+      });
+      CinetPay.onError(function(data) {
+        alert("Erreur de paiement : " + JSON.stringify(data));
+      });
+    };
+
+    // Paiement forfait toutes options
+    document.getElementById('payAllOptionsBtn').onclick = function() {
+      const userId = '<%= user?._id || user?.id %>';
+      const userToken = localStorage.getItem('token');
+      // Préparation des champs client avec fallback de test
+      const customer_name = '<%= user?.nom || "TestNom" %>';
+      const customer_surname = '<%= user?.prenoms || "TestPrenom" %>';
+      const customer_email = '<%= user?.email || "test@email.com" %>';
+      const customer_phone_number = '<%= user?.numero || "0102030405" %>';
+      const customer_address = '<%= user?.adresse || "TestAdresse" %>';
+      const customer_city = '<%= user?.city || "YAOUNDE" %>';
+      const customer_country = '<%= (user?.country || "CM").toUpperCase().slice(0,2) %>';
+      const customer_state = '<%= (user?.country || "CM").toUpperCase().slice(0,2) %>';
+      const customer_zip_code = '00000';
+      const params = {
+        transaction_id: Math.floor(Math.random() * 100000000).toString(),
+        amount: 12000,
+        currency: 'XOF',
+        channels: 'ALL',
+        description: 'Abonnement toutes options premium',
+        customer_name,
+        customer_surname,
+        customer_email,
+        customer_phone_number,
+        customer_address,
+        customer_city,
+        customer_country,
+        customer_state,
+        customer_zip_code
+      };
+      console.log('CinetPay params (all options):', params);
+      CinetPay.setConfig({
+        apikey: '212203080763d5904661eff5.58954293',
+        site_id: '397031',
+        notify_url: 'http://mondomaine.com/notify/',
+        mode: 'PRODUCTION'
+      });
+      CinetPay.getCheckout(params);
+      CinetPay.waitResponse(function(data) {
+        if (data.status === "ACCEPTED") {
+          fetch('/api/settings/activate-options', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'token': userToken || ''
+            },
+            body: JSON.stringify({ userId: userId, options: ["hasStock","hasOffer","hasSubCategories"] })
+          })
+          .then(response => response.json())
+          .then(result => {
+            alert('Toutes les options premium sont activées !');
+            window.location.reload();
+          })
+          .catch(error => {
+            alert("Paiement réussi, mais erreur lors de l'activation des options premium.");
+            window.location.reload();
+          });
+        } else if (data.status === "REFUSED") {
+          alert("Votre paiement a échoué");
+        }
+      });
+      CinetPay.onError(function(data) {
+        alert("Erreur de paiement : " + JSON.stringify(data));
+      });
+    };
+  </script>
 </body>
 
 </html>

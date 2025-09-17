@@ -1,141 +1,460 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-NT2SW8WBHT"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
-<head>
-	<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-NT2SW8WBHT"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
+      gtag("config", "G-NT2SW8WBHT");
+    </script>
+    <meta charset="utf-8" />
+    <title>E-maquis</title>
+    <!-- Stylesheets -->
+    <link href="newAssets/css/bootstrap.css" rel="stylesheet" />
+    <link href="newAssets/css/main.css" rel="stylesheet" />
+    <link href="newAssets/css/responsive.css" rel="stylesheet" />
 
-		gtag('config', 'G-NT2SW8WBHT');
-	</script>
-	<meta charset="utf-8">
-	<title>E-maquis</title>
-	<!-- Stylesheets -->
-	<link href="newAssets/css/bootstrap.css" rel="stylesheet">
-	<link href="newAssets/css/main.css" rel="stylesheet">
-	<link href="newAssets/css/responsive.css" rel="stylesheet">
+    <!-- Font Awesome pour les icônes -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
 
-	<link rel="shortcut icon" href="newAssets/images/logo/emaquisLogo2.png" type="image/x-icon">
-	<link rel="icon" href="newAssets/images/logo/emaquisLogo2.png" type="image/x-icon">
+    <style>
+      /* WhatsApp Assistant Button */
+      .whatsapp-help-button {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 1000;
+        box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+        transition: all 0.3s ease;
+        animation: bounce 2s infinite;
+      }
 
-	<!-- Responsive -->
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="description" content="E-maquis, Gestionnaire d'établissement">
-	<meta name="author" content="Haut Numérique et Médias">
-	<meta name="generator" content="E-maquis, Gestionnaire d'établissement">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-	<!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
-	<!--[if lt IE 9]><script src="js/respond.js"></script><![endif]-->
-</head>
+      .whatsapp-help-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 25px rgba(37, 211, 102, 0.4);
+      }
 
-<body>
+      .whatsapp-help-button.clicked {
+        animation: pulse 0.6s ease-out;
+      }
 
-	<div class="page-wrapper">
+      .help-icon {
+        color: white;
+        font-size: 28px;
+        transition: all 0.3s ease;
+      }
 
-		<%- include('partial/headLanding') %>
-		<%- include('partial/donateModal') %>
-		<!--End Main Header -->
+      .whatsapp-help-button:hover .help-icon {
+        transform: rotate(15deg);
+      }
 
-		<!--Banner Section-->
-		<section class="banner-section" id="home-banner">
-			<div class="patern-layer-one"
-				style="background-image: linear-gradient(rgba(0, 0, 0, 0.7),rgba(0, 0, 0, 0.7)),url(newAssets/images/background/bg-cover2.jpg);
-				background-size: cover; background-position: center; background-repeat: no-repeat;
-				">
-			</div>
-			<div class="bg-layer"
-				style="background-image: linear-gradient(rgba(0, 0, 0, 0.7),rgba(0, 0, 0, 0.7)),url(newAssets/images/background/bg-cover2.jpg)">
-			</div>
-			<div class="auto-container">
-				<div class="row clearfix">
+      /* WhatsApp Modal */
+      .whatsapp-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1001;
+        backdrop-filter: blur(5px);
+      }
 
-					<!-- Content Column -->
-					<div class="content-column col-lg-7 col-md-12 col-sm-12">
-						<div class="inner-column">
-							<h1>Gérer votre bar, <br>lounge et maquis</h1>
-							<div class="text">avec facilité et suivez l'évolution <br> de votre établissement même à
-								distance.</div>
+      .whatsapp-modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border-radius: 20px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        animation: slideIn 0.3s ease-out;
+      }
 
+      .whatsapp-modal-header {
+        background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 20px 20px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-							<!--Video Box-->
-							<div class="video-box wow fadeInRight animated" data-wow-delay="0ms"
-								data-wow-duration="1500ms"
-								style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInRight;">
-								<figure class="video-image">
-									<img src="https://via.placeholder.com/117x117" alt="">
-								</figure>
-								<a href="https://youtu.be/hQ8UUccZEMM"
-									class="lightbox-image overlay-box"><span class="fa fa-play"><i
-											class="ripple"></i></span></a>
-							</div>
+      .whatsapp-modal-header h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
 
+      .whatsapp-modal-header h3 i {
+        margin-right: 8px;
+      }
 
+      .whatsapp-modal-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+      }
 
+      .whatsapp-modal-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: rotate(90deg);
+      }
 
+      .whatsapp-modal-body {
+        padding: 25px;
+      }
 
-						</div>
-					</div>
+      .whatsapp-modal-body p {
+        margin-bottom: 20px;
+        color: #666;
+        text-align: center;
+        font-size: 14px;
+      }
 
-					<!-- Carousel Column -->
-					<div class="carousel-column col-lg-5 col-md-12 col-sm-12">
-						<div class="inner-column">
+      .whatsapp-numbers {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
 
-							<div class="slider-outer">
+      .whatsapp-number {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+      }
 
-								<!-- Custom Pager -->
-								<div class="pager-box">
-									<div class="inner-box">
-										<div class="banner-pager clearfix" id="banner-pager">
-											<a class="pager one wow zoomIn active animated" data-wow-delay="100ms"
-												data-wow-duration="1500ms" data-slide-index="0" href="/inscription"
-												style="visibility: visible; animation-duration: 1500ms; animation-delay: 100ms; animation-name: zoomIn;">
-												<div class="image img-circle">1</div>
-											</a>
-											<a class="pager two wow zoomIn animated" data-wow-delay="200ms"
-												data-wow-duration="1500ms" data-slide-index="1" href="/connexion"
-												style="visibility: visible; animation-duration: 1500ms; animation-delay: 200ms; animation-name: zoomIn;">
-												<div class="image img-circle">2</div>
-											</a>
-											<a class="pager three wow zoomIn animated" data-wow-delay="300ms"
-												data-wow-duration="1500ms" data-slide-index="2" href="/emconnexion"
-												style="visibility: visible; animation-duration: 1500ms; animation-delay: 300ms; animation-name: zoomIn;">
-												<div class="image img-circle">3</div>
-											</a>
-										</div>
-									</div>
-								</div>
+      .whatsapp-number:hover {
+        background: #e9ecef;
+        border-color: #25d366;
+        transform: translateX(5px);
+      }
 
-								<!-- Column / Slides -->
-								<div class="slides-box" style="background-image: url(images/resource/mobile.png)">
-									<div class="inner-box">
+      .whatsapp-number-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
 
-										<div class="banner-slider">
+      .whatsapp-number-info i {
+        color: #25d366;
+        font-size: 20px;
+      }
 
-											<div class="slide-item">
-												<div class="image">
-													<img src="newAssets/images/screenshots/sc1.png" alt="" />
-												</div>
-											</div>
+      .whatsapp-number-info strong {
+        display: block;
+        color: #333;
+        font-size: 14px;
+        margin-bottom: 2px;
+      }
 
-											<div class="slide-item">
-												<div class="image">
-													<img src="newAssets/images/screenshots/sc2.png" alt="" />
-												</div>
-											</div>
+      .whatsapp-number-info small {
+        color: #666;
+        font-size: 12px;
+      }
 
-											<div class="slide-item">
-												<div class="image">
-													<img src="newAssets/images/screenshots/sc4.png" alt="" />
-												</div>
-											</div>
+      .whatsapp-number i.fa-arrow-right {
+        color: #25d366;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
 
-										</div>
-									</div>
+      .whatsapp-number:hover i.fa-arrow-right {
+        transform: translateX(3px);
+      }
 
-									<!-- <div class="mobile-small-image">
+      /* Animations */
+      @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-10px);
+        }
+        60% {
+          transform: translateY(-5px);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translate(-50%, -60%);
+        }
+        to {
+          opacity: 1;
+          transform: translate(-50%, -50%);
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .whatsapp-help-button {
+          bottom: 20px;
+          right: 20px;
+          width: 55px;
+          height: 55px;
+        }
+
+        .help-icon {
+          font-size: 24px;
+        }
+
+        .whatsapp-modal-content {
+          width: 95%;
+          margin: 20px;
+        }
+
+        .whatsapp-modal-header {
+          padding: 15px;
+        }
+
+        .whatsapp-modal-body {
+          padding: 20px;
+        }
+      }
+    </style>
+
+    <link
+      rel="shortcut icon"
+      href="newAssets/images/logo/emaquisLogo2.png"
+      type="image/x-icon"
+    />
+    <link
+      rel="icon"
+      href="newAssets/images/logo/emaquisLogo2.png"
+      type="image/x-icon"
+    />
+
+    <!-- Responsive -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="E-maquis, Gestionnaire d'établissement" />
+    <meta name="author" content="Haut Numérique et Médias" />
+    <meta name="generator" content="E-maquis, Gestionnaire d'établissement" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <!--[if lt IE 9
+      ]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script
+    ><![endif]-->
+    <!--[if lt IE 9]><script src="js/respond.js"></script><![endif]-->
+  </head>
+
+  <body>
+    <div class="page-wrapper">
+      <%- include('partial/headLanding') %> <%- include('partial/donateModal')
+      %>
+      <!--End Main Header -->
+
+      <!--Banner Section-->
+      <section class="banner-section" id="home-banner">
+        <div
+          class="bg-layer"
+          style="
+            background-image: linear-gradient(
+                rgba(0, 0, 0, 0.7),
+                rgba(0, 0, 0, 0.7)
+              ),
+              url(newAssets/images/background/serveuse.jpg);
+          "
+        ></div>
+        <div class="auto-container">
+          <div class="row clearfix">
+            <!-- Content Column -->
+            <div class="content-column col-lg-7 col-md-12 col-sm-12">
+              <div class="inner-column">
+                <h1>Gérer votre bar, <br />lounge et maquis</h1>
+                <div class="text">
+                  avec facilité et suivez l'évolution <br />
+                  de votre établissement même à distance.
+                </div>
+
+                <!--Video Box-->
+                <div
+                  class="video-box wow fadeInRight animated"
+                  data-wow-delay="0ms"
+                  data-wow-duration="1500ms"
+                  style="
+                    visibility: visible;
+                    animation-duration: 1500ms;
+                    animation-delay: 0ms;
+                    animation-name: fadeInRight;
+                  "
+                >
+                  <figure class="video-image">
+                    <img src="https://via.placeholder.com/117x117" alt="" />
+                  </figure>
+                  <a
+                    href="https://youtu.be/hQ8UUccZEMM"
+                    class="lightbox-image overlay-box"
+                    ><span class="fa fa-play"><i class="ripple"></i></span
+                  ></a>
+                </div>
+              </div>
+              <div class="google-btns">
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.hnm.emaquisapp"
+                  target="_blank"
+                  ><img
+                    src="newAssets/images/icons/google-play.png"
+                    width="150"
+                    alt=""
+                /></a>
+                <a
+                  href="https://apps.apple.com/app/e-maquis-serveur-serveuse/id6739280269"
+                  ><img src="newAssets/images/icons/app-1.png" alt=""
+                /></a>
+              </div>
+            </div>
+
+            <!-- Carousel Column -->
+            <div class="carousel-column col-lg-5 col-md-12 col-sm-12">
+              <div class="inner-column">
+                <div class="slider-outer">
+                  <!-- Custom Pager -->
+                  <div class="pager-box">
+                    <div class="inner-box">
+                      <div class="banner-pager clearfix" id="banner-pager">
+                        <a
+                          class="pager one wow zoomIn active animated"
+                          data-wow-delay="100ms"
+                          data-wow-duration="1500ms"
+                          data-slide-index="0"
+                          href="/inscription"
+                          style="
+                            visibility: visible;
+                            animation-duration: 1500ms;
+                            animation-delay: 100ms;
+                            animation-name: zoomIn;
+                          "
+                        >
+                          <div class="image img-circle">1</div>
+                        </a>
+                        <a
+                          class="pager two wow zoomIn animated"
+                          data-wow-delay="200ms"
+                          data-wow-duration="1500ms"
+                          data-slide-index="1"
+                          href="/connexion"
+                          style="
+                            visibility: visible;
+                            animation-duration: 1500ms;
+                            animation-delay: 200ms;
+                            animation-name: zoomIn;
+                          "
+                        >
+                          <div class="image img-circle">2</div>
+                        </a>
+                        <a
+                          class="pager three wow zoomIn animated"
+                          data-wow-delay="300ms"
+                          data-wow-duration="1500ms"
+                          data-slide-index="2"
+                          href="/emconnexion"
+                          style="
+                            visibility: visible;
+                            animation-duration: 1500ms;
+                            animation-delay: 300ms;
+                            animation-name: zoomIn;
+                          "
+                        >
+                          <div class="image img-circle">3</div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Column / Slides -->
+                  <div
+                    class="slides-box"
+                    style="background-image: url(images/resource/mobile.png)"
+                  >
+                    <div class="inner-box">
+                      <div class="banner-slider">
+                        <div class="slide-item">
+                          <div class="image">
+                            <img
+                              src="newAssets/images/screenshots/sc1.png"
+                              alt=""
+                            />
+                          </div>
+                        </div>
+
+                        <div class="slide-item">
+                          <div class="image">
+                            <img
+                              src="newAssets/images/screenshots/sc2.png"
+                              alt=""
+                            />
+                          </div>
+                        </div>
+
+                        <div class="slide-item">
+                          <div class="image">
+                            <img
+                              src="newAssets/images/screenshots/sc4.png"
+                              alt=""
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- <div class="mobile-small-image">
 										<img src="https://via.placeholder.com/322x306" alt="" />
 									</div>
 		
@@ -146,646 +465,1000 @@
 									<div class="plus-small-image">
 										<img src="https://via.placeholder.com/100x100" alt="" />
 									</div> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!--End Banner Section-->
 
-								</div>
+      <!-- Featured Section -->
+      <section class="featured-section" id="featured">
+        <div class="auto-container">
+          <div class="row clearfix">
+            <!-- Content Column -->
+            <div class="content-column col-lg-5 col-md-12 col-sm-12">
+              <div class="iner-column">
+                <div class="sec-title">
+                  <div class="title"><span>Fo</span>nctionnalité</div>
+                  <h2>
+                    Augmentez facilement votre productivité
+                    <span>avec </span>l'app<span> E-Maquis</span>!
+                  </h2>
+                </div>
+                <div class="text">
+                  <p>
+                    Le système de gestion ! Prenez des commandes et encaissez en
+                    un temps record pour limiter le temps d’attente de vos
+                    clients et assurer une satisfaction maximale. E-Maquis est
+                    mobile.
+                  </p>
+                </div>
+                <ul class="list-style-one">
+                  <li>E-maquis, pour des commandes fluides et sans soucis.</li>
+                  <li>E-maquis, pour une comptabilité transparente.</li>
+                  <li>
+                    E-maquis, pour plus d'efficacité dans votre etablissement.
+                  </li>
+                </ul>
+                <a href="/inscription" class="theme-btn btn-style-two"
+                  ><span class="txt">Inscrivez-vous</span></a
+                >
+              </div>
+            </div>
 
-							</div>
-
-						</div>
-					</div>
-
-				</div>
-			</div>
-		</section>
-		<!--End Banner Section-->
-
-		<!-- Featured Section -->
-		<section class="featured-section" id="featured">
-			<div class="auto-container">
-				<div class="row clearfix">
-
-					<!-- Content Column -->
-					<div class="content-column col-lg-5 col-md-12 col-sm-12">
-						<div class="iner-column">
-							<div class="sec-title">
-								<div class="title"><span>Fo</span>nctionnalité</div>
-								<h2>Augmentez facilement votre productivité <span>avec </span>l'app<span>
-										E-Maquis</span>!</h2>
-							</div>
-							<div class="text">
-								<p>Le système de gestion ! Prenez des commandes et encaissez en un temps record pour
-									limiter le temps d’attente de vos clients et assurer une satisfaction maximale.
-									E-Maquis est mobile.</p>
-
-
-							</div>
-							<ul class="list-style-one">
-								<li>E-maquis, pour des commandes fluides et sans soucis.</li>
-								<li>E-maquis, pour une comptabilité transparente.</li>
-								<li>E-maquis, pour plus d'efficacité dans votre etablissement.</li>
-							</ul>
-							<a href="/inscription" class="theme-btn btn-style-two"><span
-									class="txt">Inscrivez-vous</span></a>
-						</div>
-					</div>
-
-					<!-- Blocks Column -->
-					<div class="blocks-column col-lg-7 col-md-12 col-sm-12">
-						<div class="inner-column">
-							<!-- Cloud Icon -->
-							<!-- <div class="cloud-icon">
+            <!-- Blocks Column -->
+            <div class="blocks-column col-lg-7 col-md-12 col-sm-12">
+              <div class="inner-column">
+                <!-- Cloud Icon -->
+                <!-- <div class="cloud-icon">
 								<img src="https://via.placeholder.com/90x73" alt="" />
 							</div> -->
-							<div class="row clearfix">
+                <div class="row clearfix">
+                  <!-- Featured Block -->
+                  <div
+                    class="featured-block titlt col-lg-6 col-md-6 col-sm-12"
+                    data-tilt
+                    data-tilt-max="8"
+                  >
+                    <div class="inner-box">
+                      <div class="icon-box">
+                        <span class="icon flaticon-writing"></span>
+                      </div>
+                      <h3>Vos commandes</h3>
+                      <div class="text">
+                        Traitez les commandes facilement et rapidement pour vous
+                        concentrer sur la création d'une expérience client
+                        exceptionnelle.
+                      </div>
+                    </div>
+                  </div>
 
-								<!-- Featured Block -->
-								<div class="featured-block titlt col-lg-6 col-md-6 col-sm-12" data-tilt
-									data-tilt-max="8">
-									<div class="inner-box">
-										<div class="icon-box">
-											<span class="icon flaticon-writing"></span>
-										</div>
-										<h3>Vos commandes</h3>
-										<div class="text">Traitez les commandes facilement et rapidement pour vous
-											concentrer sur la création d'une expérience client exceptionnelle</div>
-									</div>
-								</div>
+                  <!-- Featured Block -->
+                  <div
+                    class="featured-block titlt style-two col-lg-6 col-md-6 col-sm-12"
+                    data-tilt
+                    data-tilt-max="6"
+                  >
+                    <div class="inner-box">
+                      <div class="icon-box">
+                        <span
+                          class="icon flaticon-protection-shield-with-a-check-mark"
+                        ></span>
+                      </div>
+                      <h3>Sécurité</h3>
+                      <div class="text">
+                        Consultez facilement les informations sur vos ventes et
+                        vos revenus en toute sécurité afin de prendre les bonnes
+                        décisions au bon moment pour votre activité.
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="featured-block titlt style-two col-lg-6 col-md-6 col-sm-12"
+                    data-tilt
+                    data-tilt-max="6"
+                  >
+                    <div class="inner-box">
+                      <div class="icon-box">
+                        <span class="icon flaticon-credit-card"></span>
+                      </div>
+                      <h3>Utilisation Gratuite</h3>
+                      <div class="text">
+                        E-maquis est une application entièrement gratuite. Vous
+                        pouvez télécharger, installer et utiliser l'application
+                        sans aucun frais.
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="featured-block titlt style-two col-lg-6 col-md-6 col-sm-12"
+                    data-tilt
+                    data-tilt-max="6"
+                  >
+                    <div class="inner-box">
+                      <div class="icon-box">
+                        <span class="icon flaticon-invite"></span>
+                      </div>
+                      <h3>Options Payantes</h3>
+                      <div class="text">
+                        Vous serez informé(e) de toute option de nature payante
+                        proposée au sein de l'application. Ces options seront
+                        clairement présentées et vous aurez le choix de les
+                        souscrire ou non.
+                      </div>
+                    </div>
+                  </div>
 
-								<!-- Featured Block -->
-								<div class="featured-block titlt style-two col-lg-6 col-md-6 col-sm-12" data-tilt
-									data-tilt-max="6">
-									<div class="inner-box">
-										<div class="icon-box">
-											<span class="icon flaticon-protection-shield-with-a-check-mark"></span>
-										</div>
-										<h3>Sécurité</h3>
-										<div class="text">Consultez facilement les informations sur vos ventes et vos
-											revenus en toute sécurité afin de prendre les bonnes décisions au bon moment
-											pour votre
-											activité. </div>
-									</div>
-								</div>
-								<div class="featured-block titlt style-two col-lg-6 col-md-6 col-sm-12" data-tilt
-									data-tilt-max="6">
-									<div class="inner-box">
-										<div class="icon-box">
-											<span class="icon flaticon-credit-card"></span>
-										</div>
-										<h3>Utilisation Gratuite</h3>
-										<div class="text">E-maquis est une application entièrement gratuite. 
-											Vous pouvez télécharger, installer et utiliser 
-											l'application sans aucun frais. 
-										</div>
-									</div>
-								</div>
-								<div class="featured-block titlt style-two col-lg-6 col-md-6 col-sm-12" data-tilt
-									data-tilt-max="6">
-									<div class="inner-box">
-										<div class="icon-box">
-											<span class="icon flaticon-invite"></span>
-										</div>
-										<h3>Options Payantes</h3>
-										<div class="text">Vous serez informé(e) de toute option de 
-											nature payante proposée au sein de l'application. Ces options 
-											seront clairement présentées et vous aurez le choix de les souscrire ou non. 
-										</div>
-									</div>
-								</div>
+                  <!-- Featured Block -->
+                  <div
+                    class="featured-block titlt style-three col-lg-6 col-md-6 col-sm-12"
+                    data-tilt
+                    data-tilt-max="10"
+                  >
+                    <div class="inner-box">
+                      <div class="icon-box">
+                        <span class="icon flaticon-dashboard"></span>
+                      </div>
+                      <h3>Performance</h3>
+                      <div class="text">
+                        Suivez l'évolution des ventes, produits et performances
+                        de vos employés pour tout savoir de votre entreprise.
+                      </div>
+                    </div>
+                  </div>
 
-								<!-- Featured Block -->
-								<div class="featured-block titlt style-three col-lg-6 col-md-6 col-sm-12" data-tilt
-									data-tilt-max="10">
-									<div class="inner-box">
-										<div class="icon-box">
-											<span class="icon flaticon-dashboard"></span>
-										</div>
-										<h3>Performance</h3>
-										<div class="text">Suivez l'évolution des ventes, produits et performances de vos
-											employés pour tout savoir de votre entreprise.</div>
-									</div>
-								</div>
-
-								<!-- Featured Block -->
-								<div class="featured-block style-four col-lg-6 col-md-6 col-sm-12">
-									<div class="inner-box">
-										<div class="icon-box">
-											<span class="icon flaticon-cube"></span>
-										</div>
-										<h3>Suivi de stock</h3>
-										<div class="text">Vous ne pouvez pas être partout à la fois, alors E-maquis suit
-											votre stock et d'autres données importantes pendant que vous vous concentrez
-											sur le cœur de votre métier.</div>
-									</div>
-								</div>
-
-							</div>
-							<!-- Side Image -->
-							<!-- <div class="side-image">
+                  <!-- Featured Block -->
+                  <div
+                    class="featured-block style-four col-lg-6 col-md-6 col-sm-12"
+                  >
+                    <div class="inner-box">
+                      <div class="icon-box">
+                        <span class="icon flaticon-cube"></span>
+                      </div>
+                      <h3>Suivi de stock</h3>
+                      <div class="text">
+                        Vous ne pouvez pas être partout à la fois, alors
+                        E-maquis suit votre stock et d'autres données
+                        importantes pendant que vous vous concentrez sur le cœur
+                        de votre métier.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Side Image -->
+                <!-- <div class="side-image">
 								<img src="https://via.placeholder.com/130x367" alt="" />
 							</div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Featured Section -->
 
-						</div>
-					</div>
+      <!-- Steps Section -->
+      <section class="steps-section" id="steps-section">
+        <!-- <div class="patern-layer-one" style="background-image: url(https://via.placeholder.com/713x900)"></div> -->
+        <div
+          class="patern-layer-two"
+          style="background-image: url(images/background/pattern-3.png)"
+        ></div>
+        <div
+          class="patern-layer-three"
+          style="background-image: url(images/background/pattern-4.png)"
+        ></div>
+        <div class="auto-container">
+          <!-- Carousel Wrapper -->
+          <div
+            id="steps-thumb"
+            class="carousel slide carousel-thumbnails"
+            data-ride="carousel"
+          >
+            <div class="row clearfix">
+              <!-- Carousel Column -->
+              <div class="carousel-column col-lg-6 col-md-12 col-sm-12">
+                <!-- Slides -->
+                <div class="carousel-inner" role="listbox">
+                  <div class="slides">
+                    <div class="carousel-item active">
+                      <div class="content">
+                        <div class="image">
+                          <a
+                            href="newAssets/images/background/1.png"
+                            data-fancybox="steps"
+                            data-caption=""
+                            class="image-link lightbox-image"
+                            ><img
+                              src="newAssets/images/background/1.png"
+                              alt=""
+                          /></a>
+                        </div>
+                      </div>
+                    </div>
 
-				</div>
-			</div>
-		</section>
-		<!-- End Featured Section -->
+                    <div class="carousel-item">
+                      <div class="content">
+                        <div class="image">
+                          <a
+                            href="newAssets/images/background/2.png"
+                            data-fancybox="steps"
+                            data-caption=""
+                            class="image-link lightbox-image"
+                            ><img
+                              src="newAssets/images/background/2.png"
+                              alt=""
+                          /></a>
+                        </div>
+                      </div>
+                    </div>
 
-		<!-- Steps Section -->
-		<section class="steps-section" id="steps-section">
-			<!-- <div class="patern-layer-one" style="background-image: url(https://via.placeholder.com/713x900)"></div> -->
-			<div class="patern-layer-two" style="background-image: url(images/background/pattern-3.png)"></div>
-			<div class="patern-layer-three" style="background-image: url(images/background/pattern-4.png)"></div>
-			<div class="auto-container">
+                    <div class="carousel-item">
+                      <div class="content">
+                        <div class="image">
+                          <a
+                            href="newAssets/images/background/3.png"
+                            data-fancybox="steps"
+                            data-caption=""
+                            class="image-link lightbox-image"
+                            ><img
+                              src="newAssets/images/background/3.png"
+                              alt=""
+                          /></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-				<!-- Carousel Wrapper -->
-				<div id="steps-thumb" class="carousel slide carousel-thumbnails" data-ride="carousel">
-					<div class="row clearfix">
+              <div class="blocks-column col-lg-6 col-md-12 col-sm-12">
+                <div class="inner-column">
+                  <!-- Sec Title -->
+                  <div class="sec-title">
+                    <div class="title"><span>Pr</span>océdure</div>
+                    <h2>Créer facilement votre compte!</h2>
+                  </div>
 
-						<!-- Carousel Column -->
-						<div class="carousel-column col-lg-6 col-md-12 col-sm-12">
-							<!-- Slides -->
-							<div class="carousel-inner" role="listbox">
-								<div class="slides">
+                  <!-- Controls-->
+                  <ul class="carousel-indicators">
+                    <li
+                      data-target="#steps-thumb"
+                      data-slide-to="0"
+                      class="tab-btn active wow"
+                      data-wow-delay="0ms"
+                      data-wow-duration="1500ms"
+                    >
+                      <span class="number">1</span>
+                      <span class="icon"><i class="flaticon-logout"></i></span>
+                      <strong>Inscrivez-vous</strong>
+                      Cliquez sur le bouton "Inscrivez-vous" ou sur l'onglet
+                      "Inscription", vous aurez un formulaire à renseigner.
+                    </li>
 
-									<div class="carousel-item active">
-										<div class="content">
-											<div class="image">
-												<a href="newAssets/images/background/1.png" data-fancybox="steps" data-caption=""
-													class="image-link lightbox-image"><img src="newAssets/images/background/1.png"
-														alt="" /></a>
-											</div>
-										</div>
-									</div>
-
-									<div class="carousel-item">
-										<div class="content">
-											<div class="image">
-												<a href="newAssets/images/background/2.png" data-fancybox="steps" data-caption=""
-													class="image-link lightbox-image"><img src="newAssets/images/background/2.png"
-														alt="" /></a>
-											</div>
-										</div>
-									</div>
-
-									<div class="carousel-item">
-										<div class="content">
-											<div class="image">
-												<a href="newAssets/images/background/3.png" data-fancybox="steps" data-caption=""
-													class="image-link lightbox-image"><img src="newAssets/images/background/3.png"
-														alt="" /></a>
-											</div>
-										</div>
-									</div>
-
-								</div>
-							</div>
-						</div>
-
-						<div class="blocks-column col-lg-6 col-md-12 col-sm-12">
-							<div class="inner-column">
-
-								<!-- Sec Title -->
-								<div class="sec-title">
-									<div class="title"><span>Pr</span>océdure</div>
-									<h2>Créer facilement votre compte! </h2>
-								</div>
-
-								<!-- Controls-->
-								<ul class="carousel-indicators">
-
-									<li data-target="#steps-thumb" data-slide-to="0" class="tab-btn active wow"
-										data-wow-delay="0ms" data-wow-duration="1500ms">
-										<span class="number">1</span>
-										<span class="icon"><i class="flaticon-logout"></i></span>
-										<strong>Inscrivez-vous</strong>
-										Cliquez sur le bouton "Inscrivez-vous" ou sur l'onglet "Inscription", vous aurez
-										un formulaire à renseigner.
-									</li>
-
-									<li data-target="#steps-thumb" data-slide-to="1" class="tab-btn wow"
-										data-wow-delay="0ms" data-wow-duration="1500ms">
-										<span class="number">2</span>
-										<span class="icon"><i class="flaticon-credit-card"></i></span>
-										<strong>Configuration du compte</strong>
-										Après avoir rempli vos informations, vous serez redirigés sur la page de
-										configuration de votre compte.
-										<!-- 1- Choisir le mode de retour produit
+                    <li
+                      data-target="#steps-thumb"
+                      data-slide-to="1"
+                      class="tab-btn wow"
+                      data-wow-delay="0ms"
+                      data-wow-duration="1500ms"
+                    >
+                      <span class="number">2</span>
+                      <span class="icon"
+                        ><i class="flaticon-credit-card"></i
+                      ></span>
+                      <strong>Configuration du compte</strong>
+                      Après avoir rempli vos informations, vous serez redirigés
+                      sur la page de configuration de votre compte.
+                      <!-- 1- Choisir le mode de retour produit
 										2- Objectif journalier à atteindre
 										3- Ajout d'informations sur la localisation (Pays, ville, commune) -->
-									</li>
+                    </li>
 
-									<li data-target="#steps-thumb" data-slide-to="2" class="tab-btn wow"
-										data-wow-delay="0ms" data-wow-duration="1500ms">
-										<span class="number">3</span>
-										<span class="icon"><i class="flaticon-gift"></i></span>
-										<strong>Profiter en!</strong>
-										Une fois la configuration terminée, vous pouvez enfin profiter de l'outil
-										E-maquis.
-										Gerer vos employées, consulter les ventes, voir le bilan ...
-									</li>
+                    <li
+                      data-target="#steps-thumb"
+                      data-slide-to="2"
+                      class="tab-btn wow"
+                      data-wow-delay="0ms"
+                      data-wow-duration="1500ms"
+                    >
+                      <span class="number">3</span>
+                      <span class="icon"><i class="flaticon-gift"></i></span>
+                      <strong>Profiter en!</strong>
+                      Une fois la configuration terminée, vous pouvez enfin
+                      profiter de l'outil E-maquis. Gerer vos employées,
+                      consulter les ventes, voir le bilan ...
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Steps Section -->
 
+      <!-- Apps Section -->
+      <section class="apps-section" id="how-works">
+        <div class="auto-container">
+          <div class="ct-dot-animated">
+            <div class="ct-dot-container">
+              <div class="ct-dot-item">
+                <span></span>
+              </div>
+              <div class="ct-dot-item">
+                <span></span>
+              </div>
+              <div class="ct-dot-item">
+                <span></span>
+              </div>
+              <div class="ct-dot-item">
+                <span></span>
+              </div>
+              <div class="ct-dot-item">
+                <span></span>
+              </div>
+              <div class="ct-dot-item">
+                <span></span>
+              </div>
+            </div>
+          </div>
 
-								</ul>
+          <!-- App Block -->
+          <div class="app-block">
+            <div class="inner-box">
+              <div class="row clearfix">
+                <!-- Image Column -->
+                <div class="image-column col-lg-6 col-md-12 col-sm-12">
+                  <div
+                    class="inner-column wow fadeInLeft"
+                    data-wow-delay="0ms"
+                    data-wow-duration="1500ms"
+                  >
+                    <div class="image titlt" data-tilt data-tilt-max="8">
+                      <a
+                        href="newAssets/images/background/sc.png"
+                        class="app-1 lightbox-image"
+                        ><img src="newAssets/images/background/sc.png" alt=""
+                      /></a>
+                    </div>
+                  </div>
+                </div>
 
-							</div>
-						</div>
-
-					</div>
-				</div>
-
-			</div>
-		</section>
-		<!-- End Steps Section -->
-
-		<!-- Apps Section -->
-		<section class="apps-section" id="how-works">
-			<div class="auto-container">
-
-				<div class="ct-dot-animated">
-					<div class="ct-dot-container">
-						<div class="ct-dot-item">
-							<span></span>
-						</div>
-						<div class="ct-dot-item">
-							<span></span>
-						</div>
-						<div class="ct-dot-item">
-							<span></span>
-						</div>
-						<div class="ct-dot-item">
-							<span></span>
-						</div>
-						<div class="ct-dot-item">
-							<span></span>
-						</div>
-						<div class="ct-dot-item">
-							<span></span>
-						</div>
-					</div>
-				</div>
-
-				<!-- App Block -->
-				<div class="app-block">
-					<div class="inner-box">
-						<div class="row clearfix">
-
-							<!-- Image Column -->
-							<div class="image-column col-lg-6 col-md-12 col-sm-12">
-								<div class="inner-column wow fadeInLeft" data-wow-delay="0ms"
-									data-wow-duration="1500ms">
-									<div class="image titlt" data-tilt data-tilt-max="8">
-										<a href="newAssets/images/background/sc.png" class="app-1 lightbox-image"><img
-												src="newAssets/images/background/sc.png" alt="" /></a>
-									</div>
-								</div>
-							</div>
-
-							<!-- Content Column -->
-							<div class="content-column col-lg-6 col-md-12 col-sm-12">
-								<div class="inner-column">
-									<div class="icon-box">
-										<span class="icon flaticon-user"></span>
-									</div>
-									<h3>Une serveuse plus efficace!</h3>
-									<div class="text">Révolutionnez votre établissement avec notre application E-maquis,
-										vos serveuses deviennent plus promptes dans la prise de commande. Vos clients
-										pourront ainsi profiter davantage de la soirée sans se préoccuper des tracas
-										liés à leurs commandes.</div>
-									<!-- <a href="#" class="theme-btn btn-style-two"><span class="txt">Contact
+                <!-- Content Column -->
+                <div class="content-column col-lg-6 col-md-12 col-sm-12">
+                  <div class="inner-column">
+                    <div class="icon-box">
+                      <span class="icon flaticon-user"></span>
+                    </div>
+                    <h3>Une serveuse plus efficace!</h3>
+                    <div class="text">
+                      Révolutionnez votre établissement avec notre application
+                      E-maquis, vos serveuses deviennent plus promptes dans la
+                      prise de commande. Vos clients pourront ainsi profiter
+                      davantage de la soirée sans se préoccuper des tracas liés
+                      à leurs commandes.
+                    </div>
+                    <!-- <a href="#" class="theme-btn btn-style-two"><span class="txt">Contact
 											team</span></a> -->
-								</div>
-							</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End App Block -->
 
-						</div>
-					</div>
-				</div>
-				<!-- End App Block -->
+          <!-- App Block -->
+          <div class="app-block style-two">
+            <div class="inner-box">
+              <div class="row clearfix">
+                <!-- Content Column -->
+                <div class="content-column col-lg-6 col-md-12 col-sm-12">
+                  <div class="inner-column">
+                    <div class="icon-box">
+                      <span class="icon flaticon-dashboard"></span>
+                    </div>
+                    <h3>Un service au bar sans stress!</h3>
+                    <div class="text">
+                      Les taches du barman n'ont jamais été aussi simplifié,
+                      tout est dans l'appli ! En un instant vous recevez les
+                      commandes, à vous de les traiter et trinquez à
+                      l'innovation.
+                    </div>
+                    <!-- <a href="#" class="theme-btn btn-style-four"><span class="txt">Read more</span></a> -->
+                  </div>
+                </div>
 
-				<!-- App Block -->
-				<div class="app-block style-two">
-					<div class="inner-box">
-						<div class="row clearfix">
-
-							<!-- Content Column -->
-							<div class="content-column col-lg-6 col-md-12 col-sm-12">
-								<div class="inner-column">
-									<div class="icon-box">
-										<span class="icon flaticon-dashboard"></span>
-									</div>
-									<h3>Un service au bar sans stress!</h3>
-									<div class="text">Les taches du barman n'ont jamais été aussi simplifié, tout est
-										dans l'appli ! En un instant vous recevez les commandes, à vous de les traiter
-										et trinquez à l'innovation.</div>
-									<!-- <a href="#" class="theme-btn btn-style-four"><span class="txt">Read more</span></a> -->
-								</div>
-							</div>
-
-							<!-- Image Column -->
-							<div class="image-column col-lg-6 col-md-12 col-sm-12">
-								<div class="inner-column wow fadeInRight" data-wow-delay="0ms"
-									data-wow-duration="1500ms">
-									<div class="image titlt" data-tilt data-tilt-max="8">
-										<a href="newAssets/images/background/two.png" class="app-2 lightbox-image"><img
-												src="newAssets/images/background/two.png" alt="" /></a>
-									</div>
-									<!-- <div class="small-image titlt wow slideInRight" data-wow-delay="300ms"
+                <!-- Image Column -->
+                <div class="image-column col-lg-6 col-md-12 col-sm-12">
+                  <div
+                    class="inner-column wow fadeInRight"
+                    data-wow-delay="0ms"
+                    data-wow-duration="1500ms"
+                  >
+                    <div class="image titlt" data-tilt data-tilt-max="8">
+                      <a
+                        href="newAssets/images/background/two.png"
+                        class="app-2 lightbox-image"
+                        ><img src="newAssets/images/background/two.png" alt=""
+                      /></a>
+                    </div>
+                    <!-- <div class="small-image titlt wow slideInRight" data-wow-delay="300ms"
 										data-wow-duration="1500ms" data-tilt data-tilt-max="15">
 										<a href="https://via.placeholder.com/213x242" class="app-2 lightbox-image"><img
 												src="https://via.placeholder.com/213x242" alt="" /></a>
 									</div> -->
-								</div>
-							</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End App Block -->
+          <!-- App Block -->
+          <div class="app-block style-three">
+            <div class="inner-box">
+              <div class="row clearfix">
+                <!-- Image Column -->
+                <div class="image-column col-lg-6 col-md-12 col-sm-12">
+                  <div
+                    class="inner-column wow fadeInLeft"
+                    data-wow-delay="0ms"
+                    data-wow-duration="1500ms"
+                  >
+                    <div class="image titlt" data-tilt data-tilt-max="8">
+                      <a
+                        href="newAssets/images/background/one.png"
+                        class="app-1 lightbox-image"
+                        ><img src="newAssets/images/background/one.png" alt=""
+                      /></a>
+                    </div>
+                  </div>
+                </div>
 
-						</div>
-					</div>
-				</div>
-				<!-- End App Block -->
-				<!-- App Block -->
-				<div class="app-block style-three">
-					<div class="inner-box">
-						<div class="row clearfix">
-
-							<!-- Image Column -->
-							<div class="image-column col-lg-6 col-md-12 col-sm-12">
-								<div class="inner-column wow fadeInLeft" data-wow-delay="0ms"
-									data-wow-duration="1500ms">
-									<div class="image titlt" data-tilt data-tilt-max="8">
-										<a href="newAssets/images/background/one.png" class="app-1 lightbox-image"><img
-												src="newAssets/images/background/one.png" alt="" /></a>
-									</div>
-								</div>
-							</div>
-
-							<!-- Content Column -->
-							<div class="content-column col-lg-6 col-md-12 col-sm-12">
-								<div class="inner-column">
-									<div class="icon-box">
-										<span class="icon flaticon-credit-card"></span>
-									</div>
-									<h3>Surveillez et gérez votre activité à distance</h3>
-									<div class="text">En tant que gestionnaire de votre établissement vous pouvez gérer
-										vos employés, voir le rendement de chacun d'entre eux, voir le bilan financier
-										de votre structure en temps réel, partout et à tout moment...</div>
-									<!-- <a href="#" class="theme-btn btn-style-two"><span class="txt">Contact
+                <!-- Content Column -->
+                <div class="content-column col-lg-6 col-md-12 col-sm-12">
+                  <div class="inner-column">
+                    <div class="icon-box">
+                      <span class="icon flaticon-credit-card"></span>
+                    </div>
+                    <h3>Surveillez et gérez votre activité à distance</h3>
+                    <div class="text">
+                      En tant que gestionnaire de votre établissement vous
+                      pouvez gérer vos employés, voir le rendement de chacun
+                      d'entre eux, voir le bilan financier de votre structure en
+                      temps réel, partout et à tout moment...
+                    </div>
+                    <!-- <a href="#" class="theme-btn btn-style-two"><span class="txt">Contact
 											team</span></a> -->
-								</div>
-							</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End App Block -->
+        </div>
+      </section>
+      <!-- End Apps Section -->
 
-						</div>
-					</div>
-				</div>
-				<!-- End App Block -->
-
-			</div>
-		</section>
-		<!-- End Apps Section -->
-
-		<!-- Counter Section -->
-		<section class="counter-section">
-			<div class="patern-layer-one" style="background-image: url(newAssets/images/background/pattern-5.png)"></div>
-			<div class="patern-layer-two" style="background-image: url(newAssets/images/background/pattern-6.png)"></div>
-			<div class="patern-layer-three" style="background-image: url(newAssets/images/background/pattern-7.png)"></div>
-			<div class="patern-layer-four" style="background-image: url(newAssets/images/background/pattern-8.png)"></div>
-			<!-- Flower Image -->
-			<!-- <div class="flower-image">
+      <!-- Counter Section -->
+      <section class="counter-section">
+        <div
+          class="patern-layer-one"
+          style="
+            background-image: url(newAssets/images/background/pattern-5.png);
+          "
+        ></div>
+        <div
+          class="patern-layer-two"
+          style="
+            background-image: url(newAssets/images/background/pattern-6.png);
+          "
+        ></div>
+        <div
+          class="patern-layer-three"
+          style="
+            background-image: url(newAssets/images/background/pattern-7.png);
+          "
+        ></div>
+        <div
+          class="patern-layer-four"
+          style="
+            background-image: url(newAssets/images/background/pattern-8.png);
+          "
+        ></div>
+        <!-- Flower Image -->
+        <!-- <div class="flower-image">
 				
 				<div class="image paroller" data-paroller-factor="-0.30" data-paroller-factor-lg="0.60"
 					data-paroller-type="foreground" data-paroller-direction="horizontal"
 					style="background-image:url(https://via.placeholder.com/330x271)"></div>
 			</div> -->
-			<div class="auto-container" id="download">
-				<div class="row clearfix">
+        <div class="auto-container" id="download">
+          <div class="row clearfix">
+            <!-- Content Column -->
+            <div class="content-column col-lg-6 col-md-12 col-sm-12">
+              <div class="inner-column">
+                <div class="sec-title">
+                  <div class="title"><span>Té</span>lécharger</div>
+                  <h2>
+                    Nous avons un g<span>rand reseau</span> de personnes <br />
+                    satisfaites que nous voulons vous montrer!
+                  </h2>
+                </div>
+                <div class="text">
+                  Faites comme nos differents clients satisfaits par notre
+                  produit qui ont équipé leurs employés de l'application mobile
+                  E-maquis. Vous aussi, n'attendez pas incrivez vous et
+                  télécharger l'application mobile pour vos serveuses sur le
+                  play-store.
+                </div>
+                <div class="download">
+                  Téléchargez l'application E-maquis pour vous faciliter la vie
+                  de vos serveur(se)s!
+                </div>
+                <div class="google-btns">
+                  <a
+                    href="https://play.google.com/store/apps/details?id=com.hnm.emaquisapp"
+                    target="_blank"
+                    ><img
+                      src="newAssets/images/icons/google-play.png"
+                      width="150"
+                      alt=""
+                  /></a>
+                  <a
+                    href="https://apps.apple.com/app/e-maquis-serveur-serveuse/id6739280269"
+                    ><img src="newAssets/images/icons/app-1.png" alt=""
+                  /></a>
+                </div>
+              </div>
+            </div>
 
-					<!-- Content Column -->
-					<div class="content-column col-lg-6 col-md-12 col-sm-12">
-						<div class="inner-column">
-							<div class="sec-title">
-								<div class="title"><span>Té</span>lécharger</div>
-								<h2>Nous avons un g<span>rand reseau</span> de personnes <br> satisfaites que nous
-									voulons vous montrer!</h2>
-							</div>
-							<div class="text">Faites comme nos differents clients satisfaits par notre produit
-								qui ont équipé leurs employés de l'application mobile E-maquis. Vous aussi,
-								n'attendez pas incrivez vous et télécharger l'application mobile pour vos serveuses sur le play-store.
-							</div>
-							<div class="download">Téléchargez l'application E-maquis pour vous faciliter la vie de vos serveur(se)s!</div>
-							<div class="google-btns">
-								<a href="https://play.google.com/store/apps/details?id=com.hnm.emaquisapp"
-									target="_blank"><img src="newAssets/images/icons/google-play.png" width="150" alt="" /></a>
-								<!-- <a href="#"><img src="images/icons/app.png" alt="" /></a> -->
-							</div>
-						</div>
-					</div>
+            <!-- Counter Column -->
+            <div class="counter-column col-lg-6 col-md-12 col-sm-12">
+              <div class="inner-column">
+                <!-- Fact Counter -->
+                <div class="fact-counter">
+                  <div class="row clearfix">
+                    <!--Column-->
+                    <div
+                      class="column counter-column col-lg-6 col-md-6 col-sm-12"
+                    >
+                      <div
+                        class="inner wow fadeInUp"
+                        data-wow-delay="0ms"
+                        data-wow-duration="1500ms"
+                      >
+                        <div class="content">
+                          <div class="icon-box">
+                            <span class="icon flaticon-dot-and-circle"></span>
+                          </div>
+                          <div class="count-outer count-box">
+                            <span
+                              class="count-text"
+                              data-speed="2500"
+                              data-stop="500"
+                              >0</span
+                            >+
+                          </div>
+                          <h5 class="counter-title">Téléchargement Mobile</h5>
+                        </div>
+                      </div>
+                    </div>
 
-					<!-- Counter Column -->
-					<div class="counter-column col-lg-6 col-md-12 col-sm-12">
-						<div class="inner-column">
+                    <!--Column-->
+                    <div
+                      class="column counter-column col-lg-6 col-md-6 col-sm-12"
+                    >
+                      <div
+                        class="inner wow fadeInUp"
+                        data-wow-delay="300ms"
+                        data-wow-duration="1500ms"
+                      >
+                        <div class="content">
+                          <div class="icon-box">
+                            <span class="icon flaticon-cube"></span>
+                          </div>
+                          <div class="count-outer count-box alternate">
+                            <span
+                              class="count-text"
+                              data-speed="3000"
+                              data-stop="<%-maquisCount%>"
+                              >0</span
+                            >+
+                          </div>
+                          <h5 class="counter-title">Maquis et bars</h5>
+                        </div>
+                      </div>
+                    </div>
 
-							<!-- Fact Counter -->
-							<div class="fact-counter">
-								<div class="row clearfix">
+                    <!--Column-->
+                    <div
+                      class="column counter-column col-lg-6 col-md-6 col-sm-12"
+                    >
+                      <div
+                        class="inner wow fadeInUp"
+                        data-wow-delay="600ms"
+                        data-wow-duration="1500ms"
+                      >
+                        <div class="content">
+                          <div class="icon-box">
+                            <span class="icon flaticon-followers"></span>
+                          </div>
+                          <div class="count-outer count-box">
+                            <span
+                              class="count-text"
+                              data-speed="3000"
+                              data-stop="400"
+                              >0</span
+                            >+
+                          </div>
+                          <h5 class="counter-title">Clients satisfaits</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <!--
+                    <div
+                      class="column counter-column col-lg-6 col-md-6 col-sm-12"
+                    >
+                      <div
+                        class="inner wow fadeInUp"
+                        data-wow-delay="600ms"
+                        data-wow-duration="1500ms"
+                      >
+                        
+                        <div class="content">
+                          <div class="icon-box">
+                            <span class="icon flaticon-credit-card"></span>
+                          </div>
+                          <div class="count-outer count-box">
+                            <span
+                              class="count-text"
+                              data-speed="3000"
+                              data-stop="<%-totalVentes%>"
+                              >0</span
+                            >+
+                          </div>
+                          <h5 class="counter-title">Commandes validées</h5>
+                        </div>
+                        
+                      </div>
+                    </div>
+                    -->
 
-									<!--Column-->
-									<div class="column counter-column col-lg-6 col-md-6 col-sm-12">
-										<div class="inner wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
-											<div class="content">
-												<div class="icon-box">
-													<span class="icon flaticon-dot-and-circle"></span>
-												</div>
-												<div class="count-outer count-box">
-													<span class="count-text" data-speed="2500" data-stop="100">0</span>+
-												</div>
-												<h5 class="counter-title">Téléchargement</h5>
-											</div>
-										</div>
-									</div>
+                    <!--Column-->
+                    <!--
+                    <div
+                      class="column counter-column col-lg-6 col-md-6 col-sm-12"
+                    >
+                      <div
+                        class="inner wow fadeInUp"
+                        data-wow-delay="900ms"
+                        data-wow-duration="1500ms"
+                      >
+                        <div class="content">
+                          <div class="icon-box">
+                            <span class="icon flaticon-heart"></span>
+                          </div>
+                          <div class="count-outer count-box">
+                            <span
+                              class="count-text"
+                              data-speed="2500"
+                              data-stop="8"
+                              >0</span
+                            >
+                          </div>
+                          <h5 class="counter-title">Pays</h5>
+                        </div>
+                      </div>
+                    </div>
+                    -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Counter Section -->
 
-									<!--Column-->
-									<div class="column counter-column col-lg-6 col-md-6 col-sm-12">
-										<div class="inner wow fadeInUp" data-wow-delay="300ms"
-											data-wow-duration="1500ms">
-											<div class="content">
-												<div class="icon-box">
-													<span class="icon flaticon-cube"></span>
-												</div>
-												<div class="count-outer count-box alternate">
-													<span class="count-text" data-speed="3000" data-stop="10">0</span>+
-												</div>
-												<h5 class="counter-title">Maquis et bars</h5>
-											</div>
-										</div>
-									</div>
+      <!-- Screenshots Section -->
+      <section class="screenshots-section">
+        <div class="auto-container">
+          <div class="sec-title centered">
+            <div class="title"><span>Application</span> Serveur(se)s</div>
+            <h2>
+              Voici quelques <span>cap</span>t<span>ures</span> <br />
+              d'ecran de l'application mobile E-maquis
+            </h2>
+          </div>
 
-									<!--Column-->
-									<div class="column counter-column col-lg-6 col-md-6 col-sm-12">
-										<div class="inner wow fadeInUp" data-wow-delay="600ms"
-											data-wow-duration="1500ms">
-											<div class="content">
-												<div class="icon-box">
-													<span class="icon flaticon-followers"></span>
-												</div>
-												<div class="count-outer count-box">
-													<span class="count-text" data-speed="3000" data-stop="10">0</span>+
-												</div>
-												<h5 class="counter-title">Clients satisfaits</h5>
-											</div>
-										</div>
-									</div>
+          <div class="row appScreenshotCarousel-container swiper-container">
+            <div class="screen-mobile-image"></div>
+            <div class="swiper-wrapper">
+              <div
+                class="swiper-slide"
+                style="
+                  background-image: url(newAssets/images/screenshots/sc1.jpg);
+                "
+              ></div>
+              <div
+                class="swiper-slide"
+                style="
+                  background-image: url(newAssets/images/screenshots/sc2.jpg);
+                "
+              ></div>
+              <div
+                class="swiper-slide"
+                style="
+                  background-image: url(newAssets/images/screenshots/sc3.jpg);
+                "
+              ></div>
+              <div
+                class="swiper-slide"
+                style="
+                  background-image: url(newAssets/images/screenshots/sc4.jpg);
+                "
+              ></div>
+              <div
+                class="swiper-slide"
+                style="
+                  background-image: url(newAssets/images/screenshots/sc5.jpg);
+                "
+              ></div>
+              <div
+                class="swiper-slide"
+                style="
+                  background-image: url(newAssets/images/screenshots/sc6.jpg);
+                "
+              ></div>
+            </div>
+          </div>
 
-									<!--Column-->
-									<div class="column counter-column col-lg-6 col-md-6 col-sm-12">
-										<div class="inner wow fadeInUp" data-wow-delay="900ms"
-											data-wow-duration="1500ms">
-											<div class="content">
-												<div class="icon-box">
-													<span class="icon flaticon-heart"></span>
-												</div>
-												<div class="count-outer count-box">
-													<span class="count-text" data-speed="2500" data-stop="3">0</span>
-												</div>
-												<h5 class="counter-title">Pays</h5>
-											</div>
-										</div>
-									</div>
+          <!-- Navigations -->
+          <div class="banner-navigation">
+            <div class="swiper-button-prev">
+              <span class="icons-left-arrow-1"></span>
+            </div>
+            <div class="swiper-button-next">
+              <span class="icons-right-arrow-1"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Screenshots Section -->
 
-								</div>
-							</div>
+      <!-- Team Section -->
+      <section class="team-section">
+        <div class="auto-container">
+          <!-- Ct Dot Animated -->
+          <div class="ct-dot-animated">
+            <div class="ct-dot-container">
+              <div class="ct-dot-item">
+                <span></span>
+              </div>
+              <div class="ct-dot-item">
+                <span></span>
+              </div>
+              <div class="ct-dot-item">
+                <span></span>
+              </div>
+              <div class="ct-dot-item">
+                <span></span>
+              </div>
+              <div class="ct-dot-item">
+                <span></span>
+              </div>
+              <div class="ct-dot-item">
+                <span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Team Section -->
 
-						</div>
-					</div>
+      <!-- Main Footer -->
+      <%- include('partial/footer') %>
+      <!-- End Main Footer -->
+    </div>
+    <!--End pagewrapper-->
 
-				</div>
-			</div>
-		</section>
-		<!-- End Counter Section -->
+    <!--Scroll to top-->
+    <div class="scroll-to-top scroll-to-target" data-target="html">
+      <span class="fa fa-arrow-circle-up"></span>
+    </div>
 
+    <!-- WhatsApp Assistant Button -->
+    <div
+      class="whatsapp-help-button"
+      id="whatsappHelpBtn"
+      title="Besoin d'aide ?"
+    >
+      <i class="fab fa-whatsapp help-icon"></i>
+    </div>
 
+    <!-- WhatsApp Modal -->
+    <div class="whatsapp-modal" id="whatsappModal">
+      <div class="whatsapp-modal-content">
+        <div class="whatsapp-modal-header">
+          <h3><i class="fab fa-whatsapp"></i> Assistance WhatsApp</h3>
+          <button class="whatsapp-modal-close" id="whatsappModalClose">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="whatsapp-modal-body">
+          <p>Choisissez un numéro pour nous contacter :</p>
+          <div class="whatsapp-numbers">
+            <div
+              class="whatsapp-number"
+              data-number="+33760484911"
+              data-name="Support Renseignement"
+            >
+              <div class="whatsapp-number-info">
+                <i class="fab fa-whatsapp"></i>
+                <div>
+                  <strong>Support Renseignement</strong>
+                  <small>+33 7 60 48 49 11</small>
+                </div>
+              </div>
+              <i class="fas fa-arrow-right"></i>
+            </div>
+            <div
+              class="whatsapp-number"
+              data-number="+2250701234567"
+              data-name="Support Technique"
+            >
+              <div class="whatsapp-number-info">
+                <i class="fab fa-whatsapp"></i>
+                <div>
+                  <strong>Support Technique</strong>
+                  <small>+225 07 01 23 45 67</small>
+                </div>
+              </div>
+              <i class="fas fa-arrow-right"></i>
+            </div>
 
-		<!-- Screenshots Section -->
-		<section class="screenshots-section">
-			<div class="auto-container">
-				<div class="sec-title centered">
-					<div class="title"><span>Sc</span>reenshots</div>
-					<h2>Voici quelques <span>cap</span>t<span>ures</span> <br> d'ecran de l'application mobile E-maquis
-					</h2>
-				</div>
+            <div
+              class="whatsapp-number"
+              data-number="+2250701234568"
+              data-name="Commercial"
+            >
+              <div class="whatsapp-number-info">
+                <i class="fab fa-whatsapp"></i>
+                <div>
+                  <strong>Commercial</strong>
+                  <small>+225 07 01 23 45 68</small>
+                </div>
+              </div>
+              <i class="fas fa-arrow-right"></i>
+            </div>
 
-				<div class="row appScreenshotCarousel-container swiper-container">
-					<div class="screen-mobile-image"></div>
-					<div class="swiper-wrapper">
-						<div class="swiper-slide" style="background-image:url(newAssets/images/screenshots/sc1.jpg)">
-						</div>
-						<div class="swiper-slide" style="background-image:url(newAssets/images/screenshots/sc2.jpg)">
-						</div>
-						<div class="swiper-slide" style="background-image:url(newAssets/images/screenshots/sc3.jpg)">
-						</div>
-						<div class="swiper-slide" style="background-image:url(newAssets/images/screenshots/sc4.jpg)">
-						</div>
-						<div class="swiper-slide" style="background-image:url(newAssets/images/screenshots/sc5.jpg)">
-						</div>
-						<div class="swiper-slide" style="background-image:url(newAssets/images/screenshots/sc6.jpg)">
-						</div>
+            <div
+              class="whatsapp-number"
+              data-number="+2250701234569"
+              data-name="Service Client"
+            >
+              <div class="whatsapp-number-info">
+                <i class="fab fa-whatsapp"></i>
+                <div>
+                  <strong>Service Client</strong>
+                  <small>+225 07 01 23 45 69</small>
+                </div>
+              </div>
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const { userQueries } = require("./requests/UserQueries");
 
-					</div>
+      async function importAllUsers() {
+        try {
+          const result = await new Promise((resolve, reject) => {
+            userQueries
+              .getAllUSers()
+              .then((data) => {
+                if (data.etat) {
+                  resolve(data.result);
+                } else {
+                  reject(data.err);
+                }
+              })
+              .catch((err) => {
+                reject(err);
+              });
+          });
 
-				</div>
+          console.log("All Users:", result);
+        } catch (error) {
+          console.error("Error importing users:", error);
+        }
+      }
 
+      importAllUsers();
+    </script>
 
+    <script src="newAssets/js/jquery.js"></script>
+    <script src="newAssets/js/popper.min.js"></script>
+    <script src="newAssets/js/pagenav.js"></script>
+    <script src="newAssets/js/jquery.scrollTo.js"></script>
+    <script src="newAssets/js/bootstrap.min.js"></script>
+    <script src="newAssets/js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="newAssets/js/jquery.fancybox.js"></script>
+    <script src="newAssets/js/appear.js"></script>
+    <script src="newAssets/js/swiper.min.js"></script>
+    <script src="newAssets/js/jquery.paroller.min.js"></script>
+    <script src="newAssets/js/parallax.min.js"></script>
+    <script src="newAssets/js/validate.js"></script>
+    <script src="newAssets/js/bxslider.js"></script>
 
+    <script src="newAssets/js/swiper.min.js"></script>
+    <script src="newAssets/js/tilt.jquery.min.js"></script>
+    <script src="newAssets/js/owl.js"></script>
+    <script src="newAssets/js/wow.js"></script>
+    <script src="newAssets/js/jquery-ui.js"></script>
+    <script src="newAssets/js/script.js"></script>
 
+    <!-- WhatsApp Assistant JavaScript -->
+    <script>
+      // WhatsApp Assistant functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        const whatsappHelpBtn = document.getElementById("whatsappHelpBtn");
+        const whatsappModal = document.getElementById("whatsappModal");
+        const whatsappModalClose =
+          document.getElementById("whatsappModalClose");
+        const whatsappNumbers = document.querySelectorAll(".whatsapp-number");
 
+        // Ouvrir le modal
+        whatsappHelpBtn.addEventListener("click", function () {
+          whatsappModal.style.display = "block";
+          this.classList.add("clicked");
+          setTimeout(() => {
+            this.classList.remove("clicked");
+          }, 600);
+        });
 
+        // Fermer le modal
+        whatsappModalClose.addEventListener("click", function () {
+          whatsappModal.style.display = "none";
+        });
 
-				<!-- Navigations -->
-				<div class="banner-navigation">
-					<div class="swiper-button-prev"><span class="icons-left-arrow-1"></span></div>
-					<div class="swiper-button-next"><span class="icons-right-arrow-1"></span></div>
-				</div>
-			</div>
-		</section>
-		<!-- End Screenshots Section -->
+        // Fermer le modal en cliquant à l'extérieur
+        whatsappModal.addEventListener("click", function (e) {
+          if (e.target === whatsappModal) {
+            whatsappModal.style.display = "none";
+          }
+        });
 
+        // Gérer les clics sur les numéros WhatsApp
+        whatsappNumbers.forEach((number) => {
+          number.addEventListener("click", function () {
+            const phoneNumber = this.getAttribute("data-number");
+            const contactName = this.getAttribute("data-name");
+            const message = encodeURIComponent(
+              `Bonjour ! Je suis intéressé(e) par E-Maquis et j'aimerais avoir plus d'informations. Merci !`
+            );
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
 
+            // Ouvrir WhatsApp
+            window.open(whatsappUrl, "_blank");
 
+            // Fermer le modal
+            whatsappModal.style.display = "none";
+          });
+        });
 
-
-
-
-		<!-- Team Section -->
-		<section class="team-section">
-			<div class="auto-container">
-
-				<!-- Ct Dot Animated -->
-				<div class="ct-dot-animated">
-					<div class="ct-dot-container">
-						<div class="ct-dot-item">
-							<span></span>
-						</div>
-						<div class="ct-dot-item">
-							<span></span>
-						</div>
-						<div class="ct-dot-item">
-							<span></span>
-						</div>
-						<div class="ct-dot-item">
-							<span></span>
-						</div>
-						<div class="ct-dot-item">
-							<span></span>
-						</div>
-						<div class="ct-dot-item">
-							<span></span>
-						</div>
-					</div>
-				</div>
-
-
-
-
-
-			</div>
-		</section>
-		<!-- End Team Section -->
-
-
-
-
-		<!-- Main Footer -->
-		<%- include('partial/footer') %>
-		<!-- End Main Footer -->
-
-	</div>
-	<!--End pagewrapper-->
-
-	<!--Scroll to top-->
-	<div class="scroll-to-top scroll-to-target" data-target="html"><span class="fa fa-arrow-circle-up"></span></div>
-
-	
-
-	<script src="newAssets/js/jquery.js"></script>
-	<script src="newAssets/js/popper.min.js"></script>
-	<script src="newAssets/js/pagenav.js"></script>
-	<script src="newAssets/js/jquery.scrollTo.js"></script>
-	<script src="newAssets/js/bootstrap.min.js"></script>
-	<script src="newAssets/js/jquery.mCustomScrollbar.concat.min.js"></script>
-	<script src="newAssets/js/jquery.fancybox.js"></script>
-	<script src="newAssets/js/appear.js"></script>
-	<script src="newAssets/js/swiper.min.js"></script>
-	<script src="newAssets/js/jquery.paroller.min.js"></script>
-	<script src="newAssets/js/parallax.min.js"></script>
-	<script src="newAssets/js/validate.js"></script>
-	<script src="newAssets/js/bxslider.js"></script>
-
-	<script src="newAssets/js/swiper.min.js"></script>
-	<script src="newAssets/js/tilt.jquery.min.js"></script>
-	<script src="newAssets/js/owl.js"></script>
-	<script src="newAssets/js/wow.js"></script>
-	<script src="newAssets/js/jquery-ui.js"></script>
-	<script src="newAssets/js/script.js"></script>
-
-	
-</body>
-
+        // Fermer avec la touche Escape
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && whatsappModal.style.display === "block") {
+            whatsappModal.style.display = "none";
+          }
+        });
+      });
+    </script>
+  </body>
 </html>

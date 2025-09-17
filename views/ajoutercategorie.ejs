@@ -152,6 +152,27 @@
 
                     <!-- image -->
 
+                    <div class="col-lg-12">
+                      <select
+                        class="nice_Select2 nice_Select_line wide"
+                        style="display: none"
+                        name="idParent"
+                      >
+                        <option value="">Selectionner une catégorie parente(optionnel)</option>
+                        <% categories.forEach(item =>{%>
+                          <% if(categorie?.idParent == item._id){ %>
+                          <option value="<%= item._id %>" selected>
+                            <%= item.nom %>
+                          </option>
+                          <% } else { %>
+                          <option value="<%= item._id %>">
+                            <%= item.nom %>
+                          </option>
+                          <% } %>
+                        <%})%>
+                      </select>
+                    </div>
+
                   </div>
 
                   <div class="col-lg-6">
@@ -340,7 +361,8 @@
         categorie_pour: $('input[name="session"]').val(),
         image: $('input[name="image"]').prop('files')[0],
         // with opacity 0.5
-        color: $('input[name="color"]').val() + '80'
+        color: $('input[name="color"]').val() + '80',
+        idParent: $('select[name="idParent"]').val()
       };
       // change text ajouter categorie by chargement
 

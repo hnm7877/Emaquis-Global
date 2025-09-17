@@ -1,10 +1,12 @@
+const EmDashboardVenteTables = window.EmDashboardVenteTables;
+
 const EmDashboardBody = () => {
   return (
     <React.Fragment>
-      <div className='row'>
-        <EmDashboardVenteTables />
+      <div className="row">
+        {EmDashboardVenteTables ? <EmDashboardVenteTables /> : null}
       </div>
-      <div className='row'>
+      <div className="row">
         <EmDashboardStocks />
         <EmDashboardEmployes />
       </div>

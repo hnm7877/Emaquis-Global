@@ -432,18 +432,18 @@
         });
         socket.on('saved',(data)=>{
 
-          document.getElementById("semaine1").innerText = data.semaineVentes.semaine1+" FCFA";
-          document.getElementById("semaine2").innerText = data.semaineVentes.semaine2+" FCFA";
-          document.getElementById("semaine3").innerText = data.semaineVentes.semaine3+" FCFA";
-          document.getElementById("semaine4").innerText = data.semaineVentes.semaine4+" FCFA";
+          document.getElementById("semaine1").innerText = data.semaineVentes.semaine1+" <%= currency %>";
+          document.getElementById("semaine2").innerText = data.semaineVentes.semaine2+" <%= currency %>";
+          document.getElementById("semaine3").innerText = data.semaineVentes.semaine3+" <%= currency %>";
+          document.getElementById("semaine4").innerText = data.semaineVentes.semaine4+" <%= currency %>";
 
-          document.getElementById("creditsemaine1").innerText = data.semaineBenefice.semaine1+" FCFA";
-          document.getElementById("creditsemaine2").innerText = data.semaineBenefice.semaine2+" FCFA";
-          document.getElementById("creditsemaine3").innerText = data.semaineBenefice.semaine3+" FCFA";
-          document.getElementById("creditsemaine4").innerText = data.semaineBenefice.semaine4+" FCFA";
+          document.getElementById("creditsemaine1").innerText = data.semaineBenefice.semaine1+" <%= currency %>";
+          document.getElementById("creditsemaine2").innerText = data.semaineBenefice.semaine2+" <%= currency %>";
+          document.getElementById("creditsemaine3").innerText = data.semaineBenefice.semaine3+" <%= currency %>";
+          document.getElementById("creditsemaine4").innerText = data.semaineBenefice.semaine4+" <%= currency %>";
 
-          document.getElementById("totalBenefice").innerText = data.totalBenefice+" FCFA";
-          document.getElementById("totalPrix").innerText = data.totalPrix+" FCFA";
+          document.getElementById("totalBenefice").innerText = data.totalBenefice+" <%= currency %>";
+          document.getElementById("totalPrix").innerText = data.totalPrix+" <%= currency %>";
 
           console.log(data.totalBenefice,)
         })

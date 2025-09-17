@@ -8,6 +8,15 @@ const appConfigSchema = new moongoose.Schema(
     version: {
       type: String,
     },
+    happyClients: {
+      type: Number,
+    },
+    country: {
+      type: Number,
+    },
+    downloads: {
+      type: Number,
+    },
   },
   {
     collection: 'app_config',

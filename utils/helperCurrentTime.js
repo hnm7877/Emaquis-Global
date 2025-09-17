@@ -1,7 +1,7 @@
 const { formatTime } = require('./formatTime');
 const moment = require('moment');
 
-exports.helperCurrentTime = ({ date = new Date(), timings }) => {
+exports.helperCurrentTime = ({ date = new Date(), timings, defaultCurrentDay = undefined }) => {
   if (timings.length === 0) {
     return {
       startDate: null,
@@ -13,7 +13,7 @@ exports.helperCurrentTime = ({ date = new Date(), timings }) => {
   let startDate = null;
   let endDate = null;
 
-  const currentDay = date.getDay();
+  const currentDay = defaultCurrentDay ?? date.getDay();
   const prevDay = currentDay === 0 ? 6 : currentDay - 1;
   let isPrevDay = false;
 

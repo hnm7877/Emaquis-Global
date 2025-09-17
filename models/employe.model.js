@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const EmployeSchema = new Schema(
@@ -6,7 +6,7 @@ const EmployeSchema = new Schema(
     nom: { type: String, required: true },
     prenom: { type: String, required: true },
     role: { type: String, required: true },
-    travail_pour: { type: Schema.Types.ObjectId, ref: 'user', required: true },
+    travail_pour: { type: Schema.Types.ObjectId, ref: "user", required: true },
     statut: { type: String, required: true },
     numero: { type: String, required: true },
     image: { type: String },
@@ -16,12 +16,29 @@ const EmployeSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    deletedItSelf: {
+      type: Boolean,
+      default: false,
+    },
     isAdmin: {
       type: Boolean,
       default: false,
+    },
+    hasOffer: {
+      type: Boolean,
+      default: false,
+    },
+    forEvent: {
+      type: Boolean,
+      default: false,
+    },
+
+    expiredPaymentDate: {
+      type: Date,
+      default: null,
     },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model('employe', EmployeSchema);
+module.exports = mongoose.model("employe", EmployeSchema);

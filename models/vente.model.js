@@ -58,6 +58,8 @@ const VenteSchema = new Schema(
     },
     table_number: { type: Number, default: null },
     amount_collected: { type: Boolean, default: true },
+    offered: { type: Boolean, default: false },
+    offered_confirmed: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

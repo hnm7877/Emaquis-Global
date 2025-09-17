@@ -213,6 +213,40 @@ exports.produitQueries = class {
 		}
 	}
 
+	static getProductsByCategorId(categoryId, sessionId) {
+		try {
+			return new Promise(async (next) => {
+				Produit.find({
+					session: sessionId,
+					isDeleted: false,
+				})
+					.populate({
+						path: 'produit',
+						populate: {
+							path: 'categorie',
+						},
+					})
+					.select('-historiques')
+					.then((data) => {
+						const products = data.filter(
+							(el) => el.produit.categorie._id.toString() === categoryId
+						);
+						next({
+							etat: true,
+							result: products,
+						});
+					})
+					.catch((err) => {
+						next({
+							etat: false,
+							err: err,
+						});
+					});
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	}
 	static getProduitBySession(sessionId) {
 		try {
 			return new Promise(async (next) => {

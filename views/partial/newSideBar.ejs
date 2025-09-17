@@ -1,181 +1,375 @@
+<!-- IMPORTANT : Ce fichier doit être inclus AVANT newHead.ejs dans le layout principal pour garantir que la sidebar soit au-dessus du header. -->
+
 <!-- Begin page -->
-<div id="layout-wrapper">
-  <!-- ========== Left Sidebar Start ========== -->
-  <div class="vertical-menu">
-    <div data-simplebar class="h-100">
-      <div class="navbar-brand-box mt-10 logo_sidebar">
-        <a href="/dashboard">
-          <img src="../img/paresseux_sous_officiel.png" alt="" />
-        </a>
-      </div>
 
-      <!--- Sidemenu -->
-      <div id="sidebar-menu">
-        <!-- Left Menu Start -->
-        <ul class="metismenu list-unstyled" id="side-menu">
-          <li>
-            <a
-              href="javascript: void(0);"
-              class="has-arrow waves-effect"
-              aria-expanded="false"
-            >
-              <div class="nav_icon_small">
-                <img
-                  src="../img/paresseux_sous_officiel.png"
-                  style="height: 22px; width: 25px"
-                  alt=""
-                />
-                <span>E-Maquis-Bilan</span>
-              </div>
-            </a>
-
-            <ul class="sub-menu" aria-expanded="false">
-              <li class=""><a href="/bilan">Bilan</a></li>
-            </ul>
-          </li>
-
-          <li class="tutoNewAddEmploye">
-            <a
-              href="javascript: void(0);"
-              class="has-arrow waves-effect"
-              aria-expanded="false"
-            >
-              <div class="nav_icon_small">
-                <img
-                  src="../img/icone_employee.png"
-                  alt=""
-                  style="height: 29px; width: 29px"
-                />
-                <span>Employé(es)</span>
-              </div>
-            </a>
-
-            <ul class="sub-menu" aria-expanded="false">
-              <li><a href="/ajouteruser">ajouter</a></li>
-              <li><a href="/utilisateur"> Liste des employés</a></li>
-            </ul>
-          </li>
-
-          <li>
-            <a
-              href="javascript: void(0);"
-              class="has-arrow waves-effect"
-              aria-expanded="false"
-            >
-              <div class="nav_icon_small">
-                <img
-                  src="../img/icone_ventes.png"
-                  style="height: 22px; width: 37px; transform: rotate(-20deg)"
-                  alt=""
-                />
-                <span>Vente</span>
-              </div>
-            </a>
-
-            <ul class="sub-menu" aria-expanded="false">
-              <li><a href="/data_table"> Liste des ventes</a></li>
-            </ul>
-          </li>
-
-          <li class="tutoNewCompte">
-            <a
-              href="javascript: void(0);"
-              class="has-arrow waves-effect"
-              aria-expanded="false"
-            >
-              <div class="nav_icon_small">
-                <img
-                  src="img/menu-icon/bouteille.png"
-                  style="height: 22px; width: 37px; transform: rotate(-20deg)"
-                  alt=""
-                />
-                <span>Produits</span>
-              </div>
-            </a>
-
-            <ul>
-              <li><a href="/ajouterproduit">Enregistrer un produit</a></li>
-              <li><a href="/listeproduit"> Approvisionnement</a></li>
-
-              <% if(locals.user?.isAdmin){ %>
-              <li>
-                <a href="/listeproduitglobal">Liste produits global</a>
-              </li>
-              <li>
-                <a href="/ajouter-produit-global"
-                  >Enregistrer un produit global</a
-                >
-              </li>
-              <% } %>
-            </ul>
-          </li>
-
-          <li>
-            <a
-              href="javascript: void(0);"
-              class="has-arrow waves-effect"
-              aria-expanded="false"
-            >
-              <div class="nav_icon_small">
-                <img
-                  src="../img/categorie.svg"
-                  style="height: 22px; width: 37px; transform: rotate(-20deg)"
-                  alt=""
-                />
-                <span>Catégories</span>
-              </div>
-            </a>
-
-            <ul>
-              <li><a href="/listcategorie"> Mes catégories</a></li>
-              <% if(locals.user?.isAdmin){ %>
-              <li><a href="/ajoutercategorie">ajouter</a></li>
-              <% } %>
-            </ul>
-          </li>
-
-          <li>
-            <a
-              href="javascript: void(0);"
-              class="has-arrow waves-effect"
-              aria-expanded="false"
-            >
-              <div class="nav_icon_small">
-                <img
-                  src="img/menu-icon/reglage.png"
-                  style="height: 22px; width: 30px"
-                  alt=""
-                />
-                <span>Paramètres</span>
-              </div>
-            </a>
-
-            <ul class="sub-menu" aria-expanded="false">
-              <div class="profile_info_details">
-                <li><a href="/profile">Mon Profil </a></li>
-                <!--          <li><a href="/reglage" class="list-group-item disabled">Réglage<span class="badge badge-info">Bêta</span></a></li>-->
-                <li><a href="/deconnexion">Déconnexion </a></li>
-              </div>
-            </ul>
-          </li>
-
-          <!--<li>
-                        <a href="javascript: void(0);" class="has-arrow waves-effect"><i
-                                class="mdi mdi-share-variant"></i><span>Multi Level</span></a>
-                        <ul class="sub-menu" aria-expanded="true">
-                            <li><a href="javascript: void(0);">Level 1.1</a></li>
-                            <li><a href="javascript: void(0);" class="has-arrow">Level 1.2</a>
-                                <ul class="sub-menu" aria-expanded="true">
-                                    <li><a href="javascript: void(0);">Level 2.1</a></li>
-                                    <li><a href="javascript: void(0);">Level 2.2</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li> -->
-        </ul>
-      </div>
-      <!-- Sidebar -->
+<div class="vertical-menu sidebar-animated">
+  <div data-simplebar class="h-100 sidebar-inner">
+    <div class="navbar-brand-box mt-10 logo_sidebar text-center">
+      <a href="/dashboard">
+        <img
+          src="../img/paresseux_sous_officiel.png"
+          alt="Logo E-Maquis"
+          class="sidebar-logo"
+        />
+      </a>
+    </div>
+    <div class="sidebar-title" tabindex="-1">MENU PRINCIPAL</div>
+    <!--- Sidemenu -->
+    <div id="sidebar-menu">
+      <!-- Left Menu Start -->
+      <ul class="metismenu list-unstyled sidebar-menu-list" id="side-menu">
+        <li class="sidebar-menu-item">
+          <a href="/bilan" class="sidebar-link">
+            <lord-icon
+              src="https://cdn.lordicon.com/ssmahvix.json"
+              trigger="hover"
+              delay="1000"
+              state="hover-growth"
+              style="width: 22px; height: 22px; margin-right: 6px"
+            ></lord-icon>
+            <span class="sidebar-label">Bilan</span>
+          </a>
+        </li>
+        <li class="sidebar-menu-item has-submenu">
+          <a href="#" class="sidebar-link sidebar-toggle">
+            <lord-icon
+              src="https://cdn.lordicon.com/tdrtiskw.json"
+              trigger="hover"
+              delay="1000"
+              style="width: 22px; height: 22px; margin-right: 6px"
+            ></lord-icon>
+            <span class="sidebar-label">Employé(es)</span>
+            <span class="submenu-arrow">&#9662;</span>
+          </a>
+          <ul class="sidebar-submenu">
+            <li><a href="/ajouteruser">Ajouter</a></li>
+            <li><a href="/utilisateur">Liste des employés</a></li>
+          </ul>
+        </li>
+        <li class="sidebar-menu-item has-submenu">
+          <a href="#" class="sidebar-link sidebar-toggle">
+            <lord-icon
+              src="https://cdn.lordicon.com/ajkxzzfb.json"
+              trigger="hover"
+              delay="1000"
+              style="width: 22px; height: 22px; margin-right: 6px"
+            ></lord-icon>
+            <span class="sidebar-label">Ventes</span>
+            <span class="submenu-arrow">&#9662;</span>
+          </a>
+          <ul class="sidebar-submenu">
+            <li><a href="/data_table">Liste des ventes</a></li>
+            <% if (locals.user && !locals.user.hasOffer) { %>
+            <li>
+              <a href="/data_table_vente_offert">🔒 Boissons offertes</a>
+            </li>
+            <% } else { %>
+            <li><a href="/data_table_vente_offert">Boissons offertes</a></li>
+            <% } %>
+          </ul>
+        </li>
+        <li class="sidebar-menu-item has-submenu">
+          <a href="#" class="sidebar-link sidebar-toggle">
+            <lord-icon
+              src="https://cdn.lordicon.com/ghhwiltn.json"
+              trigger="hover"
+              delay="1000"
+              style="width: 22px; height: 22px; margin-right: 6px"
+            ></lord-icon>
+            <span class="sidebar-label">Produits</span>
+            <span class="submenu-arrow">&#9662;</span>
+          </a>
+          <ul class="sidebar-submenu">
+            <li><a href="/ajouterproduit">Enregistrer un produit</a></li>
+            <li><a href="/listeproduit">Approvisionnement</a></li>
+            <% if(locals.user?.isAdmin){ %>
+            <li><a href="/listeproduitglobal">Liste produits global</a></li>
+            <li>
+              <a href="/ajouter-produit-global"
+                >Enregistrer un produit global</a
+              >
+            </li>
+            <% } %>
+          </ul>
+        </li>
+        <li class="sidebar-menu-item has-submenu">
+          <a href="#" class="sidebar-link sidebar-toggle">
+            <lord-icon
+              src="https://cdn.lordicon.com/kthelypq.json"
+              trigger="hover"
+              delay="1000"
+              style="width: 22px; height: 22px; margin-right: 6px"
+            ></lord-icon>
+            <span class="sidebar-label">Catégories</span>
+            <span class="submenu-arrow">&#9662;</span>
+          </a>
+          <ul class="sidebar-submenu">
+            <li><a href="/listcategorie">Mes catégories</a></li>
+            <% if(locals.user?.isAdmin){ %>
+            <li><a href="/ajoutercategorie">Ajouter</a></li>
+            <% } %>
+          </ul>
+        </li>
+        <li class="sidebar-menu-item has-submenu">
+          <a href="#" class="sidebar-link sidebar-toggle">
+            <lord-icon
+              src="https://cdn.lordicon.com/spajtpif.json"
+              trigger="hover"
+              style="width: 22px; height: 22px; margin-right: 6px"
+            ></lord-icon>
+            <span class="sidebar-label">Paramètres</span>
+            <span class="submenu-arrow">&#9662;</span>
+          </a>
+          <ul class="sidebar-submenu">
+            <li><a href="/profile">Mon Profil</a></li>
+            <li><a href="/deconnexion">Déconnexion</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-donate text-center mt-4">
+      <button
+        type="button"
+        class="btn btn-warning sidebar-donate-btn"
+        data-toggle="modal"
+        data-target="#donateModal"
+      >
+        <span class="txt">Faites un don</span>
+      </button>
     </div>
   </div>
-  <!-- Left Sidebar End -->
 </div>
+
+<% if (!locals.forProfile && user.forEvent && (!user.paid ||
+!locals.expiredDate)) { %> <%- include('../modal.ejs') %> <% } %>
+
+<script>
+  const expiredPaymentDate = <%- JSON.stringify(user.expiredPaymentDate) %>;
+  const expiredDate = new Date(expiredPaymentDate) < new Date()
+
+
+  if(!expiredDate){
+    let timeId = setInterval(()=>{
+     const expiredDate = new Date(expiredPaymentDate) < new Date();
+
+   if(expiredDate){
+     clearInterval(timeId);
+   window.location.reload();
+   }
+   }, 1000);
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Expansion/collapse animée des sous-menus
+    document.querySelectorAll('.sidebar-toggle').forEach(function(toggle) {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        const parent = this.closest('.sidebar-menu-item');
+        const submenu = parent.querySelector('.sidebar-submenu');
+        if (submenu) {
+          if (submenu.style.maxHeight) {
+            submenu.style.maxHeight = null;
+            submenu.style.opacity = 0;
+            parent.classList.remove('open');
+          } else {
+            // Fermer les autres sous-menus
+            document.querySelectorAll('.sidebar-menu-item.open .sidebar-submenu').forEach(function(other) {
+              other.style.maxHeight = null;
+              other.style.opacity = 0;
+              other.closest('.sidebar-menu-item').classList.remove('open');
+            });
+            submenu.style.maxHeight = submenu.scrollHeight + 'px';
+            submenu.style.opacity = 1;
+            parent.classList.add('open');
+          }
+        }
+      });
+    });
+    // Par défaut, fermer tous les sous-menus
+    document.querySelectorAll('.sidebar-submenu').forEach(function(sub) {
+      sub.style.maxHeight = null;
+      sub.style.opacity = 0;
+    });
+  });
+</script>
+
+<style>
+  .sidebar-animated {
+    animation: fadeInLeft 0.7s;
+    background: #16213e; /* Bleu marin */
+    border-right: 1.5px solid #23325c;
+    min-width: 220px;
+    max-width: 260px;
+    box-shadow: 0 4px 24px rgba(22, 33, 62, 0.13);
+  }
+  @keyframes fadeInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  .sidebar-inner {
+    padding: 0 0 24px 0;
+  }
+  .sidebar-logo {
+    width: 70px;
+    margin: 18px auto 10px auto;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(22, 33, 62, 0.08);
+    background: #fff;
+  }
+  .sidebar-title {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: #ff9c2c;
+    text-align: center;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    user-select: none;
+    pointer-events: none;
+  }
+  .sidebar-menu-list {
+    padding-left: 0;
+    margin-top: 10px;
+  }
+  .sidebar-menu-item {
+    margin-bottom: 2px;
+  }
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0 6px 14px;
+    border-radius: 0;
+    color: #fff;
+    font-size: 1.08rem;
+    font-weight: 700;
+    background: transparent !important;
+    box-shadow: none !important;
+    margin-bottom: 0;
+    transition: color 0.18s, transform 0.18s;
+    position: relative;
+    cursor: pointer;
+  }
+  .sidebar-link:hover,
+  .sidebar-link.active {
+    color: #ff9c2c;
+    background: none !important;
+    transform: translateX(4px) scale(1.03);
+  }
+  .sidebar-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    min-height: 22px;
+    border-radius: 8px;
+    background: transparent !important;
+    box-shadow: none !important;
+    margin-right: 0;
+    transition: background 0.18s;
+  }
+  .sidebar-link:hover .sidebar-icon,
+  .sidebar-link.active .sidebar-icon {
+    background: transparent !important;
+  }
+  .sidebar-label {
+    color: #fff;
+    font-size: 1.08rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    font-family: "Poppins", sans-serif;
+  }
+  .sidebar-link:hover .sidebar-label,
+  .sidebar-link.active .sidebar-label {
+    color: #ff9c2c;
+  }
+  .sidebar-submenu {
+    padding-left: 44px;
+    margin-top: 2px;
+    margin-bottom: 8px;
+    font-size: 0.97rem;
+    color: #bfc9e0;
+    list-style: none;
+    background: #23325c;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 2px 8px rgba(22, 33, 62, 0.07);
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s;
+  }
+  .sidebar-menu-item.open > .sidebar-submenu {
+    max-height: 500px;
+    opacity: 1;
+    transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s;
+  }
+  .sidebar-menu-item .submenu-arrow {
+    margin-left: auto;
+    color: #bfc9e0;
+    font-size: 1.1em;
+    transition: transform 0.3s;
+  }
+  .sidebar-menu-item.open .submenu-arrow {
+    transform: rotate(180deg);
+    color: #ff9c2c;
+  }
+  .sidebar-submenu li a {
+    color: #bfc9e0;
+    font-size: 0.97rem;
+    font-weight: 500;
+    padding-left: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    display: block;
+    border-radius: 8px;
+    transition: color 0.18s, background 0.18s;
+  }
+  .sidebar-submenu li a:hover {
+    color: #ff9c2c;
+    background: #1a2950;
+  }
+  .sidebar-donate {
+    margin-top: 18px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  .sidebar-donate-btn {
+    margin-top: 0;
+    margin-bottom: 0;
+    border-radius: 18px;
+    font-weight: 700;
+    font-size: 1.08rem;
+    padding: 10px 28px;
+    background: linear-gradient(90deg, #ffb347 0%, #ff9c2c 100%);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(255, 156, 44, 0.1);
+    border: none;
+    transition: background 0.18s, transform 0.18s;
+  }
+  .sidebar-donate-btn:hover {
+    background: linear-gradient(90deg, #ff9c2c 0%, #ffb347 100%);
+    transform: scale(1.04);
+  }
+  @media (max-width: 991px) {
+    .sidebar-animated {
+      display: none !important;
+    }
+    .sidebar-title {
+      font-size: 0.9rem;
+    }
+    .sidebar-link {
+      padding: 10px 10px;
+    }
+  }
+  @media (min-width: 992px) {
+    .sidebar-animated {
+      display: block !important;
+    }
+  }
+</style>

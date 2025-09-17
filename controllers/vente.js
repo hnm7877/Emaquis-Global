@@ -11,6 +11,8 @@ const { getDateByWeekendMonthYear } = require("../utils/generateWeekly");
 const { userQueries } = require("../requests/UserQueries");
 const { helperCurrentTime } = require("../utils/helperCurrentTime");
 const { calculPromoTotal } = require("../utils/calculPromoTotal");
+const { getUserDetails, getExpiredDate } = require("../utils/getExpirateDate");
+const moment = require('moment');
 
 exports.venteByMonth = async (req, res) => {
   try {
@@ -108,6 +110,18 @@ exports.ventePost = async (req, res) => {
     let produits = [];
     let sum = 0;
 
+
+    if(sess.forEvent){
+      const user = await getUserDetails({id:sess.travail_pour, forEvent:true});
+      
+      if(!getExpiredDate(user.expiredPaymentDate)){
+        return res.status(401).json({
+          etat:false,
+          message: "Votre abonnement a expiré"
+        })
+      }
+    }
+
     if (vente !== null) {
       // get the price of each product
       for (let [index, prodId] of vente.produit.entries()) {
@@ -195,6 +209,13 @@ exports.ventePost = async (req, res) => {
         return;
       }
 
+
+      if(vente.offered && !setting.result.hasOffer){
+        return res.status(400).json({
+          message: "Vous n'avez pas le droit de faire une offre",
+        });
+      }
+
       if (product_unavailables.length > 0) {
         res.status(400).json({
           message: "Produits non disponible",
@@ -218,6 +239,7 @@ exports.ventePost = async (req, res) => {
         table_number: vente.table_number,
         amount_collected: vente.amount_collected,
         for_employe: vente.for_employe || barmans.result[0]?._id,
+        offered: vente.offered,
       };
       // il fait pas l setvente or il fait update  de produit
       Vente = await venteQueries.setVente(newVente);
@@ -273,6 +295,21 @@ exports.editventePost = async (req, res) => {
       });
       return;
     }
+
+   
+
+    if(sess.forEvent){
+      const user = await getUserDetails({id:sess.travail_pour, forEvent:true});
+      
+      if(!getExpiredDate(user.expiredPaymentDate)){
+        return res.status(401).json({
+          etat:false,
+          message:"Votre abonnement a expiré"
+        })
+      }
+    
+    }
+
     const body = req.body;
 
     const formulesProduct = [];
@@ -392,6 +429,12 @@ exports.editventePost = async (req, res) => {
         return;
       }
 
+      if(body.offered && !setting.result.hasOffer){
+        return res.status(400).json({
+          message: "Vous n'avez pas le droit de faire une offre",
+        });
+      }
+
       if (product_unavailables.length > 0) {
         res.status(400).json({
           message: "Produits non disponible",
@@ -450,6 +493,7 @@ exports.editventePost = async (req, res) => {
         table_number: body.table_number ?? oldVente.result.table_number,
         amount_collected:
           body.amount_collected ?? oldVente.result.amount_collected,
+        offered: body.offered ?? oldVente.result.offered,
       };
 
       if (body.update_for_collected_amount) {
@@ -519,11 +563,22 @@ exports.editStatusVente = async (req, res) => {
     status_commande: "En attente",
   });
 
+  if(sess.forEvent){
+    const user = await getUserDetails({id:sess.travail_pour, forEvent:true});
+    
+    if(!getExpiredDate(user.expiredPaymentDate)){
+      return res.status(401).json({
+        etat:false,
+        message: "Votre abonnement a expiré"
+      })
+    }
+  }
+
   if (vente) {
     Ventes.updateOne(
       { _id: vente_id },
       {
-        status_commande: req.body.type || "Validée",
+        status_commande: vente.offered && req.body.type !== "Annulée" ? "Offert" : req.body.type || "Validée",
         employe_validate_id: req.session.user._id,
       },
 
@@ -552,9 +607,12 @@ exports.editStatusVente = async (req, res) => {
           }
         }
 
-        res.redirect("/emdashboard");
+        res.json({
+          etat: true,
+          data: "success",
+        })
       })
-      .catch((err) => res.redirect("/emdashboard"));
+      .catch((err) => res.status(404).json({ etat: false, data: "error" }));
 
     const venteRes = await venteQueries.getVentesById(sess.travail_pour);
 
@@ -715,6 +773,24 @@ exports.venteBilan = async (req, res) => {
           $in: users,
         };
       }
+
+		
+			if(start){
+        const userAdmin = await userQueries.getUserById(req.session.user._id);
+				const { startDate, endDate } = helperCurrentTime({
+					timings: userAdmin?.result?.timings || [],
+					defaultCurrentDay: new Date(start).getDay(),
+				});
+			
+        if(filter.createdAt.$gte && startDate){
+          filter.createdAt.$gte.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds());
+        }
+
+        if(filter.createdAt.$lte && endDate){
+          filter.createdAt.$lte.setHours(endDate.getHours(), endDate.getMinutes(), endDate.getSeconds());
+        }
+      }
+
 
       const ventes = await venteQueries.getVentes(filter);
 

@@ -41,8 +41,145 @@
     <link href="assets/css/theme.min.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="css/style.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-color: #4e73df;
+        --secondary-color: #1cc88a;
+        --danger-color: #e74a3b;
+        --warning-color: #f6c23e;
+        --dark-color: #5a5c69;
+      }
 
-    <%- include('partial/newHead.ejs') %> <%- include('partial/head.ejs') %>
+      .form-container {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        margin-top: 2rem;
+      }
+
+      .nav-tabs {
+        border: none;
+        margin-bottom: 2rem;
+      }
+
+      .nav-tabs .nav-link {
+        border: none;
+        color: var(--dark-color);
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        margin-right: 0.5rem;
+        transition: all 0.3s ease;
+      }
+
+      .nav-tabs .nav-link:hover {
+        background: rgba(78, 115, 223, 0.1);
+      }
+
+      .nav-tabs .nav-link.active {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .nav-tabs .nav-link i {
+        margin-right: 0.5rem;
+      }
+
+      .form-focus {
+        border: 2px solid #e3e6f0;
+        border-radius: 10px;
+        padding: 0.8rem 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .form-focus:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+      }
+
+      .btn_1 {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+      }
+
+      .btn_1:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(78, 115, 223, 0.3);
+      }
+
+      .alert {
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        animation: fadeIn 0.5s ease;
+      }
+
+      .form-step {
+        display: none;
+        animation: fadeIn 0.5s ease;
+      }
+
+      .form-step.active {
+        display: block;
+      }
+
+      .progress-bar {
+        height: 5px;
+        background: var(--primary-color);
+        transition: width 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .input-group-text {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+      }
+
+      .nice_Select2 {
+        border-radius: 10px;
+        padding: 0.8rem;
+      }
+
+      .form-label {
+        color: var(--dark-color);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .required-field::after {
+        content: "*";
+        color: var(--danger-color);
+        margin-left: 4px;
+      }
+    </style>
+    <%- include('partial/newSideBar.ejs') %>
+    <!--/ sidebar  -->
+
+    <%- include('partial/newHead.ejs') %>
+    <!--/ navbar  -->
   </head>
 
   <body class="crm_body_bg">
@@ -128,15 +265,69 @@
           <div class="row">
             <div class="col-12">
               <p id="sess" hidden><%= user?.id %></p>
-              <div class="white_card card_height_100 mb_30">
-                <div class="white_card_header">
-                  <div class="box_header m-0">
-                    <div class="main-title">
-                      <h3 class="m-0">Ajouter un nouvel employé</h3>
-                    </div>
-                  </div>
+              <div class="form-container">
+                <h3
+                  class="text-center mb-4 animate__animated animate__fadeInDown"
+                >
+                  <i class="fas fa-user-plus me-2"></i>Ajouter un nouvel employé
+                </h3>
+
+                <div class="progress mb-4">
+                  <div
+                    class="progress-bar"
+                    role="progressbar"
+                    style="width: 0%"
+                  ></div>
                 </div>
-                <form action="" method="">
+
+                <ul class="nav nav-tabs" id="formTabs" role="tablist">
+                  <li class="nav-item">
+                    <a
+                      class="nav-link active"
+                      id="personal-tab"
+                      data-toggle="tab"
+                      href="#personal"
+                      role="tab"
+                    >
+                      <i class="fas fa-user"></i> Informations Personnelles
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      class="nav-link"
+                      id="contact-tab"
+                      data-toggle="tab"
+                      href="#contact"
+                      role="tab"
+                    >
+                      <i class="fas fa-address-book"></i> Contact
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      class="nav-link"
+                      id="security-tab"
+                      data-toggle="tab"
+                      href="#security"
+                      role="tab"
+                    >
+                      <i class="fas fa-shield-alt"></i> Sécurité
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      class="nav-link"
+                      id="role-tab"
+                      data-toggle="tab"
+                      href="#role"
+                      role="tab"
+                    >
+                      <i class="fas fa-user-tag"></i> Rôle
+                    </a>
+                  </li>
+                </ul>
+
+                <form action="" method="" id="employeeForm">
                   <% if(locals.update) { %>
                   <div
                     class="alert alert-success"
@@ -146,7 +337,6 @@
                   >
                     Employé modifier avec succès !
                   </div>
-
                   <% } else { %>
                   <div
                     class="alert alert-success"
@@ -165,133 +355,185 @@
                   >
                     Echec de l'opération, veuillez recommencer!
                   </div>
-                  <div class="white_card_body">
-                    <div class="row">
-                      <div class="col-lg-6" id="prenom">
-                        <div class="common_input mb_15" id="prenom">
-                          <input
-                            type="text"
-                            placeholder="prénom"
-                            name="prenom"
-                            value="<%= locals.employe?.prenom %>"
-                            class="form-focus"
-                          />
-                        </div>
-                      </div>
-                      <div class="col-lg-6" id="nom">
-                        <div class="common_input mb_15">
-                          <input
-                            type="text"
-                            placeholder="nom"
-                            name="nom"
-                            value="<%=locals.employe?.nom%>"
-                            class="form-focus"
-                          />
-                        </div>
-                      </div>
-                      <div class="col-lg-6" id="speudo">
-                        <div class="common_input mb_15">
-                          <input
-                            type="text"
-                            placeholder="speudo"
-                            name="speudo"
-                            value="<%=locals.employe?.pseudo%>"
-                            class="form-focus"
-                          />
-                        </div>
-                      </div>
-                      <div class="col-lg-6" id="adresse">
-                        <div class="common_input mb_15">
-                          <input
-                            type="text"
-                            placeholder="adresse"
-                            name="adresse"
-                            value="<%=locals.employe?.adresse%>"
-                            class="form-focus"
-                          />
-                        </div>
-                      </div>
-                      <div class="col-lg-6" id="numero">
-                        <div class="common_input mb_15 input-group">
-                          <input
-                            type="number"
-                            placeholder="Numéro de téléphone"
-                            name="numero"
-                            value="<%=locals.employe?.numero%>"
-                            required
-                            class="form-focus form-focus-warning"
-                          />
-                          <small class="text-info"
-                            >Le numéro de téléphone va permettre à la serveuse,
-                            au gestionnaire ou au barman de pouvoir se connecter
-                            à l'application mobile
-                            <span class="text-danger">"E-Maquis"</span>
-                            pour pouvoir prendre les commandes des clients, et
-                            le Barman aura besoin de ce numéro pour pouvoir se
-                            connecter à son espaces de travail Barman. Le numéro
-                            de téléphone doit être unique.
-                          </small>
-                        </div>
-                      </div>
-                      <div class="col-lg-6" id="password">
-                        <div class="common_input mb_15">
-                          <input
-                            type="password"
-                            placeholder="mot de passe"
-                            name="password"
-                            class="form-focus"
-                          />
-                        </div>
-                      </div>
-                      <div class="col-lg-6">
-                        <div class="common_input mb_15">
-                          <!-- <input
-                            type="email"
-                            placeholder="Email"
-                            name="email"
-                            value="<%=locals.employe?.email%>"
-                          /> -->
-                          <input
-                            type="text"
-                            name="session"
-                            value="<%= user?.id %>"
-                            hidden
-                          />
-                          <input
-                            type="checkbox"
-                            name="update"
-                            value="<%= locals.update %>"
-                            hidden
-                          />
-                        </div>
-                      </div>
 
-                      <div class="col-lg-6" id="role">
-                        <select
-                          class="nice_Select2 nice_Select_line wide form-focus"
-                          style="display: none"
-                          name="role"
-                          value="<%=locals.employe?.role%>"
-                          required
-                        >
-                          <option value="1">Selectionner le rôle</option>
-                          <option value="Barman">Barman</option>
-                          <option value="serveur(euse)">serveur(euse)</option>
-                          <option value="Manager">Manager</option>
-                          <option value="gestionnaire">Gestionnaire</option>
-                        </select>
-                      </div>
-                      <div class="col-lg-6 col-md-6 col-sm-6" id="button">
-                        <div class="create_report_btn mt_30">
-                          <button
-                            type="submit"
-                            class="btn_1 radius_btn d-block text-center btn_1_Verif"
+                  <div class="tab-content">
+                    <div
+                      class="tab-pane fade show active"
+                      id="personal"
+                      role="tabpanel"
+                    >
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label class="form-label required-field"
+                            >Prénom</label
                           >
-                            <%= locals.update?"Modifier": "Ajouter"%> employé
-                          </button>
+                          <div class="input-group mb-3">
+                            <span class="input-group-text"
+                              ><i class="fas fa-user"></i
+                            ></span>
+                            <input
+                              type="text"
+                              class="form-focus"
+                              name="prenom"
+                              required
+                              value="<%= locals.employe?.prenom %>"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label required-field">Nom</label>
+                          <div class="input-group mb-3">
+                            <span class="input-group-text"
+                              ><i class="fas fa-user"></i
+                            ></span>
+                            <input
+                              type="text"
+                              class="form-focus"
+                              name="nom"
+                              required
+                              value="<%= locals.employe?.nom %>"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label">Pseudo</label>
+                          <div class="input-group mb-3">
+                            <span class="input-group-text"
+                              ><i class="fas fa-at"></i
+                            ></span>
+                            <input
+                              type="text"
+                              class="form-focus"
+                              name="speudo"
+                              value="<%= locals.employe?.pseudo %>"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
+
+                    <div class="tab-pane fade" id="contact" role="tabpanel">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label class="form-label required-field"
+                            >Adresse</label
+                          >
+                          <div class="input-group mb-3">
+                            <span class="input-group-text"
+                              ><i class="fas fa-map-marker-alt"></i
+                            ></span>
+                            <input
+                              type="text"
+                              class="form-focus"
+                              name="adresse"
+                              required
+                              value="<%= locals.employe?.adresse %>"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label required-field"
+                            >Numéro de téléphone</label
+                          >
+                          <div class="input-group mb-3">
+                            <span class="input-group-text"
+                              ><i class="fas fa-phone"></i
+                            ></span>
+                            <input
+                              type="tel"
+                              class="form-focus"
+                              name="numero"
+                              required
+                              value="<%= locals.employe?.numero %>"
+                            />
+                          </div>
+                          <small class="text-muted">
+                            <i class="fas fa-info-circle"></i> Ce numéro sera
+                            utilisé pour la connexion à l'application mobile
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="security" role="tabpanel">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label class="form-label required-field"
+                            >Mot de passe</label
+                          >
+                          <div class="input-group mb-3">
+                            <span class="input-group-text"
+                              ><i class="fas fa-lock"></i
+                            ></span>
+                            <input
+                              type="password"
+                              class="form-focus"
+                              name="password"
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="role" role="tabpanel">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label class="form-label required-field">Rôle</label>
+                          <div class="input-group mb-3">
+                            <span class="input-group-text"
+                              ><i class="fas fa-user-tag"></i
+                            ></span>
+                            <select class="form-focus" name="role" required>
+                              <option value="">Sélectionner un rôle</option>
+                              <option value="Barman">Barman</option>
+                              <option value="serveur(euse)">
+                                Serveur(euse)
+                              </option>
+                              <option value="Manager">Manager</option>
+                              <option value="gestionnaire">Gestionnaire</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <input
+                    type="text"
+                    name="session"
+                    value="<%= user?.id %>"
+                    hidden
+                  />
+                  <input
+                    type="checkbox"
+                    name="update"
+                    value="<%= locals.update %>"
+                    hidden
+                  />
+
+                  <div class="d-flex justify-content-between mt-4">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      id="prevBtn"
+                    >
+                      <i class="fas fa-arrow-left"></i> Précédent
+                    </button>
+                    <button type="button" class="btn btn-primary" id="nextBtn">
+                      Suivant <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button
+                      type="submit"
+                      class="btn btn-success"
+                      id="submitBtn"
+                      style="display: none"
+                      data-toggle="modal"
+                      data-target="#roleModal"
+                    >
+                      <i class="fas fa-save"></i> <%= locals.update?"Modifier":
+                      "Ajouter"%> employé
+                    </button>
                   </div>
                 </form>
               </div>
@@ -398,6 +640,34 @@
             1000
           );
         });
+
+        // Determine the role and set the modal content
+        const role = $('select[name="role"]').val();
+        let modalContent = "";
+        let videoUrl = "";
+
+        if (
+          role === "serveur(euse)" ||
+          role === "Manager" ||
+          role === "gestionnaire"
+        ) {
+          modalContent =
+            "L'employé est maintenant enregistré dans votre établissement donc il peut maintenant télécharger l'application mobile sur le PlayStore ou AppStore pour les prises de commandes.";
+          videoUrl = "medias/mobile.mp4";
+        } else if (role === "Barman") {
+          modalContent =
+            "L'employé est maintenant enregistré dans votre établissement donc il peut maintenant se connecter sur son espace barman à cette adresse : https://e-maquis.com/emconnexion";
+          videoUrl = "medias/barman.mp4";
+        }
+
+        // Set the modal content and video
+        $("#modalBodyContent").html(`
+          <p>${modalContent}</p>
+          <video autoplay controls style="width:100%; height:auto;">
+            <source src="${videoUrl}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        `);
       });
       const driver = window.driver.js.driver;
       // Définir une variable pour garder une trace si l'action a déjà été effectuée
@@ -491,6 +761,65 @@
         // Mettre à jour la variable pour indiquer que le guide a été affiché
         localStorage.setItem("guideAlreadyShownAddUser", true);
       }
+
+      // Gestion des onglets
+      let currentTab = 0;
+      const tabs = document.querySelectorAll(".nav-link");
+      const progressBar = document.querySelector(".progress-bar");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const submitBtn = document.getElementById("submitBtn");
+
+      function showTab(n) {
+        tabs.forEach((tab) => tab.classList.remove("active"));
+        document
+          .querySelectorAll(".tab-pane")
+          .forEach((pane) => pane.classList.remove("show", "active"));
+
+        tabs[n].classList.add("active");
+        document
+          .querySelectorAll(".tab-pane")
+          [n].classList.add("show", "active");
+
+        progressBar.style.width = ((n + 1) / tabs.length) * 100 + "%";
+
+        prevBtn.style.display = n === 0 ? "none" : "block";
+        nextBtn.style.display = n === tabs.length - 1 ? "none" : "block";
+        submitBtn.style.display = n === tabs.length - 1 ? "block" : "none";
+      }
+
+      nextBtn.addEventListener("click", () => {
+        if (validateTab(currentTab)) {
+          currentTab++;
+          showTab(currentTab);
+        }
+      });
+
+      prevBtn.addEventListener("click", () => {
+        currentTab--;
+        showTab(currentTab);
+      });
+
+      function validateTab(n) {
+        const inputs = document
+          .querySelectorAll(".tab-pane")
+          [n].querySelectorAll("input[required], select[required]");
+        let valid = true;
+
+        inputs.forEach((input) => {
+          if (!input.value) {
+            input.classList.add("is-invalid");
+            valid = false;
+          } else {
+            input.classList.remove("is-invalid");
+          }
+        });
+
+        return valid;
+      }
+
+      // Initialisation
+      showTab(0);
     </script>
 
     <script src="../js/verifInput.js" defer></script>
@@ -511,6 +840,44 @@
 
     <!-- App js -->
     <script src="assets/js/theme.js"></script>
+
+    <!-- Add this modal structure somewhere in your HTML body -->
+    <div
+      class="modal fade"
+      id="roleModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="roleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="roleModalLabel">Information</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="modalBodyContent">
+            <!-- Content and videos will be dynamically inserted here -->
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 
   <!-- Mirrored from demo.dashboardpack.com/user-management-html/add_new_user.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 05 Jul 2021 17:20:09 GMT -->

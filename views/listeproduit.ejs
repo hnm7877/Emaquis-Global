@@ -84,6 +84,159 @@
           width: 100%;
         }
       }
+
+      /* New styles for product cards */
+      .product-grid-container {
+        max-height: 520px;
+        overflow-y: auto;
+        margin-bottom: 20px;
+        padding-right: 8px;
+      }
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 28px;
+        padding: 0 28px 28px 28px;
+      }
+      .product-card {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s cubic-bezier(0.4, 2, 0.3, 1), box-shadow 0.3s;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 520px;
+      }
+
+      .product-card:hover {
+        transform: translateY(-8px) scale(1.03);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+      }
+
+      .product-image-container {
+        width: 100%;
+        background: linear-gradient(135deg, #f8fafc 60%, #e3e9f7 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 260px;
+        border-bottom: 1px solid #f0f0f0;
+        position: relative;
+      }
+
+      .product-image {
+        max-width: 70%;
+        max-height: 220px;
+        object-fit: contain;
+        transition: transform 0.3s;
+        border-radius: 10px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+      }
+      .product-card:hover .product-image {
+        transform: scale(1.08);
+      }
+
+      .product-info {
+        padding: 22px 18px 10px 18px;
+        width: 100%;
+        text-align: center;
+        flex: 1;
+      }
+
+      .product-name {
+        font-size: 1.25em;
+        font-weight: 700;
+        margin-bottom: 14px;
+        color: #222;
+        letter-spacing: 0.5px;
+      }
+
+      .product-details {
+        margin-bottom: 18px;
+      }
+
+      .product-detail {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        color: #555;
+        font-size: 1.05em;
+      }
+
+      .product-detail span:first-child {
+        font-weight: 500;
+        color: #2d3a4b;
+      }
+
+      .product-actions {
+        display: flex;
+        gap: 8px;
+        padding: 18px 18px 18px 18px;
+        background: #f6f8fa;
+        border-top: 1px solid #eee;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .product-actions button {
+        flex: 1 1 0;
+        padding: 7px 0;
+        border: none;
+        border-radius: 7px;
+        cursor: pointer;
+        transition: all 0.18s;
+        font-weight: 600;
+        font-size: 0.95em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        min-width: 0;
+        max-width: 110px;
+      }
+
+      .product-actions button i {
+        margin-right: 7px;
+        font-size: 1.15em;
+      }
+
+      .product-actions button:hover {
+        transform: scale(1.07);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        opacity: 0.95;
+      }
+
+      .btn-success {
+        background: #28a745;
+        color: white;
+      }
+
+      .btn-info {
+        background: #17a2b8;
+        color: white;
+      }
+
+      .btn-danger {
+        background: #dc3545;
+        color: white;
+      }
+
+      .total-price-container {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px;
+        text-align: center;
+      }
+
+      .total-price {
+        font-size: 1.5em;
+        font-weight: 600;
+        color: #28a745;
+      }
     </style>
 
     <!-- react js -->
@@ -91,16 +244,14 @@
     <%- include('partial/reactScript.ejs') %>
 
     <!--  -->
-
+    <%- include('partial/newHead.ejs') %>
+    <!--/ navbar  -->
     <%- include(user.role ===
     "Barman"?'partial/emsidebar.ejs':'partial/newSideBar.ejs') %>
-
     <!--/ sidebar  -->
 
     <section class="main_content dashboard_part large_header_bg">
       <!-- menu  -->
-      <%- include('partial/newHead.ejs') %>
-
       <div id="root"></div>
 
       <div class="footer_part">
@@ -132,12 +283,27 @@
     <!-- jquery slim -->
     <%- include('partial/script.ejs') %>
 
+    <!-- Données pour React (doivent être AVANT le script React) -->
+    <script id="employee-data" type="application/json">
+      <%- JSON.stringify(user) %>
+    </script>
+    <script id="products-data" type="application/json">
+      <%- JSON.stringify(Result) %>
+    </script>
+    <script id="currency-data" type="application/json">
+      <%- JSON.stringify(currency) %>
+    </script>
     <script type="text/babel">
+      const currency = JSON.parse(
+        document.getElementById("currency-data").textContent
+      );
       const AppContext = React.createContext();
 
-      const ListProduits = () => {
+      const ListProduits = ({ search }) => {
         const { handleSelectProduct, products } = React.useContext(AppContext);
-        const employee = <%- JSON.stringify(user) %>;
+        const employee = JSON.parse(
+          document.getElementById("employee-data").textContent
+        );
         const [quantities, setQuantities] = React.useState(
           products.reduce((acc, product) => {
             acc[product._id] = product.quantite;
@@ -146,7 +312,6 @@
         );
 
         const handleEdit = (productId) => {
-
           window.location.href = `/editproduit?productId=${productId}`;
         };
 
@@ -161,298 +326,352 @@
           }));
         };
 
-        const totalPrixVente = products.reduce((total, el) => {
+        // Filtrage selon la recherche
+        const filteredProducts = products.filter((el) => {
+          const q = search.toLowerCase();
+          return (
+            el.produit.nom_produit.toLowerCase().includes(q) ||
+            el.produit.categorie.nom.toLowerCase().includes(q) ||
+            (el.taille && el.taille.toLowerCase().includes(q))
+          );
+        });
+
+        const totalPrixVente = filteredProducts.reduce((total, el) => {
           return total + el.prix_vente * (quantities[el._id] || el.quantite);
         }, 0);
 
         return (
-          <tbody>
-            <tr>
-              <td colspan="7">
-                <p>Reste à vendre: <button className=" animationTotalPriceBorder"> {totalPrixVente} FCFA</button></p>
+          <div>
+            <div className="total-price-container">
+              <p>
+                Reste à vendre:{" "}
+                <span className="total-price">
+                  {totalPrixVente} {currency}
+                </span>
+              </p>
+            </div>
+            <div className="product-grid-container">
+              <div className="product-grid">
+                {filteredProducts.map((el, prodId) => (
+                  <div key={prodId} className="product-card">
+                    <div className="product-image-container">
+                      <img
+                        src={el.produit.image}
+                        alt={el.produit.nom_produit}
+                        className="product-image"
+                      />
+                    </div>
+                    <div className="product-info">
+                      <h3 className="product-name">{el.produit.nom_produit}</h3>
+                      <div className="product-details">
+                        <div className="product-detail">
+                          <span>Catégorie:</span>
+                          <span>{el.produit.categorie.nom}</span>
+                        </div>
+                        <div className="product-detail">
+                          <span>Taille:</span>
+                          <span>{el.taille}</span>
+                        </div>
+                        <div className="product-detail">
+                          <span>Prix:</span>
+                          <span>
+                            {el.prix_vente} {currency}
+                          </span>
+                        </div>
+                        <div className="product-detail">
+                          <span>Quantité:</span>
+                          <span>{el.is_cocktail ? "∞" : el.quantite}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="product-actions">
+                      {employee.role !== "Barman" && (
+                        <button
+                          onClick={() => handleEdit(el._id)}
+                          className="btn btn-success"
+                        >
+                          <i className="ti-pencil"></i> Modifier
+                        </button>
+                      )}
+                      <button
+                        onClick={() => handleOpenModal(el)}
+                        className="btn btn-info"
+                        data-toggle="modal"
+                        data-target="#myModal"
+                      >
+                        <i className="ti-time"></i> Historiques
+                      </button>
+                      {employee.role !== "Barman" && (
+                        <button
+                          onClick={() => handleOpenModal(el)}
+                          className="btn btn-danger"
+                          data-toggle="modal"
+                          data-target="#deleteModal"
+                        >
+                          <i className="ti-trash"></i> Supprimer
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      };
 
-              </td>
-            </tr>
-            {products.map((el, prodId) => {
-              return (
-                <tr key={prodId}>
-                                               <td>{el.produit.nom_produit}</td>
-                                               <td style={{
-                                                 maxWidth: '200px',
-                                               }}>{el.produit.categorie.nom}</td>
-                                               <td>{el.taille}</td>
-                                               <td>{el.prix_vente}</td>
+      const ModalHistoriques = () => {
+        const { productSelected } = React.useContext(AppContext);
+        return (
+          <div
+            className="modal fade"
+            id="myModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="myModalTitle"
+          >
+            <div
+              className="modal-dialog modal-dialog-centered"
+              style={{
+                maxWidth: "600px",
+              }}
+              role="document"
+            >
+              {!!productSelected && productSelected.produit && (
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h2 className="modal-title" id="exampleModalLongTitle">
+                      Historiques des modifications
+                    </h2>
+                    <button
+                      type="button"
+                      className="close close-modal"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                      id="close-modal"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div className="modal-body">
+                    <h4>
+                      {" "}
+                      {productSelected.produit.nom_produit}{" "}
+                      {productSelected.taille}
+                    </h4>
+                    {productSelected.historiques &&
+                      productSelected.historiques.reverse().map((el, index) => {
+                        return (
+                          <p key={index}>
+                            {el.add_by} a{" "}
+                            {el.update
+                              ? `modifiée la quantité de ${
+                                  el.prev_quantite
+                                } à ${
+                                  el.stockType === "locker"
+                                    ? `${el.lockerQty} casier(s) de ${el.quantite} bouteilles`
+                                    : el.quantite
+                                }`
+                              : `ajoutée ${
+                                  el.stockType === "locker"
+                                    ? `${el.lockerQty} casier(s) de ${el.quantite} bouteilles`
+                                    : `${el.quantite} quantité(s)`
+                                }`}{" "}
+                            le{" "}
+                            {new Date(el.date).toLocaleDateString("fr-FR", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                              hour: "numeric",
+                              minute: "numeric",
+                              second: "numeric",
+                            })}
+                          </p>
+                        );
+                      })}
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-success close-modal"
+                      data-dismiss="modal"
+                    >
+                      Ok
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      };
 
-                                               <td>{el.is_cocktail ? '∞': el.quantite}</td>
-                                               <td>
-                                                 <img
-                                                   src={el.produit.image}
-                                                   alt=''
-                                                   width='100px'
-                                                   height='100px'
-                                                   style={{
-                                                     objectFit: 'contain',
-                                                   }}
-                                                 />
-                                               </td>
-                                               <td className="product_btns">
-                                                 {employee.role !== 'Barman' && (
-                                                   <button onClick={()=>handleEdit(el._id)} className='btn btn-success mr-1'>Modifier</button>
-                                                 )}
+      const ModalDelete = () => {
+        const { productSelected, handleRemoveProduct } =
+          React.useContext(AppContext);
+        const [loading, setLoading] = React.useState(false);
 
-                                                 <button onClick={()=>handleOpenModal(el)} className='btn btn-info mr-1' data-toggle="modal" data-target="#myModal" >historiques</button>
+        const handleDelete = () => {
+          setLoading(true);
+          fetch("/deleteproduit/" + productSelected._id, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              $(".close-modal").each(function () {
+                $(this).trigger("click");
+              });
+              setLoading(false);
+              handleRemoveProduct(productSelected._id);
+            });
+        };
 
-                                                 {employee.role !== 'Barman' && (
-                                                   <button onClick={()=>handleOpenModal(el)} className='btn btn-danger' data-toggle="modal" data-target="#deleteModal">Supprimer</button>
-                                                 )}
-                                               </td>
-                                             </tr>
-                                           );
-                                         })}
-                                       </tbody>
-                                     );
-                                   };
+        return (
+          <div
+            className="modal fade"
+            id="deleteModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="myModalDeleteTitle"
+          >
+            <div
+              className="modal-dialog modal-dialog-centered"
+              style={{
+                maxWidth: "600px",
+              }}
+              role="document"
+            >
+              {!!productSelected && productSelected.produit && (
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h2 className="modal-title" id="exampleModalLongTitle">
+                      Suppression du produit
+                    </h2>
+                    <button
+                      type="button"
+                      className="close close-modal"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                      id="close-delete-modal"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div className="modal-body">
+                    <h4>
+                      {" "}
+                      Voulez-vous supprimer le produit{" "}
+                      {productSelected.produit.nom_produit}{" "}
+                      {productSelected.taille} ?
+                    </h4>
+                  </div>
 
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-danger close-modal"
+                      onClick={handleDelete}
+                      disabled={loading}
+                    >
+                      {loading ? "Suppression en cours..." : "Oui"}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-success close-modal"
+                      data-dismiss="modal"
+                    >
+                      Non
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      };
 
-                                   const ModalHistoriques = ()=>{
+      const App = () => {
+        const [search, setSearch] = React.useState("");
+        return (
+          <div className="app-container">
+            <div className="main_content_iner">
+              <div className="container-fluid p-0">
+                <div className="row justify-content-center">
+                  <div className="col-lg-12">
+                    <div className="white_card card_height_100 mb_30">
+                      <div className="white_card_header">
+                        <div className="box_header m-0">
+                          <div className="main-title">
+                            <h3 className="m-0">Liste des produits</h3>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="white_card_body">
+                        <div className="QA_section">
+                          <div className="white_box_tittle list_header">
+                            <h4></h4>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Rechercher un produit, une catégorie, une taille..."
+                              value={search}
+                              onChange={(e) => setSearch(e.target.value)}
+                              style={{
+                                maxWidth: 350,
+                                margin: "0 auto",
+                                marginBottom: 18,
+                              }}
+                            />
+                          </div>
+                          <div className="QA_table mb_30">
+                            <ListProduits search={search} />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ModalHistoriques />
+            <ModalDelete />
+          </div>
+        );
+      };
 
-                                     const {productSelected} = React.useContext(AppContext);
+      const AppRoot = () => {
+        const [productSelected, setProductSelected] = React.useState(null);
+        const [products, setProducts] = React.useState(
+          JSON.parse(document.getElementById("products-data").textContent)
+        );
 
+        const handleSelectProduct = (product) => {
+          setProductSelected(product);
+        };
 
+        const handleRemoveProduct = (id) => {
+          setProducts(products.filter((el) => el._id !== id));
+          setProductSelected(null);
+        };
 
+        return (
+          <AppContext.Provider
+            value={{
+              productSelected,
+              handleSelectProduct,
+              handleRemoveProduct,
+              products,
+            }}
+          >
+            <App />
+          </AppContext.Provider>
+        );
+      };
 
-                                     return  <div
-                               className="modal fade"
-                               id="myModal"
-                               tabindex="-1"
-                               role="dialog"
-                               aria-labelledby="myModalTitle"
-                             >
-                               <div className="modal-dialog modal-dialog-centered" style={{
-                                 maxWidth: '600px',
-                               }} role="document">
-                               {!!productSelected && productSelected.produit &&  <div className="modal-content">
-                                   <div className="modal-header">
-                                     <h2 className="modal-title" id="exampleModalLongTitle">
-                                    Historiques des modifications
-                                     </h2>
-                                     <button
-                                       type="button"
-                                       className="close close-modal"
-                                       data-dismiss="modal"
-                                       aria-label="Close"
-                                       id="close-modal"
-                                     >
-                                       <span aria-hidden="true">&times;</span>
-                                     </button>
-                                   </div>
-                                   <div className="modal-body">
-                                     <h4> {productSelected.produit.nom_produit} {productSelected.taille}</h4>
-                                     {productSelected.historiques && productSelected.historiques.reverse().map((el, index)=>{
-                                       return <p key={index}>{el.add_by} a {el.update?`modifiée la quantité de ${el.prev_quantite} à ${el.stockType === "locker"?`${el.lockerQty} casier(s) de ${el.quantite} bouteilles`:el.quantite}`:`ajoutée ${el.stockType === "locker"?`${el.lockerQty} casier(s) de ${el.quantite} bouteilles`:`${el.quantite} quantité(s)`}`} le {new Date(el.date).toLocaleDateString('fr-FR',{
-                                         year: 'numeric',
-                                         month: 'long',
-                                         day: 'numeric',
-                                         hour: 'numeric',
-                                         minute: 'numeric',
-                                         second: 'numeric',
-                                       })}</p>
-                                     })
-                                   }
-
-                                     </div>
-
-                                   <div className="modal-footer">
-                                     <button
-                                       type="button"
-                                       className="btn btn-success close-modal"
-                                       data-dismiss="modal"
-                                     >
-                                       Ok
-                                     </button>
-                                   </div>
-                                 </div>}
-                               </div>
-                             </div>
-
-                                   }
-
-
-      const ModalDelete = ()=>{
-
-           const {productSelected,handleRemoveProduct} = React.useContext(AppContext);
-           const [loading, setLoading] = React.useState(false);
-
-
-
-           const handleDelete =  ()=>{
-
-            setLoading(true)
-
-
-
-            fetch('/deleteproduit/'+productSelected._id, {
-              method: 'DELETE',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            })
-              .then((res) => res.json())
-              .then((data) => {
-                $('.close-modal').each(function () {
-
-                $(this).trigger('click');
-                  });
-                setLoading(false)
-                handleRemoveProduct(productSelected._id)
-
-
-            })
-           }
-
-
-
-
-
-
-
-
-
-
-           return  <div
-           className="modal fade"
-           id="deleteModal"
-           tabindex="-1"
-           role="dialog"
-           aria-labelledby="myModalDeleteTitle"
-           >
-           <div className="modal-dialog modal-dialog-centered" style={{
-           maxWidth: '600px',
-           }} role="document">
-           {!!productSelected && productSelected.produit &&  <div className="modal-content">
-           <div className="modal-header">
-           <h2 className="modal-title" id="exampleModalLongTitle">
-          Suppression du produit
-           </h2>
-           <button
-             type="button"
-             className="close close-modal"
-             data-dismiss="modal"
-             aria-label="Close"
-             id="close-delete-modal"
-           >
-             <span aria-hidden="true">&times;</span>
-           </button>
-           </div>
-           <div className="modal-body">
-           <h4> Voulez-vous supprimer le produit {productSelected.produit.nom_produit} {productSelected.taille} ?</h4>
-           </div>
-
-           <div className="modal-footer">
-
-           <button
-             type="button"
-             className="btn btn-danger close-modal"
-             onClick={handleDelete}
-             disabled={loading}
-           >
-             {loading?'Suppression en cours...':'Oui'}
-           </button>
-           <button
-             type="button"
-             className="btn btn-success close-modal"
-             data-dismiss="modal"
-           >
-             Non
-           </button>
-           </div>
-
-           </div>}
-           </div>
-           </div>
-
-           }
-
-
-                             const App = ()=>{
-                               return <React.Fragment>
-                               <div className="main_content_iner">
-                               <div className="container-fluid p-0">
-                                 <div className="row justify-content-center">
-                                   <div className="col-lg-12">
-                                     <div className="white_card card_height_100 mb_30">
-                                       <div className="white_card_header">
-                                         <div className="box_header m-0">
-                                           <div className="main-title">
-                                             <h3 className="m-0">Liste des produits</h3>
-
-
-                                           </div>
-                                         </div>
-                                       </div>
-                                       <div className="white_card_body">
-                                         <div className="QA_section">
-                                           <div className="white_box_tittle list_header">
-                                             <h4></h4>
-                                             <%- include('partial/inputSearch.ejs') %>
-                                           </div>
-
-                                           <div className='QA_table mb_30'>
-                                         <table className='table lms_table_active3'>
-                                           <thead>
-                                             <tr>
-                                               <th scope='col'>Nom</th>
-                                               <th scope='col'>Catégorie</th>
-                                               <th scope='col'>Taille</th>
-                                               <th scope='col'>Prix de vente</th>
-                                               <th scope='col'>Quantité</th>
-                                               <th scope='col'>Produit</th>
-                                               <th scope='col'>Action</th>
-                                             </tr>
-                                           </thead>
-                                           <ListProduits />
-                                         </table>
-
-                             </div>
-                                         </div>
-                                       </div>
-                                     </div>
-                                   </div>
-                                 </div>
-                               </div>
-                             </div>
-                       <ModalHistoriques />
-                       <ModalDelete />
-
-                               </React.Fragment>
-                             }
-
-
-
-
-
-                             const AppRoot = () => {
-
-                               const [productSelected, setProductSelected] = React.useState(null);
-                               const [products, setProducts] = React.useState(<%- JSON.stringify(Result) %>);
-
-                               const handleSelectProduct = (product) => {
-                                 setProductSelected(product);
-                               };
-
-                               const handleRemoveProduct = (id) => {
-                                setProducts(products.filter((el) => el._id !== id));
-                                setProductSelected(null);
-                               };
-
-                               return (
-                                 <AppContext.Provider value={{ productSelected, handleSelectProduct,handleRemoveProduct, products }}>
-                                   <App />
-                                 </AppContext.Provider>
-                               );
-                             }
-
-                                   ReactDOM.render(<AppRoot />, document.getElementById('root'));
+      ReactDOM.render(<AppRoot />, document.getElementById("root"));
     </script>
 
     <script src="assets/js/bootstrap.bundle.min.js"></script>

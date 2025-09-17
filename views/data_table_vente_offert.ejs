@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="zxx">
+	<meta
+		http-equiv="content-type"
+		content="text/html;charset=UTF-8"
+	/>
+	<head>
+		<!-- Google tag (gtag.js) -->
+		<script
+			async
+			src="https://www.googletagmanager.com/gtag/js?id=G-NT2SW8WBHT"
+		></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag('js', new Date());
+
+			gtag('config', 'G-NT2SW8WBHT');
+		</script>
+		<!-- End Google tag (gtag.js) -->
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, shrink-to-fit=no"
+		/>
+		<script src="assets/js/jquery.min.js"></script>
+		<title>Liste des ventes</title>
+		<!-- App css -->
+		<link
+			href="assets/css/bootstrap.min.css"
+			rel="stylesheet"
+			type="text/css"
+		/>
+		<link
+			href="assets/css/icons.min.css"
+			rel="stylesheet"
+			type="text/css"
+		/>
+		<link
+			href="assets/css/theme.min.css"
+			rel="stylesheet"
+			type="text/css"
+		/>
+		<link
+			href="assets/css/style.css"
+			rel="stylesheet"
+			type="text/css"
+		/>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+		<link href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css" rel="stylesheet" />
+
+		<%- include('partial/newHead.ejs') %>
+		<%- include('partial/head.ejs') %>
+		<%- include('partial/script.ejs') %>
+	</head>
+	<body class="crm_body_bg">
+		<style>
+			/* Reset et base */
+			* {
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				min-height: 100vh;
+			}
+
+			/* Sidebar modernisée */
+			.sidebar .logo .large_logo img {
+				width: 70%;
+				margin-left: 15%;
+				filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+			}
+
+			/* Conteneur principal modernisé */
+			.main_content {
+				background: transparent;
+				padding: 2rem 0;
+			}
+
+			.main_content_iner {
+				background: transparent;
+			}
+
+			/* Carte principale avec glassmorphism */
+			.white_card {
+				background: rgba(255, 255, 255, 0.95);
+				backdrop-filter: blur(20px);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				border-radius: 24px;
+				box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+				overflow: hidden;
+				transition: all 0.3s ease;
+				animation: slideInUp 0.6s ease-out;
+			}
+
+			.white_card:hover {
+				transform: translateY(-5px);
+				box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+			}
+
+			/* Header de la carte */
+			.white_card_header {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				background: linear-gradient(135deg, #2FD8F2 0%, #1b7481 100%);
+				padding: 2rem 5rem;
+				border-bottom: none;
+				position: relative;
+				overflow: hidden;
+			}
+
+			.white_card_header::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+				opacity: 0.3;
+			}
+
+			.main-title h3 {
+				color: white;
+				font-size: 2rem;
+				font-weight: 700;
+				margin: 0;
+				text-align: center;
+				text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+				position: relative;
+				z-index: 1;
+			}
+
+			/* Section de recherche et filtres - Design simplifié et clair */
+			.white_box_tittle {
+				padding: 2rem 3rem;
+				background: white;
+				border-bottom: 1px solid #e5e7eb;
+				border-radius: 0 0 16px 16px;
+			}
+
+			/* Container principal des filtres */
+			.filters-container {
+				display: flex;
+				flex-direction: column;
+				gap: 2rem;
+				align-items: center;
+				max-width: 1200px;
+				margin: 0 auto;
+			}
+
+			/* Section de recherche - Design simple */
+			.search-section {
+				display: flex;
+				align-items: center;
+				gap: 1rem;
+				padding: 1.5rem;
+				background: #f8fafc;
+				border-radius: 12px;
+				border: 1px solid #e2e8f0;
+				width: 100%;
+				max-width: 600px;
+				justify-content: center;
+			}
+
+			/* Styles pour les éléments des includes */
+			.search-section input,
+			.search-section select {
+				flex: 1;
+				padding: 0.75rem 1rem;
+				border: 2px solid #e2e8f0;
+				border-radius: 8px;
+				font-size: 1rem;
+				background: white;
+			}
+
+			.search-section input:focus,
+			.search-section select:focus {
+				outline: none;
+				border-color: #2FD8F2;
+				box-shadow: 0 0 0 3px rgba(47, 216, 242, 0.1);
+			}
+
+			.search-section button {
+				padding: 0.75rem 1.5rem;
+				background: #2FD8F2;
+				color: white;
+				border: none;
+				border-radius: 8px;
+				font-weight: 600;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.search-section button:hover {
+				background: #1f99ac;
+				transform: translateY(-1px);
+			}
+
+			/* Grille des filtres - Layout simple */
+			.filter-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+				gap: 1rem;
+				width: 100%;
+				justify-items: center;
+			}
+
+			/* Styles pour les éléments des includes de filtres */
+			.filter-grid .form-group,
+			.filter-grid .input-group,
+			.filter-grid .col-md-3,
+			.filter-grid .col-md-4,
+			.filter-grid .col-md-6 {
+				background: white;
+				border: 1px solid #e2e8f0;
+				border-radius: 8px;
+				padding: 1rem;
+				transition: all 0.3s ease;
+				width: 100%;
+				max-width: 250px;
+				margin: 0;
+			}
+
+			.filter-grid .form-group:hover,
+			.filter-grid .input-group:hover,
+			.filter-grid .col-md-3:hover,
+			.filter-grid .col-md-4:hover,
+			.filter-grid .col-md-6:hover {
+				border-color: #2FD8F2;
+				box-shadow: 0 4px 12px rgba(47, 216, 242, 0.1);
+			}
+
+			/* Labels des filtres - Simple et clair */
+			.filter-grid label,
+			.filter-grid .filter-label {
+				display: flex;
+				align-items: center;
+				margin-bottom: 0.5rem;
+				font-weight: 600;
+				color: #374151;
+				font-size: 0.875rem;
+			}
+
+			.filter-grid label i,
+			.filter-grid .filter-label i {
+				margin-right: 0.5rem;
+				color: #2FD8F2;
+				width: 16px;
+			}
+
+			/* Champs de saisie - Design simple */
+			.filter-grid input,
+			.filter-grid select,
+			.filter-grid .form-control,
+			.filter-grid .filter-input {
+				width: 100%;
+				padding: 0.5rem 0.75rem;
+				border: 1px solid #d1d5db;
+				border-radius: 6px;
+				font-size: 0.875rem;
+				background: white;
+			}
+
+			.filter-grid input:focus,
+			.filter-grid select:focus,
+			.filter-grid .form-control:focus,
+			.filter-grid .filter-input:focus {
+				outline: none;
+				border-color: #2FD8F2;
+				box-shadow: 0 0 0 2px rgba(47, 216, 242, 0.1);
+			}
+
+			/* Boutons d'action - Position fixe */
+			.action-buttons {
+				display: flex;
+				justify-content: center;
+				gap: 1rem;
+				margin-top: 1.5rem;
+				padding-top: 1.5rem;
+				border-top: 1px solid #e5e7eb;
+				width: 100%;
+			}
+
+			.btn-filter {
+				padding: 0.75rem 1.5rem;
+				border-radius: 8px;
+				font-weight: 600;
+				font-size: 0.875rem;
+				border: none;
+				cursor: pointer;
+				transition: all 0.3s ease;
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+			}
+
+			.btn-primary {
+				background: #2FD8F2;
+				color: white;
+			}
+
+			.btn-primary:hover {
+				background: #1f99ac;
+				transform: translateY(-1px);
+			}
+
+			.btn-secondary {
+				background: #6b7280;
+				color: white;
+			}
+
+			.btn-secondary:hover {
+				background: #4b5563;
+				transform: translateY(-1px);
+			}
+
+			/* Table modernisée */
+			.QA_table {
+				padding: 0 3rem 2rem;
+			}
+
+			.table {
+				background: white;
+				border-radius: 16px;
+				overflow: hidden;
+				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+				border: none;
+			}
+
+			.table thead {
+				background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+			}
+
+			.table thead th {
+				border: none;
+				padding: 1.5rem 1rem;
+				font-weight: 600;
+				color: #475569;
+				font-size: 0.9rem;
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+				position: relative;
+			}
+
+			.table thead th::after {
+				content: '';
+				position: absolute;
+				bottom: 0;
+				left: 1rem;
+				right: 1rem;
+				height: 2px;
+				background: linear-gradient(90deg, #2FD8F2, #22808f);
+				border-radius: 1px;
+			}
+
+			.table tbody tr {
+				transition: all 0.3s ease;
+				border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+			}
+
+			.table tbody tr:hover {
+				background: rgba(102, 126, 234, 0.05);
+				transform: scale(1.01);
+				box-shadow: 0 4px 20px rgba(102, 126, 234, 0.1);
+			}
+
+			.table tbody td {
+				padding: 1.25rem 1rem;
+				border: none;
+				vertical-align: middle;
+				font-size: 0.95rem;
+				color: #374151;
+			}
+
+			/* Statuts avec badges modernes */
+			.status-badge {
+				display: inline-flex;
+				align-items: center;
+				padding: 0.5rem 1rem;
+				border-radius: 50px;
+				font-size: 0.8rem;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+				position: relative;
+				overflow: hidden;
+			}
+
+			.status-badge::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: -100%;
+				width: 100%;
+				height: 100%;
+				background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+				transition: left 0.5s ease;
+			}
+
+			.status-badge:hover::before {
+				left: 100%;
+			}
+
+			.status-offert {
+				background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+				color: white;
+				box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+			}
+
+			.status-confirmed {
+				background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+				color: white;
+				box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+			}
+
+			.status-cancelled {
+				background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+				color: white;
+				box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+			}
+
+			/* Boutons d'action modernisés */
+			.btn {
+				border-radius: 12px;
+				padding: 0.75rem 1.5rem;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+				transition: all 0.3s ease;
+				border: none;
+				position: relative;
+				overflow: hidden;
+			}
+
+			.btn::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: -100%;
+				width: 100%;
+				height: 100%;
+				background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+				transition: left 0.5s ease;
+			}
+
+			.btn:hover::before {
+				left: 100%;
+			}
+
+			.btn-success {
+				background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+				color: white;
+				box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+			}
+
+			.btn-success:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+			}
+
+			.btn-danger {
+				background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+				color: white;
+				box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+			}
+
+			.btn-danger:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+			}
+
+			/* Total avec animation */
+			.total-section {
+				background: linear-gradient(135deg, #2d91a0 0%, #2FD8F2 100%);
+				border-radius: 16px;
+				padding: 1.5rem 2rem;
+				margin: 1rem 2rem;
+				text-align: center;
+				color: white;
+				position: relative;
+				overflow: hidden;
+			}
+
+			.total-section::before {
+				content: '';
+				position: absolute;
+				top: -50%;
+				left: -50%;
+				width: 200%;
+				height: 200%;
+				background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+				animation: rotate 10s linear infinite;
+			}
+
+			.total-text {
+				font-size: 1.1rem;
+				font-weight: 600;
+				margin-bottom: 0.5rem;
+				position: relative;
+				z-index: 1;
+			}
+
+			.total-amount {
+				font-size: 2rem;
+				font-weight: 700;
+				position: relative;
+				z-index: 1;
+				text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+			}
+
+			/* Animations */
+			@keyframes slideInUp {
+				from {
+					opacity: 0;
+					transform: translateY(30px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			@keyframes rotate {
+				from { transform: rotate(0deg); }
+				to { transform: rotate(360deg); }
+			}
+
+			@keyframes pulse {
+				0%, 100% { transform: scale(1); }
+				50% { transform: scale(1.05); }
+			}
+
+			@keyframes fadeIn {
+				from { opacity: 0; }
+				to { opacity: 1; }
+			}
+
+			/* Responsive */
+			@media (max-width: 768px) {
+				.white_card_header {
+					padding: 1.5rem 2rem;
+				}
+
+				.white_box_tittle {
+					padding: 1.5rem 2rem;
+				}
+
+				.QA_table {
+					padding: 0 2rem 2rem;
+				}
+
+				.total-section {
+					margin: 1rem 1rem;
+					padding: 1.5rem 1.5rem;
+				}
+
+				/* Filtres responsive */
+				.filters-container {
+					gap: 1.5rem;
+					padding: 0 1rem;
+				}
+
+				.search-section {
+					flex-direction: column;
+					gap: 0.75rem;
+					padding: 1rem;
+					max-width: 100%;
+				}
+
+				.search-section input {
+					width: 100%;
+				}
+
+				.filter-grid {
+					grid-template-columns: 1fr;
+					gap: 0.75rem;
+					justify-items: center;
+				}
+
+				.filter-card {
+					padding: 0.75rem;
+					max-width: 100%;
+				}
+
+				.action-buttons {
+					flex-direction: column;
+					gap: 0.75rem;
+					align-items: center;
+				}
+
+				.btn-filter {
+					padding: 0.75rem 1rem;
+					justify-content: center;
+					width: 100%;
+					max-width: 200px;
+				}
+
+				.main-title h3 {
+					font-size: 1.5rem;
+				}
+
+				.table thead th,
+				.table tbody td {
+					padding: 1rem 0.5rem;
+					font-size: 0.85rem;
+				}
+
+				.btn {
+					padding: 0.5rem 1rem;
+					font-size: 0.8rem;
+				}
+			}
+
+			/* Modal modernisé */
+			.modal-content {
+				border-radius: 20px;
+				border: none;
+				box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+				overflow: hidden;
+			}
+
+			.modal-header {
+				background: linear-gradient(135deg, #2d91a0 0%, #2FD8F2 100%);
+				color: white;
+				border-bottom: none;
+				padding: 2rem;
+			}
+
+			.modal-title {
+				font-weight: 600;
+				font-size: 1.25rem;
+			}
+
+			.modal-body {
+				padding: 2rem;
+				font-size: 1.1rem;
+				color: #374151;
+			}
+
+			.modal-footer {
+				padding: 1.5rem 2rem;
+				border-top: 1px solid rgba(226, 232, 240, 0.8);
+				background: rgba(248, 250, 252, 0.8);
+			}
+
+			/* Footer modernisé */
+			.footer_part {
+				background: rgba(255, 255, 255, 0.1);
+				backdrop-filter: blur(10px);
+				border-top: 1px solid rgba(255, 255, 255, 0.2);
+				margin-top: 3rem;
+			}
+
+			.footer_iner {
+				padding: 2rem 0;
+				color: rgba(255, 255, 255, 0.8);
+			}
+
+			.footer_iner a {
+				color: white;
+				text-decoration: none;
+				font-weight: 600;
+				transition: all 0.3s ease;
+			}
+
+			.footer_iner a:hover {
+				color: #fbbf24;
+				transform: translateY(-2px);
+			}
+
+			/* Scrollbar personnalisée */
+			.table-responsive::-webkit-scrollbar {
+				width: 8px;
+				height: 8px;
+			}
+
+			.table-responsive::-webkit-scrollbar-track {
+				background: rgba(226, 232, 240, 0.5);
+				border-radius: 4px;
+			}
+
+			.table-responsive::-webkit-scrollbar-thumb {
+				background: linear-gradient(135deg, #2d91a0 0%, #2FD8F2 100%);
+				border-radius: 4px;
+			}
+
+			.table-responsive::-webkit-scrollbar-thumb:hover {
+				background: linear-gradient(135deg, #2d91a0 0%, #2FD8F2 100%);
+			}
+
+			/* Effet de chargement */
+			.loading {
+				opacity: 0.7;
+				pointer-events: none;
+			}
+
+			.loading::after {
+				content: '';
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				width: 20px;
+				height: 20px;
+				margin: -10px 0 0 -10px;
+				border: 2px solid #2FD8F2;
+				border-top: 2px solid transparent;
+				border-radius: 50%;
+				animation: spin 1s linear infinite;
+			}
+
+			@keyframes spin {
+				0% { transform: rotate(0deg); }
+				100% { transform: rotate(360deg); }
+			}
+		</style>
+		<%- include('partial/newHead.ejs') %>
+		<!--/ navbar  -->
+		<%- include('partial/newSideBar.ejs') %>
+		<!--/ sidebar  -->
+
+		
+
+		<section class="main_content dashboard_part large_header_bg">
+			<!-- menu  -->
+
+			<div class="main_content_iner">
+				<div class="container-fluid p-0">
+					<div class="row justify-content-center">
+						<div class="col-lg-12">
+							<div class="white_card card_height_100 mb_30">
+								<div class="white_card_header">
+									<div class="box_header m-0">
+										<div class="main-title">
+											<h3 class="m-0">
+												<i class="fas fa-gift me-3"></i>
+												Liste des boissons offertes
+											</h3>
+										</div>
+									</div>
+								</div>
+								<div class="white_card_body">
+									<div class="QA_section">
+										<div class="white_box_tittle list_header">
+											<div class="filters-container">
+												<!-- Section de recherche -->
+												<div class="search-section">
+													<%- include('partial/inputSearch.ejs') %>
+												</div>
+												
+												<!-- Grille des filtres -->
+												<div class="filter-grid">
+													<%- include('partial/filterOffer.ejs') %>
+												</div>
+												
+												<!-- Boutons d'action - UN SEUL SET -->
+												<div class="action-buttons">
+													<button type="button" class="btn-filter btn-primary" onclick="applyFilters()">
+														<i class="fas fa-filter"></i>
+														Filtrer
+													</button>
+													<button type="button" class="btn-filter btn-secondary" onclick="resetFilters()">
+														<i class="fas fa-undo"></i>
+														Réinitialiser
+													</button>
+												</div>
+											</div>
+										</div>
+
+										<!-- Section Total -->
+										<div class="total-section">
+											<div class="total-text">
+												<i class="fas fa-chart-pie me-2"></i>
+												Total des boissons offertes
+											</div>
+											<div class="total-amount">
+												<%= totalOffert %> <%= currency %>
+											</div>
+										</div>
+
+										<div class="QA_table mb_30">
+											<!-- table-responsive -->
+											<div class="table-responsive">
+												<table class="table lms_table_active3" data-order='[[7, "desc"]]'>
+													<thead>
+														<tr>
+															<th scope="col">
+																<i class="fas fa-hashtag me-2"></i>Code
+															</th>
+															<th scope="col">
+																<i class="fas fa-wine-bottle me-2"></i>Produit
+															</th>
+															<th scope="col">
+																<i class="fas fa-tags me-2"></i>Categories
+															</th>
+															<th scope="col">
+																<i class="fas fa-user me-2"></i>Vendeur / Vendeuse
+															</th>
+															<th scope="col">
+																<i class="fas fa-sort-numeric-up me-2"></i>Quantité
+															</th>
+															<th scope="col">
+																<i class="fas fa-money-bill-wave me-2"></i>Prix
+															</th>
+															<th scope="col">
+																<i class="fas fa-info-circle me-2"></i>Status
+															</th>
+															<th scope="col">
+																<i class="fas fa-calendar-alt me-2"></i>Date
+															</th>
+														</tr>
+													</thead>
+													<tbody>
+														<% for(let vente of ventes) {%>
+														<tr class="<%=vente.status_commande == "Annulée" ?'venteRed': '' %>" style="animation: fadeIn 0.5s ease-out;">
+															<td>
+																<span class="badge bg-primary" style="font-family: 'Courier New', monospace; font-weight: 600;">
+																	<%= vente.code %>
+																</span>
+															</td>
+															<td>
+																<div class="d-flex align-items-center">
+																	<i class="fas fa-wine-bottle me-2 text-primary"></i>
+																	<strong><%= vente.produit %></strong>
+																</div>
+															</td>
+															<td>
+																<span class="badge bg-info bg-opacity-10 text-white">
+																	<%= vente.categories%>
+																</span>
+															</td>
+															<td>
+																<div class="d-flex align-items-center">
+																	<div class="avatar-sm me-2" style="width: 32px; height: 32px; background: linear-gradient(135deg, #2FD8F2 0%, #1f99ac 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.8rem;">
+																		<%= vente.employe.charAt(0).toUpperCase() %>
+																	</div>
+																	<span><%= vente.employe%></span>
+																</div>
+															</td>
+															<td>
+																<span class="badge bg-warning bg-opacity-10 text-white" style="font-size: 0.9rem; padding: 0.5rem 0.75rem;">
+																	<%= vente.quantite%>
+																</span>
+															</td>
+															<td>
+																<span class="fw-bold text-success">
+																	<%= vente.prix%>
+																</span>
+															</td>
+															<td>
+																<% if(vente.status_commande === "Offert") { %>
+																	<% if(vente.offered_confirmed) { %>
+																		<span class="status-badge status-confirmed">
+																			<i class="fas fa-check-circle me-1"></i>
+																			Validée
+																		</span>
+																	<% } else { %>
+																		<span class="status-badge status-offert">
+																			<i class="fas fa-clock me-1"></i>
+																			En attente
+																		</span>
+																	<% } %>
+																<% } else { %>
+																	<span class="status-badge status-cancelled">
+																		<i class="fas fa-times-circle me-1"></i>
+																		Annulée
+																	</span>
+																<% } %>
+															</td>
+															<td data-order="<%= vente.createdAt %>">
+																<div class="d-flex align-items-center">
+																	<i class="fas fa-calendar me-2 text-muted"></i>
+																	<small><%= new Date(vente.createdAt).toLocaleString('fr-Fr') %></small>
+																</div>
+															</td>
+														</tr>
+														<% } %>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="footer_part">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="footer_iner text-center">
+								<p>
+									2023 © HNM - Designed by
+									<a href="#"> <i class="ti-gun"></i> </a><a href="#"> HNM</a> -
+									<a href="/faq">FAQ</a>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<div class="menu-overlay"></div>
+
+		<!--/### CHAT_MESSAGE_BOX  ### -->
+		<div
+			id="back-top"
+			style="display: none"
+		>
+			<a
+				title="Go to Top"
+				href="#"
+			>
+				<i class="ti-angle-up"></i>
+			</a>
+		</div>
+		<!-- footer  -->
+		<!-- footer  -->
+		<!-- jquery slim -->
+
+    <!-- MODAL -->
+
+    <div class="modal fade" id="confirm_offer_modal" tabindex="-1" role="dialog" aria-labelledby="confirm_offer_modalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">
+              <i class="fas fa-check-circle me-2"></i>
+              Validation de la vente offerte
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="text-center">
+              <i class="fas fa-question-circle fa-3x text-primary mb-3"></i>
+              <p class="mb-0">Voulez-vous valider la vente offerte ?</p>
+            </div>
+          </div>
+          <form method="post" action="/confirm_vente_offert">
+            <input type="hidden" id="confirm_offer_id" name="offerId" />
+            <input type="checkbox" id="confirm_offer_checkbox" name="confirm" style="opacity: 0;" />
+  
+            <label class="modal-footer" style="display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+             
+              <button type="submit" class="btn btn-success">
+                <label for="confirm_offer_checkbox" style="width: 100%;margin:0;padding:0;">
+                  <i class="fas fa-check me-1"></i>
+                  Oui, confirmer
+                </label>
+              </button>
+          
+              <button type="button" class="btn btn-danger" data-dismiss="modal">
+                <i class="fas fa-times me-1"></i>
+                Non, annuler
+              </button>
+          
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="cancel_offer_modal" tabindex="-1" role="dialog" aria-labelledby="cancel_offer_modalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">
+              <i class="fas fa-times-circle me-2"></i>
+              Annulation de la vente offerte
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="text-center">
+              <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+              <p class="mb-0">Voulez-vous annuler la vente offerte ?</p>
+            </div>
+          </div>
+          <form method="post" action="/cancel_vente_offert">
+            <input type="hidden" id="cancel_offer_id" name="offerId" />
+            <input type="checkbox" id="cancel_offer_checkbox" name="confirm" style="opacity: 0;" />
+            <label class="modal-footer" style="display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+             
+              <button type="submit" class="btn btn-success">
+                <label for="confirm_offer_checkbox" style="width: 100%;margin:0;padding:0;">
+                  <i class="fas fa-check me-1"></i>
+                  Oui, annuler
+                </label>
+              </button>
+          
+              <button type="button" class="btn btn-danger" data-dismiss="modal">
+                <i class="fas fa-times me-1"></i>
+                Non, garder
+              </button>
+          
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    
+		<script src="assets/js/bootstrap.bundle.min.js"></script>
+		<script src="assets/js/metismenu.min.js"></script>
+		<script src="assets/js/waves.js"></script>
+		<script src="assets/js/simplebar.min.js"></script>
+
+		<!-- Morris Js-->
+		<script src="../plugins/morris-js/morris.min.js"></script>
+		<!-- Raphael Js-->
+		<script src="../plugins/raphael/raphael.min.js"></script>
+
+		<!-- Morris Custom Js-->
+		<script src="assets/pages/dashboard-demo.js"></script>
+
+		<!-- App js -->
+		<script src="assets/js/theme.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+      const handleClickConfirmBtn = (offerId) => {
+          // const offerId = btn.closest('tr').querySelector('td:first-child').textContent;
+          // document.getElementById('confirm_offer_id').value = offerId;
+          let vente_id = offerId;
+          if(typeof offerId !== 'string'){
+            vente_id = $(this).attr('data-venteId');
+          }else{
+            vente_id = offerId;
+          }
+          $('#confirm_offer_id').val(vente_id);
+        $('#confirm_offer_modal').modal('show');
+      }
+
+      const handleClickCancelBtn = (offerId) => {
+        let vente_id = offerId;
+        if(typeof offerId !== 'string'){
+          vente_id = $(this).attr('data-venteId');
+        }else{
+          vente_id = offerId;
+        }
+        $('#cancel_offer_id').val(vente_id);
+        $('#cancel_offer_modal').modal('show');
+      }
+
+      // Fonctions pour les filtres
+      function applyFilters() {
+        // Animation de chargement
+        const filterBtn = document.querySelector('.btn-primary');
+        filterBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> FILTRAGE...';
+        filterBtn.disabled = true;
+        
+        // Simuler le filtrage (à adapter selon votre logique)
+        setTimeout(() => {
+          filterBtn.innerHTML = '<i class="fas fa-filter"></i> FILTRER';
+          filterBtn.disabled = false;
+          // Ici, ajoutez votre logique de filtrage
+          console.log('Filtres appliqués');
+        }, 1000);
+      }
+
+      function resetFilters() {
+        // Animation de réinitialisation
+        const resetBtn = document.querySelector('.btn-secondary');
+        resetBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> RÉINITIALISATION...';
+        resetBtn.disabled = true;
+        
+        // Simuler la réinitialisation
+        setTimeout(() => {
+          resetBtn.innerHTML = '<i class="fas fa-undo"></i> RÉINITIALISER';
+          resetBtn.disabled = false;
+          // Ici, ajoutez votre logique de réinitialisation
+          console.log('Filtres réinitialisés');
+        }, 800);
+      }
+      
+      
+    </script>
+	</body>
+
+	<!-- Mirrored from demo.dashboardpack.com/user-management-html/data_table.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 05 Jul 2021 17:20:14 GMT -->
+</html>

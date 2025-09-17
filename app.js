@@ -1,26 +1,26 @@
 /** @format */
-require('dotenv').config();
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const cors = require('cors');
-const swaggerUi = require('swagger-ui-express'),
-  swaggerDocument = require('./swagger.json');
+require("dotenv").config();
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const cors = require("cors");
+const swaggerUi = require("swagger-ui-express"),
+  swaggerDocument = require("./swagger.json");
 
-const expressSession = require('express-session');
-var MongoStore = require('connect-mongo');
+const expressSession = require("express-session");
+var MongoStore = require("connect-mongo");
 
 const session = expressSession({
-  secret: 'maisdismoitucherchesquoiputin',
+  secret: "d8a6f8363e1b546148f997b9b511e3ce400368215b5f893159b9b9d5bd3a3fb2",
   resave: true,
   saveUninitialized: true,
   store: MongoStore.create({
     mongoUrl: process.env.MONGO_URI,
-    dbName: 'emaquis',
-    dbCollection: 'sessions',
-    autoRemove: 'interval',
+    dbName: "emaquis",
+    dbCollection: "sessions",
+    autoRemove: "interval",
     autoRemoveInterval: 1,
   }),
   cookie: {
@@ -28,10 +28,11 @@ const session = expressSession({
   },
 });
 
-const sharedSession = require('express-socket.io-session');
+const sharedSession = require("express-socket.io-session");
 
-const indexRouters = require('./routes/index');
-const { forceSession } = require('./middleware/auth');
+const indexRouters = require("./routes/index");
+const settingsRouter = require("./routes/settings.router");
+const { forceSession } = require("./middleware/auth");
 // const adminRouters = require("./routes/admin.router");
 //const usersRouter = require("./routes/users.router");
 
@@ -49,8 +50,8 @@ const Serveur = class {
   }
 
   settings() {
-    this.app.set('views', path.join(__dirname, 'views'));
-    this.app.set('view engine', 'ejs');
+    this.app.set("views", path.join(__dirname, "views"));
+    this.app.set("view engine", "ejs");
   }
 
   middleware() {
@@ -58,18 +59,19 @@ const Serveur = class {
 
     this.app.use(
       cors({
-        origin: ['http://localhost:3000'],
+        origin: ["http://localhost:3000"],
       })
     );
-    this.app.use(logger('dev'));
+    this.app.use(logger("dev"));
     this.app.use(session);
     this.app.use(cookieParser());
-    this.app.use(express.static(path.join(__dirname, 'public')));
+    this.app.use(express.static(path.join(__dirname, "public")));
     // this.app.use(bodyParser.urlencoded({ extended: false }));
     // this.app.use(bodyParser.json());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
     this.app.use(forceSession);
+    this.app.use("/api/settings", settingsRouter);
     // this.app.use(function (req, res, next) {
     //   res.locals.user = req.session.user;
     //   next();
@@ -77,9 +79,9 @@ const Serveur = class {
   }
 
   routes() {
-    this.app.use('/', indexRouters);
+    this.app.use("/", indexRouters);
     this.app.use(
-      '/api-docs',
+      "/api-docs",
       swaggerUi.serve,
       swaggerUi.setup(swaggerDocument)
     );
@@ -93,14 +95,14 @@ const Serveur = class {
 
     // error handler
     this.app.use(function (err, req, res, next) {
-      console.log('👉 👉 👉  ~ file: app.js:78 ~ err', err);
+      console.log("👉 👉 👉  ~ file: app.js:78 ~ err", err);
       // set locals, only providing error in development
       res.locals.message = err.message;
-      res.locals.error = req.app.get('env') === 'development' ? err : {};
+      res.locals.error = req.app.get("env") === "development" ? err : {};
 
       // render the error page
       res.status(err.status || 500);
-      res.render('error');
+      res.render("error");
     });
   }
 

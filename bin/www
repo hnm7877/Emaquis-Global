@@ -14,13 +14,16 @@ const { fournisseurQueries } = require("../requests/fournisseurQueries");
 const { produitQueries } = require("../requests/produitQueries");
 const { venteQueries } = require("../requests/venteQueries");
 const { paiementQueries } = require("../requests/paiementQueries");
+const { settingQueries } = require("../requests/settingQueries");
 const User = require("../models/user.model");
+const PaymentHistory = require("../models/paymentHistory");
 const Setting = require("../models/settings.model");
 const dotenv = require("dotenv").config();
 var bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const swaggerUi = require("swagger-ui-express"),
   swaggerDocument = require("../swagger.json");
+const moment = require("moment");
 
 const FileUpload = require("../utils/fileupload");
 
@@ -60,7 +63,7 @@ const SaveUSer = io.of("/inscription").use(Serveur.getSharedSession());
 SaveUSer.on("connection", (socket) => {
   socket.on("setUser", async (data) => {
     const Result = await userQueries.setUser(data);
-    if (Result.etat == false) {
+    if (Result.etat === false) {
       socket.emit("bad");
     } else {
       if (Result !== null) {
@@ -112,6 +115,8 @@ UserLogin.on("connection", (socket) => {
 
         userlogin.token = token;
 
+        const setting = await settingQueries.getSettingByUserId(userlogin._id);
+
         socket.handshake.session.user = {
           id: userlogin._id,
           username: userlogin.username,
@@ -119,6 +124,7 @@ UserLogin.on("connection", (socket) => {
           isAdmin: userlogin.isAdmin,
           ...userlogin._doc,
           token,
+          hasOffer: setting?.result?.hasOffer,
         };
 
         socket.handshake.session.save();
@@ -185,7 +191,11 @@ io.of("/modifiercategorie")
   .use(Serveur.getSharedSession())
   .on("connection", (socket) => {
     socket.on("updatecategorie", async (data, id) => {
+      console.log("🔧 Modification catégorie - ID:", id);
+      console.log("🔧 Données reçues:", data);
+
       const cat = await categorieQueries.getCategorieById(id);
+      console.log("🔧 Catégorie existante:", cat.result);
 
       if (cat.result) {
         if (data.image && data.image !== cat.result.image) {
@@ -199,13 +209,24 @@ io.of("/modifiercategorie")
           data.image = cat.result.image;
         }
 
+        // S'assurer que idParent est null si vide
+        if (data.idParent === "" || data.idParent === undefined) {
+          data.idParent = null;
+        }
+
+        console.log("🔧 Données finales pour update:", data);
+
         const Result = await categorieQueries.updateCategorie(id, data);
-        if (Result.result !== null) {
+        console.log("🔧 Résultat update:", Result);
+
+        if (Result.etat) {
           socket.emit("saved");
         } else {
+          console.log("❌ Erreur lors de l'update:", Result.err);
           socket.emit("bad");
         }
       } else {
+        console.log("❌ Catégorie non trouvée");
         socket.emit("bad");
       }
     });
@@ -220,6 +241,30 @@ SaveFournisseur.on("connection", (socket) => {
       socket.emit("saved");
     } else {
       socket.emit("bad");
+    }
+  });
+});
+
+const SaveDashInfo = io.of("/dashboard").use(Serveur.getSharedSession());
+SaveDashInfo.on("connection", (socket) => {
+  socket.on("eventPaiement", async (data) => {
+    console.log(data);
+
+    const paiement = new PaymentHistory({
+      userId: data.user.id,
+      payment: data.data,
+    });
+    await paiement.save();
+    const dayNumber = parseInt(Number(data.data.amount) / 5000);
+    const newDate = moment().add({ day: dayNumber }).toDate();
+    console.log(newDate, "newDate");
+
+    if (data.data.status === "ACCEPTED") {
+      const Result = await userQueries.updateUser(data.user.id, {
+        expiredPaymentDate: newDate,
+        paid: true,
+        period: dayNumber,
+      });
     }
   });
 });

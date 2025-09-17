@@ -1,196 +1,350 @@
 <!DOCTYPE html>
 <html lang="fr">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="description" content="E-maquis, Gestionnaire d'établissement">
-    <meta name="author" content="Haut Numérique et Médias">
-    <meta name="keywords" content="E-maquis, Gestionnaire d'établissement">
-    <meta name="generator" content="E-maquis, Gestionnaire d'établissement">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="description" content="E-maquis, Gestionnaire d'établissement" />
+    <meta name="author" content="Haut Numérique et Médias" />
+    <meta name="keywords" content="E-maquis, Gestionnaire d'établissement" />
+    <meta name="generator" content="E-maquis, Gestionnaire d'établissement" />
     <title>E-maquis</title>
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="newAssets/css/signUp.css">
+    <link rel="stylesheet" href="newAssets/css/signUp.css" />
 
-
-    <link rel="shortcut icon" href="newAssets/images/logo/emaquisLogo2.png" type="image/x-icon">
-    <link rel="icon" href="newAssets/images/logo/emaquisLogo2.png" type="image/x-icon">
-    <link href="newAssets/css/bootstrap.css" rel="stylesheet">
-
-
+    <link
+      rel="shortcut icon"
+      href="newAssets/images/logo/emaquisLogo2.png"
+      type="image/x-icon"
+    />
+    <link
+      rel="icon"
+      href="newAssets/images/logo/emaquisLogo2.png"
+      type="image/x-icon"
+    />
+    <link href="newAssets/css/bootstrap.css" rel="stylesheet" />
 
     <!-- Responsive -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <style>
+      .input-box select {
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        border: none;
+        outline: none;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 40px;
+        font-size: 16px;
+        color: #fff;
+        padding: 15px;
+        transition: all 0.3s ease-in-out;
+      }
+    </style>
+  </head>
 
-    <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
-    <!--[if lt IE 9]><script src="js/respond.js"></script><![endif]-->
-</head>
-
-<body>
+  <body>
     <div class="wrapper">
+      <div
+        class="alert alert-success"
+        role="alert"
+        style="text-align: center; display: none"
+        id="alert-success"
+      >
+        L'opération s'est terminée avec succès !
+      </div>
+      <div
+        class="alert alert-danger"
+        role="alert"
+        style="text-align: center; display: none"
+        id="alert-danger"
+      >
+        Echec de l'opération, nom de l'établissement ou email déjà utilisé!
+      </div>
 
-        <div class="alert alert-success" role="alert" style="text-align: center; display: none" id="alert-success">
-            L'opération s'est terminée avec succès !
+      <form action="">
+        <div class="auto-container">
+          <div class="row clearfix justify-content-center align-items-center">
+            <a href="/"
+              ><img
+                src="newAssets/images/logo/emaquisLogo2.png"
+                width="100"
+                alt=""
+                srcset=""
+            /></a>
           </div>
-          <div class="alert alert-danger" role="alert" style="text-align: center; display: none" id="alert-danger">
-            Echec de l'opération, nom de l'établissement ou email déjà
-            utilisé!
+          <h1>Inscrivez-vous</h1>
+          <div class="row clearfix">
+            <div class="col-lg-6 col-md-6">
+              <div class="input-box">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Nom d'utilisateur "
+                  name="username"
+                  required
+                />
+                <span class="icon flaticon-user"></span>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <div class="input-box">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Nom de l'établissement "
+                  name="nom_etablissement"
+                  required
+                />
+                <span class="icon flaticon-user"></span>
+              </div>
+            </div>
           </div>
-
-        <form action="">
-            <div class="auto-container">
-
-                <div class="row clearfix justify-content-center align-items-center">
-                  <a href="/"><img src="newAssets/images/logo/emaquisLogo2.png" width="100" alt="" srcset=""></a>  
-                </div>
-                <h1>Inscrivez-vous</h1>
-                <div class="row clearfix">
-
-
-                    <div class="col-lg-6 col-md-6">
-                        <div class="input-box">
-                            <input type="text" placeholder="Nom d'utilisateur " name="username" required>
-                            <span class="icon flaticon-user"></span>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6">
-                        <div class="input-box">
-                            <input type="text" placeholder="Nom de l'établissement " name="nom_etablissement" required>
-                            <span class="icon flaticon-user"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row clearfix">
-
-
-                    <div class="col-lg-6 col-md-6">
-                        <div class="input-box">
-                            <input type="text" placeholder="Email" name="email" required>
-                            <span class="icon flaticon-user"></span>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6">
-                        <div class="input-box">
-                            <input type="text" placeholder="Adresse" name="adresse" required>
-                            <span class="icon flaticon-user"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row clearfix">
-
-
-                    <div class="col-lg-6 col-md-6">
-                        <div class="input-box">
-                            <input type="tel" id="numericInput" oninput="validateNumericInput(this)" placeholder="N° de Téléphone" name="numero" required>
-                            <span class="icon flaticon-user"></span>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6">
-                        <div class="input-box">
-                            <input type="password" placeholder="Mot de passe" name="password" required>
-                            <span class="icon flaticon-user"></span>
-                        </div>
-                        <div class="input-box">
-                            <input type="password" placeholder="confirmer le mot de passe" name="confirm_password" required>
-                            <span class="icon flaticon-user"></span>
-                        </div>
-                    </div>
-                </div>
+          <div class="row clearfix">
+            <div class="col-lg-6 col-md-6">
+              <div class="input-box">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Email"
+                  name="email"
+                  required
+                />
+                <span class="icon flaticon-user"></span>
+              </div>
             </div>
-
-
-
-
-
-            <div class="row clearfix justify-content-center align-items-center">
-                <button type="submit" class="btn">S'inscrire</button>
+            <div class="col-lg-6 col-md-6">
+              <div class="input-box">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Adresse"
+                  name="adresse"
+                  required
+                />
+                <span class="icon flaticon-user"></span>
+              </div>
             </div>
-             <div class="register-link">
-                <p>Avez-vous déjà un compte? <a href="/connexion">Connectez-vous ici</a></p>
+          </div>
+          <script>
+            document.addEventListener("DOMContentLoaded", function () {
+              // Create the modal
+              const modal = document.createElement("div");
+              modal.id = "eventModal";
+              modal.style.position = "fixed";
+              modal.style.top = "50%";
+              modal.style.left = "50%";
+              modal.style.transform = "translate(-50%, -50%)";
+              modal.style.backgroundColor = "white";
+              modal.style.padding = "20px";
+              modal.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.3)";
+              modal.style.zIndex = "1000";
+              modal.innerHTML = `
+                <h2>Nouveau</h2>
+                <p>E-maquis vous propose une option pour gérer vos évènements, l'application reste gratuite mais cette option est <b>payante</b>. Sélectionnez "OUI 👑" si vous souhaiter gérer un évènement ou "non" si vous voulez utiliser l'application pour votre établissement gratuitement</p>
+                <button id="closeModal" class="btn btn-info">J'ai compris</button>
+              `;
+              document.body.appendChild(modal);
+
+              // Close modal function
+              document
+                .getElementById("closeModal")
+                .addEventListener("click", function () {
+                  modal.style.display = "none";
+                  clearInterval(blinkInterval);
+                  document.querySelector("select[name='event']").style.border =
+                    "2px solid rgba(255, 255, 255, 0.2)";
+                });
+
+              // Blink the border of the select field
+              const eventSelect = document.querySelector(
+                "select[name='event']"
+              );
+              let blink = true;
+              const blinkInterval = setInterval(function () {
+                eventSelect.style.border = blink
+                  ? "2px solid red"
+                  : "2px solid rgba(255, 255, 255, 0.2)";
+                blink = !blink;
+              }, 500);
+            });
+          </script>
+          <div class="row clearfix">
+            <div class="col-lg-6 col-md-6">
+              <div class="input-box">
+                <select name="event" class="wallper_select">
+                  <option
+                    value=""
+                    disabled
+                    selected
+                    placeholder="Créer un compte pour un évenement ?"
+                  >
+                    Créer un compte pour un évenement ?
+                  </option>
+                  <option value="true">OUI<sup>👑</sup></option>
+                  <option value="false">NON</option>
+                </select>
+                <span class="icon flaticon-user"></span>
+              </div>
             </div>
-        </form>
+            <div class="col-lg-6 col-md-6">
+              <div class="input-box">
+                <input
+                  name="period"
+                  style="display: none"
+                  placeholder="Nombre de jour(s)"
+                  type="number"
+                />
+                <span class="icon flaticon-user"></span>
+              </div>
+            </div>
+          </div>
+          <div class="row clearfix">
+            <div class="col-lg-6 col-md-6">
+              <div class="input-box">
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="numericInput"
+                  oninput="validateNumericInput(this)"
+                  placeholder="N° de Téléphone"
+                  name="numero"
+                  required
+                />
+                <span class="icon flaticon-user"></span>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <div class="input-box">
+                <input
+                  type="password"
+                  class="form-control"
+                  placeholder="Mot de passe"
+                  name="password"
+                  required
+                />
+                <span class="icon flaticon-user"></span>
+              </div>
+              <div class="input-box">
+                <input
+                  type="password"
+                  class="form-control"
+                  placeholder="confirmer le mot de passe"
+                  name="confirm_password"
+                  required
+                />
+                <span class="icon flaticon-user"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row clearfix justify-content-center align-items-center">
+          <button type="submit" class="btn btn-primary">S'inscrire</button>
+        </div>
+        <div class="register-link">
+          <p>
+            Avez-vous déjà un compte?
+            <a href="/connexion">Connectez-vous ici</a>
+          </p>
+        </div>
+      </form>
     </div>
 
-  
+    <!-- JAVASCRIPTS -->
+    <script src="../jquery-3.4.1.min.js"></script>
+    <script src="../plugins/country/src/js/countrySelect.js"></script>
+    <script src="../emaquisjs/emaquis.js"></script>
+    <script src="../plugins/jquery/jquery.min.js"></script>
+    <script src="../plugins/bootstrap/bootstrap.min.js"></script>
+    <script src="../plugins/slick/slick.min.js"></script>
+    <script src="../plugins/fancybox/jquery.fancybox.min.js"></script>
+    <script src="../plugins/syotimer/jquery.syotimer.min.js"></script>
+    <script src="../plugins/aos/aos.js"></script>
+    <!-- google map -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+    <script src="../plugins/google-map/gmap.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="/socket.io/socket.io.js "></script>
+    <script>
+      const socket = io(window.location.origin + window.location.pathname);
+      console.log(window.location.origin + window.location.pathname);
 
-  <!-- JAVASCRIPTS -->
-  <script src="../jquery-3.4.1.min.js"></script>
-  <script src="../plugins/country/src/js/countrySelect.js"></script>
-  <script src="../emaquisjs/emaquis.js"></script>
-  <script src="../plugins/jquery/jquery.min.js"></script>
-  <script src="../plugins/bootstrap/bootstrap.min.js"></script>
-  <script src="../plugins/slick/slick.min.js"></script>
-  <script src="../plugins/fancybox/jquery.fancybox.min.js"></script>
-  <script src="../plugins/syotimer/jquery.syotimer.min.js"></script>
-  <script src="../plugins/aos/aos.js"></script>
-  <!-- google map -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
-  <script src="../plugins/google-map/gmap.js"></script>
+      $("form").on("submit", (e) => {
+        e.preventDefault();
+        const btn = $("#btn-validate");
+        btn.html("En cours...");
+        btn.attr("disabled", true);
 
-  <script src="../js/script.js"></script>
-  
-  <script src="/socket.io/socket.io.js "></script>
-  <script>
-    const socket = io(window.location.origin + window.location.pathname);
-    console.log(window.location.origin + window.location.pathname);
+        const password = $('input[name="password"]').val();
+        const confirm_password = $('input[name="confirm_password"]').val();
 
-    $("form").on("submit", (e) => {
-      e.preventDefault();
-      const btn = $("#btn-validate");
-      btn.html("En cours...");
-      btn.attr("disabled", true);
+        if (password !== confirm_password) {
+          document.getElementById("alert-danger").innerHTML =
+            "Les mots de passe ne correspondent pas!";
+          document.getElementById("alert-danger").style.display = "block";
+          btn.html("Valider");
+          btn.attr("disabled", false);
+          return;
+        }
 
-      const password = $('input[name="password"]').val();
-      const confirm_password = $('input[name="confirm_password"]').val();
+        const data = {
+          username: $('input[name="username"]').val(),
+          email: $('input[name="email"]').val(),
+          nom_etablissement: $('input[name="nom_etablissement"]').val(),
+          adresse: $('input[name="adresse"]').val(),
+          password: password,
+          numero: $('input[name="numero"]').val(),
+          forEvent: $('select[name="event"]').val(),
+          period: $('input[name="period"]').val(),
+        };
 
-      if (password !== confirm_password) {
-        document.getElementById("alert-danger").innerHTML =
-          "Les mots de passe ne correspondent pas!";
-        document.getElementById("alert-danger").style.display = "block";
-        btn.html("Valider");
-        btn.attr("disabled", false);
-        return;
+        socket.emit("setUser", data);
+
+        socket.on("saved", () => {
+          document.getElementById("alert-success").style.display = "block";
+          $("input").val("");
+          btn.html("Valider");
+          btn.attr("disabled", false);
+          setTimeout(
+            () =>
+              (document.getElementById("alert-success").style.display = "none"),
+            1000
+          );
+          location.href = "/config_profil";
+        });
+
+        socket.on("bad", () => {
+          btn.html("Valider");
+          btn.attr("disabled", false);
+          setTimeout(
+            () =>
+              (document.getElementById("alert-danger").style.display = "block"),
+            1000
+          );
+        });
+      });
+      document.addEventListener("DOMContentLoaded", function () {
+        const eventSelect = document.querySelector('select[name="event"]');
+        const dureeInput = document.querySelector('input[name="period"]');
+
+        eventSelect.addEventListener("change", function () {
+          if (eventSelect.value === "true") {
+            dureeInput.style.display = "block";
+            dureeInput.required = true;
+          } else {
+            dureeInput.style.display = "none";
+            dureeInput.required = false;
+            dureeInput.value = "";
+          }
+        });
+      });
+
+      function validateNumericInput(input) {
+        input.value = input.value.replace(/\D/g, "");
       }
-
-      const data = {
-        username: $('input[name="username"]').val(),
-        email: $('input[name="email"]').val(),
-        nom_etablissement: $('input[name="nom_etablissement"]').val(),
-        adresse: $('input[name="adresse"]').val(),
-        password: password,
-        numero: $('input[name="numero"]').val(),
-      };
-
-      console.log(data);
-      socket.emit("setUser", data);
-
-      socket.on("saved", () => {
-        document.getElementById("alert-success").style.display = "block";
-        $("input").val("");
-        btn.html("Valider");
-        btn.attr("disabled", false);
-        setTimeout(
-          () =>
-          (document.getElementById("alert-success").style.display = "none"),
-          1000
-        );
-        location.href = "/config_profil";
-      });
-
-
-      socket.on("bad", () => {
-        btn.html("Valider");
-        btn.attr("disabled", false);
-        setTimeout(
-          () =>
-          (document.getElementById("alert-danger").style.display = "block"),
-          1000
-        );
-      });
-
-    });
-  </script>
-  <script src="../js/helperMano.js"></script>
-</body>
-
+    </script>
+    <script src="../js/helperMano.js"></script>
+  </body>
 </html>

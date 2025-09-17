@@ -1,4 +1,4 @@
-<link rel="icon" href="img/paresseux_sous_officiel.png" type="image/png">
+<link rel="icon" href="img/paresseux_sous_officiel.png" type="image/png" />
 
 <link rel="stylesheet" href="vendors/themefy_icon/themify-icons.css" />
 
@@ -11,44 +11,64 @@
 <link rel="stylesheet" href="vendors/font_awesome/css/all.min.css" />
 <link rel="stylesheet" href="vendors/tagsinput/tagsinput.css" />
 
+<link rel="stylesheet" href="vendors/datepicker/date-picker.css" />
 
- <link rel="stylesheet" href="vendors/datepicker/date-picker.css" />
+<link rel="stylesheet" href="vendors/vectormap-home/vectormap-2.0.2.css" />
 
- <link rel="stylesheet" href="vendors/vectormap-home/vectormap-2.0.2.css" />
-
- <link rel="stylesheet" href="vendors/scroll/scrollable.css" />
+<link rel="stylesheet" href="vendors/scroll/scrollable.css" />
 
 <link rel="stylesheet" href="vendors/datatable/css/jquery.dataTables.min.css" />
-<link rel="stylesheet" href="vendors/datatable/css/responsive.dataTables.min.css" />
-<link rel="stylesheet" href="vendors/datatable/css/buttons.dataTables.min.css" />
+<link
+  rel="stylesheet"
+  href="vendors/datatable/css/responsive.dataTables.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="vendors/datatable/css/buttons.dataTables.min.css"
+/>
 
 <link rel="stylesheet" href="vendors/text_editor/summernote-bs4.css" />
 
-<link rel="stylesheet" href="vendors/morris/morris.css">
+<link rel="stylesheet" href="vendors/morris/morris.css" />
 
 <link rel="stylesheet" href="vendors/material_icon/material-icons.css" />
 
-<link rel="stylesheet" href="css/metisMenu.css">
-
+<link rel="stylesheet" href="css/metisMenu.css" />
 
 <link rel="stylesheet" href="css/style.css" />
-<link rel="stylesheet" href="css/colors/default.css" id="colorSkinCSS">
+<link rel="stylesheet" href="css/colors/default.css" id="colorSkinCSS" />
 
-
-<a class="btn btn-primary btn-menu" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+<a
+  class="btn btn-primary btn-menu"
+  data-bs-toggle="offcanvas"
+  href="#offcanvasExample"
+  role="button"
+  aria-controls="offcanvasExample"
+>
   Menu
 </a>
 
-  <nav class="offcanvas offcanvas-start sidebar" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-    <div class="logo d-flex justify-content-between">
-      <a class="large_logo" href="/emdashboard"
-      ><img src="img/paresseux_sous_officiel.png" alt=""
-        /></a>
-
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <ul id="sidebar_menu">
-      <!-- <li class="">
+<nav
+  class="offcanvas offcanvas-start sidebar"
+  tabindex="-1"
+  id="offcanvasExample"
+  aria-labelledby="offcanvasExampleLabel"
+>
+  <div
+    class="logo d-flex flex-column align-items-center justify-content-between"
+  >
+    <a class="large_logo" href="/emdashboard">
+      <img src="img/paresseux_sous_officiel.png" alt="" />
+    </a>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <ul id="sidebar_menu">
+    <!-- <li class="">
         <a class="has-arrow" href="#" aria-expanded="false">
           <div class="nav_icon_small">
             <img src="img/paresseux_parasol.svg" alt="" />
@@ -59,63 +79,542 @@
         </a>
       </li> -->
 
-      <li class="">
-        <a class="has-arrow" href="#" aria-expanded="false">
-          <div class="nav_icon_small icon_anim">
-            <img src="img/menu-icon/icone_produits.png"
-                 style="height: 40px; width: 40px;"
-                 class="img-fluid " alt="img produits"
-            />
-          </div>
-          <div class="nav_title">
-            <span>Produit</span>
-          </div>
-        </a>
-        <ul>
-          <li><a href="/listeproduit"> voir mes produits</a></li>
-          <li><a href="/ajouterproduit">Enregistrer un produit</a></li>
-        </ul>
-      </li>
-      <li class="">
-        <a class="has-arrow" href="#" aria-expanded="false">
-          <div class="nav_icon_small icon_anim">
-            <img src="img/menu-icon/remarque.png"
-                 style="height: 40px; width: 40px;"
-                 class="img-fluid " alt="img remarque"
-            />
-          </div>
-          <div class="nav_title">
-            <span>Retour produit</span>
-          </div>
-        </a>
-        <ul>
-          <li><a href="/listeretour"> mes retours produits</a></li>
-          <li><a href="/retournerproduit">Enregistrer retour produit</a></li>
-        </ul>
-      </li>
-      <li class="">
-        <a class="has-arrow" href="#" aria-expanded="false">
-          <div class="nav_icon_small icon_anim">
-            <img src="img/menu-icon/reglage.png"
-                 style="height: 35px; width: 35px;"
-                 class="img-fluid " alt="img remarque"
-            />
-          </div>
-          <div class="nav_title">
-            <span>Réglages</span>
-          </div>
-        </a>
-        <ul>
-          <div class="profile_info_details">
-            <li><a href="/profile">Mon Profil </a></li>
-            <li><a href="#">Réglage</a></li>
-            <li><a href="/deconnexion">Déconnexion </a></li>
-          </div>
-        </ul>
-        <div class="profile_info_details side-deconnexion">
-          <a href="/deconnexion" class="btn btn-danger side-deconnexion  text-dark">Déconnexion </a>
+    <li class="">
+      <a class="has-arrow" href="#" aria-expanded="false">
+        <div class="nav_icon_small icon_anim">
+          <i class="fas fa-box-open"></i>
         </div>
-      </li>
-    </ul>
-  </nav>
-    <!-- sidebar menu end -->
+        <div class="nav_title">
+          <span>Produit</span>
+        </div>
+      </a>
+      <ul>
+        <li><a href="/listeproduit"> voir mes produits</a></li>
+        <li><a href="/ajouterproduit">Enregistrer un produit</a></li>
+      </ul>
+    </li>
+    <li class="">
+      <a class="has-arrow" href="#" aria-expanded="false">
+        <div class="nav_icon_small icon_anim">
+          <i class="fas fa-undo-alt"></i>
+        </div>
+        <div class="nav_title">
+          <span>Retour produit</span>
+        </div>
+      </a>
+      <ul>
+        <li><a href="/listeretour"> mes retours produits</a></li>
+        <li><a href="/retournerproduit">Enregistrer retour produit</a></li>
+      </ul>
+    </li>
+    <li class=""></li>
+    <div class="side-deconnexion">
+      <label class="switch-logout">
+        <input type="checkbox" id="logoutSwitch" />
+        <span class="slider"></span>
+        <span class="switch-label">Déconnexion</span>
+      </label>
+    </div>
+  </ul>
+</nav>
+<!-- sidebar menu end -->
+
+<!-- Modal de confirmation de déconnexion -->
+<div
+  class="modal fade"
+  id="logoutModal"
+  tabindex="-1"
+  aria-labelledby="logoutModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="logoutModalLabel">
+          <i class="fas fa-sign-out-alt text-danger me-2"></i>
+          Confirmation de déconnexion
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center mb-4">
+          <div class="cart-animation">
+            <i class="fas fa-shopping-cart cart-icon"></i>
+            <div class="cart-items">
+              <i class="fas fa-box box-1"></i>
+              <i class="fas fa-box box-2"></i>
+              <i class="fas fa-box box-3"></i>
+            </div>
+          </div>
+        </div>
+        <p class="text-center fs-5">
+          Êtes-vous sûr de vouloir vous déconnecter ?
+        </p>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="fas fa-times me-2"></i>Annuler
+        </button>
+        <button type="button" class="btn btn-danger" id="confirmLogout">
+          <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var logoutSwitch = document.getElementById("logoutSwitch");
+    var logoutModal = new bootstrap.Modal(
+      document.getElementById("logoutModal")
+    );
+    var confirmLogoutBtn = document.getElementById("confirmLogout");
+    var cancelLogoutBtn = document.querySelector("#logoutModal .btn-secondary");
+
+    if (logoutSwitch) {
+      logoutSwitch.addEventListener("change", function () {
+        if (this.checked) {
+          logoutModal.show();
+        }
+      });
+    }
+
+    // Gérer la fermeture de la modal
+    document
+      .getElementById("logoutModal")
+      .addEventListener("hidden.bs.modal", function () {
+        logoutSwitch.checked = false;
+      });
+
+    // Gérer l'annulation
+    if (cancelLogoutBtn) {
+      cancelLogoutBtn.addEventListener("click", function () {
+        logoutModal.hide();
+        logoutSwitch.checked = false;
+        window.location.href = "/emdashboard";
+      });
+    }
+
+    // Gérer la confirmation de déconnexion
+    if (confirmLogoutBtn) {
+      confirmLogoutBtn.addEventListener("click", function () {
+        window.location.href = "/deconnexion";
+      });
+    }
+  });
+</script>
+
+<style>
+  /* Glassmorphism pour les cartes */
+  #sidebar_menu > li {
+    background: rgba(255, 255, 255, 0.13);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 18px 0;
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+  }
+  #sidebar_menu > li:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 16px 32px 0 rgba(31, 38, 135, 0.18);
+  }
+
+  /* Icônes modernes */
+  .nav_icon_small {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    margin-right: 18px;
+    font-size: 2rem;
+    color: #3498db;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.1);
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+  }
+  .nav_icon_small:hover {
+    background: #3498db;
+    color: #fff;
+    transform: scale(1.1) rotate(-8deg);
+  }
+
+  /* Animation pulse */
+  .icon_anim {
+    animation: pulse 2.5s infinite;
+  }
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.2);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(52, 152, 219, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
+    }
+  }
+
+  /* Titre du menu */
+  .nav_title span {
+    color: #222;
+    font-weight: 600;
+    font-size: 1.15em;
+    letter-spacing: 0.5px;
+  }
+
+  /* Sous-menu professionnel */
+  #sidebar_menu ul {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 24px 0 rgba(52, 152, 219, 0.1);
+    border-radius: 14px;
+    margin: 12px 0 12px 60px;
+    padding: 10px 0 10px 0;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  #sidebar_menu ul li a {
+    color: #2266aa;
+    font-weight: 600;
+    padding: 10px 24px;
+    border-radius: 10px;
+    margin: 4px 0;
+    background: transparent;
+    transition: background 0.2s, color 0.2s, padding-left 0.2s;
+    box-shadow: none;
+    letter-spacing: 0.2px;
+    font-size: 1.05em;
+  }
+  #sidebar_menu ul li a:hover {
+    color: #fff;
+    background: linear-gradient(90deg, #3498db 0%, #6dd5fa 100%);
+    padding-left: 32px;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.1);
+  }
+
+  /* Logo pro, bien visible, sans fond blanc */
+  .logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: none;
+    padding: 40px 0 18px 0;
+  }
+  .large_logo img {
+    border-radius: 50%;
+    background: transparent;
+    padding: 0;
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    margin-bottom: 8px;
+    transition: filter 0.3s;
+    filter: drop-shadow(0 0 24px #3498db88);
+  }
+  .large_logo img:hover {
+    filter: drop-shadow(0 0 32px #3498dbcc);
+  }
+
+  /* Sidebar dégradé */
+  .sidebar {
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+
+  /* Bouton menu */
+  .btn-menu {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    z-index: 2000;
+    background: #98ed58;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 30px;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.1);
+    border: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .btn-menu:hover {
+    background: #3498db;
+    color: #fff;
+  }
+
+  /* Bouton de déconnexion flottant */
+  .side-deconnexion {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100vw;
+    background: linear-gradient(90deg, #e0e7efcc 0%, #6dd5fa33 100%);
+    padding: 24px 0 16px 0;
+    display: flex;
+    justify-content: center;
+    z-index: 3000;
+    border-radius: 0 0 18px 18px;
+    box-shadow: 0 -2px 24px 0 rgba(52, 152, 219, 0.12);
+    backdrop-filter: blur(6px);
+  }
+  .btn-danger.side-deconnexion {
+    background: #fff;
+    color: #222;
+    font-weight: 600;
+    border-radius: 18px;
+    padding: 14px 0;
+    width: 80vw;
+    max-width: 400px;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.1);
+    border: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .btn-danger.side-deconnexion:hover {
+    background: #e74c3c;
+    color: #fff;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .sidebar {
+      padding-bottom: 120px;
+    }
+    .large_logo img {
+      width: 90px;
+      height: 90px;
+    }
+    #sidebar_menu > li {
+      margin: 12px 0;
+    }
+    .btn-danger.side-deconnexion {
+      width: 95vw;
+      font-size: 1em;
+    }
+    .btn-menu {
+      top: 10px;
+      left: 10px;
+      padding: 8px 18px;
+      font-size: 1em;
+    }
+  }
+
+  .switch-logout {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 12px 0;
+  }
+  .switch-logout .switch-label {
+    font-size: 1.15em;
+    font-weight: 600;
+    color: #2266aa;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+  .switch-logout input[type="checkbox"] {
+    display: none;
+  }
+  .switch-logout .slider {
+    position: relative;
+    width: 56px;
+    height: 32px;
+    background: linear-gradient(90deg, #e0e7ef 0%, #6dd5fa 100%);
+    border-radius: 32px;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.1);
+    transition: background 0.3s;
+    cursor: pointer;
+    display: inline-block;
+  }
+  .switch-logout .slider:before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    width: 24px;
+    height: 24px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.15);
+    transition: transform 0.3s, background 0.3s;
+  }
+  .switch-logout input:checked + .slider {
+    background: linear-gradient(90deg, #e74c3c 0%, #ff7675 100%);
+    box-shadow: 0 0 16px #e74c3c44;
+  }
+  .switch-logout input:checked + .slider:before {
+    transform: translateX(24px);
+    background: #fff3f3;
+    box-shadow: 0 0 16px #e74c3c44;
+  }
+  .switch-logout input:checked ~ .switch-label {
+    color: #e74c3c;
+  }
+
+  /* Styles pour la modal de déconnexion */
+  .modal-content {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .modal-header {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border-bottom: none;
+    padding: 1.5rem;
+  }
+
+  .modal-title {
+    color: white;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+  }
+
+  .modal-body {
+    padding: 2rem;
+    background: #f8f9fa;
+  }
+
+  .modal-footer {
+    background: white;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+  }
+
+  .modal .btn {
+    padding: 0.8rem 1.5rem;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .modal .btn-secondary {
+    background: #95a5a6;
+    border: none;
+  }
+
+  .modal .btn-secondary:hover {
+    background: #7f8c8d;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .modal .btn-danger {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    border: none;
+  }
+
+  .modal .btn-danger:hover {
+    background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.2);
+  }
+
+  .modal .btn i {
+    font-size: 1.1em;
+    margin-right: 8px;
+  }
+
+  /* Animation de la modal */
+  .modal.fade .modal-dialog {
+    transform: scale(0.8);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .modal.show .modal-dialog {
+    transform: scale(1);
+  }
+
+  /* Animation du panier */
+  .cart-animation {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+  }
+
+  .cart-icon {
+    font-size: 4rem;
+    color: #3498db;
+    animation: cartBounce 2s infinite;
+  }
+
+  .cart-items {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .box-1,
+  .box-2,
+  .box-3 {
+    position: absolute;
+    font-size: 1.5rem;
+    color: #e74c3c;
+    opacity: 0;
+  }
+
+  .box-1 {
+    animation: dropBox 2s infinite;
+  }
+
+  .box-2 {
+    animation: dropBox 2s infinite 0.5s;
+  }
+
+  .box-3 {
+    animation: dropBox 2s infinite 1s;
+  }
+
+  @keyframes cartBounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes dropBox {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px) translateX(-20px);
+    }
+    20% {
+      opacity: 1;
+    }
+    40% {
+      opacity: 1;
+      transform: translateY(40px) translateX(20px);
+    }
+    60% {
+      opacity: 0;
+      transform: translateY(60px) translateX(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(60px) translateX(0);
+    }
+  }
+</style>

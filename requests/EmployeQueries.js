@@ -13,11 +13,13 @@ exports.employeQueries = class {
         role: data.role,
         travail_pour: data.chef_etablissement,
         statut: 'Actif',
-        // email: data.email,
+        email: data.email,
         numero: data.numero,
         adresse: data.adresse,
         password: encryptedPassword,
         isAdmin: 'false',
+        forEvent: !!data.forEvent,
+        expiredPaymentDate: data.expiredPaymentDate || null,
       });
       await employe
         .save()
@@ -40,7 +42,7 @@ exports.employeQueries = class {
     return new Promise(async (next) => {
       await Employe.findOne({
         email: email,
-        deleted: false,
+        deleted: false
       })
         .then((data) => {
           next({
@@ -231,6 +233,18 @@ exports.employeQueries = class {
             etat: false,
             err: err,
           });
+        });
+    });
+  }
+
+  static updateEmployeDeletedItSelf(id, data) {
+    return new Promise((next) => {
+      Employe.updateOne({ _id: id }, { $set: { deletedItSelf: data } })
+        .then((data) => {
+          next({ etat: true, result: data });
+        })
+        .catch((err) => {
+          next({ etat: false, err: err });
         });
     });
   }

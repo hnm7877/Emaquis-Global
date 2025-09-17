@@ -1,77 +1,216 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.cinetpay.com/seamless/main.js"></script>
     <style>
-        .sdk {
-            display: block;
-            position: absolute;
-            background-position: center;
-            text-align: center;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-        }
+      .sdk {
+        display: block;
+        position: absolute;
+        background-position: center;
+        text-align: center;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
     </style>
     <script>
-      // Modifiez la définition de la fonction checkout() pour qu'elle prenne un paramètre 'price'
-function checkout() {
-    CinetPay.setConfig({
-        apikey: '212203080763d5904661eff5.58954293',//   YOUR APIKEY
-        site_id: '397031',//YOUR_SITE_ID
-        notify_url: 'http://mondomaine.com/notify/',
-        mode: 'PRODUCTION'
-    });
-    CinetPay.getCheckout({
-        transaction_id: Math.floor(Math.random() * 100000000).toString(), // YOUR TRANSACTION ID
-        amount: 100, // Utilisez le paramètre 'price' comme valeur pour 'amount'
-        currency: 'XOF',
-        channels: 'ALL',
-        description: 'Test de paiement',
-        //Fournir ces variables pour le paiements par carte bancaire
-        customer_name:"Joe",//Le nom du client
-        customer_surname:"Down",//Le prenom du client
-        customer_email: "down@test.com",//l'email du client
-        customer_phone_number: "088767611",//l'email du client
-        customer_address : "BP 0024",//addresse du client
-        customer_city: "Antananarivo",// La ville du client
-        customer_country : "CM",// le code ISO du pays
-        customer_state : "CM",// le code ISO l'état
-        customer_zip_code : "06510", // code postal
-    });
-    CinetPay.waitResponse(function(data) {
-        if (data.status == "REFUSED") {
-            if (alert("Votre paiement a échoué")) {
-                window.location.reload();
-            }
-        } else if (data.status == "ACCEPTED") {
-            if (alert("Votre paiement a été effectué avec succès")) {
-                window.location.reload();
-            }
+      // Injection de l'ID travail_pour (user principal) côté frontend
+      const travailPourId = "<%= user.travail_pour || user._id || user.id %>";
+
+      function checkout() {
+        // Récupère l'option sélectionnée dynamiquement (exemple : via un select)
+        let selectedOption = "hasStock"; // Valeur par défaut
+        const selectElem = document.getElementById("optionSelect");
+        let optionsToActivate = [selectedOption];
+        if (selectElem) {
+          selectedOption = selectElem.value;
+          if (selectedOption === "all") {
+            optionsToActivate = ["hasStock", "hasOffer", "hasSubCategories"];
+          } else {
+            optionsToActivate = [selectedOption];
+          }
         }
-    });
-    CinetPay.onError(function(data) {
-        console.log(data);
-    });
-}
+        CinetPay.setConfig({
+          apikey: "212203080763d5904661eff5.58954293", //   YOUR APIKEY
+          site_id: "397031", //YOUR_SITE_ID
+          notify_url: "http://mondomaine.com/notify/",
+          mode: "PRODUCTION",
+        });
+        CinetPay.getCheckout({
+          transaction_id: Math.floor(Math.random() * 100000000).toString(), // YOUR TRANSACTION ID
+          amount: 100, // Utilisez le paramètre 'price' comme valeur pour 'amount'
+          currency: "<%= currency %>",
+          channels: "ALL",
+          description: "Test de paiement",
+          customer_name: "Joe",
+          customer_surname: "Down",
+          customer_email: "down@test.com",
+          customer_phone_number: "088767611",
+          customer_address: "BP 0024",
+          customer_city: "Antananarivo",
+          customer_country: "CM",
+          customer_state: "CM",
+          customer_zip_code: "06510",
+        });
+        CinetPay.waitResponse(function (data) {
+          if (data.status == "REFUSED") {
+            if (alert("Votre paiement a échoué")) {
+              window.location.reload();
+            }
+          } else if (data.status == "ACCEPTED") {
+            // Récupère le token utilisateur depuis le localStorage
+            const userToken = localStorage.getItem("token");
+            // Appel AJAX pour activer l'option ou les options sélectionnées côté backend
+            fetch("/api/settings/activate-options", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                token: userToken || "",
+              },
+              body: JSON.stringify({
+                userId: travailPourId,
+                options: optionsToActivate,
+              }),
+            })
+              .then((response) => response.json())
+              .then((result) => {
+                showSuccessModal();
+              })
+              .catch((error) => {
+                alert(
+                  "Paiement réussi, mais erreur lors de l'activation de l'option."
+                );
+                window.location.reload();
+              });
+          }
+        });
+        CinetPay.onError(function (data) {
+          console.log(data);
+        });
+      }
 
-socket.on("connect", () => {
-    $("#paiement").click(function () {
-        alert("Connect");
-        const price = parseInt(document.getElementById("totalBenefice").innerHTML); // Obtenez le prix à partir de la page
-        checkout(price); // Passez le prix en tant que paramètre lors de l'appel de la fonction checkout()
-    });
-});
-
+      socket.on("connect", () => {
+        $("#paiement").click(function () {
+          alert("Connect");
+          const price = parseInt(
+            document.getElementById("totalBenefice").innerHTML
+          ); // Obtenez le prix à partir de la page
+          checkout(price); // Passez le prix en tant que paramètre lors de l'appel de la fonction checkout()
+        });
+      });
     </script>
-</head>
-<body>
-    </head>
-    <body>
-        <div class="sdk">
-            <h1>SDK SEAMLESS</h1>
-            <button onclick="checkout()">Checkout</button>
+    <!-- Modal de succès paiement -->
+    <div id="successModal" class="modal-success" style="display: none">
+      <div class="modal-success-content">
+        <div class="success-animation">
+          <svg class="checkmark" viewBox="0 0 52 52">
+            <circle
+              class="checkmark-circle"
+              cx="26"
+              cy="26"
+              r="25"
+              fill="none"
+            />
+            <path class="checkmark-check" fill="none" d="M14 27l7 7 16-16" />
+          </svg>
         </div>
-    </body>
-</html>  
+        <h2>Paiement réussi !</h2>
+        <p>Votre option premium a été activée avec succès.</p>
+        <button id="closeSuccessModal" class="modal-success-btn">Fermer</button>
+      </div>
+    </div>
+    <style>
+      .modal-success {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.3s;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .modal-success-content {
+        background: #fff;
+        border-radius: 18px;
+        padding: 36px 32px 28px 32px;
+        text-align: center;
+        min-width: 320px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+        animation: popIn 0.4s;
+      }
+      @keyframes popIn {
+        0% {
+          transform: scale(0.7);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .success-animation {
+        margin-bottom: 18px;
+      }
+      .checkmark {
+        width: 72px;
+        height: 72px;
+        display: block;
+        margin: 0 auto;
+      }
+      .checkmark-circle {
+        stroke: #2ecc71;
+        stroke-width: 4;
+        stroke-dasharray: 166;
+        stroke-dashoffset: 166;
+        animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+      }
+      .checkmark-check {
+        stroke: #2ecc71;
+        stroke-width: 4;
+        stroke-linecap: round;
+        stroke-dasharray: 48;
+        stroke-dashoffset: 48;
+        animation: stroke 0.4s 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+      }
+      @keyframes stroke {
+        100% {
+          stroke-dashoffset: 0;
+        }
+      }
+      .modal-success-btn {
+        margin-top: 18px;
+        background: #2ecc71;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 32px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .modal-success-btn:hover {
+        background: #27ae60;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sdk">
+      <h1>SDK SEAMLESS</h1>
+      <button onclick="checkout()">Checkout</button>
+    </div>
+  </body>
+</html>

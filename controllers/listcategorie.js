@@ -1,4 +1,5 @@
 const { categorieQueries } = require('../requests/categorieQueries');
+const { getUserDetails, getExpiredDate } = require('../utils/getExpirateDate');
 
 exports.categoriesList = async (req, res) => {
   const user = req.session.user;
@@ -19,9 +20,12 @@ exports.seecat = async (req, res) => {
         const categorie = await categorieQueries.getCategorie();
         let categories = categorie.result;
 
+        const user = await getUserDetails(req.session.user);
+
         res.render('listecategories', {
           categories: categories,
-          user: req.session.user,
+          user: user,
+          expiredDate: getExpiredDate(user.expiredPaymentDate),
         });
       }
     } catch (e) {

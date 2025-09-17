@@ -1,4 +1,5 @@
 const { employeQueries } = require('../requests/EmployeQueries');
+const { getUserDetails, getExpiredDate } = require('../utils/getExpirateDate');
 exports.userlist = async (req, res) => {
   if (req.session.user) {
     const session = req.session.user;
@@ -13,9 +14,11 @@ exports.userlist = async (req, res) => {
             Result.push(el);
           }
         });
+        const user = await getUserDetails(session);
         res.render('user_list', {
           Result: Result,
-          user: req.session.user,
+          user,
+          expiredDate: getExpiredDate(user.expiredPaymentDate)
         });
       }
     } catch (e) {
