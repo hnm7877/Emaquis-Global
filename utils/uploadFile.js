@@ -100,7 +100,7 @@ exports.uploadFile = async (file, filename) => {
       key: uploadResult.public_id,
     };
   } catch (error) {
-    console.error("Erreur lors de l'upload du fichier sur Cloudinary:", error);
+    console.error("Erreur lors de lupload du fichier sur Cloudinary:", error);
     throw error;
   }
 };
