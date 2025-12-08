@@ -374,26 +374,27 @@ const ModalUnvailableProducts = () => {
       <div
         class="modal-dialog modal-dialog-centered"
         style={{
-          maxWidth: "600px",
+          maxWidth: "650px",
         }}
         role="document"
       >
         <div
           class="modal-content"
           style={{
-            borderRadius: "15px",
-            boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
+            borderRadius: "16px",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
             border: "none",
             overflow: "hidden",
+            background: "#ffffff",
           }}
         >
           <div
             class="modal-header"
             style={{
-              background: "linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)",
+              background: "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)",
               color: "white",
               borderBottom: "none",
-              padding: "1.5rem",
+              padding: "1.75rem 2rem",
             }}
           >
             <h2
@@ -401,16 +402,21 @@ const ModalUnvailableProducts = () => {
               id="exampleModalLongTitle"
               style={{
                 fontSize: "1.5rem",
-                fontWeight: "600",
+                fontWeight: "700",
                 margin: 0,
                 display: "flex",
                 alignItems: "center",
-                gap: "10px",
+                gap: "12px",
+                letterSpacing: "-0.02em",
               }}
             >
               <i
-                className="fas fa-exclamation-circle"
-                style={{ color: "#fff" }}
+                className="fas fa-exclamation-triangle"
+                style={{
+                  color: "#fff",
+                  fontSize: "1.5rem",
+                  animation: "pulse 2s infinite",
+                }}
               ></i>
               Produits non disponibles
             </h2>
@@ -420,13 +426,26 @@ const ModalUnvailableProducts = () => {
               data-dismiss="modal"
               aria-label="Close"
               id="close-modal"
+              onClick={handleClose}
               style={{
                 color: "white",
-                opacity: "0.8",
-                transition: "opacity 0.2s",
-                "&:hover": {
-                  opacity: "1",
-                },
+                opacity: "0.9",
+                transition: "all 0.2s ease",
+                fontSize: "1.75rem",
+                fontWeight: "300",
+                lineHeight: "1",
+                padding: "0",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.opacity = "1";
+                e.target.style.transform = "rotate(90deg)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.opacity = "0.9";
+                e.target.style.transform = "rotate(0deg)";
               }}
             >
               <span aria-hidden="true">&times;</span>
@@ -438,13 +457,15 @@ const ModalUnvailableProducts = () => {
               padding: "2rem",
               maxHeight: "60vh",
               overflowY: "auto",
+              background: "#f8fafc",
             }}
           >
             {productUnvailable && productUnvailable.length > 0 ? (
               <div
                 className="product-list"
                 style={{
-                  display: "grid",
+                  display: "flex",
+                  flexDirection: "column",
                   gap: "1rem",
                 }}
               >
@@ -452,39 +473,95 @@ const ModalUnvailableProducts = () => {
                   <div
                     key={index}
                     style={{
-                      background: "#f8fafc",
-                      padding: "1rem",
-                      borderRadius: "10px",
+                      background:
+                        "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)",
+                      padding: "1.25rem",
+                      borderRadius: "12px",
                       display: "flex",
                       alignItems: "center",
-                      gap: "1rem",
-                      transition: "transform 0.2s",
-                      "&:hover": {
-                        transform: "translateX(5px)",
-                      },
+                      gap: "1.25rem",
+                      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                      border: "1px solid #e2e8f0",
+                      boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "translateX(8px)";
+                      e.currentTarget.style.boxShadow =
+                        "0 4px 12px rgba(0,0,0,0.1)";
+                      e.currentTarget.style.borderColor = "#ef4444";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "translateX(0)";
+                      e.currentTarget.style.boxShadow =
+                        "0 1px 3px rgba(0,0,0,0.05)";
+                      e.currentTarget.style.borderColor = "#e2e8f0";
                     }}
                   >
-                    <i className="fas fa-box" style={{ color: "#6366f1" }}></i>
-                    <div>
+                    <div
+                      style={{
+                        width: "48px",
+                        height: "48px",
+                        borderRadius: "12px",
+                        background:
+                          "linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexShrink: 0,
+                      }}
+                    >
+                      <i
+                        className="fas fa-box-open"
+                        style={{
+                          color: "#ef4444",
+                          fontSize: "1.5rem",
+                        }}
+                      ></i>
+                    </div>
+                    <div style={{ flex: 1 }}>
                       <h3
                         style={{
                           margin: 0,
-                          fontSize: "1.1rem",
-                          color: "#1e293b",
-                          fontWeight: "500",
+                          fontSize: "1.125rem",
+                          color: "#0f172a",
+                          fontWeight: "600",
+                          marginBottom: "0.5rem",
                         }}
                       >
                         {el.nom_produit}
                       </h3>
-                      <p
+                      <div
                         style={{
-                          margin: "0.5rem 0 0",
-                          color: "#64748b",
-                          fontSize: "0.9rem",
+                          display: "flex",
+                          gap: "1rem",
+                          flexWrap: "wrap",
                         }}
                       >
-                        Taille: {el.taille} | Quantité restante: {el.quantite}
-                      </p>
+                        <span
+                          style={{
+                            padding: "0.25rem 0.75rem",
+                            borderRadius: "6px",
+                            fontSize: "0.875rem",
+                            fontWeight: "500",
+                            background: "#e0e7ff",
+                            color: "#4338ca",
+                          }}
+                        >
+                          Taille: {el.taille}
+                        </span>
+                        <span
+                          style={{
+                            padding: "0.25rem 0.75rem",
+                            borderRadius: "6px",
+                            fontSize: "0.875rem",
+                            fontWeight: "600",
+                            background: "#fee2e2",
+                            color: "#991b1b",
+                          }}
+                        >
+                          Stock: {el.quantite}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -493,19 +570,41 @@ const ModalUnvailableProducts = () => {
               <div
                 style={{
                   textAlign: "center",
-                  padding: "2rem",
+                  padding: "3rem 2rem",
                   color: "#64748b",
                 }}
               >
-                <i
-                  className="fas fa-check-circle"
+                <div
                   style={{
-                    fontSize: "3rem",
-                    color: "#10b981",
-                    marginBottom: "1rem",
+                    width: "80px",
+                    height: "80px",
+                    borderRadius: "50%",
+                    background:
+                      "linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    margin: "0 auto 1.5rem",
                   }}
-                ></i>
-                <p>Tous les produits sont disponibles</p>
+                >
+                  <i
+                    className="fas fa-check-circle"
+                    style={{
+                      fontSize: "2.5rem",
+                      color: "#10b981",
+                    }}
+                  ></i>
+                </div>
+                <p
+                  style={{
+                    fontSize: "1.125rem",
+                    fontWeight: "500",
+                    color: "#0f172a",
+                    margin: 0,
+                  }}
+                >
+                  Tous les produits sont disponibles
+                </p>
               </div>
             )}
           </div>
@@ -514,7 +613,8 @@ const ModalUnvailableProducts = () => {
             class="modal-footer"
             style={{
               borderTop: "1px solid #e2e8f0",
-              padding: "1.5rem",
+              padding: "1.5rem 2rem",
+              background: "#ffffff",
             }}
           >
             <button
@@ -523,16 +623,24 @@ const ModalUnvailableProducts = () => {
               data-dismiss="modal"
               onClick={handleClose}
               style={{
-                background: "#10b981",
+                background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
                 border: "none",
-                padding: "0.75rem 1.5rem",
-                borderRadius: "8px",
-                fontWeight: "500",
-                transition: "all 0.2s",
-                "&:hover": {
-                  background: "#059669",
-                  transform: "translateY(-1px)",
-                },
+                padding: "0.75rem 2rem",
+                borderRadius: "10px",
+                fontWeight: "600",
+                fontSize: "1rem",
+                color: "#ffffff",
+                transition: "all 0.2s ease",
+                cursor: "pointer",
+                boxShadow: "0 2px 4px rgba(16, 185, 129, 0.2)",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = "translateY(-2px)";
+                e.target.style.boxShadow = "0 4px 8px rgba(16, 185, 129, 0.3)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = "translateY(0)";
+                e.target.style.boxShadow = "0 2px 4px rgba(16, 185, 129, 0.2)";
               }}
             >
               <i className="fas fa-check" style={{ marginRight: "8px" }}></i>
@@ -541,6 +649,12 @@ const ModalUnvailableProducts = () => {
           </div>
         </div>
       </div>
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.7; }
+        }
+      `}</style>
     </div>
   );
 };

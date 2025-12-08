@@ -1,119 +1,132 @@
 // STYLE PROFESSIONNEL, SOBRE ET ÉLÉGANT POUR DASHBOARD VENTE TABLES
 const dashboardVenteTablesStyle = `
   .vente_table_item {
-    background: #fff;
-    transition: box-shadow 0.18s, background 0.18s, transform 0.13s;
+    background: #ffffff;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(30,42,80,0.06);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     cursor: pointer;
     position: relative;
     z-index: 1;
-    border: 1px solid #f3f4f6;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 4px;
   }
   .vente_table_item:nth-child(even) {
-    background: #f7f8fa;
+    background: #f8fafc;
   }
   .vente_table_item:hover {
     background: #f1f5f9;
-    box-shadow: 0 4px 16px rgba(30,42,80,0.10);
-    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+    transform: translateY(-2px);
     z-index: 2;
-    border-color: #e5e7eb;
+    border-color: #cbd5e1;
   }
   .vente_table_item.active {
-    background: #e5e7eb !important;
-    box-shadow: 0 6px 24px rgba(30,42,80,0.13);
-    color: #1e223a;
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%) !important;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.2);
+    color: #1e293b;
     font-weight: 600;
-    border-left: 4px solid #23408e;
+    border-left: 4px solid #2563eb;
+    transform: translateX(4px);
   }
   .table {
-    border-radius: 14px;
+    border-radius: 16px;
     overflow: hidden;
-    background: #fff;
-    box-shadow: 0 2px 12px rgba(30,42,80,0.07);
-    border: 1px solid #f3f4f6;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 0;
   }
   .table th, .table td {
     border: none !important;
-    font-size: 1.07rem;
+    font-size: 0.9375rem;
     vertical-align: middle;
-    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-    padding: 1.1rem 1.3rem;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 1rem 1.25rem;
   }
   .table th {
-    background: #22305a !important;
-    color: #fff !important;
-    letter-spacing: 0.02em;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+    color: #ffffff !important;
+    letter-spacing: 0.05em;
     font-weight: 700;
     border-radius: 0 !important;
     box-shadow: none;
     text-transform: uppercase;
-    font-size: 1.01rem;
-    padding: 1.2rem 1.3rem;
+    font-size: 0.8125rem;
+    padding: 1.25rem 1.5rem;
+    white-space: nowrap;
   }
   .badge-primary, .badge-info {
-    background: #f3f4f6 !important;
-    color: #22305a !important;
+    background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%) !important;
+    color: #3730a3 !important;
     font-weight: 600;
-    border-radius: 10px;
-    font-size: 1.01rem;
-    padding: 0.25em 0.9em;
-    box-shadow: none;
-    border: 1px solid #e5e7eb;
-    transition: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    padding: 0.375rem 0.875rem;
+    box-shadow: 0 1px 2px rgba(67, 56, 202, 0.1);
+    border: 1px solid #c7d2fe;
+    transition: all 0.2s ease;
     display: inline-block;
+  }
+  .badge-primary:hover, .badge-info:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 4px rgba(67, 56, 202, 0.2);
   }
   .btn-actions .btn {
     border-radius: 10px;
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin: 0 2px;
-    box-shadow: none;
-    transition: background 0.13s, transform 0.11s;
-    font-size: 1.12rem;
+    margin: 0 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 1rem;
     border: none;
     outline: none;
-    background: #fff;
-    color: #23408e;
+    background: #ffffff;
+    color: #64748b;
     position: relative;
     overflow: hidden;
   }
   .btn-actions .btn-success {
-    color: #fff;
-    background: #059669;
+    color: #ffffff;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   }
   .btn-actions .btn-success:hover {
-    background: #047857;
-    color: #fff;
-    box-shadow: 0 2px 8px #2e7d3211;
-    transform: scale(1.08);
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    transform: translateY(-2px) scale(1.05);
   }
   .btn-actions .btn-primary {
-    color: #fff;
-    background: #22305a;
+    color: #ffffff;
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
   }
   .btn-actions .btn-primary:hover {
-    background: #1e223a;
-    color: #fff;
-    box-shadow: 0 2px 8px #23408e11;
-    transform: scale(1.08);
+    background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    transform: translateY(-2px) scale(1.05);
   }
   .btn-actions .btn-danger {
-    color: #fff;
-    background: #dc2626;
+    color: #ffffff;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   }
   .btn-actions .btn-danger:hover {
-    background: #b91c1c;
-    color: #fff;
-    box-shadow: 0 2px 8px #b91c1c11;
-    transform: scale(1.08);
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    transform: translateY(-2px) scale(1.05);
   }
   .btn-actions .btn:active {
-    transform: scale(0.97);
+    transform: scale(0.95);
+  }
+  .btn-actions .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
   }
   .action-icon {
     width: 20px;
@@ -125,73 +138,159 @@ const dashboardVenteTablesStyle = `
     transform: scale(1.13);
   }
   .white_card {
-    background: #fff;
+    background: #ffffff;
     border-radius: 16px;
-    box-shadow: 0 2px 12px rgba(30,42,80,0.07);
-    border: 1px solid #f3f4f6;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
     overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  .white_card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
   .white_card_header {
-    background: #22305a !important;
-    color: #fff !important;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+    color: #ffffff !important;
     border-radius: 16px 16px 0 0;
     box-shadow: none;
-    padding: 1.2rem 1.7rem;
-    margin-bottom: 0.5rem;
+    padding: 1.5rem 2rem;
+    margin-bottom: 0;
   }
   .main-title h3 {
-    font-size: 1.22rem;
+    font-size: 1.375rem;
     font-weight: 700;
-    letter-spacing: 0.02em;
+    letter-spacing: -0.02em;
     display: flex;
     align-items: center;
-    gap: 0.5em;
+    gap: 0.75em;
     text-shadow: none;
-    color: #fff;
+    color: #ffffff;
+    margin: 0;
   }
   .main-title h3 i {
-    font-size: 1.25rem;
-    color: #fff;
+    font-size: 1.5rem;
+    color: #ffffff;
   }
   .alert-success, .alert-danger {
     border-radius: 12px;
-    font-size: 1.04rem;
+    font-size: 0.9375rem;
     font-weight: 600;
-    box-shadow: 0 1px 4px #0001;
-    margin-bottom: 1.1rem;
-    border: 1.5px solid #e0e7eb;
-    opacity: 0.98;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.25rem;
+    border: none;
+    opacity: 1;
     letter-spacing: 0.01em;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.6em;
-    background: #fff;
-    color: #23408e;
+    gap: 0.75em;
+    padding: 1rem 1.5rem;
+    animation: slideDown 0.3s ease;
   }
   .alert-success {
-    border-left: 4px solid #059669;
-    color: #059669;
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    color: #065f46;
+    border-left: 4px solid #10b981;
   }
   .alert-danger {
-    border-left: 4px solid #dc2626;
-    color: #dc2626;
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    color: #991b1b;
+    border-left: 4px solid #ef4444;
+  }
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   .my-custom-scrollbar {
     max-height: 60vh;
+    overflow-x: auto;
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: #e0e7ef #f3f4f6;
+    scrollbar-color: #2563eb #f1f5f9;
     border-radius: 0 0 16px 16px;
+    background: #f8fafc;
+    padding: 1.5rem;
+    -webkit-overflow-scrolling: touch;
   }
   .my-custom-scrollbar::-webkit-scrollbar {
-    width: 7px;
-    background: #f3f4f6;
-    border-radius: 7px;
+    width: 8px;
+    height: 8px;
+    background: #f1f5f9;
+    border-radius: 4px;
   }
   .my-custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #e0e7ef;
-    border-radius: 7px;
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    border-radius: 4px;
+  }
+  .my-custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+  }
+  .vente-tables-responsive {
+    overflow-x: auto;
+  }
+  .vente-tables-responsive table {
+    min-width: 1000px;
+  }
+  @media (max-width: 1200px) {
+    .vente-tables-responsive table {
+      min-width: 900px;
+    }
+  }
+  @media (max-width: 768px) {
+    .my-custom-scrollbar {
+      padding: 1rem;
+      max-height: 50vh;
+    }
+    .vente-tables-responsive table {
+      min-width: 800px;
+    }
+    .table th, .table td {
+      padding: 0.75rem 0.5rem;
+      font-size: 0.8125rem;
+    }
+    .table th {
+      font-size: 0.75rem;
+      padding: 0.875rem 0.5rem;
+    }
+    .btn-actions .btn {
+      width: 32px;
+      height: 32px;
+      margin: 0 2px;
+      font-size: 0.875rem;
+    }
+  }
+  @media (max-width: 576px) {
+    .my-custom-scrollbar {
+      padding: 0.75rem;
+      max-height: 45vh;
+    }
+    .vente-tables-responsive table {
+      min-width: 750px;
+    }
+    .table th, .table td {
+      padding: 0.625rem 0.375rem;
+      font-size: 0.75rem;
+    }
+    .table th {
+      font-size: 0.6875rem;
+      padding: 0.75rem 0.375rem;
+    }
+    .btn-actions .btn {
+      width: 28px;
+      height: 28px;
+      margin: 0 1px;
+      font-size: 0.75rem;
+    }
+    .action-icon {
+      width: 16px;
+      height: 16px;
+    }
   }
   .product-formule {
     color: #23408e;
@@ -502,9 +601,37 @@ const ModalDelete = ({
         role="document"
       >
         {!!venteIdToDelete && (
-          <div className="modal-content">
-            <div className="modal-header">
-              <h2 className="modal-title" id="exampleModalLongTitle">
+          <div
+            className="modal-content"
+            style={{
+              borderRadius: "16px",
+              border: "none",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              className="modal-header"
+              style={{
+                background: "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)",
+                color: "white",
+                borderBottom: "none",
+                padding: "1.75rem 2rem",
+              }}
+            >
+              <h2
+                className="modal-title"
+                id="exampleModalLongTitle"
+                style={{
+                  fontSize: "1.5rem",
+                  fontWeight: "700",
+                  margin: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                }}
+              >
+                <i className="fas fa-exclamation-triangle"></i>
                 Suppression d'une vente
               </h2>
               <button
@@ -514,30 +641,138 @@ const ModalDelete = ({
                 aria-label="Close"
                 id="close-modal"
                 onClick={handleClose}
+                style={{
+                  color: "white",
+                  opacity: "0.9",
+                  fontSize: "1.75rem",
+                  fontWeight: "300",
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                }}
               >
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div className="modal-body">
-              <h4> êtes vous sûr de vouloir supprimer la vente ?</h4>
+            <div
+              className="modal-body"
+              style={{
+                padding: "2rem",
+                background: "#ffffff",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem",
+                  marginBottom: "1rem",
+                }}
+              >
+                <div
+                  style={{
+                    width: "48px",
+                    height: "48px",
+                    borderRadius: "50%",
+                    background:
+                      "linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <i
+                    className="fas fa-trash-alt"
+                    style={{ color: "#ef4444", fontSize: "1.25rem" }}
+                  ></i>
+                </div>
+                <h4
+                  style={{
+                    margin: 0,
+                    fontSize: "1.125rem",
+                    fontWeight: "600",
+                    color: "#0f172a",
+                  }}
+                >
+                  Êtes-vous sûr de vouloir supprimer cette vente ?
+                </h4>
+              </div>
+              <p
+                style={{
+                  color: "#64748b",
+                  fontSize: "0.9375rem",
+                  margin: 0,
+                  paddingLeft: "64px",
+                }}
+              >
+                Cette action est irréversible et la vente sera définitivement
+                supprimée.
+              </p>
             </div>
 
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-danger close-modal"
-                onClick={handleUpdateVente}
-                disabled={loading}
-              >
-                {loading ? "Annulation.." : "Oui"}
-              </button>
+            <div
+              className="modal-footer"
+              style={{
+                borderTop: "1px solid #e2e8f0",
+                padding: "1.5rem 2rem",
+                background: "#f8fafc",
+              }}
+            >
               <button
                 type="button"
                 className="btn btn-success close-modal"
                 data-dismiss="modal"
                 onClick={handleClose}
+                style={{
+                  background:
+                    "linear-gradient(135deg, #64748b 0%, #475569 100%)",
+                  border: "none",
+                  padding: "0.75rem 1.5rem",
+                  borderRadius: "10px",
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  marginRight: "0.75rem",
+                  transition: "all 0.2s ease",
+                }}
               >
-                Non
+                Annuler
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger close-modal"
+                onClick={handleUpdateVente}
+                disabled={loading}
+                style={{
+                  background: loading
+                    ? "linear-gradient(135deg, #94a3b8 0%, #64748b 100%)"
+                    : "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)",
+                  border: "none",
+                  padding: "0.75rem 1.5rem",
+                  borderRadius: "10px",
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  transition: "all 0.2s ease",
+                  cursor: loading ? "not-allowed" : "pointer",
+                }}
+              >
+                {loading ? (
+                  <React.Fragment>
+                    <i
+                      className="fas fa-spinner fa-spin"
+                      style={{ marginRight: "8px" }}
+                    ></i>
+                    Suppression...
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    <i
+                      className="fas fa-trash-alt"
+                      style={{ marginRight: "8px" }}
+                    ></i>
+                    Oui, supprimer
+                  </React.Fragment>
+                )}
               </button>
             </div>
           </div>
@@ -579,9 +814,37 @@ const ModalConfirmOrder = ({ venteIdToConfirm, onClose }) => {
         role="document"
       >
         {!!venteIdToConfirm && (
-          <div className="modal-content">
-            <div className="modal-header">
-              <h2 className="modal-title" id="exampleModalLongTitle">
+          <div
+            className="modal-content"
+            style={{
+              borderRadius: "16px",
+              border: "none",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              className="modal-header"
+              style={{
+                background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                color: "white",
+                borderBottom: "none",
+                padding: "1.75rem 2rem",
+              }}
+            >
+              <h2
+                className="modal-title"
+                id="exampleModalLongTitle"
+                style={{
+                  fontSize: "1.5rem",
+                  fontWeight: "700",
+                  margin: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                }}
+              >
+                <i className="fas fa-check-circle"></i>
                 Commande confirmée avec succès
               </h2>
               <button
@@ -591,19 +854,92 @@ const ModalConfirmOrder = ({ venteIdToConfirm, onClose }) => {
                 aria-label="Close"
                 id="close-modal"
                 onClick={handleClose}
+                style={{
+                  color: "white",
+                  opacity: "0.9",
+                  fontSize: "1.75rem",
+                  fontWeight: "300",
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                }}
               >
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div className="modal-body">
-              <h4 className="text-center">Voulez-vous imprimer le ticket</h4>
+            <div
+              className="modal-body"
+              style={{
+                padding: "2.5rem 2rem",
+                background: "#ffffff",
+                textAlign: "center",
+              }}
+            >
+              <div
+                style={{
+                  width: "80px",
+                  height: "80px",
+                  borderRadius: "50%",
+                  background:
+                    "linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  margin: "0 auto 1.5rem",
+                }}
+              >
+                <i
+                  className="fas fa-check-circle"
+                  style={{
+                    fontSize: "2.5rem",
+                    color: "#10b981",
+                  }}
+                ></i>
+              </div>
+              <h4
+                style={{
+                  fontSize: "1.25rem",
+                  fontWeight: "600",
+                  color: "#0f172a",
+                  marginBottom: "0.5rem",
+                }}
+              >
+                Voulez-vous imprimer le ticket ?
+              </h4>
+              <p
+                style={{
+                  color: "#64748b",
+                  fontSize: "0.9375rem",
+                  margin: 0,
+                }}
+              >
+                Vous pouvez imprimer le ticket de caisse pour cette commande.
+              </p>
             </div>
 
-            <div className="modal-footer">
+            <div
+              className="modal-footer"
+              style={{
+                borderTop: "1px solid #e2e8f0",
+                padding: "1.5rem 2rem",
+                background: "#f8fafc",
+              }}
+            >
               <button
                 type="button"
                 className="btn btn-danger close-modal"
                 onClick={handleClose}
+                style={{
+                  background:
+                    "linear-gradient(135deg, #64748b 0%, #475569 100%)",
+                  border: "none",
+                  padding: "0.75rem 1.5rem",
+                  borderRadius: "10px",
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  marginRight: "0.75rem",
+                  transition: "all 0.2s ease",
+                }}
               >
                 Non
               </button>
@@ -616,8 +952,21 @@ const ModalConfirmOrder = ({ venteIdToConfirm, onClose }) => {
                   venteIdToConfirm._id || venteIdToConfirm
                 }`}
                 target="_blank"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                  border: "none",
+                  padding: "0.75rem 1.5rem",
+                  borderRadius: "10px",
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  textDecoration: "none",
+                  display: "inline-block",
+                  transition: "all 0.2s ease",
+                }}
               >
-                Oui
+                <i className="fas fa-print" style={{ marginRight: "8px" }}></i>
+                Oui, imprimer
               </a>
             </div>
           </div>
@@ -718,9 +1067,37 @@ const ModalCollectedAmount = ({ vente, onClose }) => {
         role="document"
       >
         {!!vente && (
-          <div className="modal-content">
-            <div className="modal-header">
-              <h3 className="modal-title" id="exampleModalLongTitle">
+          <div
+            className="modal-content"
+            style={{
+              borderRadius: "16px",
+              border: "none",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              className="modal-header"
+              style={{
+                background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)",
+                color: "white",
+                borderBottom: "none",
+                padding: "1.75rem 2rem",
+              }}
+            >
+              <h3
+                className="modal-title"
+                id="exampleModalLongTitle"
+                style={{
+                  fontSize: "1.5rem",
+                  fontWeight: "700",
+                  margin: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                }}
+              >
+                <i className="fas fa-cash-register"></i>
                 Confirmation de la vente table N°{vente.table_number}
               </h3>
               <button
@@ -730,49 +1107,210 @@ const ModalCollectedAmount = ({ vente, onClose }) => {
                 aria-label="Close"
                 id="close-modal"
                 onClick={() => handleClose()}
+                style={{
+                  color: "white",
+                  opacity: "0.9",
+                  fontSize: "1.75rem",
+                  fontWeight: "300",
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                }}
               >
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div className="modal-body">
-              <h4>
-                Prix:{" "}
-                <b>
-                  {vente.prix} {currency}
-                </b>
-              </h4>
-              <input
-                type="number"
-                placeholder="Somme encaissé"
-                className="form-control mb-1"
-                value={sommeEncaisse || ""}
-                onChange={(e) => setSommeEncaisse(e.target.value)}
-              />
-              <p>
-                Monnaie à rendre:{" "}
-                <b>
-                  {vente.prix < sommeEncaisse ? sommeEncaisse - vente.prix : 0}{" "}
-                  {currency}
-                </b>
-              </p>
+            <div
+              className="modal-body"
+              style={{
+                padding: "2rem",
+                background: "#ffffff",
+              }}
+            >
+              <div
+                style={{
+                  background:
+                    "linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)",
+                  padding: "1.5rem",
+                  borderRadius: "12px",
+                  marginBottom: "1.5rem",
+                  border: "1px solid #bfdbfe",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <span
+                    style={{
+                      color: "#64748b",
+                      fontSize: "0.9375rem",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Prix total:
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "1.5rem",
+                      fontWeight: "700",
+                      color: "#1e40af",
+                    }}
+                  >
+                    {vente.prix} {currency}
+                  </span>
+                </div>
+              </div>
+
+              <div style={{ marginBottom: "1.5rem" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "0.5rem",
+                    color: "#0f172a",
+                    fontWeight: "600",
+                    fontSize: "0.9375rem",
+                  }}
+                >
+                  Somme encaissée
+                </label>
+                <input
+                  type="number"
+                  placeholder="Entrez la somme encaissée"
+                  className="form-control"
+                  value={sommeEncaisse || ""}
+                  onChange={(e) => setSommeEncaisse(e.target.value)}
+                  style={{
+                    padding: "0.875rem 1rem",
+                    borderRadius: "10px",
+                    border: "2px solid #e2e8f0",
+                    fontSize: "1rem",
+                    transition: "all 0.2s ease",
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = "#2563eb";
+                    e.target.style.boxShadow =
+                      "0 0 0 3px rgba(37, 99, 235, 0.1)";
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = "#e2e8f0";
+                    e.target.style.boxShadow = "none";
+                  }}
+                />
+              </div>
+
+              {sommeEncaisse && vente.prix < sommeEncaisse && (
+                <div
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)",
+                    padding: "1rem 1.25rem",
+                    borderRadius: "10px",
+                    border: "1px solid #86efac",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: "#065f46",
+                        fontSize: "0.9375rem",
+                        fontWeight: "500",
+                      }}
+                    >
+                      Monnaie à rendre:
+                    </span>
+                    <span
+                      style={{
+                        fontSize: "1.25rem",
+                        fontWeight: "700",
+                        color: "#059669",
+                      }}
+                    >
+                      {sommeEncaisse - vente.prix} {currency}
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
 
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-success close-modal"
-                onClick={handleUpdateVente}
-                disabled={loading}
-              >
-                {loading ? "En cours.." : "Valider"}
-              </button>
+            <div
+              className="modal-footer"
+              style={{
+                borderTop: "1px solid #e2e8f0",
+                padding: "1.5rem 2rem",
+                background: "#f8fafc",
+              }}
+            >
               <button
                 type="button"
                 className="btn btn-danger close-modal"
                 data-dismiss="modal"
                 onClick={() => handleClose()}
+                style={{
+                  background:
+                    "linear-gradient(135deg, #64748b 0%, #475569 100%)",
+                  border: "none",
+                  padding: "0.75rem 1.5rem",
+                  borderRadius: "10px",
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  marginRight: "0.75rem",
+                  transition: "all 0.2s ease",
+                }}
               >
-                Fermer
+                Annuler
+              </button>
+              <button
+                type="button"
+                className="btn btn-success close-modal"
+                onClick={handleUpdateVente}
+                disabled={
+                  loading || !sommeEncaisse || sommeEncaisse < vente.prix
+                }
+                style={{
+                  background:
+                    loading || !sommeEncaisse || sommeEncaisse < vente.prix
+                      ? "linear-gradient(135deg, #94a3b8 0%, #64748b 100%)"
+                      : "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                  border: "none",
+                  padding: "0.75rem 1.5rem",
+                  borderRadius: "10px",
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  transition: "all 0.2s ease",
+                  cursor:
+                    loading || !sommeEncaisse || sommeEncaisse < vente.prix
+                      ? "not-allowed"
+                      : "pointer",
+                }}
+              >
+                {loading ? (
+                  <React.Fragment>
+                    <i
+                      className="fas fa-spinner fa-spin"
+                      style={{ marginRight: "8px" }}
+                    ></i>
+                    Validation...
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    <i
+                      className="fas fa-check"
+                      style={{ marginRight: "8px" }}
+                    ></i>
+                    Valider
+                  </React.Fragment>
+                )}
               </button>
             </div>
           </div>
@@ -816,14 +1354,19 @@ const EmDashboardVenteTables = () => {
   const [venteIdToDelete, setVenteIdToDelete] = React.useState(null);
   const [venteToConfirm, setVenteToConfirm] = React.useState(null);
   const { venteId } = React.useContext(ProductsContext);
+  const { ventes } = React.useContext(AppContext);
 
   return (
     <React.Fragment>
-      <div className={`col-xl-12 z-2 mt-${venteId ? "5" : "2"}`}>
+      <div
+        className={`col-xl-12 col-lg-12 col-md-12 col-sm-12 z-2 mt-${
+          venteId ? "5" : "2"
+        }`}
+      >
         <div className="white_card mb_30 card_height_100 shadow-lg rounded-lg">
           <div className="white_card_header bg-gradient-primary text-white p-4 rounded-top">
             <div className="row align-items-center justify-content-between flex-wrap">
-              <div className="col-lg-4">
+              <div className="col-lg-6 col-md-12 col-sm-12 mb-2 mb-lg-0">
                 <div className="main-title">
                   <h3 className="m-0 text-white">
                     <i className="fas fa-clock mr-2"></i>
@@ -831,9 +1374,26 @@ const EmDashboardVenteTables = () => {
                   </h3>
                 </div>
               </div>
+              <div className="col-lg-6 col-md-12 col-sm-12 text-lg-right text-left">
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    background: "rgba(255, 255, 255, 0.2)",
+                    padding: "0.5rem 1rem",
+                    borderRadius: "8px",
+                    fontSize: "0.875rem",
+                    fontWeight: "600",
+                  }}
+                >
+                  <i className="fas fa-list"></i>
+                  {ventes.length} commande{ventes.length > 1 ? "s" : ""}
+                </span>
+              </div>
             </div>
           </div>
-          <div className="table-wrapper-scroll-y my-custom-scrollbar p-4">
+          <div className="table-wrapper-scroll-y my-custom-scrollbar p-4 vente-tables-responsive">
             {showSuccess && (
               <div
                 className="alert alert-success animate__animated animate__fadeIn"

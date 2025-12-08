@@ -276,3 +276,123 @@
   color: #98ed58;
   letter-spacing: 0.25em;
 }
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+  .vente .product-list__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .vente {
+    flex-direction: column;
+  }
+
+  .vente .categories {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    margin-bottom: 1rem;
+  }
+
+  .vente .product-list {
+    width: 100%;
+    max-height: 400px;
+    margin-bottom: 1rem;
+  }
+
+  .vente .product-list__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .vente .carts {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .vente .product-list__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .vente .categories {
+    max-height: 150px;
+    padding: 8px;
+  }
+
+  .vente .categories ul li {
+    font-size: 11px;
+    min-height: 40px;
+    padding: 8px;
+  }
+
+  .vente .product-list {
+    max-height: 350px;
+    padding: 8px;
+  }
+
+  .vente .carts {
+    max-width: 100%;
+  }
+
+  .vente .carts .cart-item {
+    min-height: auto;
+    padding: 8px;
+  }
+
+  .vente .carts img {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 576px) {
+  .vente .product-list__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .vente .categories {
+    max-height: 120px;
+    padding: 6px;
+  }
+
+  .vente .categories ul li {
+    font-size: 10px;
+    min-height: 35px;
+    padding: 6px;
+    margin-bottom: 4px;
+  }
+
+  .vente .product-list {
+    max-height: 300px;
+    padding: 6px;
+  }
+
+  .vente .product-list__grid .product-card {
+    min-height: 80px;
+    padding: 6px;
+  }
+
+  .vente .product-list__grid .product-card .product-card__image img {
+    height: 70px;
+  }
+
+  .vente .carts .cart-item {
+    padding: 6px;
+    margin-bottom: 8px;
+  }
+
+  .vente .carts img {
+    width: 35px;
+    height: 35px;
+  }
+
+  .product-card__details h4 {
+    font-size: 10px;
+    max-width: 90px;
+  }
+}
