@@ -47,41 +47,114 @@
 
   <body class="crm_body_bg">
     <style>
+      :root {
+        --primary-color: #2563eb;
+        --primary-dark: #1e40af;
+        --primary-light: #3b82f6;
+        --secondary-color: #1e293b;
+        --accent-color: #ef4444;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --background-color: #f1f5f9;
+        --surface-color: #ffffff;
+        --text-primary: #0f172a;
+        --text-secondary: #64748b;
+        --border-color: #e2e8f0;
+        --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        --card-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        --transition-speed: 0.3s;
+        --border-radius: 12px;
+        --border-radius-lg: 16px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+        color: var(--text-primary);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
       .sidebar .logo .large_logo img {
         width: 70%;
         margin-left: 15%;
+        transition: transform var(--transition-speed) ease;
       }
 
-      #status_btnn {
-        display: inline-block;
-        padding: 2px 15px;
-        font-size: 11px;
-        font-weight: 300;
-        color: #fff !important;
-        background: #ff9409;
-        -webkit-border-radius: 30px;
-        -moz-border-radius: 30px;
-        border-radius: 30px;
-        text-transform: capitalize;
-        white-space: nowrap;
-        min-width: 70px;
-        text-align: center;
+      .sidebar .logo .large_logo img:hover {
+        transform: scale(1.05) rotate(2deg);
       }
 
-      .lms_checkbox_1 input:checked + .slider-check:before {
-        transform: translateX(20px);
-        background: #2eec1c;
+      .main_content_iner {
+        padding: 2rem;
+        min-height: 100vh;
+        overflow: visible;
       }
 
-      .dataTables_scrollBody table thead {
-        display: none;
+      .container-fluid {
+        padding: 0 2rem;
+        overflow: visible;
       }
 
-      @media screen and (max-width: 765px) {
-        td button.btn {
-          font-size: 10px;
-          margin-bottom: 5px;
-          width: 100%;
+      #root {
+        overflow: visible;
+        position: relative;
+        z-index: 1;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(-30px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .fade-in {
+        animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .slide-in {
+        animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      @media (max-width: 768px) {
+        .main_content_iner {
+          padding: 1rem;
+        }
+        .container-fluid {
+          padding: 0 0.75rem;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .main_content_iner {
+          padding: 0.75rem;
+        }
+        .container-fluid {
+          padding: 0 0.5rem;
         }
       }
     </style>
@@ -272,125 +345,446 @@
     <!-- jquery slim -->
     <%- include('partial/script.ejs') %>
 
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+
+    <!-- Injection des données depuis le serveur -->
+    <div id="products-data-container" data-products='<%- JSON.stringify(productsGlobal).replace(/'/g, "&#39;") %>' style="display: none;"></div>
+
     <script type="text/babel">
+      const { useState, useEffect } = React;
 
+      // Récupération des données depuis l'élément HTML
+      const productsDataElement = document.getElementById('products-data-container');
+      const productsData = productsDataElement && productsDataElement.getAttribute('data-products') 
+        ? JSON.parse(productsDataElement.getAttribute('data-products')) 
+        : [];
 
+      const SearchBar = ({ onSearch }) => {
+        const [searchTerm, setSearchTerm] = useState("");
 
-            const ListProduits = () => {
-
-
-             //  const [user, setUser] = React.useState({});
-
-             const products = <%- JSON.stringify(productsGlobal) %>;
-
-
-              const handleEdit = (productId)=>{
-                window.location.href = `/edit-produit-global?productId=${productId}`
-              }
-
-
-
-
-
-              return (
-                <tbody>
-                  {products.map((el, prodId) => {
-                    return (
-                      <tr key={prodId}>
-                        <td scope='col'>{el.nom_produit}</td>
-                        <td scope="col">{el.categorie ? el.categorie.nom:''}</td>
-                        <td scope='col'>{el.country.join(',') || "Non defini"}</td>
-                        <td scope='col'>{el.brand || "Non defini"}</td>
-                        <td scope='col'  style={{width:'100px'}}>
-                          <img
-                            src={el.image}
-                            alt=''
-                            width='100px'
-                            height='100px'
-                            style={{
-                              objectFit: 'contain',
-                            }}
-                          />
-                        </td>
-                        <td scope='col' className="product_btns" style={{alignItems:'center'}}>
-
-                            <button onClick={()=>handleEdit(el._id)} className='btn btn-success m-auto'>Modifier</button>
-
-
-
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              );
-            };
-
-
-
-      const App = ()=>{
-        return <React.Fragment>
-        <div className="main_content_iner">
-        <div className="container-fluid p-0">
-          <div className="row justify-content-center">
-            <div className="col-lg-12">
-              <div className="white_card card_height_100 mb_30">
-                <div className="white_card_header">
-                  <div className="box_header m-0">
-                    <div className="main-title">
-                      <h3 className="m-0">Liste des produits global</h3>
-                    </div>
-                  </div>
-                </div>
-                <div className="white_card_body">
-                  <div className="QA_section">
-                    <div className="white_box_tittle list_header">
-                      <h4></h4>
-                      <%- include('partial/inputSearch.ejs') %>
-                    </div>
-
-                    <div className='QA_table mb_30'>
-                  <table className='table lms_table_active3'>
-                    <thead>
-                      <tr>
-                        <th scope='col'>Nom</th>
-                        <th scope='col'>Catégorie</th>
-                        <th scope='col'>Pays</th>
-                        <th scope='col'>Marque</th>
-                        <th scope='col' style={{width:'100px'}}>Image</th>
-                        <th scope='col'>Action</th>
-                      </tr>
-                    </thead>
-                    <ListProduits />
-                  </table>
-
-      </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-        </React.Fragment>
-      }
-
-
-
-
-
-      const AppRoot = () => {
-
+        const handleChange = (e) => {
+          const value = e.target.value;
+          setSearchTerm(value);
+          onSearch(value);
+        };
 
         return (
-
-            <App />
-
+          <div style={{
+            marginBottom: "2rem",
+            position: "relative",
+          }}>
+            <div style={{
+              position: "relative",
+              maxWidth: "600px",
+              margin: "0 auto",
+            }}>
+              <i className="fas fa-search" style={{
+                position: "absolute",
+                left: "1.25rem",
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "#64748b",
+                fontSize: "1.1rem",
+                zIndex: 2,
+              }}></i>
+              <input
+                type="text"
+                placeholder="Rechercher un produit par nom, catégorie, pays ou marque..."
+                value={searchTerm}
+                onChange={handleChange}
+                style={{
+                  width: "100%",
+                  padding: "1rem 1rem 1rem 3.5rem",
+                  fontSize: "1rem",
+                  border: "2px solid #e2e8f0",
+                  borderRadius: "12px",
+                  outline: "none",
+                  transition: "all 0.3s ease",
+                  background: "#ffffff",
+                  boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = "#2563eb";
+                  e.target.style.boxShadow = "0 0 0 3px rgba(37, 99, 235, 0.1)";
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = "#e2e8f0";
+                  e.target.style.boxShadow = "0 1px 3px 0 rgba(0, 0, 0, 0.1)";
+                }}
+              />
+            </div>
+          </div>
         );
-      }
+      };
 
-            ReactDOM.render(<AppRoot />, document.getElementById('root'));
+      const ProductCard = ({ product, onEdit }) => {
+        return (
+          <div style={{
+            background: "#ffffff",
+            borderRadius: "16px",
+            padding: "1.5rem",
+            boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
+            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            border: "1px solid #e2e8f0",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            cursor: "pointer",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-4px)";
+            e.currentTarget.style.boxShadow = "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)";
+          }}
+          >
+            {/* Image Container */}
+            <div style={{
+              width: "100%",
+              height: "200px",
+              marginBottom: "1.25rem",
+              borderRadius: "12px",
+              overflow: "hidden",
+              background: "#f8fafc",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              border: "1px solid #e2e8f0",
+            }}>
+              <img
+                src={product.image || "/images/paresseux_sous_parasol_DEF.png"}
+                alt={product.nom_produit}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                  padding: "0.5rem",
+                }}
+                onError={(e) => {
+                  e.target.src = "/images/paresseux_sous_parasol_DEF.png";
+                }}
+              />
+            </div>
+
+            {/* Product Info */}
+            <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+              <h3 style={{
+                fontSize: "1.25rem",
+                fontWeight: "700",
+                color: "#0f172a",
+                marginBottom: "0.75rem",
+                lineHeight: "1.4",
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+              }}>
+                {product.nom_produit}
+              </h3>
+
+              {/* Category Badge */}
+              {product.categorie && product.categorie.nom && (
+                <div style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  marginBottom: "0.75rem",
+                }}>
+                  <i className="fas fa-tag" style={{ color: "#2563eb", fontSize: "0.875rem" }}></i>
+                  <span style={{
+                    fontSize: "0.875rem",
+                    color: "#64748b",
+                    fontWeight: "500",
+                  }}>
+                    {product.categorie.nom}
+                  </span>
+                </div>
+              )}
+
+              {/* Countries */}
+              {product.country && product.country.length > 0 && (
+                <div style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "0.5rem",
+                  marginBottom: "0.75rem",
+                }}>
+                  {product.country.map((country, idx) => (
+                    <span key={idx} style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "0.25rem",
+                      padding: "0.25rem 0.75rem",
+                      background: "linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)",
+                      color: "#1e40af",
+                      borderRadius: "20px",
+                      fontSize: "0.75rem",
+                      fontWeight: "600",
+                      border: "1px solid #93c5fd",
+                    }}>
+                      <i className="fas fa-globe" style={{ fontSize: "0.7rem" }}></i>
+                      {country}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* Brand */}
+              {product.brand && product.brand !== "Non defini" && (
+                <div style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  marginBottom: "1rem",
+                  padding: "0.5rem 0.75rem",
+                  background: "#f8fafc",
+                  borderRadius: "8px",
+                  border: "1px solid #e2e8f0",
+                }}>
+                  <i className="fas fa-certificate" style={{ color: "#f59e0b", fontSize: "0.875rem" }}></i>
+                  <span style={{
+                    fontSize: "0.875rem",
+                    color: "#475569",
+                    fontWeight: "600",
+                  }}>
+                    {product.brand}
+                  </span>
+                </div>
+              )}
+
+              {/* Action Button */}
+              <button
+                onClick={() => onEdit(product._id)}
+                style={{
+                  marginTop: "auto",
+                  width: "100%",
+                  padding: "0.75rem 1.5rem",
+                  background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                  color: "#ffffff",
+                  border: "none",
+                  borderRadius: "10px",
+                  fontSize: "0.9375rem",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "0.5rem",
+                  boxShadow: "0 2px 4px rgba(16, 185, 129, 0.3)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow = "0 4px 8px rgba(16, 185, 129, 0.4)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 2px 4px rgba(16, 185, 129, 0.3)";
+                }}
+              >
+                <i className="fas fa-edit"></i>
+                Modifier
+              </button>
+            </div>
+          </div>
+        );
+      };
+
+      const App = () => {
+        const products = productsData || [];
+        const [filteredProducts, setFilteredProducts] = useState(products);
+        const [searchTerm, setSearchTerm] = useState("");
+
+        const handleSearch = (term) => {
+          setSearchTerm(term);
+          if (!term.trim()) {
+            setFilteredProducts(products);
+            return;
+          }
+
+          const filtered = products.filter((product) => {
+            const searchLower = term.toLowerCase();
+            const nameMatch = product.nom_produit && product.nom_produit.toLowerCase().includes(searchLower);
+            const categoryMatch = product.categorie && product.categorie.nom && product.categorie.nom.toLowerCase().includes(searchLower);
+            const countryMatch = product.country && Array.isArray(product.country) && product.country.some(function(c) {
+              return c && c.toLowerCase().includes(searchLower);
+            });
+            const brandMatch = product.brand && product.brand.toLowerCase().includes(searchLower);
+
+            return nameMatch || categoryMatch || countryMatch || brandMatch;
+          });
+
+          setFilteredProducts(filtered);
+        };
+
+        const handleEdit = (productId) => {
+          window.location.href = `/edit-produit-global?productId=${productId}`;
+        };
+
+        return (
+          <React.Fragment>
+            <style>{`
+              .products-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 1.5rem;
+                padding: 0;
+              }
+
+              @media (max-width: 1200px) {
+                .products-grid {
+                  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                  gap: 1.25rem;
+                }
+              }
+
+              @media (max-width: 768px) {
+                .products-grid {
+                  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                  gap: 1rem;
+                }
+              }
+
+              @media (max-width: 576px) {
+                .products-grid {
+                  grid-template-columns: 1fr;
+                  gap: 1rem;
+                }
+              }
+
+              .page-header {
+                background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+                padding: 2rem;
+                border-radius: 16px;
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+                margin-bottom: 2rem;
+                border: 1px solid #e2e8f0;
+              }
+
+              .page-title {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                margin-bottom: 0.5rem;
+              }
+
+              .page-title h1 {
+                font-size: 2rem;
+                font-weight: 700;
+                color: #0f172a;
+                margin: 0;
+                letter-spacing: -0.02em;
+              }
+
+              .page-subtitle {
+                color: #64748b;
+                font-size: 1rem;
+                margin: 0;
+              }
+
+              .products-count {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 0.5rem 1rem;
+                background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+                color: #1e40af;
+                border-radius: 20px;
+                font-size: 0.875rem;
+                font-weight: 600;
+                margin-top: 1rem;
+              }
+
+              .empty-state {
+                text-align: center;
+                padding: 4rem 2rem;
+                background: #ffffff;
+                border-radius: 16px;
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+                border: 1px solid #e2e8f0;
+              }
+
+              .empty-state-icon {
+                font-size: 4rem;
+                color: #cbd5e1;
+                margin-bottom: 1rem;
+              }
+
+              .empty-state-title {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: #0f172a;
+                margin-bottom: 0.5rem;
+              }
+
+              .empty-state-text {
+                color: #64748b;
+                font-size: 1rem;
+              }
+            `}</style>
+
+            <div className="main_content_iner fade-in">
+              <div className="container-fluid p-0">
+                {/* Page Header */}
+                <div className="page-header slide-in">
+                  <div className="page-title">
+                    <i className="fas fa-boxes" style={{ color: "#2563eb", fontSize: "2rem" }}></i>
+                    <h1>Liste des produits globaux</h1>
+                  </div>
+                  <p className="page-subtitle">
+                    Gérez et modifiez tous vos produits globaux en un seul endroit
+                  </p>
+                  <div className="products-count">
+                    <i className="fas fa-list"></i>
+                    {filteredProducts.length} produit{filteredProducts.length > 1 ? 's' : ''} trouvé{filteredProducts.length > 1 ? 's' : ''}
+                  </div>
+                </div>
+
+                {/* Search Bar */}
+                <SearchBar onSearch={handleSearch} />
+
+                {/* Products Grid */}
+                {filteredProducts.length > 0 ? (
+                  <div className="products-grid">
+                    {filteredProducts.map((product, idx) => (
+                      <div key={product._id || idx} style={{
+                        animation: `fadeIn 0.5s ease ${idx * 0.05}s both`,
+                      }}>
+                        <ProductCard product={product} onEdit={handleEdit} />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="empty-state">
+                    <i className="fas fa-search empty-state-icon"></i>
+                    <h3 className="empty-state-title">Aucun produit trouvé</h3>
+                    <p className="empty-state-text">
+                      {searchTerm
+                        ? `Aucun produit ne correspond à "${searchTerm}". Essayez avec d'autres mots-clés.`
+                        : "Aucun produit disponible pour le moment."}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </React.Fragment>
+        );
+      };
+
+      const AppRoot = () => {
+        return <App />;
+      };
+
+      ReactDOM.render(<AppRoot />, document.getElementById('root'));
     </script>
 
     <script src="assets/js/bootstrap.bundle.min.js"></script>

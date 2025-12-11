@@ -27,6 +27,8 @@
   <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" href="css/metisMenu.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
   <script src="/assets/js/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
@@ -558,9 +560,136 @@
       background: linear-gradient(90deg, #FF4500 0%, #FFA500 100%);
       transform: scale(1.04);
     }
-    @media (max-width: 700px) {
-      .forfait-cards { flex-direction: column; gap: 24px; }
-      .forfait-modal-content { padding: 18px 4vw 18px 4vw; }
+    /* Responsive pour les modals */
+    @media (max-width: 992px) {
+      .forfait-modal-content {
+        width: 90%;
+        margin: 10% auto;
+        padding: 2rem;
+      }
+
+      .subscription-modal-content {
+        width: 90%;
+        margin: 10% auto;
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .forfait-cards {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .forfait-card {
+        min-width: 100%;
+        max-width: 100%;
+      }
+
+      .forfait-modal-content {
+        width: 95%;
+        margin: 5% auto;
+        padding: 1.5rem;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      .forfait-modal-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .forfait-icon {
+        font-size: 2.5rem;
+      }
+
+      .forfait-price {
+        font-size: 1.75rem;
+      }
+
+      .forfait-desc {
+        font-size: 1rem;
+      }
+
+      .subscription-modal-content {
+        width: 95%;
+        margin: 5% auto;
+        padding: 1.25rem;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      .subscription-modal-title {
+        font-size: 1.5rem;
+      }
+
+      .subscription-modal-body {
+        font-size: 0.9375rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .forfait-modal-content {
+        padding: 1rem;
+        border-radius: 12px;
+      }
+
+      .forfait-modal-title {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+      }
+
+      .forfait-icon {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      .forfait-price {
+        font-size: 1.5rem;
+      }
+
+      .forfait-desc {
+        font-size: 0.9375rem;
+        margin-bottom: 1rem;
+      }
+
+      .forfait-btn {
+        padding: 0.875rem 0;
+        font-size: 0.9375rem;
+      }
+
+      .subscription-modal-content {
+        padding: 1rem;
+        border-radius: 12px;
+      }
+
+      .subscription-modal-title {
+        font-size: 1.25rem;
+      }
+
+      .subscription-modal-body {
+        font-size: 0.875rem;
+        padding: 0;
+      }
+
+      .subscription-modal-button {
+        width: 100%;
+        padding: 0.75rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .forfait-modal-content {
+        padding: 0.75rem;
+      }
+
+      .forfait-modal-title {
+        font-size: 1.125rem;
+      }
+
+      .subscription-modal-content {
+        padding: 0.75rem;
+      }
     }
   </style>
 
@@ -571,252 +700,1100 @@
   <section class="main_content dashboard_part large_header_bg">
     <!-- menu  -->
 
+    <style>
+      .profile-modern-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .profile-header-modern {
+        background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
+        border-radius: 24px;
+        padding: 3.5rem 3rem;
+        margin-bottom: 2.5rem;
+        color: white;
+        box-shadow: 0 20px 60px rgba(37, 99, 235, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        animation: fadeInDown 0.6s ease;
+        position: relative;
+        overflow: hidden;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .profile-header-modern::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        animation: pulse 3s ease-in-out infinite;
+      }
+
+      .profile-header-modern h1 {
+        font-size: 3.25rem;
+        font-weight: 800;
+        margin: 0 0 1rem 0;
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        color: #ffffff;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        letter-spacing: -0.02em;
+        position: relative;
+        z-index: 1;
+      }
+
+      .profile-header-modern h1 i {
+        font-size: 3.5rem;
+        color: #ffffff;
+        filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+        animation: iconFloat 3s ease-in-out infinite;
+      }
+
+      .profile-header-modern p {
+        font-size: 1.25rem;
+        opacity: 1;
+        margin: 0;
+        color: #ffffff;
+        font-weight: 400;
+        line-height: 1.6;
+        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+        position: relative;
+        z-index: 1;
+      }
+
+      @keyframes iconFloat {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
+      @keyframes pulse {
+        0%, 100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 0.6;
+        }
+      }
+
+      .profile-card-modern {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid #e2e8f0;
+      }
+
+      .profile-card-modern:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+      }
+
+      .profile-card-modern h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e2e8f0;
+      }
+
+      .profile-card-modern h3 i {
+        color: #2563eb;
+        font-size: 1.3rem;
+      }
+
+      .profile-avatar-section {
+        text-align: center;
+        padding: 2rem;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        border-radius: 20px;
+        margin-bottom: 2rem;
+      }
+
+      .profile-avatar-modern {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid white;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        margin-bottom: 1.5rem;
+      }
+
+      .profile-name-modern {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin: 0.5rem 0;
+      }
+
+      .profile-email-modern {
+        color: #64748b;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .profile-badge-modern {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+      }
+
+      .form-group-modern {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-label-modern {
+        display: block;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .form-label-modern i {
+        color: #2563eb;
+        font-size: 0.875rem;
+      }
+
+      .form-input-modern {
+        width: 100%;
+        padding: 0.875rem 1.25rem;
+        font-size: 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        background: #ffffff;
+        color: #0f172a;
+      }
+
+      .form-input-modern:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+      }
+
+      .form-select-modern {
+        width: 100%;
+        padding: 0.875rem 1.25rem;
+        font-size: 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        background: #ffffff;
+        color: #0f172a;
+        cursor: pointer;
+      }
+
+      .form-select-modern:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+      }
+
+      .btn-save-modern {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border: none;
+        padding: 1rem 2.5rem;
+        border-radius: 12px;
+        font-size: 1.0625rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-save-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+      }
+
+      .password-section-modern {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border: 2px solid #f59e0b;
+      }
+
+      .password-section-modern h4 {
+        color: #92400e;
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .premium-section-modern {
+        background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        border: 2px solid #ffa500;
+      }
+
+      .premium-header-modern {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .premium-header-modern h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #ff4500;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+      }
+
+      .premium-badge-modern {
+        display: inline-block;
+        background: linear-gradient(135deg, #ffa500 0%, #ff4500 100%);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
+        margin-top: 1rem;
+      }
+
+      .premium-badge-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 165, 0, 0.4);
+      }
+
+      .premium-feature-item-modern {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border: 2px solid #e2e8f0;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .premium-feature-item-modern:hover {
+        border-color: #ffa500;
+        box-shadow: 0 4px 15px rgba(255, 165, 0, 0.1);
+      }
+
+      .premium-feature-item-modern.active {
+        border-color: #10b981;
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      }
+
+      .currency-badge-modern {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        color: #1e40af;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        margin-left: 0.5rem;
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .fade-in-modern {
+        animation: fadeIn 0.6s ease;
+      }
+
+      /* Tablettes et écrans moyens (768px - 992px) */
+      @media (max-width: 992px) {
+        .profile-modern-container {
+          padding: 1rem;
+        }
+
+        .profile-header-modern {
+          padding: 2.5rem 2rem;
+        }
+
+        .profile-header-modern h1 {
+          font-size: 2.5rem;
+        }
+
+        .profile-header-modern h1 i {
+          font-size: 2.75rem;
+        }
+
+        .profile-header-modern p {
+          font-size: 1.125rem;
+        }
+
+        .profile-card-modern {
+          padding: 1.5rem;
+        }
+
+        .profile-card-modern h3 {
+          font-size: 1.3rem;
+        }
+
+        .profile-avatar-modern {
+          width: 120px;
+          height: 120px;
+        }
+
+        .profile-name-modern {
+          font-size: 1.5rem;
+        }
+
+        .premium-header-modern h2 {
+          font-size: 1.75rem;
+        }
+      }
+
+      /* Tablettes portrait et petits écrans (576px - 768px) */
+      @media (max-width: 768px) {
+        .profile-modern-container {
+          padding: 0.75rem;
+        }
+
+        .profile-header-modern {
+          padding: 2rem 1.5rem;
+          border-radius: 20px;
+        }
+
+        .profile-header-modern h1 {
+          font-size: 2.25rem;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.75rem;
+          margin-bottom: 0.75rem;
+        }
+
+        .profile-header-modern h1 i {
+          font-size: 2.5rem;
+        }
+
+        .profile-header-modern p {
+          font-size: 1.0625rem;
+        }
+
+        .profile-card-modern {
+          padding: 1.25rem;
+          border-radius: 16px;
+          margin-bottom: 1.5rem;
+        }
+
+        .profile-card-modern h3 {
+          font-size: 1.25rem;
+          margin-bottom: 1.25rem;
+        }
+
+        .profile-avatar-section {
+          padding: 1.5rem;
+        }
+
+        .profile-avatar-modern {
+          width: 100px;
+          height: 100px;
+          margin-bottom: 1rem;
+        }
+
+        .profile-name-modern {
+          font-size: 1.25rem;
+        }
+
+        .profile-email-modern {
+          font-size: 0.9375rem;
+        }
+
+        .form-group-modern {
+          margin-bottom: 1.25rem;
+        }
+
+        .form-label-modern {
+          font-size: 0.875rem;
+        }
+
+        .form-input-modern,
+        .form-select-modern {
+          padding: 0.75rem 1rem;
+          font-size: 0.9375rem;
+        }
+
+        .btn-save-modern {
+          padding: 0.875rem 2rem;
+          font-size: 1rem;
+          width: 100%;
+        }
+
+        .premium-section-modern {
+          padding: 1.5rem;
+        }
+
+        .premium-header-modern h2 {
+          font-size: 1.5rem;
+          flex-wrap: wrap;
+        }
+
+        .premium-badge-modern {
+          padding: 0.625rem 1.25rem;
+          font-size: 0.9375rem;
+          width: 100%;
+          text-align: center;
+        }
+
+        .premium-feature-item-modern {
+          padding: 1.25rem;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .premium-feature-item-modern label {
+          width: 100%;
+        }
+
+        .password-section-modern {
+          padding: 1.25rem;
+        }
+
+        .currency-badge-modern {
+          font-size: 0.8125rem;
+          padding: 0.375rem 0.75rem;
+        }
+
+        /* Empiler les colonnes sur mobile */
+        .row > [class*="col-"] {
+          margin-bottom: 1rem;
+        }
+      }
+
+      /* Petits écrans mobiles (max-width: 576px) */
+      @media (max-width: 576px) {
+        .profile-modern-container {
+          padding: 0.5rem;
+        }
+
+        .profile-header-modern {
+          padding: 1.75rem 1.25rem;
+          border-radius: 16px;
+        }
+
+        .profile-header-modern h1 {
+          font-size: 2rem;
+        }
+
+        .profile-header-modern h1 i {
+          font-size: 2.25rem;
+        }
+
+        .profile-header-modern p {
+          font-size: 1rem;
+        }
+
+        .profile-card-modern {
+          padding: 1rem;
+          border-radius: 12px;
+          margin-bottom: 1rem;
+        }
+
+        .profile-card-modern h3 {
+          font-size: 1.125rem;
+          margin-bottom: 1rem;
+          padding-bottom: 0.75rem;
+        }
+
+        .profile-card-modern h3 i {
+          font-size: 1.125rem;
+        }
+
+        .profile-avatar-section {
+          padding: 1rem;
+          border-radius: 12px;
+        }
+
+        .profile-avatar-modern {
+          width: 80px;
+          height: 80px;
+          border-width: 3px;
+          margin-bottom: 0.75rem;
+        }
+
+        .profile-name-modern {
+          font-size: 1.125rem;
+        }
+
+        .profile-email-modern {
+          font-size: 0.875rem;
+        }
+
+        .profile-badge-modern {
+          font-size: 0.75rem;
+          padding: 0.375rem 0.75rem;
+        }
+
+        .form-group-modern {
+          margin-bottom: 1rem;
+        }
+
+        .form-label-modern {
+          font-size: 0.8125rem;
+          margin-bottom: 0.375rem;
+        }
+
+        .form-label-modern i {
+          font-size: 0.75rem;
+        }
+
+        .form-input-modern,
+        .form-select-modern {
+          padding: 0.625rem 0.875rem;
+          font-size: 0.875rem;
+          border-radius: 10px;
+        }
+
+        .btn-save-modern {
+          padding: 0.75rem 1.5rem;
+          font-size: 0.9375rem;
+          border-radius: 10px;
+        }
+
+        .password-section-modern {
+          padding: 1rem;
+          border-radius: 12px;
+        }
+
+        .password-section-modern h4 {
+          font-size: 1rem;
+          margin-bottom: 0.75rem;
+        }
+
+        .premium-section-modern {
+          padding: 1rem;
+          border-radius: 16px;
+        }
+
+        .premium-header-modern {
+          margin-bottom: 1.5rem;
+        }
+
+        .premium-header-modern h2 {
+          font-size: 1.25rem;
+          margin-bottom: 0.75rem;
+        }
+
+        .premium-header-modern h2 i {
+          font-size: 1.125rem;
+        }
+
+        .new-badge {
+          font-size: 0.625rem;
+          padding: 0.125rem 0.5rem;
+          margin-left: 0.25rem;
+        }
+
+        .premium-badge-modern {
+          padding: 0.5rem 1rem;
+          font-size: 0.875rem;
+          border-radius: 20px;
+        }
+
+        .premium-feature-item-modern {
+          padding: 1rem;
+          border-radius: 12px;
+          margin-bottom: 0.75rem;
+        }
+
+        .premium-feature-item-modern label span {
+          font-size: 0.9375rem;
+        }
+
+        .premium-tooltip {
+          font-size: 0.8125rem !important;
+        }
+
+        .lock-icon {
+          width: 28px;
+          height: 28px;
+          font-size: 1rem;
+        }
+
+        .currency-badge-modern {
+          font-size: 0.75rem;
+          padding: 0.25rem 0.625rem;
+          margin-left: 0.25rem;
+        }
+
+        /* Empiler tous les champs sur très petits écrans */
+        .row > [class*="col-"] {
+          flex: 0 0 100%;
+          max-width: 100%;
+          margin-bottom: 0.75rem;
+        }
+
+        /* Ajuster les flexbox pour le sélecteur de pays */
+        .form-group-modern div[style*="display: flex"] {
+          flex-direction: column;
+          align-items: stretch !important;
+        }
+
+        .form-group-modern div[style*="display: flex"] select {
+          width: 100% !important;
+          min-width: 100% !important;
+          margin-bottom: 0.5rem;
+        }
+
+        .form-group-modern div[style*="display: flex"] .currency-badge-modern {
+          width: 100%;
+          text-align: center;
+          margin-left: 0;
+        }
+
+        /* Ajuster les espacements */
+        .mt-4 {
+          margin-top: 1rem !important;
+        }
+
+        .mt-5 {
+          margin-top: 1.25rem !important;
+        }
+      }
+
+      /* Très petits écrans (max-width: 400px) */
+      @media (max-width: 400px) {
+        .profile-modern-container {
+          padding: 0.25rem;
+        }
+
+        .profile-header-modern {
+          padding: 0.875rem;
+        }
+
+        .profile-header-modern h1 {
+          font-size: 1.25rem;
+        }
+
+        .profile-card-modern {
+          padding: 0.875rem;
+        }
+
+        .form-input-modern,
+        .form-select-modern {
+          padding: 0.5rem 0.75rem;
+          font-size: 0.8125rem;
+        }
+
+        .btn-save-modern {
+          padding: 0.625rem 1.25rem;
+          font-size: 0.875rem;
+        }
+      }
+
+      /* Grands écrans (min-width: 1200px) */
+      @media (min-width: 1200px) {
+        .profile-modern-container {
+          max-width: 1400px;
+        }
+
+        .profile-card-modern {
+          padding: 2.5rem;
+        }
+
+        .profile-header-modern {
+          padding: 3rem;
+        }
+      }
+
+      /* Orientation paysage sur mobile */
+      @media (max-width: 768px) and (orientation: landscape) {
+        .profile-header-modern {
+          padding: 1rem;
+        }
+
+        .profile-header-modern h1 {
+          font-size: 1.5rem;
+        }
+
+        .profile-card-modern {
+          padding: 1rem;
+        }
+      }
+
+      .new-badge {
+        background-color: #FF4500;
+        color: #fff;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        margin-left: 0.5rem;
+        animation: bounce 1.5s infinite;
+        font-weight: 600;
+      }
+
+      @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        60% { transform: translateY(-5px); }
+      }
+    </style>
 
     <div class="main_content_iner">
       <div class="container-fluid p-0">
-        <div class="row justify-content-center">
-          <div class="col-lg-12">
-            <div class="white_card card_height_100 mb_30">
-              <div class="white_card_header">
-                <div class="box_header m-0">
-                  <div class="main-title">
-                    <h3 class="m-0">Modifier le profil</h3>
+        <div class="profile-modern-container">
+          <!-- Header -->
+          <div class="profile-header-modern fade-in-modern">
+            <h1>
+              <i class="fas fa-user-circle"></i>
+              MON PROFIL
+            </h1>
+            <p>Gérez vos informations personnelles et vos paramètres de compte</p>
+          </div>
+
+          <form action='/profile' method='post'>
+            <div class="row">
+              <!-- Colonne gauche - Avatar et informations -->
+              <div class="col-lg-4 col-md-12 col-sm-12 mb-4">
+                <div class="profile-card-modern fade-in-modern">
+                  <div class="profile-avatar-section">
+                    <img class="profile-avatar-modern" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg" alt="Avatar">
+                    <h2 class="profile-name-modern"><%= user?.nom %> <%= user?.prenom %></h2>
+                    <p class="profile-email-modern">
+                      <i class="fas fa-envelope"></i>
+                      <%= user.email %>
+                    </p>
+                    <span class="profile-badge-modern">
+                      <i class="fas fa-check-circle"></i>
+                      Compte actif
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Section Mot de passe -->
+                <div class="profile-card-modern fade-in-modern">
+                  <h3>
+                    <i class="fas fa-lock"></i>
+                    Sécurité
+                  </h3>
+                  <div class="password-section-modern">
+                    <h4>
+                      <i class="fas fa-info-circle"></i>
+                      Changer votre mot de passe ?
+                    </h4>
+                    <p style="font-size: 0.875rem; color: #92400e; margin-bottom: 1rem;">
+                      Laissez les champs vides si vous ne souhaitez pas modifier votre mot de passe
+                    </p>
+                    <div class="form-group-modern">
+                      <label class="form-label-modern">
+                        <i class="fas fa-key"></i>
+                        Nouveau mot de passe
+                      </label>
+                      <input type="password" class="form-input-modern" name='newPassword' placeholder="Entrez un nouveau mot de passe" value="">
+                    </div>
+                    <div class="form-group-modern">
+                      <label class="form-label-modern">
+                        <i class="fas fa-check-double"></i>
+                        Confirmer le mot de passe
+                      </label>
+                      <input type="password" class="form-input-modern" name='confirmPassword' placeholder="Confirmez le mot de passe" value="">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Section Premium -->
+                <div class="premium-section-modern fade-in-modern">
+                  <div class="premium-header-modern">
+                    <h2>
+                      <i class="fas fa-crown"></i>
+                      Fonctionnalités Premium
+                      <span class="new-badge">Nouveauté</span>
+                    </h2>
+                    <span class="premium-badge-modern" id="openForfaitModal">
+                      <i class="fas fa-gift"></i>
+                      Voir les forfaits
+                    </span>
+                  </div>
+
+                  <div class="premium-feature-item-modern <%= user?.hasStock ? 'active' : '' %>">
+                    <% if (user?.hasStock) { %>
+                      <input id="cbx-12-stock" type="checkbox" checked name="hasStock" class="premium-checkbox" style="margin-top: 0.25rem;">
+                      <label for="cbx-12-stock" class="premium-label" data-locked="false" tabindex="0" style="flex: 1; margin: 0;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                          <span style="font-weight: 600; color: #0f172a; font-size: 1.0625rem;">
+                            <i class="fas fa-boxes" style="color: #10b981; margin-right: 0.5rem;"></i>
+                            Réserve de stock
+                          </span>
+                          <i class="fas fa-lock-open lock-icon lock-green" data-feature="stock" data-locked="false"></i>
+                        </div>
+                        <span class="premium-tooltip" style="font-size: 0.875rem; color: #64748b; line-height: 1.5;">
+                          Activez la gestion avancée de votre stock pour éviter les ruptures et optimiser vos approvisionnements.
+                        </span>
+                      </label>
+                    <% } else { %>
+                      <input type='checkbox' id='cbx-12-stock' name="hasStock" class="premium-checkbox checkbox-disabled" style="margin-top: 0.25rem;" />
+                      <label for="cbx-12-stock" class="premium-label" data-locked="true" tabindex="0" style="flex: 1; margin: 0;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                          <span style="font-weight: 600; color: #0f172a; font-size: 1.0625rem;">
+                            <i class="fas fa-boxes" style="color: #ffa500; margin-right: 0.5rem;"></i>
+                            Réserve de stock
+                          </span>
+                          <i class="fas fa-lock lock-icon lock-orange" data-feature="stock" data-locked="true"></i>
+                        </div>
+                        <span class="premium-tooltip" style="font-size: 0.875rem; color: #64748b; line-height: 1.5;">
+                          Activez la gestion avancée de votre stock pour éviter les ruptures et optimiser vos approvisionnements.
+                        </span>
+                      </label>
+                    <% } %>
+                  </div>
+
+                  <div class="premium-feature-item-modern <%= user?.hasOffer ? 'active' : '' %>">
+                    <% if (user?.hasOffer) { %>
+                      <input id="cbx-12-offer" type="checkbox" checked name="hasOffer" class="premium-checkbox" style="margin-top: 0.25rem;">
+                      <label for="cbx-12-offer" class="premium-label" data-locked="false" tabindex="0" style="flex: 1; margin: 0;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                          <span style="font-weight: 600; color: #0f172a; font-size: 1.0625rem;">
+                            <i class="fas fa-gift" style="color: #10b981; margin-right: 0.5rem;"></i>
+                            Boissons offertes
+                          </span>
+                          <i class="fas fa-lock-open lock-icon lock-green" data-feature="offer" data-locked="false"></i>
+                        </div>
+                        <span class="premium-tooltip" style="font-size: 0.875rem; color: #64748b; line-height: 1.5;">
+                          Cette option vous donne l'opportunité d'offrir des boissons à vos clients tout en ayant la traçabilité des boissons offertes.
+                        </span>
+                      </label>
+                    <% } else { %>
+                      <input type='checkbox' id='cbx-12-offer' name="hasOffer" class="premium-checkbox checkbox-disabled" style="margin-top: 0.25rem;" />
+                      <label for="cbx-12-offer" class="premium-label" data-locked="true" tabindex="0" style="flex: 1; margin: 0;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                          <span style="font-weight: 600; color: #0f172a; font-size: 1.0625rem;">
+                            <i class="fas fa-gift" style="color: #ffa500; margin-right: 0.5rem;"></i>
+                            Boissons offertes
+                          </span>
+                          <i class="fas fa-lock lock-icon lock-orange" data-feature="offer" data-locked="true"></i>
+                        </div>
+                        <span class="premium-tooltip" style="font-size: 0.875rem; color: #64748b; line-height: 1.5;">
+                          Cette option vous donne l'opportunité d'offrir des boissons à vos clients tout en ayant la traçabilité des boissons offertes.
+                        </span>
+                      </label>
+                    <% } %>
+                  </div>
+
+                  <div class="premium-feature-item-modern <%= user?.hasSubCategories ? 'active' : '' %>">
+                    <% if (user?.hasSubCategories) { %>
+                      <input id="cbx-12-SubCategories" type="checkbox" checked name="hasSubCategories" class="premium-checkbox" style="margin-top: 0.25rem;">
+                      <label for="cbx-12-SubCategories" class="premium-label" data-locked="false" tabindex="0" style="flex: 1; margin: 0;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                          <span style="font-weight: 600; color: #0f172a; font-size: 1.0625rem;">
+                            <i class="fas fa-utensils" style="color: #10b981; margin-right: 0.5rem;"></i>
+                            Option nourriture
+                          </span>
+                          <i class="fas fa-lock-open lock-icon lock-green" data-feature="subcategories" data-locked="false"></i>
+                        </div>
+                        <span class="premium-tooltip" style="font-size: 0.875rem; color: #64748b; line-height: 1.5;">
+                          Permet de proposer et gérer des sous-catégories de plats pour une carte plus flexible et détaillée.
+                        </span>
+                      </label>
+                    <% } else { %>
+                      <input type='checkbox' id='cbx-12-SubCategories' name="hasSubCategories" class="premium-checkbox checkbox-disabled" style="margin-top: 0.25rem;" />
+                      <label for="cbx-12-SubCategories" class="premium-label" data-locked="true" tabindex="0" style="flex: 1; margin: 0;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                          <span style="font-weight: 600; color: #0f172a; font-size: 1.0625rem;">
+                            <i class="fas fa-utensils" style="color: #ffa500; margin-right: 0.5rem;"></i>
+                            Option nourriture
+                          </span>
+                          <i class="fas fa-lock lock-icon lock-orange" data-feature="subcategories" data-locked="true"></i>
+                        </div>
+                        <span class="premium-tooltip" style="font-size: 0.875rem; color: #64748b; line-height: 1.5;">
+                          Permet de proposer et gérer des sous-catégories de plats pour une carte plus flexible et détaillée.
+                        </span>
+                      </label>
+                    <% } %>
                   </div>
                 </div>
               </div>
-              <div class="white_card_body">
-                <div class="QA_section">
-                  <div class="white_box_tittle list_header">
 
+              <!-- Colonne droite - Formulaire principal -->
+              <div class="col-lg-8 col-md-12 col-sm-12">
+                <div class="profile-card-modern fade-in-modern">
+                  <h3>
+                    <i class="fas fa-user-edit"></i>
+                    Informations personnelles
+                  </h3>
+                  
+                  <div class='alert alert-danger' style='display: none;'></div>
+
+                  <div class="row">
+                    <div class="col-md-6 col-sm-12 form-group-modern" id="element-nom">
+                      <label class="form-label-modern">
+                        <i class="fas fa-user"></i>
+                        Nom
+                      </label>
+                      <input type="text" class="form-input-modern" placeholder="Votre nom" name='nom' value="<%= user.nom %>" required>
+                    </div>
+                    <div class="col-md-6 col-sm-12 form-group-modern" id="element-prenom">
+                      <label class="form-label-modern">
+                        <i class="fas fa-user"></i>
+                        Prénom
+                      </label>
+                      <input type="text" class="form-input-modern" name='prenoms' value="<%= user.prenoms %>" placeholder="Votre prénom" required>
+                    </div>
                   </div>
-                  <div class="col-xl-12">
-                    <form action='/profile' method='post'>
-                      <div class="container rounded bg-white mt-5 mb-5">
-                        <div class="row">
-                          <div class="col-md-3 border-right">
-                            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                              <div class="profile-image-container">
-                                <img class="profile-image" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
-                              </div>
-                              <div class="profile-info">
-                                <h2 class="profile-name"><%= user?.nom %> <%= user?.prenom %></h2>
-                                <p class="profile-email"><%= user.email %></p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-5 border-right">
-                            <div class="p-3 py-5">
-                              <h4 class="section-title">Paramètres du profil</h4>
-                              <div class="form-section">
-                                <div class="row mt-2">
-                                  <div class="col-md-6" id="element-nom">
-                                    <label class="labels">Nom</label>
-                                    <input type="text" class="form-control" placeholder="Nom" name='nom' value="<%= user.nom %>" required>
-                                  </div>
-                                  <div class="col-md-6" id="element-prenom">
-                                    <label class="labels">Prénom</label>
-                                    <input type="text" class="form-control" name='prenoms' value="<%= user.prenoms %>" placeholder="Prénom" required>
-                                  </div>
-                                </div>
-                                <div class="row mt-3">
-                                  <div class="col-md-12"><label class="labels">Nom de l'établissement</label><input type="text" class="form-control" name='nom_etablissement' placeholder="Entrer le nom de l'établissement" value="<%= user.nom_etablissement %>"></div>
 
-                                  <div class="col-md-12"><label class="labels">Telephone</label><input type="text" class="form-control" name='numero' placeholder="Entrer le numero" value="<%= user.numero %>"></div>
-                                  <div class="col-md-12"><label class="labels">Adresse</label><input type="text" class="form-control" name="adresse" placeholder="Entrer l'adresse" value="<%= user.adresse %>"></div>
-                                  <div class="col-md-12"><label class="labels">Choisir le mode retour produit</label>
-                                    <select class="form-control" name='product_return_type' value="<%user.product_return_type%>">
-                                      <% retour_produits_types.forEach((p)=> { %>
-                                      <% if(p.type == user.product_return_type) { %>
-                                      <option value="<%= p.type %>" selected><%= p.nom %></option>
-                                      <% } else { %>
-                                      <option value="<%= p.type %>"><%= p.nom %></option>
-                                      <% } %>
-                                      <% }) %>
+                  <div class="form-group-modern">
+                    <label class="form-label-modern">
+                      <i class="fas fa-building"></i>
+                      Nom de l'établissement
+                    </label>
+                    <input type="text" class="form-input-modern" name='nom_etablissement' placeholder="Nom de votre établissement" value="<%= user.nom_etablissement %>">
+                  </div>
 
-                                    </select>
-                                  </div>
+                  <div class="form-group-modern">
+                    <label class="form-label-modern">
+                      <i class="fas fa-phone"></i>
+                      Téléphone
+                    </label>
+                    <input type="text" class="form-input-modern" name='numero' placeholder="Votre numéro de téléphone" value="<%= user.numero %>">
+                  </div>
 
-                                  <div class="col-md-12"><label class="labels">Email </label><input type="text" class="form-control" name="email" placeholder="Entrer l'email" value="<%= user.email %>"></div>
-                                  <div class="col-md-12"><label class="labels">Objectif à atteindre par jour</label><input type="number" class="form-control" name="objective" placeholder="Objectif" value="<%= user.objective %>"></div>
-                                  <div class="col-md-12"><label class="labels">Nombre de table</label><input type="number" class="form-control" name="numberOfTables" placeholder="Nombre de table" value="<%= user.numberOfTables %>"></div>
-                                </div>
-                                <div class="row mt-3">
-                                  <div class="col-md-6">
-                                    <label class="labels" for="country">Pays</label>
-                                    <div style="display: flex; align-items: center; gap: 8px;">
-                                      <select class='form-control' id="country" name="country">
-                                        <% for (var i = 0; i < pays.length; i++) { %>
-                                          <option value="<%= pays[i].code %>" <% if (pays[i].code == user.country) { %>selected<% } %>><%= pays[i].nom %></option>
-                                        <% } %>
-                                      </select>
-                                      <span class="badge badge-info" style="font-size:1rem;"> <%= currency %> </span>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-6">
-                                    <label class="labels" for="city">ville</label>
-                                    <select class='form-control' id="city" name="city">
-                                      <% pays.forEach((p)=> { %>
-                                        <% if(p.code == user.country) { %>
-                                          <% for(ville of p.cities) {%>
-                                            <% if(ville == user.city) { %>
-                                              <option value="<%=ville%>" selected><%= ville %></option>
-                                            <% } else { %>
-                                              <option value="<%=ville%>"><%= ville %></option>
-                                            <% } %>
-                                          <% } %>
-                                        <% } %>
-                                      <% }); %>
-                                    </select>
-                                  </div>
-                                </div>
+                  <div class="form-group-modern">
+                    <label class="form-label-modern">
+                      <i class="fas fa-map-marker-alt"></i>
+                      Adresse
+                    </label>
+                    <input type="text" class="form-input-modern" name="adresse" placeholder="Votre adresse" value="<%= user.adresse %>">
+                  </div>
 
-
-                                
-
-
-                                <div class="mt-5 text-center" id="element-save"><button class="btn btn-primary profile-button" type="submit">Enregistrer Profil</button></div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-4">
-                            <div class='alert alert-danger' style='display: none;'>
-
-                            </div>
-                            <div class="p-3 py-5">
-                              <div class="d-flex justify-content-between align-items-center experience"><span>Changer votre mot de pass?</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;sinon laissez vide les champs</span></div><br>
-                              <div class="col-md-12"><label class="labels">Nouveau mot de pass</label><input type="password" class="form-control" name='newPassword' placeholder="" value=""></div> <br>
-                              <div class="col-md-12"><label class="labels">Confirmer</label><input type="password" class="form-control" name='confirmPassword' placeholder="" value=""></div>
-                              <div class="premium-feature-title">
-                                <h2 class="animated-title">Fonctionnalités Premium <span class="new-badge">Nouveauté</span></h2>
-                                <div>
-                                  <span class="forfait-badge" id="openForfaitModal">Voir les forfaits</span>
-                                </div>
-                              </div>
-
-                              <style>
-                                .premium-feature-title {
-                                  text-align: center;
-                                  margin: 20px 0;
-                                }
-
-                                .animated-title {
-                                  font-size: 1.8rem;
-                                  font-weight: bold;
-                                  color: #f5f3ef;
-                                  position: relative;
-                                  display: inline-block;
-                                  animation: fadeIn 2s ease-in-out;
-                                }
-
-                                .new-badge {
-                                  background-color: #FF4500;
-                                  color: #fff;
-                                  font-size: 0.8rem;
-                                  padding: 2px 8px;
-                                  border-radius: 12px;
-                                  margin-left: 10px;
-                                  animation: bounce 1.5s infinite;
-                                }
-
-                                .forfait-badge {
-                                  display: inline-block;
-                                  margin-top: 10px;
-                                  background: #FFA500;
-                                  color: #fff;
-                                  font-size: 1rem;
-                                  padding: 4px 16px;
-                                  border-radius: 16px;
-                                  font-weight: 600;
-                                  cursor: pointer;
-                                  box-shadow: 0 2px 8px rgba(255, 165, 0, 0.12);
-                                  transition: background 0.2s, color 0.2s, transform 0.2s;
-                                }
-
-                                .forfait-badge:hover {
-                                  background: #FF4500;
-                                  color: #fff;
-                                  transform: scale(1.05);
-                                }
-
-                                @keyframes fadeIn {
-                                  0% { opacity: 0; transform: translateY(-10px); }
-                                  100% { opacity: 1; transform: translateY(0); }
-                                }
-
-                                @keyframes bounce {
-                                  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-                                  40% { transform: translateY(-10px); }
-                                  60% { transform: translateY(-5px); }
-                                }
-                              </style>
-                              <hr>
-                              
-
-                              <div class="checkbox-wrapper-12 premium-row">
-                                <% if (user?.hasStock) { %>
-                                  <input id="cbx-12-stock" type="checkbox" checked name="hasStock" class="premium-checkbox">
-                                  <label for="cbx-12-stock" class="premium-label" data-locked="false" tabindex="0">
-                                    Réserve de stock
-                                    <span class="premium-tooltip">Activez la gestion avancée de votre stock pour éviter les ruptures et optimiser vos approvisionnements.</span>
-                                    <i class="fas fa-lock-open lock-icon lock-green" data-feature="stock" data-locked="false"></i>
-                                  </label>
-                                <% } else { %>
-                                  <input type='checkbox' id='cbx-12-stock' name="hasStock" class="premium-checkbox checkbox-disabled" />
-                                  <label for="cbx-12-stock" class="premium-label" data-locked="true" tabindex="0">
-                                    Réserve de stock
-                                    <span class="premium-tooltip">Activez la gestion avancée de votre stock pour éviter les ruptures et optimiser vos approvisionnements.</span>
-                                    <i class="fas fa-lock lock-icon lock-orange" data-feature="stock" data-locked="true"></i>
-                                  </label>
-                                <% } %>
-                              </div>
-                              <hr>
-                              <div class="checkbox-wrapper-12 premium-row">
-                                <% if (user?.hasOffer) { %>
-                                  <input id="cbx-12-offer" type="checkbox" checked name="hasOffer" class="premium-checkbox">
-                                  <label for="cbx-12-offer" class="premium-label" data-locked="false" tabindex="0">
-                                    Boissons offertes
-                                    <span class="premium-tooltip">Cette option vous donne l'opportunité d'offrir des boissons à vos clients tout en ayant la traçabilité des boissons offertes.</span>
-                                    <i class="fas fa-lock-open lock-icon lock-green" data-feature="offer" data-locked="false"></i>
-                                  </label>
-                                <% } else { %>
-                                  <input type='checkbox' id='cbx-12-offer' name="hasOffer" class="premium-checkbox checkbox-disabled" />
-                                  <label for="cbx-12-offer" class="premium-label" data-locked="true" tabindex="0">
-                                    Boissons offertes
-                                    <span class="premium-tooltip">Cette option vous donne l'opportunité d'offrir des boissons à vos clients tout en ayant la traçabilité des boissons offertes.</span>
-                                    <i class="fas fa-lock lock-icon lock-orange" data-feature="offer" data-locked="true"></i>
-                                  </label>
-                                <% } %>
-                              </div>
-                              <hr>
-                              <div class="checkbox-wrapper-12 premium-row">
-                                <% if (user?.hasSubCategories) { %>
-                                  <input id="cbx-12-SubCategories" type="checkbox" checked name="hasSubCategories" class="premium-checkbox">
-                                  <label for="cbx-12-SubCategories" class="premium-label" data-locked="false" tabindex="0">
-                                    Option nourriture
-                                    <span class="premium-tooltip">Permet de proposer et gérer des sous-catégories de plats pour une carte plus flexible et détaillée.</span>
-                                    <i class="fas fa-lock-open lock-icon lock-green" data-feature="subcategories" data-locked="false"></i>
-                                  </label>
-                                <% } else { %>
-                                  <input type='checkbox' id='cbx-12-SubCategories' name="hasSubCategories" class="premium-checkbox checkbox-disabled" />
-                                  <label for="cbx-12-SubCategories" class="premium-label" data-locked="true" tabindex="0">
-                                    Option nourriture
-                                    <span class="premium-tooltip">Permet de proposer et gérer des sous-catégories de plats pour une carte plus flexible et détaillée.</span>
-                                    <i class="fas fa-lock lock-icon lock-orange" data-feature="subcategories" data-locked="true"></i>
-                                  </label>
-                                <% } %>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                  <div class="row">
+                    <div class="col-md-6 col-sm-12 form-group-modern">
+                      <label class="form-label-modern" for="country">
+                        <i class="fas fa-globe"></i>
+                        Pays
+                      </label>
+                      <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                        <select class='form-select-modern' id="country" name="country" style="flex: 1; min-width: 200px;">
+                          <% for (var i = 0; i < pays.length; i++) { %>
+                            <option value="<%= pays[i].code %>" <% if (pays[i].code == user.country) { %>selected<% } %>><%= pays[i].nom %></option>
+                          <% } %>
+                        </select>
+                        <span class="currency-badge-modern"><%= currency %></span>
                       </div>
-                    </form>
+                    </div>
+                    <div class="col-md-6 col-sm-12 form-group-modern">
+                      <label class="form-label-modern" for="city">
+                        <i class="fas fa-city"></i>
+                        Ville
+                      </label>
+                      <select class='form-select-modern' id="city" name="city">
+                        <% pays.forEach((p)=> { %>
+                          <% if(p.code == user.country) { %>
+                            <% for(ville of p.cities) {%>
+                              <% if(ville == user.city) { %>
+                                <option value="<%=ville%>" selected><%= ville %></option>
+                              <% } else { %>
+                                <option value="<%=ville%>"><%= ville %></option>
+                              <% } %>
+                            <% } %>
+                          <% } %>
+                        <% }); %>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group-modern">
+                    <label class="form-label-modern">
+                      <i class="fas fa-envelope"></i>
+                      Email
+                    </label>
+                    <input type="email" class="form-input-modern" name="email" placeholder="Votre adresse email" value="<%= user.email %>">
+                  </div>
+
+                  <div class="form-group-modern">
+                    <label class="form-label-modern">
+                      <i class="fas fa-list"></i>
+                      Mode de retour produit
+                    </label>
+                    <select class="form-select-modern" name='product_return_type'>
+                      <% retour_produits_types.forEach((p)=> { %>
+                        <% if(p.type == user.product_return_type) { %>
+                          <option value="<%= p.type %>" selected><%= p.nom %></option>
+                        <% } else { %>
+                          <option value="<%= p.type %>"><%= p.nom %></option>
+                        <% } %>
+                      <% }) %>
+                    </select>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6 col-sm-12 form-group-modern">
+                      <label class="form-label-modern">
+                        <i class="fas fa-bullseye"></i>
+                        Objectif quotidien
+                      </label>
+                      <input type="number" class="form-input-modern" name="objective" placeholder="Objectif à atteindre par jour" value="<%= user.objective %>">
+                    </div>
+                    <div class="col-md-6 col-sm-12 form-group-modern">
+                      <label class="form-label-modern">
+                        <i class="fas fa-chair"></i>
+                        Nombre de tables
+                      </label>
+                      <input type="number" class="form-input-modern" name="numberOfTables" placeholder="Nombre de tables" value="<%= user.numberOfTables %>">
+                    </div>
+                  </div>
+
+                  <div class="text-center mt-4" id="element-save">
+                    <button class="btn-save-modern" type="submit">
+                      <i class="fas fa-save"></i>
+                      Enregistrer les modifications
+                    </button>
                   </div>
                 </div>
-                </form>
               </div>
             </div>
-          </div>
+          </form>
         </div>
+      </div>
+    </div>
       </div>
     </div>
 

@@ -44,13 +44,720 @@
     <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/theme.min.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
 
-    <title>Ajouter un produit</title>
+    <title><%= update ? 'Modifier un produit' : 'Ajouter un produit' %></title>
 
     <%- include('partial/head.ejs') %>
   </head>
   <%- include('partial/newHead.ejs') %>
   <body class="crm_body_bg">
+    <style>
+      :root {
+        --primary-color: #2563eb;
+        --primary-dark: #1e40af;
+        --primary-light: #3b82f6;
+        --secondary-color: #1e293b;
+        --accent-color: #ef4444;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --background-color: #f1f5f9;
+        --surface-color: #ffffff;
+        --text-primary: #0f172a;
+        --text-secondary: #64748b;
+        --border-color: #e2e8f0;
+        --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        --card-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        --transition-speed: 0.3s;
+        --border-radius: 12px;
+        --border-radius-lg: 16px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+        color: var(--text-primary);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .main_content_iner {
+        padding: 2rem;
+        min-height: 100vh;
+        overflow: visible;
+      }
+
+      .container-fluid {
+        padding: 0 2rem;
+        overflow: visible;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(-30px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .fade-in {
+        animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .slide-in {
+        animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* Header moderne */
+      .page-header-modern {
+        background: linear-gradient(
+          135deg,
+          #1e40af 0%,
+          #2563eb 50%,
+          #3b82f6 100%
+        );
+        border-radius: 24px;
+        padding: 3rem 2.5rem;
+        margin-bottom: 2rem;
+        color: white;
+        box-shadow: 0 20px 60px rgba(37, 99, 235, 0.35),
+          0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        position: relative;
+        overflow: hidden;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .page-header-modern::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 0%,
+          transparent 70%
+        );
+        animation: pulse 3s ease-in-out infinite;
+      }
+
+      .page-header-modern h1 {
+        font-size: 2.75rem;
+        font-weight: 800;
+        margin: 0 0 0.75rem 0;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        color: #ffffff;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        letter-spacing: -0.02em;
+        position: relative;
+        z-index: 1;
+      }
+
+      .page-header-modern h1 i {
+        font-size: 3rem;
+        color: #ffffff;
+        filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+        animation: iconFloat 3s ease-in-out infinite;
+      }
+
+      .page-header-modern p {
+        font-size: 1.125rem;
+        opacity: 1;
+        margin: 0;
+        color: #ffffff;
+        font-weight: 400;
+        line-height: 1.6;
+        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+        position: relative;
+        z-index: 1;
+      }
+
+      @keyframes iconFloat {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 0.6;
+        }
+      }
+
+      /* Formulaire moderne */
+      .form-card-modern {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e2e8f0;
+        margin-bottom: 2rem;
+      }
+
+      .form-section-modern {
+        margin-bottom: 2rem;
+      }
+
+      .form-section-modern h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .form-section-modern h3 i {
+        color: #2563eb;
+        font-size: 1.125rem;
+      }
+
+      .form-group-modern {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-label-modern {
+        display: block;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .form-label-modern i {
+        color: #2563eb;
+        font-size: 0.875rem;
+      }
+
+      .form-label-modern .required {
+        color: #ef4444;
+        margin-left: 0.25rem;
+      }
+
+      .form-input-modern,
+      .form-select-modern {
+        width: 100%;
+        padding: 0.875rem 1.25rem;
+        font-size: 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        background: #ffffff;
+        color: #0f172a;
+      }
+
+      .form-input-modern:focus,
+      .form-select-modern:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+      }
+
+      .form-input-modern:disabled,
+      .form-select-modern:disabled {
+        background: #f8fafc;
+        color: #64748b;
+        cursor: not-allowed;
+      }
+
+      .form-help-text {
+        font-size: 0.875rem;
+        color: #64748b;
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .form-help-text i {
+        color: #3b82f6;
+        margin-top: 0.125rem;
+      }
+
+      /* Image preview moderne */
+      .product-preview-modern {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        border-radius: 16px;
+        padding: 1.5rem;
+        border: 2px solid #e2e8f0;
+        text-align: center;
+      }
+
+      .product-preview-modern img {
+        max-width: 100%;
+        max-height: 200px;
+        object-fit: contain;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .product-info-modern {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e2e8f0;
+      }
+
+      .product-info-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        font-size: 0.9375rem;
+      }
+
+      .product-info-item span:first-child {
+        color: #64748b;
+        font-weight: 600;
+      }
+
+      .product-info-item span:last-child {
+        color: #0f172a;
+        font-weight: 700;
+      }
+
+      /* Bouton moderne */
+      .btn-submit-modern {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border: none;
+        padding: 1rem 2.5rem;
+        border-radius: 12px;
+        font-size: 1.0625rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .btn-submit-modern:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+      }
+
+      .btn-submit-modern:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+
+      /* Alertes modernes */
+      .alert-modern {
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-weight: 600;
+        border: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .alert-success-modern {
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        color: #065f46;
+        border-left: 4px solid #10b981;
+      }
+
+      .alert-danger-modern {
+        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        color: #991b1b;
+        border-left: 4px solid #ef4444;
+      }
+
+      @media (max-width: 768px) {
+        .alert-modern {
+          padding: 0.875rem 1.25rem;
+          font-size: 0.875rem;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .alert-modern {
+          padding: 0.75rem 1rem;
+          font-size: 0.8125rem;
+          flex-wrap: wrap;
+        }
+
+        .alert-modern i {
+          font-size: 1rem !important;
+        }
+      }
+
+      /* Checkbox moderne */
+      .checkbox-modern {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 12px;
+        border: 2px solid #e2e8f0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .checkbox-modern:hover {
+        border-color: #2563eb;
+        background: #f0f9ff;
+      }
+
+      .checkbox-modern input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        accent-color: #2563eb;
+      }
+
+      .checkbox-modern label {
+        margin: 0;
+        cursor: pointer;
+        font-weight: 600;
+        color: #0f172a;
+      }
+
+      /* Responsive */
+      @media (max-width: 992px) {
+        .main_content_iner {
+          padding: 1.5rem;
+        }
+
+        .form-card-modern {
+          padding: 2rem;
+        }
+
+        .page-header-modern {
+          padding: 2rem 1.5rem;
+        }
+
+        .page-header-modern h1 {
+          font-size: 2.25rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .main_content_iner {
+          padding: 1rem;
+        }
+
+        .container-fluid {
+          padding: 0 0.75rem;
+        }
+
+        .page-header-modern {
+          padding: 1.5rem 1.25rem;
+        }
+
+        .page-header-modern h1 {
+          font-size: 1.75rem;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.5rem;
+        }
+
+        .form-card-modern {
+          padding: 1.5rem;
+        }
+
+        .form-section-modern h3 {
+          font-size: 1.125rem;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .main_content_iner {
+          padding: 0.75rem;
+        }
+
+        .container-fluid {
+          padding: 0 0.5rem;
+        }
+
+        .page-header-modern {
+          padding: 1.25rem 1rem;
+        }
+
+        .page-header-modern h1 {
+          font-size: 1.5rem;
+        }
+
+        .form-card-modern {
+          padding: 1rem;
+        }
+      }
+
+      /* Media queries améliorées pour tous les types de supports */
+      @media (min-width: 1400px) {
+        .form-card-modern {
+          max-width: 1400px;
+          margin: 0 auto 2rem;
+        }
+
+        .page-header-modern {
+          max-width: 1400px;
+          margin: 0 auto 2rem;
+        }
+      }
+
+      @media (max-width: 1200px) {
+        .form-section-modern h3 {
+          font-size: 1.125rem;
+        }
+
+        .form-group-modern {
+          margin-bottom: 1.25rem;
+        }
+      }
+
+      @media (max-width: 992px) {
+        .row {
+          margin-left: -0.5rem;
+          margin-right: -0.5rem;
+        }
+
+        .row > [class*="col-"] {
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
+        }
+
+        .form-group-modern {
+          margin-bottom: 1rem;
+        }
+
+        .form-input-modern,
+        .form-select-modern {
+          font-size: 0.9375rem;
+          padding: 0.75rem 1rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .page-header-modern h1 i {
+          font-size: 2rem;
+        }
+
+        .form-section-modern {
+          margin-bottom: 1.5rem;
+        }
+
+        .form-section-modern h3 {
+          font-size: 1rem;
+          padding-bottom: 0.5rem;
+        }
+
+        .form-label-modern {
+          font-size: 0.875rem;
+        }
+
+        .form-input-modern,
+        .form-select-modern {
+          font-size: 0.875rem;
+          padding: 0.625rem 0.875rem;
+        }
+
+        .btn-modern,
+        .btn-submit-modern {
+          width: 100%;
+          padding: 0.875rem 1.5rem;
+          font-size: 0.9375rem;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .page-header-modern h1 {
+          font-size: 1.375rem;
+        }
+
+        .page-header-modern h1 i {
+          font-size: 1.5rem;
+        }
+
+        .page-header-modern p {
+          font-size: 0.9375rem;
+        }
+
+        .form-card-modern {
+          border-radius: 16px;
+          padding: 1rem 0.875rem;
+        }
+
+        .form-section-modern h3 {
+          font-size: 0.9375rem;
+          margin-bottom: 1rem;
+        }
+
+        .form-label-modern {
+          font-size: 0.8125rem;
+          margin-bottom: 0.375rem;
+        }
+
+        .form-input-modern,
+        .form-select-modern {
+          font-size: 0.8125rem;
+          padding: 0.5625rem 0.75rem;
+          border-radius: 10px;
+        }
+
+        .form-group-modern {
+          margin-bottom: 0.875rem;
+        }
+
+        .btn-submit-modern {
+          width: 100%;
+          padding: 0.875rem 1.25rem;
+          font-size: 0.875rem;
+        }
+      }
+
+      @media (max-width: 400px) {
+        .main_content_iner {
+          padding: 0.5rem;
+        }
+
+        .container-fluid {
+          padding: 0 0.25rem;
+        }
+
+        .page-header-modern {
+          padding: 1rem 0.75rem;
+          border-radius: 16px;
+        }
+
+        .page-header-modern h1 {
+          font-size: 1.25rem;
+        }
+
+        .form-card-modern {
+          padding: 0.875rem 0.625rem;
+        }
+      }
+
+      /* Amélioration de l'affichage du stock actuel */
+      .stock-info-modern {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        border: 2px solid #0ea5e9;
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: 0 2px 8px rgba(14, 165, 233, 0.1);
+      }
+
+      .stock-info-modern i {
+        font-size: 1.5rem;
+        color: #0ea5e9;
+      }
+
+      .stock-info-modern .stock-content {
+        flex: 1;
+      }
+
+      .stock-info-modern .stock-label {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: #0369a1;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.25rem;
+      }
+
+      .stock-info-modern .stock-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #0c4a6e;
+      }
+
+      .stock-info-modern .stock-unit {
+        font-size: 0.875rem;
+        color: #64748b;
+        margin-left: 0.5rem;
+      }
+
+      @media (max-width: 768px) {
+        .stock-info-modern {
+          padding: 0.875rem 1rem;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.75rem;
+        }
+
+        .stock-info-modern i {
+          font-size: 1.25rem;
+        }
+
+        .stock-info-modern .stock-value {
+          font-size: 1.25rem;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .stock-info-modern {
+          padding: 0.75rem;
+          border-radius: 10px;
+        }
+
+        .stock-info-modern .stock-label {
+          font-size: 0.75rem;
+        }
+
+        .stock-info-modern .stock-value {
+          font-size: 1.125rem;
+        }
+      }
+    </style>
+
     <%- include(user.role ===
     "Barman"?'partial/emsidebar.ejs':'partial/newSideBar.ejs') %>
 
@@ -64,78 +771,30 @@
       <!-- menu  -->
 
       <!--/ menu  -->
-      <div class="main_content_iner overly_inner mt-10">
+      <div class="main_content_iner overly_inner mt-10 fade-in">
         <div class="container-fluid p-0">
-          <!-- page title  -->
-          <!-- page title  -->
-          <div class="row">
-            <div class="col-12">
-              <div
-                class="page_title_box d-flex flex-wrap align-items-center justify-content-between"
-              >
-                <div class="page_title_left d-flex align-items-center">
-                  <h3 class="f_s_25 f_w_700 dark_text mr_30">
-                    Ajouter un produit
-                  </h3>
-                  <!--  <ol class="breadcrumb page_bradcam mb-0">
-                   <li class="breadcrumb-item">
-                     <a href="javascript:void(0);">Acceuil</a>
-                   </li>
-                   <li class="breadcrumb-item active">Analyse</li>
-                 </ol> -->
-                </div>
-                <div class="page_title_right">
-                  <div class="page_title_right d-flex">
-                    <div class="page_date d-flex align-items-center">
-                      <div class="date_content ml-2">
-                        <span id="heure"></span>
-                        <script>
-                          setInterval("heure()", 1000);
-                        </script>
-                      </div>
-                    </div>
-                    <div class="page_date d-flex align-items-center">
-                      <div class="date_content ml-2">
-                        <span id="date"></span>
-                      </div>
-                    </div>
-                    <div class="page_date_button d-flex align-items-center">
-                      <script>
-                        var d = new Date();
-                        //affichage de la date du jour
-                        var jour = d.getDate();
-                        var mois = d.getMonth();
-                        var annee = d.getFullYear();
-                        var date = jour + "/" + (mois + 1) + "/" + annee;
-                        document.getElementById("date").innerHTML = date;
-                        //affichage de l'heure dynamique
-                        function heure() {
-                          var d = new Date();
-                          var h = d.getHours();
-                          var m = d.getMinutes();
-                          var s = d.getSeconds();
-                          if (h < 10) {
-                            h = "0" + h;
-                          }
-                          if (m < 10) {
-                            m = "0" + m;
-                          }
-                          if (s < 10) {
-                            s = "0" + s;
-                          }
-                          document.getElementById("heure").innerHTML =
-                            h + ":" + m + ":" + s;
-                        }
-                      </script>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <!-- Header moderne -->
+          <div class="page-header-modern slide-in">
+            <h1>
+              <i class="fas fa-<%= update ? 'edit' : 'plus-circle' %>"></i>
+              <%= update ? 'MODIFIER UN PRODUIT' : 'AJOUTER UN PRODUIT' %>
+            </h1>
+            <p>
+              <%= update ? 'Modifiez les informations de votre produit' : 'Créez et ajoutez un nouveau produit à votre catalogue' %>
+            </p>
           </div>
+
           <div class="row">
             <div class="col-12">
               <p id="sess" hidden></p>
+              <!-- Données pour React (doivent être AVANT le script React) -->
+              <div id="globalProduits-data" data-globalproduits='<%- JSON.stringify(globalProduits).replace(/'/g, "&#39;") %>' style="display: none;"></div>
+              <div id="produits-data" data-produits='<%- JSON.stringify(produits).replace(/'/g, "&#39;") %>' style="display: none;"></div>
+              <div id="categories-data" data-categories='<%- JSON.stringify(categories).replace(/'/g, "&#39;") %>' style="display: none;"></div>
+              <div id="productSizes-data" data-productsizes='<%- JSON.stringify(product_sizes).replace(/'/g, "&#39;") %>' style="display: none;"></div>
+              <div id="user-data" data-user='<%- JSON.stringify(user).replace(/'/g, "&#39;") %>' style="display: none;"></div>
+              <div id="update-data" data-update='<%- JSON.stringify(update).replace(/'/g, "&#39;") %>' style="display: none;"></div>
+              <div id="product-data" data-product='<%- JSON.stringify(product).replace(/'/g, "&#39;") %>' style="display: none;"></div>
               <div id="add_product"></div>
             </div>
           </div>
@@ -219,7 +878,6 @@
 
     <!-- footer  -->
     <%- include('partial/script.ejs') %>
-    <script src="../jquery-3.4.1.min.js"></script>
     <!-- <script>
   const socket = io(window.location.origin + window.location.pathname);
   console.log(window.location.origin + window.location.pathname);
@@ -258,35 +916,66 @@
     <script type="text/babel">
       const AddProduct = () => {
 
-          const [ allProducts, setAllProducts ] = React.useState(<%- JSON.stringify(globalProduits) %>);
-          const [ products, setProducts ] = React.useState(<%- JSON.stringify(produits) %>);
-          const [ categories, setCategories ] = React.useState(<%- JSON.stringify(categories) %>);
-          const [sizesProduct, setSizesProduct] = React.useState(<%- JSON.stringify(product_sizes) %>);
-          const adminSession = <%- JSON.stringify(user?.id) %>;
-          const updateProduct = <%- JSON.stringify(update) %>;
-          const hasStock = <%- JSON.stringify(user?.hasStock) %>;
-          const hasSubCategories = <%- JSON.stringify(user?.hasSubCategories || false) %>;
+          // Récupération des données depuis les éléments HTML cachés
+          const globalProduitsElement = document.getElementById('globalProduits-data');
+          const produitsElement = document.getElementById('produits-data');
+          const categoriesElement = document.getElementById('categories-data');
+          const productSizesElement = document.getElementById('productSizes-data');
+          const userElement = document.getElementById('user-data');
+          const updateElement = document.getElementById('update-data');
+          const productElement = document.getElementById('product-data');
+
+          const allProductsData = globalProduitsElement && globalProduitsElement.getAttribute('data-globalproduits')
+            ? JSON.parse(globalProduitsElement.getAttribute('data-globalproduits'))
+            : [];
+          const produitsData = produitsElement && produitsElement.getAttribute('data-produits')
+            ? JSON.parse(produitsElement.getAttribute('data-produits'))
+            : [];
+          const categoriesData = categoriesElement && categoriesElement.getAttribute('data-categories')
+            ? JSON.parse(categoriesElement.getAttribute('data-categories'))
+            : [];
+          const sizesProductData = productSizesElement && productSizesElement.getAttribute('data-productsizes')
+            ? JSON.parse(productSizesElement.getAttribute('data-productsizes'))
+            : [];
+          const userData = userElement && userElement.getAttribute('data-user')
+            ? JSON.parse(userElement.getAttribute('data-user'))
+            : {};
+          const updateData = updateElement && updateElement.getAttribute('data-update')
+            ? JSON.parse(updateElement.getAttribute('data-update'))
+            : false;
+          const productData = productElement && productElement.getAttribute('data-product')
+            ? JSON.parse(productElement.getAttribute('data-product'))
+            : null;
+
+          const [ allProducts, setAllProducts ] = React.useState(allProductsData);
+          const [ products, setProducts ] = React.useState(produitsData);
+          const [ categories, setCategories ] = React.useState(categoriesData);
+          const [sizesProduct, setSizesProduct] = React.useState(sizesProductData);
+          const adminSession = userData && userData.id ? userData.id : null;
+          const updateProduct = updateData;
+          const hasStock = userData && userData.hasStock ? userData.hasStock : false;
+          const hasSubCategories = userData && userData.hasSubCategories ? userData.hasSubCategories : false;
 
 
 
-          const productCategoryId = <%- JSON.stringify(product?.produit?.categorie?._id || '') %>;
+          const productCategoryId = productData && productData.produit && productData.produit.categorie && productData.produit.categorie._id ? productData.produit.categorie._id : '';
 
           const categoryParent = categories.find(c => c._id == productCategoryId || c.childs.find(c => c._id == productCategoryId));
 
 
 
-          const [productSelected,setProductSelected] = React.useState(<%- JSON.stringify(product) %>);
-          const [productId, setProductId] = React.useState(<%- JSON.stringify(product?.produit?._id) %>);
-          const [selectedSize, setSelectedSize] = React.useState(<%- JSON.stringify(product?.taille) %>);
+          const [productSelected,setProductSelected] = React.useState(productData);
+          const [productId, setProductId] = React.useState(productData && productData.produit && productData.produit._id ? productData.produit._id : null);
+          const [selectedSize, setSelectedSize] = React.useState(productData && productData.taille ? productData.taille : null);
           const [ categoryId, setCategoryId ] = React.useState(categoryParent?categoryParent._id:productCategoryId);
-          const [ subCategoryId, setSubCategoryId ] = React.useState(<%- JSON.stringify(product?.produit?.categorie?._id) %>);
-          const [ prix_vente, setPrixVente ] = React.useState(<%- JSON.stringify(product?.prix_vente) %>);
-          const [ prix_achat, setPrixAchat ] = React.useState(<%- JSON.stringify(product?.prix_achat) %>);
+          const [ subCategoryId, setSubCategoryId ] = React.useState(productData && productData.produit && productData.produit.categorie && productData.produit.categorie._id ? productData.produit.categorie._id : null);
+          const [ prix_vente, setPrixVente ] = React.useState(productData && productData.prix_vente ? productData.prix_vente : '');
+          const [ prix_achat, setPrixAchat ] = React.useState(productData && productData.prix_achat ? productData.prix_achat : '');
           const [ quantite, setQuantite ] = React.useState(0);
-          const [ quantiteStock, setQuantiteStock ] = React.useState(<%- JSON.stringify(product?.quantite) %>);
-          const [ promo,setPromo] = React.useState(<%- JSON.stringify(product?.promo) %>);
-          const [promoQuantity, setPromoQuantity] = React.useState(<%- JSON.stringify(product?.promo_quantity) %>);
-          const [promoPrice, setPromoPrice] = React.useState(<%- JSON.stringify(product?.promo_price) %>);
+          const [ quantiteStock, setQuantiteStock ] = React.useState(productData && productData.quantite ? productData.quantite : 0);
+          const [ promo,setPromo] = React.useState(productData && productData.promo ? productData.promo : false);
+          const [promoQuantity, setPromoQuantity] = React.useState(productData && productData.promo_quantity ? productData.promo_quantity : '');
+          const [promoPrice, setPromoPrice] = React.useState(productData && productData.promo_price ? productData.promo_price : '');
           const [stockType, setStockType] = React.useState(updateProduct?'bottle':'locker');
 
 
@@ -388,7 +1077,7 @@
             setLoading(true);
 
             if(updateProduct){
-              data.productId = <%- JSON.stringify(product?._id || null) %> ;
+              data.productId = productData && productData._id ? productData._id : null;
             }
 
             fetch(!updateProduct?'/ajouterproduit':'/editproduit',{
@@ -606,7 +1295,7 @@
 
           React.useEffect(()=>{
             if(categories){
-          const catId = <%- JSON.stringify(product?.produit?.categorie?._id || '') %>
+          const catId = productData && productData.produit && productData.produit.categorie && productData.produit.categorie._id ? productData.produit.categorie._id : '';
               const categorySelected = categories.find(c => c._id == subCategoryId || c.childs.find(c => c._id == subCategoryId));
               // console.log("🚀 ~ React.useEffect ~ categorySelected:", categorySelected._id)
               if(categorySelected){
@@ -620,98 +1309,103 @@
 
 
           return (
-            <div className='white_card card_height_100 mb_30'>
-              <div className='white_card_header'>
-                <div className='box_header m-0'>
-                  <div className='main-title'>
-                    <h3 className='m-0 ' >Ajouter un produit</h3>
-                  </div>
+            <React.Fragment>
+              {/* Alertes modernes */}
+              {showSuccess && (
+                <div className='alert-modern alert-success-modern fade-in'>
+                  <i className="fas fa-check-circle" style={{ fontSize: "1.25rem" }}></i>
+                  <span>Produit enregistré avec succès !</span>
                 </div>
-              </div>
+              )}
+              {showError && (
+                <div className='alert-modern alert-danger-modern fade-in'>
+                  <i className="fas fa-exclamation-circle" style={{ fontSize: "1.25rem" }}></i>
+                  <span>Échec de l'opération, veuillez recommencer !</span>
+                </div>
+              )}
 
-              <div>
-               {showSuccess &&  <div
-                  className='alert alert-success'
-                  role='alert'
-                  // style="text-align: center; display: none"
-                  style={{
-                    textAlign: 'center',
+              {/* Formulaire moderne */}
+              <div className='form-card-modern fade-in'>
+                {/* Section Catégorie et Produit */}
+                <div className='form-section-modern'>
+                  <h3>
+                    <i className="fas fa-tags"></i>
+                    Sélection du produit
+                  </h3>
+                  <div className='row'>
+                    <div className='col-lg-6 col-md-12 form-group-modern' id="categorie">
+                      <label className='form-label-modern'>
+                        <i className="fas fa-folder"></i>
+                        Catégorie
+                        <span className="required">*</span>
+                      </label>
+                      <select
+                        className="select wide selectProduit form-select-modern"
+                        name='categorie'
+                        id='categorie'
+                        required
+                        value={categoryId}
+                        disabled={updateProduct}
+                        onChange={() => {}}
+                      >
+                        <option value="">Sélectionner la catégorie</option>
+                        {categories.map(categorie =>(
+                          <option key={categorie._id} value={categorie._id}>
+                            {categorie.nom} {!hasSubCategories && categorie.childs && categorie.childs.length > 0 ? '🔒':''}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-                  }}
-                  id='alert-success'
-                >
-                  Produit enregistré avec succès !
-                </div>}
-               {showError && <div
-                  className='alert alert-danger'
-                  role='alert'
-                  // style="text-align: center; display: none"
-                  style={{
-                    textAlign: 'center',
 
-                  }}
-                  id='alert-danger'
-                >
-                Echec de l'opération, veuillez recommencer!
-              </div>}
-              <div className='white_card_body'>
-                <div className='row'>
-                  <div className='col-lg-6' id="categorie">
-                    <select
-                    className="select wide selectProduit"
-                      name='categorie'
-                      id='categorie'
-                      required
-                      value={categoryId}
-                      disabled={updateProduct}
-                    >
-                    <option value="">Selectionner la catégorie</option>
-                       {categories.map(categorie =>(
-                          <option value={categorie._id}>{categorie.nom} {!hasSubCategories && categorie.childs.length > 0 ? '🔒':''}</option>
+                    {catHasChild && hasSubCategories && (
+                      <div className='col-lg-6 col-md-12 form-group-modern' id="subCategories">
+                        <label className='form-label-modern'>
+                          <i className="fas fa-folder-open"></i>
+                          Sous-catégorie
+                          <span className="required">*</span>
+                        </label>
+                        <select
+                          className="select wide selectProduit form-select-modern"
+                          name='subCategorie'
+                          id='subCategorie'
+                          required
+                          value={subCategoryId}
+                          disabled={updateProduct}
+                          onChange={() => {}}
+                        >
+                          <option value="">Sélectionner la sous-catégorie</option>
+                          {categorySelected && categorySelected.childs && categorySelected.childs.map(categorie =>(
+                            <option key={categorie._id} value={categorie._id}>{categorie.nom}</option>
                           ))}
+                        </select>
+                      </div>
+                    )}
 
-                    </select>
-                  </div>
-
-
-                 { catHasChild && hasSubCategories && <div className='col-lg-6 mb_15 common_input' id="subCategories">
-                    <select
-                    className="select wide selectProduit"
-                      name='subCategorie'
-                      id='subCategorie'
-                      required
-                      value={subCategoryId}
-                      disabled={updateProduct}
-                    >
-                    <option value="">Selectionner la sous catégorie</option>
-                       {categorySelected.childs.map(categorie =>(
-                          <option value={categorie._id}>{categorie.nom}</option>
-                          ))}
-
-                    </select>
-                  </div>}
-
-                  <div className="col-lg-6 mb_15 common_input" id='productContainer produit'>
-                    <select
-                    className="select wide selectProduit"
-                      name='produit'
-                      id='produit'
-                      required
-                      disabled={updateProduct}
-                      onChange={(e) => {
-                        const id = e.target.value;
-                        setProductId(id);
-                      }}
-                      value={productId}
-                    >
-                    <option value="">Selectionner un produit</option>
-                      {(categoryId ? allProducts:[]).sort((a,b) => a.nom_produit.localeCompare(b.nom_produit)).map(produit =>(
-                          <option value={produit._id}>{produit.nom_produit}</option>
-                          ))}
-
-
-                    </select>
-                  </div>
+                    <div className="col-lg-6 col-md-12 form-group-modern" id='productContainer produit'>
+                      <label className='form-label-modern'>
+                        <i className="fas fa-box"></i>
+                        Produit
+                        <span className="required">*</span>
+                      </label>
+                      <select
+                        className="select wide selectProduit form-select-modern"
+                        name='produit'
+                        id='produit'
+                        required
+                        disabled={updateProduct}
+                        onChange={(e) => {
+                          const id = e.target.value;
+                          setProductId(id);
+                        }}
+                        value={productId}
+                      >
+                        <option value="">Sélectionner un produit</option>
+                        {(categoryId ? allProducts:[]).sort((a,b) => a.nom_produit.localeCompare(b.nom_produit)).map(produit =>(
+                          <option key={produit._id} value={produit._id}>{produit.nom_produit}</option>
+                        ))}
+                      </select>
+                    </div>
                     {!is_cocktail &&<div className='col-lg-6'>
                       <div className='common_input mb_15'>
 
@@ -722,10 +1416,11 @@
       																		required={catHasChild ? false : true}
       																		value={selectedSize}
       																		disabled={updateProduct || is_cocktail}
+      																		onChange={() => {}}
       																>
       																<option value="">Selectionner la taille du produit</option>
       																{sizesProduct.map(size =>(
-      																				<option value={size}>{size}</option>
+      																				<option key={size} value={size}>{size}</option>
       																				))}
       															</select>
 
@@ -733,170 +1428,286 @@
                           type='text'
                           placeholder='zo'
                           name='session'
-                          value='<%= user?.id %>'
+                          value={adminSession}
                           hidden
                         />
                       </div>
                     </div>}
 
-                    <div className='col-lg-6' id="prix_vente">
-                      <div className='common_input mb_15'>
-                        <input
-                          type='number'
-                          placeholder='prix de vente ex: 700'
-                          name='prix_vente'
-                          required
-                          value={prix_vente}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            setPrixVente(value);
-                          }}
-                        />
-                      </div>
-                    </div>
-                     <div className='col-lg-6'>
-                      <div className='common_input mb_15' id="prix_achat">
-                        <input
-                          type='number'
-                          placeholder="prix d'achat  ex: 320"
-                          name='prix_achat'
-                          required
-                          value={prix_achat}
-
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            setPrixAchat(value);
-                          }}
-                        />
-                        <small class="text-info">
-                            le prix d'achat d'une bouteille se calcule
-                             en divisant le prix d'achat du
-                             carton ou du casier par le nombre de bouteille dans
-                             le carton ou du casier
-                          </small>
-                      </div>
+                    <div className='col-lg-6 col-md-12 form-group-modern' id="prix_vente">
+                      <label className='form-label-modern'>
+                        <i className="fas fa-tag"></i>
+                        Prix de vente
+                        <span className="required">*</span>
+                      </label>
+                      <input
+                        type='number'
+                        className='form-input-modern'
+                        placeholder='Exemple: 700'
+                        name='prix_vente'
+                        required
+                        value={prix_vente}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setPrixVente(value);
+                        }}
+                      />
                     </div>
 
-                    {!is_cocktail &&  <div className='col-lg-6' >
-                      <div className="row">
-                      <div className={'col-lg-6 common_input mb_15'} id="quantite">
+                    <div className='col-lg-6 col-md-12 form-group-modern' id="prix_achat">
+                      <label className='form-label-modern'>
+                        <i className="fas fa-shopping-cart"></i>
+                        Prix d'achat
+                        <span className="required">*</span>
+                      </label>
+                      <input
+                        type='number'
+                        className='form-input-modern'
+                        placeholder="Exemple: 320"
+                        name='prix_achat'
+                        required
+                        value={prix_achat}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setPrixAchat(value);
+                        }}
+                      />
+                      <div className='form-help-text'>
+                        <i className="fas fa-info-circle"></i>
+                        <span>
+                          Le prix d'achat d'une bouteille se calcule en divisant le prix d'achat du carton ou du casier par le nombre de bouteilles dans le carton ou le casier.
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Section Stock */}
+                {!is_cocktail && (
+                  <div className='form-section-modern'>
+                    <h3>
+                      <i className="fas fa-boxes"></i>
+                      Gestion du stock
+                    </h3>
+                    
+                    {/* Affichage du stock actuel */}
+                    {updateProduct && (productInStock || quantiteStock > 0) && (
+                      <div className='stock-info-modern'>
+                        <i className="fas fa-info-circle"></i>
+                        <div className='stock-content'>
+                          <div className='stock-label'>Stock actuel</div>
+                          <div>
+                            <span className='stock-value'>
+                              {productInStock ? productInStock.quantity : quantiteStock}
+                            </span>
+                            <span className='stock-unit'>
+                              {productInStock && productInStock.size ? ` (${productInStock.size})` : ''}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className='row'>
+
+                      <div className='col-lg-6 col-md-12 form-group-modern' id="quantite">
+                        <label className='form-label-modern'>
+                          <i className="fas fa-calculator"></i>
+                          {updateProduct ? 'Quantité à modifier' : 'Quantité'}
+                          {!catHasChild && <span className="required">*</span>}
+                        </label>
                         <input
                           type='number'
-                          placeholder={`quantite ${catHasChild ? '(Optionnel)':''}`}
+                          className='form-input-modern'
+                          placeholder={updateProduct ? 'Quantité à ajouter ou retirer' : `Quantité ${catHasChild ? '(Optionnel)':''}`}
                           name='quantite'
                           required={catHasChild ? false : true}
                           value={quantite}
-
                           onChange={(e) => {
                             const value = e.target.value;
                             setQuantite(value);
                           }}
                         />
-                      </div>
-                      {!catHasChild &&<div className='col-lg-6 common_input mb_15' id="stockType">
-                        <select
-                          className='nice_Select2 nice_Select_line wide'
-                          name='stockType'
-                          id="stockType"
-                          required
-                          value={stockType}
-
-                        >
-
-
-                          {
-                            ['locker','cardboard','bottle','glass'].map(type =>(
-                              <option value={type}>{type ==="locker"?"Casier": type === "cardboard"? "Carton": type==="glass"?"Verre":"Bouteille"}</option>
-                              ))
-                          }
-
-
-
-
-                        </select>
-                      </div>}
+                        {updateProduct && productInStock && (
+                          <div className='form-help-text' style={{marginTop: '0.5rem', fontSize: '0.8125rem', color: '#64748b'}}>
+                            <i className="fas fa-info-circle"></i>
+                            <span>
+                              Stock disponible: {productInStock.quantity} {productInStock.size ? `(${productInStock.size})` : ''}
+                            </span>
+                          </div>
+                        )}
                       </div>
 
-                    </div>}
+                      {!catHasChild && (
+                        <div className='col-lg-6 col-md-12 form-group-modern' id="stockType">
+                          <label className='form-label-modern'>
+                            <i className="fas fa-layer-group"></i>
+                            Type de stock
+                            <span className="required">*</span>
+                          </label>
+                          <select
+                            className='nice_Select2 nice_Select_line wide form-select-modern'
+                            name='stockType'
+                            id="stockType"
+                            required
+                            value={stockType}
+                            onChange={() => {}}
+                          >
+                            {['locker','cardboard','bottle','glass'].map(type =>(
+                              <option key={type} value={type}>
+                                {type === "locker" ? "Casier" : type === "cardboard" ? "Carton" : type === "glass" ? "Verre" : "Bouteille"}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
 
-                   {!catHasChild && <div className="col-lg-12 pl-4">
-                      <div className="form-check" id="formule">
-                          <input className="form-check-input" checked={promo} onChange={(e)=>setPromo(e.target.checked)} type="checkbox" value="" id="flexCheckDefault"
-
-                          />
-                          <p className="form-check-label" for="flexSwitchCheckDefault">Voulez-vous ajouter cette boisson en formule ?</p>
-                      </div>
-
-                     </div>}
-
-                     {
-                      !!promo && <React.Fragment>
-                      <div className='col-lg-6 mt-2'>
-                      <div className='common_input mb_15' id="promoQuantity">
+                {/* Section Formule */}
+                {!catHasChild && (
+                  <div className='form-section-modern'>
+                    <h3>
+                      <i className="fas fa-gift"></i>
+                      Formule promotionnelle
+                    </h3>
+                    <div className='col-lg-12'>
+                      <div className="checkbox-modern" id="formule">
                         <input
-                          type='number'
-                          placeholder='Nombre de quantité de la formule'
-                          name='promoQuantity'
-                          required
-                          value={promoQuantity}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            setPromoQuantity(value);
-                          }}
+                          className="form-check-input"
+                          checked={promo}
+                          onChange={(e)=>setPromo(e.target.checked)}
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
                         />
+                        <label htmlFor="flexCheckDefault" style={{ margin: 0 }}>
+                          Voulez-vous ajouter cette boisson en formule ?
+                        </label>
                       </div>
                     </div>
 
-                    <div className='col-lg-6 mt-2'>
-                      <div className='common_input mb_15' id="promoPrice">
-                        <input
-                          type='number'
-                          placeholder='Le prix de la formule'
-                          name='promoPrice'
-                          required
-                          value={promoPrice}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            setPromoPrice(value);
-                          }}
-                        />
-                      </div>
-                    </div>
-
-                      </React.Fragment>
-                     }
-
-
-                    <div className='col-lg-6'>
-                     {!is_cocktail &&
+                    {!!promo && (
                       <React.Fragment>
-                        {!!productSelected &&  <p>Quantité total du produit: {quantiteStock || 0}</p>}
-                      {productSelected && hasStock &&  <p>Quantité en stock: {productInStock ? productInStock.quantity : 0}</p>}
-                      </React.Fragment>
-                     }
-                     {!!productSelected &&  <img src={productSelected.image} id="preview-image" alt="" width="150px" height="150px" style={{
-                        objectFit:'contain'
-                       }} />
-                      }
-                    </div>
+                        <div className='row mt-3'>
+                          <div className='col-lg-6 col-md-12 form-group-modern' id="promoQuantity">
+                            <label className='form-label-modern'>
+                              <i className="fas fa-hashtag"></i>
+                              Quantité de la formule
+                              <span className="required">*</span>
+                            </label>
+                            <input
+                              type='number'
+                              className='form-input-modern'
+                              placeholder='Nombre de quantité'
+                              name='promoQuantity'
+                              required
+                              value={promoQuantity}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                setPromoQuantity(value);
+                              }}
+                            />
+                          </div>
 
-                    <div className='col-lg-12' id="button">
-                      <div className='create_report_btn mt_30'>
-                        <button
-                          type='submit'
-                          id='#button'
-                          className='btn_1 radius_btn d-block text-center col-lg-6 col-md-6 col-sm-12'
-                          onClick={handleSubmit}
-                          disabled={loading}
-                        >
-                          {updateProduct?'Modifier le produit':'Ajouter Produit'}
-                        </button>
+                          <div className='col-lg-6 col-md-12 form-group-modern' id="promoPrice">
+                            <label className='form-label-modern'>
+                              <i className="fas fa-money-bill"></i>
+                              Prix de la formule
+                              <span className="required">*</span>
+                            </label>
+                            <input
+                              type='number'
+                              className='form-input-modern'
+                              placeholder='Prix de la formule'
+                              name='promoPrice'
+                              required
+                              value={promoPrice}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                setPromoPrice(value);
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </React.Fragment>
+                    )}
+                  </div>
+                )}
+
+                {/* Section Aperçu produit */}
+                {!!productSelected && (
+                  <div className='form-section-modern'>
+                    <h3>
+                      <i className="fas fa-eye"></i>
+                      Aperçu du produit
+                    </h3>
+                    <div className='row'>
+                      <div className='col-lg-6 col-md-12'>
+                        <div className='product-preview-modern'>
+                          <img
+                            src={productSelected.image || "/images/paresseux_sous_parasol_DEF.png"}
+                            alt={productSelected.nom_produit}
+                            onError={(e) => {
+                              e.target.src = "/images/paresseux_sous_parasol_DEF.png";
+                            }}
+                          />
+                          <div className='product-info-modern'>
+                            {!is_cocktail && (
+                              <React.Fragment>
+                                <div className='product-info-item'>
+                                  <span>
+                                    <i className="fas fa-boxes" style={{ color: "#2563eb", marginRight: "0.5rem" }}></i>
+                                    Quantité totale
+                                  </span>
+                                  <span style={{ color: "#10b981" }}>{quantiteStock || 0}</span>
+                                </div>
+                                {hasStock && (
+                                  <div className='product-info-item'>
+                                    <span>
+                                      <i className="fas fa-warehouse" style={{ color: "#2563eb", marginRight: "0.5rem" }}></i>
+                                      En stock
+                                    </span>
+                                    <span style={{ color: productInStock && productInStock.quantity > 0 ? "#10b981" : "#ef4444" }}>
+                                      {productInStock ? productInStock.quantity : 0}
+                                    </span>
+                                  </div>
+                                )}
+                              </React.Fragment>
+                            )}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
+                )}
+
+                {/* Bouton de soumission */}
+                <div className='row'>
+                  <div className='col-lg-12' id="button">
+                    <button
+                      type='submit'
+                      className='btn-submit-modern'
+                      onClick={handleSubmit}
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <React.Fragment>
+                          <i className="fas fa-spinner fa-spin"></i>
+                          {updateProduct ? 'Modification en cours...' : 'Ajout en cours...'}
+                        </React.Fragment>
+                      ) : (
+                        <React.Fragment>
+                          <i className={`fas fa-${updateProduct ? 'save' : 'plus-circle'}`}></i>
+                          {updateProduct ? 'Modifier le produit' : 'Ajouter le produit'}
+                        </React.Fragment>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            </React.Fragment>
           );
         };
 
