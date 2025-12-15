@@ -322,43 +322,200 @@
 
       /* Image preview moderne */
       .product-preview-modern {
-        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-        border-radius: 16px;
-        padding: 1.5rem;
-        border: 2px solid #e2e8f0;
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        border: 3px solid #2563eb;
+        box-shadow: 0 8px 30px rgba(37, 99, 235, 0.2);
         text-align: center;
+        position: relative;
+        overflow: hidden;
+        animation: slideInPreview 0.5s ease-out;
+      }
+
+      .product-preview-modern::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%);
+        animation: shimmer 2s infinite;
+      }
+
+      @keyframes slideInPreview {
+        from {
+          opacity: 0;
+          transform: translateY(20px) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
       }
 
       .product-preview-modern img {
         max-width: 100%;
-        max-height: 200px;
+        max-height: 250px;
         object-fit: contain;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease;
+        margin-bottom: 1.5rem;
+      }
+
+      .product-preview-modern img:hover {
+        transform: scale(1.05);
+      }
+
+      .product-preview-header {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e2e8f0;
+      }
+
+      .product-preview-header h4 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin: 0 0 0.5rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+      }
+
+      .product-preview-header h4 i {
+        color: #2563eb;
+        font-size: 1.25rem;
+      }
+
+      .product-preview-header .product-category {
+        font-size: 0.9375rem;
+        color: #64748b;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      .product-preview-header .product-category i {
+        color: #3b82f6;
       }
 
       .product-info-modern {
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px solid #e2e8f0;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 2px solid #e2e8f0;
       }
 
       .product-info-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.5rem 0;
+        padding: 0.875rem 1rem;
+        margin-bottom: 0.75rem;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-radius: 10px;
+        border-left: 3px solid #2563eb;
         font-size: 0.9375rem;
+        transition: all 0.3s ease;
+      }
+
+      .product-info-item:hover {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        transform: translateX(5px);
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
       }
 
       .product-info-item span:first-child {
-        color: #64748b;
+        color: #475569;
         font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .product-info-item span:first-child i {
+        color: #2563eb;
+        font-size: 1rem;
       }
 
       .product-info-item span:last-child {
         color: #0f172a;
         font-weight: 700;
+        font-size: 1.0625rem;
+      }
+
+      .product-preview-price {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        margin-top: 1rem;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border-radius: 12px;
+        color: white;
+        font-weight: 700;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+      }
+
+      .product-preview-price span:first-child {
+        font-size: 0.9375rem;
+        opacity: 0.95;
+      }
+
+      .product-preview-price span:last-child {
+        font-size: 1.25rem;
+      }
+
+      @media (max-width: 768px) {
+        .product-preview-modern {
+          padding: 1.5rem;
+        }
+
+        .product-preview-header h4 {
+          font-size: 1.25rem;
+        }
+
+        .product-preview-modern img {
+          max-height: 200px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .product-preview-modern {
+          padding: 1.25rem;
+          border-radius: 16px;
+        }
+
+        .product-preview-header h4 {
+          font-size: 1.125rem;
+        }
+
+        .product-info-item {
+          padding: 0.75rem;
+          font-size: 0.875rem;
+        }
+
+        .product-preview-price {
+          padding: 0.875rem 1rem;
+        }
+
+        .product-preview-price span:last-child {
+          font-size: 1.125rem;
+        }
       }
 
       /* Bouton moderne */
@@ -1638,14 +1795,31 @@
 
                 {/* Section Aperçu produit */}
                 {!!productSelected && (
-                  <div className='form-section-modern'>
+                  <div className='form-section-modern fade-in'>
                     <h3>
                       <i className="fas fa-eye"></i>
-                      Aperçu du produit
+                      Aperçu du produit sélectionné
                     </h3>
                     <div className='row'>
-                      <div className='col-lg-6 col-md-12'>
+                      <div className='col-lg-12 col-md-12'>
                         <div className='product-preview-modern'>
+                          <div className='product-preview-header'>
+                            <h4>
+                              <i className="fas fa-box"></i>
+                              {productSelected.nom_produit}
+                            </h4>
+                            {categorySelected && (
+                              <div className='product-category'>
+                                <i className="fas fa-folder"></i>
+                                {categorySelected.nom}
+                                {selectedSize && !is_cocktail && (
+                                  <span style={{ marginLeft: "0.5rem", color: "#2563eb", fontWeight: "600" }}>
+                                    • {selectedSize}
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                          </div>
                           <img
                             src={productSelected.image || "/images/paresseux_sous_parasol_DEF.png"}
                             alt={productSelected.nom_produit}
@@ -1654,27 +1828,90 @@
                             }}
                           />
                           <div className='product-info-modern'>
+                            {prix_vente && (
+                              <div className='product-info-item'>
+                                <span>
+                                  <i className="fas fa-tag"></i>
+                                  Prix de vente
+                                </span>
+                                <span>{parseFloat(prix_vente).toLocaleString()} XOF</span>
+                              </div>
+                            )}
+                            {prix_achat && (
+                              <div className='product-info-item'>
+                                <span>
+                                  <i className="fas fa-shopping-cart"></i>
+                                  Prix d'achat
+                                </span>
+                                <span>{parseFloat(prix_achat).toLocaleString()} XOF</span>
+                              </div>
+                            )}
                             {!is_cocktail && (
                               <React.Fragment>
-                                <div className='product-info-item'>
-                                  <span>
-                                    <i className="fas fa-boxes" style={{ color: "#2563eb", marginRight: "0.5rem" }}></i>
-                                    Quantité totale
-                                  </span>
-                                  <span style={{ color: "#10b981" }}>{quantiteStock || 0}</span>
-                                </div>
+                                {selectedSize && (
+                                  <div className='product-info-item'>
+                                    <span>
+                                      <i className="fas fa-ruler"></i>
+                                      Taille
+                                    </span>
+                                    <span>{selectedSize}</span>
+                                  </div>
+                                )}
+                                {quantiteStock > 0 && (
+                                  <div className='product-info-item'>
+                                    <span>
+                                      <i className="fas fa-boxes"></i>
+                                      Quantité totale
+                                    </span>
+                                    <span style={{ color: "#10b981" }}>{quantiteStock}</span>
+                                  </div>
+                                )}
                                 {hasStock && (
                                   <div className='product-info-item'>
                                     <span>
-                                      <i className="fas fa-warehouse" style={{ color: "#2563eb", marginRight: "0.5rem" }}></i>
+                                      <i className="fas fa-warehouse"></i>
                                       En stock
                                     </span>
                                     <span style={{ color: productInStock && productInStock.quantity > 0 ? "#10b981" : "#ef4444" }}>
                                       {productInStock ? productInStock.quantity : 0}
+                                      {productInStock && productInStock.size && ` (${productInStock.size})`}
+                                    </span>
+                                  </div>
+                                )}
+                                {stockType && (
+                                  <div className='product-info-item'>
+                                    <span>
+                                      <i className="fas fa-layer-group"></i>
+                                      Type de stock
+                                    </span>
+                                    <span>
+                                      {stockType === "locker" ? "Casier" : stockType === "cardboard" ? "Carton" : stockType === "glass" ? "Verre" : "Bouteille"}
                                     </span>
                                   </div>
                                 )}
                               </React.Fragment>
+                            )}
+                            {promo && (
+                              <div className='product-info-item' style={{ background: "linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)", borderLeftColor: "#f59e0b" }}>
+                                <span>
+                                  <i className="fas fa-gift" style={{ color: "#f59e0b" }}></i>
+                                  Formule promotionnelle
+                                </span>
+                                <span style={{ color: "#92400e" }}>
+                                  {promoQuantity} pour {parseFloat(promoPrice).toLocaleString()} XOF
+                                </span>
+                              </div>
+                            )}
+                            {prix_vente && prix_achat && (
+                              <div className='product-preview-price'>
+                                <span>
+                                  <i className="fas fa-chart-line" style={{ marginRight: "0.5rem" }}></i>
+                                  Marge bénéficiaire
+                                </span>
+                                <span>
+                                  {((parseFloat(prix_vente) - parseFloat(prix_achat)) / parseFloat(prix_achat) * 100).toFixed(1)}%
+                                </span>
+                              </div>
                             )}
                           </div>
                         </div>
