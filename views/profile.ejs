@@ -1585,6 +1585,26 @@
             .profile-section-premium {
               grid-area: premium;
             }
+
+            /* FIX: Sidebar overlap issue */
+            .main_content_iner {
+              transition: margin-left 0.3s ease;
+            }
+          }
+
+          @media (min-width: 992px) {
+            .main_content_iner {
+              margin-left: 260px !important; /* Width of sidebar + gap */
+              width: calc(100% - 260px);
+            }
+          }
+
+          @media (max-width: 991px) {
+             .main_content_iner {
+              margin-left: 0 !important;
+              width: 100%;
+              padding-top: 60px; /* Space for mobile header */
+            }
           }
         </style>
 
