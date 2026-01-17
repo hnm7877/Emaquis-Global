@@ -139,6 +139,7 @@
     </div>
   </div>
 </div>
+<%- include('donateModal') %>
 
 <% if (!locals.forProfile && user.forEvent && (!user.paid ||
 !locals.expiredDate)) { %> <%- include('../modal.ejs') %> <% } %>
