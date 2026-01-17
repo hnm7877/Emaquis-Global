@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="fr">
+  <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NT2SW8WBHT"></script>
     <script>
@@ -10,70 +10,494 @@
 
         gtag('config', 'G-NT2SW8WBHT');
     </script>
-    <!-- Basic Page Needs ================================================== -->
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>E-Maquis Barman(aid)</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      rel="shortcut icon"
+      href="newAssets/images/logo/emaquisLogo2.png"
+      type="image/x-icon"
+    />
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
 
-    <!-- Mobile Specific Metas ================================================== -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="E-maquis, Gestionnaire d'établissement" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-    <meta name="author" content="Haut Numérique et Médias" />
-    <meta name="generator" content="E-maquis, Gestionnaire d'établissement" />
-    
-    <title>E-maquis</title>
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="newAssets/css/login.css">
-    
-    
-    <link rel="shortcut icon" href="newAssets/images/logo/emaquisLogo2.png" type="image/x-icon">
-    <link rel="icon" href="newAssets/images/logo/emaquisLogo2.png" type="image/x-icon">
+    <style>
+      :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3f37c9;
+        --accent-color: #4895ef;
+        --success-color: #06d6a0;
+        --error-color: #ef476f;
+        --text-color: #2b2d42;
+      }
 
-    <!-- Responsive -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
 
-    <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
-    <!--[if lt IE 9]><script src="js/respond.js"></script><![endif]-->
-    
-    
-</head>
-<body>
-    <div class="wrapper">
-        <a href="/"><img src="newAssets/images/logo/emaquisLogo2.png" width="100" alt="" srcset=""></a>
-        <h1>Espace Barman(aid)</h1>
-        <% if (locals.success) { %>
-            <div class="alert alert-success animSuccessConnect" role="alert" style="text-align: center" id="alert-success">
-                Connexion réussie !
-            </div>
-        <% } %>
-        <% if (locals.error) { %>
-            <div class="alert alert-danger animFailConnect" role="alert" style="text-align: center" id="alert-danger">
-                <%= locals.error %> 😢
-            </div>
-        <% } %>
-        <form action="/emconnexion" method="post">
-            <div class="input-box">
-                <input placeholder="N° de Téléphone" type="number" name="numero" value="<%= locals.numero %>" required>
-                <span class="icon flaticon-user"></span>
-            </div>
-            <div class="input-box">
-                <input type="password" placeholder="mot de passe" name="password" required>
-                <span class="icon flaticon-user"></span>
-            </div>
-            <div class="remember-forget">
-                <!-- <label for="">
-                    <input type="checkbox">
-                    Se souvenir
-                </label> -->
-                <a href="">Mot de passe oublié</a>
-            </div>
-            <button type="submit" class="btn">Se connecter</button>
-            <div class="register-link">
-                <p>Vous n'avez pas de compte? <a href="/inscription">Créer un compte</a></p>
-            </div>
-        </form>
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                    url("newAssets/images/background/bg-login.jpg");
+        background-size: cover;
+        background-position: center;
+        overflow: hidden;
+      }
+
+      /* Glassmorphism Card */
+      .container {
+        position: relative;
+        width: 100%;
+        max-width: 450px;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+
+      .container::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 0%,
+          transparent 70%
+        );
+        transform: rotate(45deg);
+        pointer-events: none;
+      }
+
+      /* Logo */
+      .logo-area {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .logo-area img {
+        width: 120px;
+        filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+        transition: transform 0.3s ease;
+      }
+
+      .logo-area img:hover {
+        transform: scale(1.05);
+      }
+
+      h1 {
+        text-align: center;
+        color: white;
+        font-size: 2rem;
+        margin-bottom: 30px;
+        font-weight: 700;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Form Inputs */
+      .input-group {
+        position: relative;
+        margin-bottom: 25px;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 15px 45px 15px 20px;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 50px;
+        font-size: 1rem;
+        color: var(--text-color);
+        outline: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .input-group input:focus {
+        background: white;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+      }
+
+      .input-group i {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+        transition: color 0.3s ease;
+      }
+
+      .input-group input:focus + i {
+        color: var(--primary-color);
+      }
+
+      /* Action Links */
+      .actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 25px;
+      }
+
+      .actions a {
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border-bottom: 1px solid transparent;
+      }
+
+      .actions a:hover {
+        color: white;
+        border-bottom-color: white;
+      }
+
+      /* Button */
+      .btn-login {
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 50px;
+        background: linear-gradient(90deg, #4361ee, #3f37c9);
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-login::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: 0.5s;
+      }
+
+      .btn-login:hover::after {
+        left: 100%;
+      }
+
+      .btn-login:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(67, 97, 238, 0.5);
+      }
+
+      .btn-login:active {
+        transform: translateY(-1px);
+      }
+
+      /* Register Link */
+      .register-text {
+        text-align: center;
+        margin-top: 25px;
+        color: white;
+        font-size: 0.95rem;
+      }
+
+      .register-text a {
+        color: white;
+        font-weight: 700;
+        text-decoration: none;
+        margin-left: 5px;
+        text-decoration: underline;
+      }
+
+      /* Feedback Animations Classes */
+      .animSuccessConnect,
+      .animFailConnect {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        animation: slideIn 0.3s ease;
+      }
+
+      .animSuccessConnect {
+        border-left: 5px solid var(--success-color);
+        color: var(--success-color);
+        font-weight: 600;
+      }
+
+      .animFailConnect {
+        border-left: 5px solid var(--error-color);
+        color: var(--error-color);
+        font-weight: 600;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+       /* Floating Shapes for Background */
+      .shape {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(50px);
+        z-index: -1;
+      }
+
+      .shape-1 {
+        top: -10%;
+        left: -10%;
+        width: 300px;
+        height: 300px;
+        background: #4cc9f0;
+        opacity: 0.6;
+        animation: float 8s ease-in-out infinite;
+      }
+
+      .shape-2 {
+        bottom: -10%;
+        right: -10%;
+        width: 350px;
+        height: 350px;
+        background: #7209b7;
+        opacity: 0.6;
+        animation: float 10s ease-in-out infinite reverse;
+      }
+
+      @keyframes float {
+        0% { transform: translate(0, 0); }
+        50% { transform: translate(30px, 30px); }
+        100% { transform: translate(0, 0); }
+      }
+
+      lord-icon {
+        width: 80px !important;
+        height: 80px !important;
+        margin: 10px auto;
+        display: block;
+      }
+
+      /* CSS pour le preloader (identique à l'original) */
+        .preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        }
+
+        .preloader img {
+        width: 100px;
+        animation: spin 1s ease-in-out infinite;
+        }
+        .pathOne {
+        background-color: transparent !important;
+        /* border: 3px solid #19112d; */
+        border-radius: 50%;
+        height: 250px;
+        position: absolute;
+        width: 250px;
+        }
+
+        .pathTwo {
+        background-color: transparent !important;
+        /* border: 3px solid #19112d; */
+        border-radius: 50%;
+        height: 130px;
+        /* left: 132px; */
+        position: absolute;
+        /* top: 132px; */
+        width: 130px;
+        }
+
+        .pathThree {
+        background-color: transparent !important;
+        /* border: 3px solid #19112d; */
+        border-radius: 50%;
+        height: 110px;
+        /* left: 142px; */
+        position: absolute;
+        /* top: 142px; */
+        width: 110px;
+        }
+
+        .ldrOne {
+        background-color: transparent !important;
+        border: 4px solid;
+        border-color: transparent #ff9c2c #ff9c2c transparent;
+        border-radius: 50%;
+        height: 150px;
+        /* left: 122px; */
+        position: absolute;
+        /* top: 122px; */
+        width: 150px;
+        -webkit-animation: aniOne 3s linear infinite;
+        animation: aniOne 3s linear infinite;
+        }
+
+        .ldrTwo {
+        background-color: transparent !important;
+        border: 4px solid;
+        border-color: #98ed58 #98ed58 transparent transparent;
+        border-radius: 50%;
+        height: 130px;
+        /* left: 131px; */
+        position: absolute;
+        /* top: 131px; */
+        width: 130px;
+        transform: rotateZ(360deg);
+        -webkit-animation: aniTwo 3s linear infinite;
+        animation: aniTwo 3s linear infinite;
+        }
+
+        .ldrThree {
+        border: 4px solid;
+        border-color: #20deff transparent transparent #20deff;
+        border-radius: 50%;
+        height: 110px;
+        /* left: 141px; */
+        position: absolute;
+        /* top: 141px; */
+        width: 110px;
+        -webkit-animation: aniThree 3s linear infinite;
+        animation: aniThree 3s linear infinite;
+        }
+        
+        @keyframes aniOne { 0% { transform: rotateZ(0deg); } 20% { transform: rotateZ(72deg); } 40% { transform: rotateZ(120deg); } 60% { transform: rotateZ(160deg); } 80% { transform: rotateZ(260deg); } 100% { transform: rotateZ(360deg); } }
+        @keyframes aniTwo { 0% { transform: rotateZ(360deg); } 20% { transform: rotateZ(260deg); } 40% { transform: rotateZ(160deg); } 60% { transform: rotateZ(120deg); } 80% { transform: rotateZ(72deg); } 100% { transform: rotateZ(0deg); } }
+        @keyframes aniThree { 0% { transform: rotateZ(0deg); } 20% { transform: rotateZ(100deg); } 40% { transform: rotateZ(200deg); } 60% { transform: rotateZ(260deg); } 80% { transform: rotateZ(320deg); } 100% { transform: rotateZ(360deg); } }
+
+    </style>
+  </head>
+  <body>
+    <!-- Background Shapes -->
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+
+    <div class="container">
+      <div class="logo-area">
+        <a href="/">
+          <img
+            src="newAssets/images/logo/emaquisLogo2.png"
+            alt="E-Maquis Logo"
+          />
+        </a>
+      </div>
+
+      <h1>Espace Barman(aid)</h1>
+
+      <% if (locals.success) { %>
+      <div class="alert animSuccessConnect" role="alert" style="text-align: center" id="alert-success">
+        <div style="font-size: 1.1rem; margin-bottom: 10px">
+          Connexion réussie !
+        </div>
+        <lord-icon
+          src="https://cdn.lordicon.com/iloumlrk.json"
+          trigger="in"
+          delay="100"
+          stroke="bold"
+          state="in-reveal"
+          colors="primary:#06d6a0,secondary:#06d6a0"
+        >
+        </lord-icon>
+      </div>
+      <% } %>
+
+      <% if (locals.error) { %>
+      <div class="alert animFailConnect" role="alert" style="text-align: center" id="alert-danger">
+        <div style="font-size: 1.1rem; margin-bottom: 10px">
+          <%= locals.error %> 😢
+        </div>
+        <lord-icon
+          src="https://cdn.lordicon.com/mcxhyndb.json"
+          trigger="loop"
+          delay="2000"
+          state="in-reveal"
+          colors="primary:#ef476f,secondary:#ef476f"
+        >
+        </lord-icon>
+      </div>
+      <% } %>
+
+      <form action="/emconnexion" method="post">
+        <div class="input-group">
+          <input
+            type="number"
+            placeholder="N° de Téléphone"
+            name="numero"
+            value="<%= locals.numero %>"
+            required
+            autocomplete="tel"
+          />
+          <i class="fas fa-phone"></i>
+        </div>
+
+        <div class="input-group">
+          <input
+            type="password"
+            placeholder="Mot de passe"
+            name="password"
+            required
+            autocomplete="current-password"
+          />
+          <i class="fas fa-lock"></i>
+        </div>
+
+        <div class="actions">
+          <a href="#">Mot de passe oublié ?</a>
+        </div>
+
+        <button type="submit" class="btn-login">
+          Se connecter <i class="fas fa-arrow-right" style="margin-left: 10px;"></i>
+        </button>
+
+        <div class="register-text">
+          Vous n'avez pas de compte ?
+          <a href="/inscription">Créer un compte</a>
+        </div>
+      </form>
     </div>
+
+    <!-- JAVASCRIPTS -->
+    <script src="plugins/jquery/jquery.min.js"></script>
 
     <!-- Condition pour afficher le preloader uniquement si loginSuccess est true -->
     <script>
@@ -104,5 +528,5 @@
             });
         }
     </script>
-</body>
+  </body>
 </html>

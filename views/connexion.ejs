@@ -1,122 +1,444 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
   <head>
-    <meta charset="utf-8" />
-    <title>E-maquis</title>
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="newAssets/css/login.css" />
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connexion | E-Maquis</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
     <link
       rel="shortcut icon"
       href="newAssets/images/logo/emaquisLogo2.png"
       type="image/x-icon"
     />
-    <link
-      rel="icon"
-      href="newAssets/images/logo/emaquisLogo2.png"
-      type="image/x-icon"
-    />
-
-    <!-- Responsive -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-    />
     <script src="https://cdn.lordicon.com/lordicon.js"></script>
 
-    <!--[if lt IE 9
-      ]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script
-    ><![endif]-->
-    <!--[if lt IE 9]><script src="js/respond.js"></script><![endif]-->
+    <style>
+      :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3f37c9;
+        --accent-color: #4895ef;
+        --success-color: #06d6a0;
+        --error-color: #ef476f;
+        --text-color: #2b2d42;
+        --bg-gradient: linear-gradient(135deg, #4361ee 0%, #f72585 100%);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                    url("newAssets/images/background/bg-login.jpg");
+        background-size: cover;
+        background-position: center;
+        overflow: hidden;
+      }
+
+      /* Glassmorphism Card */
+      .container {
+        position: relative;
+        width: 100%;
+        max-width: 450px;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+
+      .container::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 0%,
+          transparent 70%
+        );
+        transform: rotate(45deg);
+        pointer-events: none;
+      }
+
+      /* Logo */
+      .logo-area {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .logo-area img {
+        width: 120px;
+        filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+        transition: transform 0.3s ease;
+      }
+
+      .logo-area img:hover {
+        transform: scale(1.05);
+      }
+
+      h1 {
+        text-align: center;
+        color: white;
+        font-size: 2rem;
+        margin-bottom: 30px;
+        font-weight: 700;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Form Inputs */
+      .input-group {
+        position: relative;
+        margin-bottom: 25px;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 15px 45px 15px 20px;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 50px;
+        font-size: 1rem;
+        color: var(--text-color);
+        outline: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .input-group input:focus {
+        background: white;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+      }
+
+      .input-group i {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+        transition: color 0.3s ease;
+      }
+
+      .input-group input:focus + i {
+        color: var(--primary-color);
+      }
+
+      /* Action Links */
+      .actions {
+        display: flex;
+        justify-content: flex-end; /* Align right as specifically requested 'Mot de passe oublié' only usually */
+        margin-bottom: 25px;
+      }
+
+      .actions a {
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border-bottom: 1px solid transparent;
+      }
+
+      .actions a:hover {
+        color: white;
+        border-bottom-color: white;
+      }
+
+      /* Button */
+      .btn-login {
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 50px;
+        background: linear-gradient(90deg, #4361ee, #3f37c9);
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-login::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: 0.5s;
+      }
+
+      .btn-login:hover::after {
+        left: 100%;
+      }
+
+      .btn-login:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(67, 97, 238, 0.5);
+      }
+
+      .btn-login:active {
+        transform: translateY(-1px);
+      }
+
+      .btn-login:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      /* Register Link */
+      .register-text {
+        text-align: center;
+        margin-top: 25px;
+        color: white;
+        font-size: 0.95rem;
+      }
+
+      .register-text a {
+        color: white;
+        font-weight: 700;
+        text-decoration: none;
+        margin-left: 5px;
+        text-decoration: underline;
+      }
+
+      /* Feedback Animations Classes (Preserved) */
+      .animSuccessConnect,
+      .animFailConnect {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        animation: slideIn 0.3s ease;
+      }
+
+      .animSuccessConnect {
+        border-left: 5px solid var(--success-color);
+        color: var(--success-color);
+        font-weight: 600;
+      }
+
+      .animFailConnect {
+        border-left: 5px solid var(--error-color);
+        color: var(--error-color);
+        font-weight: 600;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        10%,
+        30%,
+        50%,
+        70%,
+        90% {
+          transform: translateX(-5px);
+        }
+        20%,
+        40%,
+        60%,
+        80% {
+          transform: translateX(5px);
+        }
+      }
+
+      .shake {
+        animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+      }
+
+      /* Floating Shapes for Background */
+      .shape {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(50px);
+        z-index: -1;
+      }
+
+      .shape-1 {
+        top: -10%;
+        left: -10%;
+        width: 300px;
+        height: 300px;
+        background: #4cc9f0;
+        opacity: 0.6;
+        animation: float 8s ease-in-out infinite;
+      }
+
+      .shape-2 {
+        bottom: -10%;
+        right: -10%;
+        width: 350px;
+        height: 350px;
+        background: #7209b7;
+        opacity: 0.6;
+        animation: float 10s ease-in-out infinite reverse;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(30px, 30px);
+        }
+        100% {
+          transform: translate(0, 0);
+        }
+      }
+
+      /* Lordicon resizing */
+      lord-icon {
+        width: 80px !important;
+        height: 80px !important;
+        margin: 10px auto;
+        display: block;
+      }
+    </style>
   </head>
-
   <body>
-    <div class="wrapper">
-      <form action="">
-        <a href="/"
-          ><img
+    <!-- Background Shapes -->
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+
+    <div class="container">
+      <div class="logo-area">
+        <a href="/">
+          <img
             src="newAssets/images/logo/emaquisLogo2.png"
-            width="100"
-            alt=""
-            srcset=""
-        /></a>
-        <h1>Espace Gestionnaire</h1>
-        <div
-          class="alert alert-success animSuccessConnect"
-          role="alert"
-          style="text-align: center; display: none"
-          id="alert-success"
-        >
+            alt="E-Maquis Logo"
+          />
+        </a>
+      </div>
+
+      <h1>Espace Gestionnaire</h1>
+
+      <!-- Success Alert (Hidden by default) -->
+      <div
+        class="alert animSuccessConnect"
+        role="alert"
+        style="text-align: center; display: none"
+        id="alert-success"
+      >
+        <div style="font-size: 1.1rem; margin-bottom: 10px">
           Connexion réussie !
-
-          <lord-icon
-            src="https://cdn.lordicon.com/iloumlrk.json"
-            trigger="in"
-            delay="100"
-            stroke="bold"
-            state="in-reveal"
-            style="width: 250px; height: 250px"
-          >
-          </lord-icon>
         </div>
-        <div
-          class="alert alert-danger animFailConnect"
-          role="alert"
-          style="text-align: center; display: none"
-          id="alert-danger"
+        <lord-icon
+          src="https://cdn.lordicon.com/iloumlrk.json"
+          trigger="in"
+          delay="100"
+          stroke="bold"
+          state="in-reveal"
+          colors="primary:#06d6a0,secondary:#06d6a0"
         >
-          Email ou mot de passe incorrecte
+        </lord-icon>
+      </div>
 
-          <lord-icon
-            src="https://cdn.lordicon.com/mcxhyndb.json"
-            trigger="loop"
-            delay="2000"
-            state="in-reveal"
-            colors="primary:#121331,secondary:#c71f16"
-            style="width: 250px; height: 250px"
-          >
-          </lord-icon>
+      <!-- Error Alert (Hidden by default) -->
+      <div
+        class="alert animFailConnect"
+        role="alert"
+        style="text-align: center; display: none"
+        id="alert-danger"
+      >
+        <div style="font-size: 1.1rem; margin-bottom: 10px">
+          Email ou mot de passe incorrect
         </div>
-        <div class="input-box">
+        <lord-icon
+          src="https://cdn.lordicon.com/mcxhyndb.json"
+          trigger="loop"
+          delay="2000"
+          state="in-reveal"
+          colors="primary:#ef476f,secondary:#ef476f"
+        >
+        </lord-icon>
+      </div>
+
+      <form action="">
+        <div class="input-group">
           <input
             type="text"
             placeholder="Email ou N° de Téléphone"
             name="emailOrPhoneNumber"
             required
+            autocomplete="username"
           />
-          <span class="icon flaticon-user"></span>
+          <i class="fas fa-user"></i>
         </div>
-        <div class="input-box">
+
+        <div class="input-group">
           <input
             type="password"
             placeholder="Mot de passe"
             name="password"
             required
+            autocomplete="current-password"
           />
-          <span class="icon flaticon-user"></span>
+          <i class="fas fa-lock"></i>
         </div>
 
-        <div class="remember-forget">
-          <!-- <label for="">
-                    <input type="checkbox">
-                    Se souvenir
-                </label> -->
-          <a href="">Mot de passe oublié</a>
+        <div class="actions">
+          <a href="#">Mot de passe oublié ?</a>
         </div>
-        <button type="submit" class="btn">Se connecter</button>
-        <div class="register-link">
-          <p>
-            Vous n'avez pas de compte?
-            <a href="/inscription">Créer un compte</a>
-          </p>
+
+        <button type="submit" class="btn-login">
+          Se connecter <i class="fas fa-arrow-right" style="margin-left: 10px;"></i>
+        </button>
+
+        <div class="register-text">
+          Vous n'avez pas de compte ?
+          <a href="/inscription">Créer un compte</a>
         </div>
       </form>
     </div>
 
     <!-- JAVASCRIPTS -->
     <script src="plugins/jquery/jquery.min.js"></script>
-
     <script src="js/script.js"></script>
     <script src="/socket.io/socket.io.js"></script>
 
@@ -127,7 +449,8 @@
         e.preventDefault();
         const submitButton = $('button[type="submit"]');
         submitButton.prop("disabled", true);
-        submitButton.text("Connexion en cours..."); // Ajouter un indicateur de chargement
+        const originalText = submitButton.html();
+        submitButton.html('<i class="fas fa-circle-notch fa-spin"></i> Connexion...');
 
         const data = {
           emailOrPhoneNumber: $('input[name="emailOrPhoneNumber"]').val(),
@@ -135,54 +458,45 @@
         };
 
         socket.emit("login", data);
+
+        socket.on("loginsuccess", (data) => {
+          if (data && data.token) {
+            localStorage.setItem("token", data.token);
+          }
+          setTimeout(() => {
+            document.querySelector(".animSuccessConnect").style.display = "block";
+            // Hide form elements smoothly if desired, or just show success
+             $('form').slideUp();
+          }, 500);
+
+          setTimeout(() => {
+            location.href = "/dashboard";
+          }, 2500);
+        });
+
+        socket.on("bad", () => {
+          setTimeout(() => {
+            const errorAlert = document.querySelector(".animFailConnect");
+            errorAlert.style.display = "block";
+            errorAlert.classList.add("shake");
+            
+            // Remove shake class after animation
+            setTimeout(() => {
+                errorAlert.classList.remove("shake");
+            }, 500);
+            
+          }, 500);
+
+          setTimeout(() => {
+            submitButton.prop("disabled", false);
+            submitButton.html(originalText);
+          }, 1500);
+        });
       });
-      socket.on("loginsuccess", (data) => {
-        // Si le backend renvoie le token dans data.token, on le stocke dans le localStorage
-        if (data && data.token) {
-          localStorage.setItem("token", data.token);
-        }
-        setTimeout(() => {
-          // Ajoutez la classe 'success-animation' à l'élément du formulaire ou à l'élément de confirmation
-          document
-            .querySelector(".animSuccessConnect")
-            .classList.add("success-animation");
-          document.querySelector(".animSuccessConnect").style.display = "block";
-        }, 1000);
 
-        // Redirigez l'utilisateur vers la page de tableau de bord après l'animation
-        setTimeout(() => {
-          location.href = "/dashboard";
-        }, 3000);
-      });
-
-      socket.on("bad", () => {
-        setTimeout(() => {
-          document.querySelector(".animFailConnect").style.display = "block";
-          // Ajoutez la classe 'shake' à l'élément du formulaire
-          document.querySelector(".animFailConnect").classList.add("shake");
-        }, 1000);
-        // Réactiver le bouton et restaurer le texte après un échec de connexion
-        const submitButton = $('button[type="submit"]');
-        setTimeout(() => {
-          submitButton.prop("disabled", false);
-          submitButton.text("Se connecter");
-        }, 2000);
-      });
-
-      // Supprimez la classe 'shake' lorsque l'animation est terminée
-      setTimeout(() => {
-        document
-          .querySelector(".animFailConnect")
-          .addEventListener("animationend", () => {
-            document
-              .querySelector(".animFailConnect")
-              .classList.remove("shake");
-          });
-      }, 2000);
-
-      // Effacer l'alerte de danger et l'icône en cas de nouvelle tentative de connexion
-      $("button[type='submit']").on("click", () => {
-        document.querySelector(".animFailConnect").style.display = "none";
+      // Clear alerts on interaction
+      $("input").on("focus", () => {
+        $(".animFailConnect").slideUp();
       });
     </script>
   </body>

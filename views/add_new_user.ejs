@@ -174,6 +174,55 @@
         color: var(--danger-color);
         margin-left: 4px;
       }
+
+      /* Glassmorphism Modal Styles */
+      .modal-content.glass-modal {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        font-family: 'Poppins', sans-serif;
+      }
+      .modal-header { border-bottom: none; padding: 20px 30px 10px; }
+      .modal-footer { border-top: none; padding: 10px 30px 30px; justify-content: center; }
+      .modal-title { font-weight: 700; color: var(--primary-color); font-size: 1.5rem; }
+      
+      .video-wrapper {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        margin: 25px auto;
+        border: 4px solid white;
+        background: #000;
+        max-height: 50vh; /* Limit height */
+        max-width: 300px; /* Limit width suitable for phone mockup videos */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .instruction-text {
+        font-size: 1.1rem;
+        color: #4e73df;
+        font-weight: 500;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+      .instruction-text a { text-decoration: underline; font-weight: 700; }
+      .role-badge {
+        display: inline-block;
+        padding: 8px 25px;
+        background: #e3e6f0;
+        color: #4e73df;
+        border-radius: 50px;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      }
+      .close { outline: none !important; }
     </style>
     <%- include('partial/newSideBar.ejs') %>
     <!--/ sidebar  -->
@@ -642,9 +691,11 @@
         });
 
         // Determine the role and set the modal content
+        // Determine the role and set the modal content
         const role = $('select[name="role"]').val();
         let modalContent = "";
         let videoUrl = "";
+        let platformIcon = "";
 
         if (
           role === "serveur(euse)" ||
@@ -652,21 +703,36 @@
           role === "gestionnaire"
         ) {
           modalContent =
-            "L'employé est maintenant enregistré dans votre établissement donc il peut maintenant télécharger l'application mobile sur le PlayStore ou AppStore pour les prises de commandes.";
+            `L'employé a été enregistré avec succès ! <br> Pour commencer à prendre des commandes, il doit télécharger l'application mobile <b style="color:var(--primary-color)">E-Maquis</b>.`;
           videoUrl = "medias/mobile.mp4";
+          platformIcon = "fas fa-mobile-alt";
         } else if (role === "Barman") {
           modalContent =
-            "L'employé est maintenant enregistré dans votre établissement donc il peut maintenant se connecter sur son espace barman à cette adresse : https://e-maquis.com/emconnexion";
+            `L'employé a été enregistré avec succès ! <br> Il peut maintenant se connecter à son espace de travail web : <br> <a href='/emconnexion' target='_blank'>Espace Barman</a>`;
           videoUrl = "medias/barman.mp4";
+          platformIcon = "fas fa-desktop";
         }
 
         // Set the modal content and video
         $("#modalBodyContent").html(`
-          <p>${modalContent}</p>
-          <video autoplay controls style="width:100%; height:auto;">
-            <source src="${videoUrl}" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
+          <div class="text-center">
+            <lord-icon
+                src="https://cdn.lordicon.com/lupuorrc.json"
+                trigger="loop"
+                delay="2000"
+                style="width:80px;height:80px">
+            </lord-icon>
+            <br>
+            <div class="role-badge"><i class="${platformIcon}"></i> ${role}</div>
+            <p class="instruction-text">${modalContent}</p>
+            <div class="video-wrapper">
+                <video autoplay controls loop muted style="width:100%; height:auto; display:block;">
+                    <source src="${videoUrl}" type="video/mp4">
+                    Votre navigateur ne supporte pas la lecture de vidéo.
+                </video>
+            </div>
+            <p class="text-muted small"><i class="fas fa-info-circle"></i> Regardez la vidéo ci-dessus pour comprendre le fonctionnement.</p>
+          </div>
         `);
       });
       const driver = window.driver.js.driver;
@@ -850,10 +916,10 @@
       aria-labelledby="roleModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content glass-modal">
           <div class="modal-header">
-            <h5 class="modal-title" id="roleModalLabel">Information</h5>
+            <h5 class="modal-title" id="roleModalLabel">🎉 Félicitations !</h5>
             <button
               type="button"
               class="close"
@@ -872,7 +938,7 @@
               class="btn btn-secondary"
               data-dismiss="modal"
             >
-              Close
+              J'ai compris
             </button>
           </div>
         </div>
