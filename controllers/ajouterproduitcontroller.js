@@ -127,6 +127,15 @@ exports.addproduitPost = async (req, res) => {
         }
       }
 
+      const calculatedQty = ["cardboard", "locker"].includes(req.body.stockType)
+            ? generateQuantityByLocker({
+                locker: req.body.quantite,
+                size: req.body.taille,
+                produit: produit.result,
+                stockType: req.body.stockType,
+              })
+            : req.body.quantite;
+
       const data = {
         produit: req.body.produit,
         prix_vente: parseInt(req.body.prix_vente),
@@ -305,20 +314,20 @@ exports.editproduitPost = async (req, res) => {
 
     // casier passe, mais ça fait en 12 ou 24 ?? ok
 
-    const data = {
-      produit: req.body.produit,
-      prix_vente: parseInt(req.body.prix_vente),
-      prix_achat: parseInt(req.body.prix_achat),
-      quantite: parseInt(
-        ["cardboard", "locker"].includes(req.body.stockType)
+    const calculatedQty = ["cardboard", "locker"].includes(req.body.stockType)
           ? generateQuantityByLocker({
               locker: req.body.quantite,
               size: req.body.taille,
               produit: produit.result,
               stockType: req.body.stockType,
             })
-          : req.body.quantite
-      ),
+          : req.body.quantite;
+
+    const data = {
+      produit: req.body.produit,
+      prix_vente: parseInt(req.body.prix_vente),
+      prix_achat: parseInt(req.body.prix_achat),
+      quantite: parseInt(calculatedQty),
       taille: req.body.taille,
       promo: req.body.promo,
       promo_quantity: parseInt(req.body.promo_quantity) || null,
@@ -337,11 +346,7 @@ exports.editproduitPost = async (req, res) => {
       });
     }
 
-    const produit_exist = await produitQueries.getProduitByData({
-      produit: data.produit,
-      session,
-      taille: data.taille,
-    });
+    const produit_exist = await produitQueries.getProduitById(req.body.productId);
 
     const newQty = req.body.is_cocktail
       ? 0
@@ -363,7 +368,7 @@ exports.editproduitPost = async (req, res) => {
     };
 
     let result = await produitQueries.updateProduit(
-      { produitId: req.body.productId, session },
+      { produitId: produit_exist.result._id, session },
       {
         ...data,
         quantite: newQty,

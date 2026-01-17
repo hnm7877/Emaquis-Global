@@ -282,7 +282,7 @@ exports.produitQueries = class {
 	static getProduitById(id) {
 		try {
 			return new Promise(async (next) => {
-				Produit.findById({ _id: id, isDeleted: false })
+				Produit.findOne({ _id: id, isDeleted: false })
 					.populate({
 						path: 'produit',
 						populate: {
@@ -332,7 +332,7 @@ exports.produitQueries = class {
 	static getProduitByUser(id) {
 		try {
 			return new Promise(async (next) => {
-				Produit.findById({ session: id, isDeleted: false })
+				Produit.findOne({ session: id, isDeleted: false })
 					.then((data) => {
 						next({
 							etat: true,

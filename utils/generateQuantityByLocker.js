@@ -10,7 +10,7 @@ exports.generateQuantityByLocker = ({ locker, size, produit }) => {
   } else if (['30cl', '33cl', '25cl'].includes(size)) {
     return locker * 24;
   } else {
-    if (produit.nom_produit === 'VALPIERRE') {
+    if (produit.nom_produit && produit.nom_produit.toLowerCase().includes('valpierre')) {
       return locker * 12;
     } else {
       return locker * 6;
