@@ -1,445 +1,224 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Connexion | E-Maquis</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-    <link
-      rel="shortcut icon"
-      href="newAssets/images/logo/emaquisLogo2.png"
-      type="image/x-icon"
-    />
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>E-Maquis - Connexion & DepozUp Promo</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#4F46E5",
+              "primary-hover": "#4338ca",
+              "background-light": "#f3f4f6",
+              "background-dark": "#111827",
+              "depozup-orange": "#f97316",
+              "glass-dark": "rgba(255, 255, 255, 0.1)",
+              "glass-border": "rgba(255, 255, 255, 0.2)",
+              "success": "#06d6a0",
+              "error": "#ef476f"
+            },
+            fontFamily: {
+              display: ["Inter", "sans-serif"],
+              body: ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              'xl': "1rem",
+              '2xl': "1.5rem",
+            },
+            backdropBlur: {
+                'xs': '2px',
+            }
+          },
+        },
+      };
+    </script>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+    <!-- Lordicon -->
     <script src="https://cdn.lordicon.com/lordicon.js"></script>
-
+    
     <style>
-      :root {
-        --primary-color: #4361ee;
-        --secondary-color: #3f37c9;
-        --accent-color: #4895ef;
-        --success-color: #06d6a0;
-        --error-color: #ef476f;
-        --text-color: #2b2d42;
-        --bg-gradient: linear-gradient(135deg, #4361ee 0%, #f72585 100%);
-      }
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: "Poppins", sans-serif;
-      }
-
-      body {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-                    url("newAssets/images/background/bg-login.jpg");
-        background-size: cover;
-        background-position: center;
-        overflow: hidden;
-      }
-
-      /* Glassmorphism Card */
-      .container {
-        position: relative;
-        width: 100%;
-        max-width: 450px;
-        padding: 40px;
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-        overflow: hidden;
-        transition: transform 0.3s ease;
-      }
-
-      .container::before {
-        content: "";
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(
-          circle,
-          rgba(255, 255, 255, 0.1) 0%,
-          transparent 70%
-        );
-        transform: rotate(45deg);
-        pointer-events: none;
-      }
-
-      /* Logo */
-      .logo-area {
-        text-align: center;
-        margin-bottom: 30px;
-      }
-
-      .logo-area img {
-        width: 120px;
-        filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
-        transition: transform 0.3s ease;
-      }
-
-      .logo-area img:hover {
-        transform: scale(1.05);
-      }
-
-      h1 {
-        text-align: center;
-        color: white;
-        font-size: 2rem;
-        margin-bottom: 30px;
-        font-weight: 700;
-        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-      }
-
-      /* Form Inputs */
-      .input-group {
-        position: relative;
-        margin-bottom: 25px;
-      }
-
-      .input-group input {
-        width: 100%;
-        padding: 15px 45px 15px 20px;
-        background: rgba(255, 255, 255, 0.9);
-        border: none;
-        border-radius: 50px;
-        font-size: 1rem;
-        color: var(--text-color);
-        outline: none;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-      }
-
-      .input-group input:focus {
-        background: white;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-        transform: translateY(-2px);
-      }
-
-      .input-group i {
-        position: absolute;
-        right: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #666;
-        transition: color 0.3s ease;
-      }
-
-      .input-group input:focus + i {
-        color: var(--primary-color);
-      }
-
-      /* Action Links */
-      .actions {
-        display: flex;
-        justify-content: flex-end; /* Align right as specifically requested 'Mot de passe oublié' only usually */
-        margin-bottom: 25px;
-      }
-
-      .actions a {
-        color: rgba(255, 255, 255, 0.9);
-        text-decoration: none;
-        font-size: 0.9rem;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        border-bottom: 1px solid transparent;
-      }
-
-      .actions a:hover {
-        color: white;
-        border-bottom-color: white;
-      }
-
-      /* Button */
-      .btn-login {
-        width: 100%;
-        padding: 15px;
-        border: none;
-        border-radius: 50px;
-        background: linear-gradient(90deg, #4361ee, #3f37c9);
-        color: white;
-        font-size: 1.1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
-        position: relative;
-        overflow: hidden;
-      }
-
-      .btn-login::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.2),
-          transparent
-        );
-        transition: 0.5s;
-      }
-
-      .btn-login:hover::after {
-        left: 100%;
-      }
-
-      .btn-login:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(67, 97, 238, 0.5);
-      }
-
-      .btn-login:active {
-        transform: translateY(-1px);
-      }
-
-      .btn-login:disabled {
-        background: #ccc;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-      }
-
-      /* Register Link */
-      .register-text {
-        text-align: center;
-        margin-top: 25px;
-        color: white;
-        font-size: 0.95rem;
-      }
-
-      .register-text a {
-        color: white;
-        font-weight: 700;
-        text-decoration: none;
-        margin-left: 5px;
-        text-decoration: underline;
-      }
-
-      /* Feedback Animations Classes (Preserved) */
-      .animSuccessConnect,
-      .animFailConnect {
-        background: rgba(255, 255, 255, 0.9);
-        padding: 20px;
-        border-radius: 15px;
-        margin-bottom: 20px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        animation: slideIn 0.3s ease;
-      }
-
-      .animSuccessConnect {
-        border-left: 5px solid var(--success-color);
-        color: var(--success-color);
-        font-weight: 600;
-      }
-
-      .animFailConnect {
-        border-left: 5px solid var(--error-color);
-        color: var(--error-color);
-        font-weight: 600;
-      }
-
-      @keyframes slideIn {
-        from {
-          opacity: 0;
-          transform: translateY(-10px);
+        body {
+            font-family: "Inter", sans-serif
         }
-        to {
-          opacity: 1;
-          transform: translateY(0);
+        .bg-bar-scene {
+            background-image: url('newAssets/images/background/bg-login.jpg');
+            background-size: cover;
+            background-position: center;
         }
-      }
-
-      @keyframes shake {
-        0%,
-        100% {
-          transform: translateX(0);
+        .glass-panel {
+            background: rgba(30, 30, 30, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37)
         }
-        10%,
-        30%,
-        50%,
-        70%,
-        90% {
-          transform: translateX(-5px);
+        
+        /* Animation classes for script compatibility */
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        20%,
-        40%,
-        60%,
-        80% {
-          transform: translateX(5px);
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
         }
-      }
-
-      .shake {
-        animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-      }
-
-      /* Floating Shapes for Background */
-      .shape {
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(50px);
-        z-index: -1;
-      }
-
-      .shape-1 {
-        top: -10%;
-        left: -10%;
-        width: 300px;
-        height: 300px;
-        background: #4cc9f0;
-        opacity: 0.6;
-        animation: float 8s ease-in-out infinite;
-      }
-
-      .shape-2 {
-        bottom: -10%;
-        right: -10%;
-        width: 350px;
-        height: 350px;
-        background: #7209b7;
-        opacity: 0.6;
-        animation: float 10s ease-in-out infinite reverse;
-      }
-
-      @keyframes float {
-        0% {
-          transform: translate(0, 0);
+        .shake {
+            animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
         }
-        50% {
-          transform: translate(30px, 30px);
+        .animSuccessConnect, .animFailConnect {
+            animation: slideIn 0.3s ease;
         }
-        100% {
-          transform: translate(0, 0);
-        }
-      }
-
-      /* Lordicon resizing */
-      lord-icon {
-        width: 80px !important;
-        height: 80px !important;
-        margin: 10px auto;
-        display: block;
-      }
     </style>
-  </head>
-  <body>
-    <!-- Background Shapes -->
-    <div class="shape shape-1"></div>
-    <div class="shape shape-2"></div>
+</head>
+<body class="bg-bar-scene min-h-screen flex items-center justify-center p-4 md:p-8 text-white relative">
+    <div class="absolute inset-0 bg-black/50 dark:bg-black/70 z-0"></div>
+    <div class="absolute bottom-0 right-0 w-1/2 h-1/2 bg-purple-900/40 blur-[120px] rounded-full z-0 pointer-events-none"></div>
+    <div class="absolute top-0 left-0 w-1/3 h-1/3 bg-blue-900/30 blur-[100px] rounded-full z-0 pointer-events-none"></div>
+    
+    <main class="container mx-auto max-w-6xl z-10 relative">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+            <div class="glass-panel rounded-2xl p-8 md:p-12 flex flex-col justify-center items-center text-center w-full max-w-md mx-auto lg:mx-0 lg:max-w-none h-full">
+                
+                <a href="/" class="mb-8 relative w-24 h-24 bg-white/10 rounded-full flex items-center justify-center shadow-lg border border-white/10 hover:scale-105 transition-transform duration-300">
+                     <img src="newAssets/images/logo/emaquisLogo2.png" alt="E-Maquis Logo" class="w-20 drop-shadow-lg">
+                </a>
 
-    <div class="container">
-      <div class="logo-area">
-        <a href="/">
-          <img
-            src="newAssets/images/logo/emaquisLogo2.png"
-            alt="E-Maquis Logo"
-          />
-        </a>
-      </div>
+                <h1 class="text-3xl font-bold mb-8 tracking-tight text-white">Espace Gestionnaire</h1>
+                
+                <!-- Feedback Alerts (Initally Hidden) -->
+                <div class="animSuccessConnect w-full bg-white/90 text-success p-4 rounded-xl mb-6 shadow-lg border-l-4 border-success hidden" id="alert-success">
+                    <div class="flex flex-col items-center">
+                        <span class="font-bold mb-2">Connexion réussie !</span>
+                        <lord-icon
+                            src="https://cdn.lordicon.com/iloumlrk.json"
+                            trigger="in"
+                            delay="100"
+                            stroke="bold"
+                            state="in-reveal"
+                            colors="primary:#06d6a0,secondary:#06d6a0"
+                            style="width:50px;height:50px">
+                        </lord-icon>
+                    </div>
+                </div>
 
-      <h1>Espace Gestionnaire</h1>
+                <div class="animFailConnect w-full bg-white/90 text-error p-4 rounded-xl mb-6 shadow-lg border-l-4 border-error hidden" id="alert-danger">
+                    <div class="flex flex-col items-center">
+                        <span class="font-bold mb-2">Email ou mot de passe incorrect</span>
+                         <lord-icon
+                            src="https://cdn.lordicon.com/mcxhyndb.json"
+                            trigger="loop"
+                            delay="2000"
+                            state="in-reveal"
+                            colors="primary:#ef476f,secondary:#ef476f"
+                            style="width:50px;height:50px">
+                        </lord-icon>
+                    </div>
+                </div>
 
-      <!-- Success Alert (Hidden by default) -->
-      <div
-        class="alert animSuccessConnect"
-        role="alert"
-        style="text-align: center; display: none"
-        id="alert-success"
-      >
-        <div style="font-size: 1.1rem; margin-bottom: 10px">
-          Connexion réussie !
+                <form action="#" class="w-full space-y-5" method="POST">
+                    <div class="relative group">
+                        <input class="w-full pl-4 pr-10 py-3.5 bg-gray-100 dark:bg-gray-800 border-none rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-primary transition-all shadow-inner" 
+                               id="email" 
+                               name="emailOrPhoneNumber" 
+                               placeholder="Email ou N° de Téléphone" 
+                               type="text" 
+                               required 
+                               autocomplete="username"/>
+                        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors">
+                            <span class="material-icons-round">person</span>
+                        </span>
+                    </div>
+                    
+                    <div class="relative group">
+                        <input class="w-full pl-4 pr-10 py-3.5 bg-gray-100 dark:bg-gray-800 border-none rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-primary transition-all shadow-inner" 
+                               id="password" 
+                               name="password" 
+                               placeholder="Mot de passe" 
+                               type="password"
+                               required
+                               autocomplete="current-password"/>
+                        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors">
+                            <span class="material-icons-round">lock</span>
+                        </span>
+                    </div>
+                    
+                    <div class="text-right">
+                        <a class="text-sm text-gray-300 hover:text-white transition-colors underline-offset-4 hover:underline" href="#">
+                            Mot de passe oublié ?
+                        </a>
+                    </div>
+                    
+                    <button class="w-full bg-primary hover:bg-primary-hover text-white font-semibold py-3.5 rounded-xl shadow-lg hover:shadow-primary/50 transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center gap-2" type="submit">
+                        Se connecter
+                        <span class="material-icons-round text-lg">arrow_forward</span>
+                    </button>
+                </form>
+                
+                <div class="mt-8 text-sm text-gray-400">
+                    Vous n'avez pas de compte ? 
+                    <a class="text-white font-semibold hover:underline decoration-primary decoration-2 underline-offset-4" href="/inscription">Créer un compte</a>
+                </div>
+            </div>
+
+            <!-- Right: DepozUp Promo -->
+            <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800 shadow-2xl border border-gray-700/50 flex flex-col h-full group">
+                <div class="absolute inset-0 z-0">
+                    <img alt="Woman smiling in warehouse with boxes" class="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtxcQz6fGnmU1sP_gQQ1kSNFSA5fdNYHH9IpKbmFFubNnkmWpEHhHLc2s4h_SbYnzuKR2ADoJjZ3UMujTtmEn_u8XNHBT637sRMK94pMteKLe3coL3eDo8oiDC5dCbNI0-7UkpO-CcQzE1VVGNSq_obwql0gxveBCV84PbmaahZqBvpBi060jU-YzvokiUxS2vZbNcySVKvbnW74Me8QztI-l8i_kyrRbBdbb0306P5qgZ_fseHewsHOtwFOxzUI75rOeSBk5inCs"/>
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent"></div>
+                </div>
+                <div class="relative z-10 p-8 md:p-12 flex flex-col h-full justify-between items-start">
+                    <div class="bg-orange-100 dark:bg-orange-900/30 text-depozup-orange dark:text-orange-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-6 border border-orange-200 dark:border-orange-700/50">
+                        Nouveau Service
+                    </div>
+                    <div class="mt-auto">
+                        <div class="mb-6">
+                        <img src="newAssets/images/logo/depozup.png" alt="DepozUp Logo" class="h-16 w-auto drop-shadow-md hover:scale-105 transition-transform duration-300">
+                    </div>
+                        <h3 class="text-3xl md:text-4xl font-extrabold text-white mb-4 leading-tight">
+                            Gérez vos <span class="text-depozup-orange">Dépôts de boissons</span> <br/>en toute simplicité.
+                        </h3>
+                        <p class="text-gray-300 text-lg mb-8 max-w-md leading-relaxed">
+                            Une solution complète pour les professionnels du secteur des boissons. Optimisez votre inventaire, automatisez vos commandes et boostez votre rentabilité.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <a class="bg-white text-gray-900 hover:bg-gray-100 font-bold py-3 px-6 rounded-lg shadow-lg transition-colors flex items-center justify-center gap-2" href="https://depozup.com/" target="_blank">
+                                Découvrir DepozUp
+                            </a>
+                            <a class="bg-transparent border border-gray-500 hover:border-white text-gray-300 hover:text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center" href="https://depozup.com/how-it-works" target="_blank">
+                                En savoir plus
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute top-10 right-10 pointer-events-none flex items-center justify-center w-24 h-24">
+                    <svg class="absolute inset-0 opacity-20" fill="none" viewBox="0 0 100 100" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="40" stroke="white" stroke-dasharray="10 10" stroke-width="2"></circle>
+                    </svg>
+                    <img src="newAssets/images/logo/depozup.png" alt="" class="w-16 h-16 object-contain filter drop-shadow-lg">
+                </div>
+            </div>
         </div>
-        <lord-icon
-          src="https://cdn.lordicon.com/iloumlrk.json"
-          trigger="in"
-          delay="100"
-          stroke="bold"
-          state="in-reveal"
-          colors="primary:#06d6a0,secondary:#06d6a0"
-        >
-        </lord-icon>
-      </div>
+    </main>
 
-      <!-- Error Alert (Hidden by default) -->
-      <div
-        class="alert animFailConnect"
-        role="alert"
-        style="text-align: center; display: none"
-        id="alert-danger"
-      >
-        <div style="font-size: 1.1rem; margin-bottom: 10px">
-          Email ou mot de passe incorrect
+    <footer class="absolute bottom-4 w-full text-center z-10 pointer-events-none">
+        <div class="pointer-events-auto inline-flex gap-6 text-xs text-gray-400">
+            <a class="hover:text-white transition-colors" href="#">Conditions d'utilisation</a>
+            <a class="hover:text-white transition-colors" href="#">Politique de confidentialité</a>
+            <a class="hover:text-white transition-colors" href="#">Aide</a>
         </div>
-        <lord-icon
-          src="https://cdn.lordicon.com/mcxhyndb.json"
-          trigger="loop"
-          delay="2000"
-          state="in-reveal"
-          colors="primary:#ef476f,secondary:#ef476f"
-        >
-        </lord-icon>
-      </div>
-
-      <form action="">
-        <div class="input-group">
-          <input
-            type="text"
-            placeholder="Email ou N° de Téléphone"
-            name="emailOrPhoneNumber"
-            required
-            autocomplete="username"
-          />
-          <i class="fas fa-user"></i>
-        </div>
-
-        <div class="input-group">
-          <input
-            type="password"
-            placeholder="Mot de passe"
-            name="password"
-            required
-            autocomplete="current-password"
-          />
-          <i class="fas fa-lock"></i>
-        </div>
-
-        <div class="actions">
-          <a href="#">Mot de passe oublié ?</a>
-        </div>
-
-        <button type="submit" class="btn-login">
-          Se connecter <i class="fas fa-arrow-right" style="margin-left: 10px;"></i>
-        </button>
-
-        <div class="register-text">
-          Vous n'avez pas de compte ?
-          <a href="/inscription">Créer un compte</a>
-        </div>
-      </form>
-    </div>
+    </footer>
 
     <!-- JAVASCRIPTS -->
     <script src="plugins/jquery/jquery.min.js"></script>
-    <script src="js/script.js"></script>
     <script src="/socket.io/socket.io.js"></script>
 
     <script>
@@ -450,7 +229,7 @@
         const submitButton = $('button[type="submit"]');
         submitButton.prop("disabled", true);
         const originalText = submitButton.html();
-        submitButton.html('<i class="fas fa-circle-notch fa-spin"></i> Connexion...');
+        submitButton.html('<span class="material-icons-round animate-spin">refresh</span> Connexion...');
 
         const data = {
           emailOrPhoneNumber: $('input[name="emailOrPhoneNumber"]').val(),
@@ -464,9 +243,9 @@
             localStorage.setItem("token", data.token);
           }
           setTimeout(() => {
-            document.querySelector(".animSuccessConnect").style.display = "block";
-            // Hide form elements smoothly if desired, or just show success
-             $('form').slideUp();
+            // Using Tailwind classes for display toggling if needed, but jquery show/slideDown works fine with 'hidden' class removal
+            $("#alert-success").removeClass("hidden").hide().slideDown();
+            $('form').slideUp();
           }, 500);
 
           setTimeout(() => {
@@ -476,13 +255,12 @@
 
         socket.on("bad", () => {
           setTimeout(() => {
-            const errorAlert = document.querySelector(".animFailConnect");
-            errorAlert.style.display = "block";
-            errorAlert.classList.add("shake");
+            const errorAlert = $("#alert-danger");
+            errorAlert.removeClass("hidden").hide().slideDown();
+            errorAlert.addClass("shake");
             
-            // Remove shake class after animation
             setTimeout(() => {
-                errorAlert.classList.remove("shake");
+                errorAlert.removeClass("shake");
             }, 500);
             
           }, 500);
@@ -499,5 +277,5 @@
         $(".animFailConnect").slideUp();
       });
     </script>
-  </body>
+</body>
 </html>
