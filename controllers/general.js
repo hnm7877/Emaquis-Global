@@ -5,9 +5,11 @@ const app_configModel = require("../models/app_config.model");
 exports.index = async (req, res) => {
 
     try {
-        const maquisCount = await userQueries.getCounts();
-        const totalVentes = await venteQueries.getCounts();
-        const config = await app_configModel.findOne({});
+        const [maquisCount, totalVentes, config] = await Promise.all([
+            userQueries.getCounts(),
+            venteQueries.getCounts(),
+            app_configModel.findOne({})
+        ]);
         res.render('landing', {maquisCount,totalVentes})
     } catch (e) {
         console.log('err', e);

@@ -43,10 +43,14 @@ exports.venteQueries = class {
     });
   }
 
-  static getVentes(query, select = {}) {
+  static getVentes(query, select = {}, options = {}) {
     return new Promise(async (next) => {
-      Vente.find(query)
-        .populate({
+      const q = Vente.find(query);
+      
+      if (options.limit) q.limit(options.limit);
+      if (options.skip) q.skip(options.skip);
+
+      q.populate({
           path: "produit.produit",
           populate: {
             path: "categorie",
@@ -224,6 +228,6 @@ exports.venteQueries = class {
   }
 
   static getCounts() {
-    return Vente.countDocuments();
+    return Vente.estimatedDocumentCount();
   }
 };

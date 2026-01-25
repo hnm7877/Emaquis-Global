@@ -7,6 +7,9 @@ exports.data_table = async (req, res) => {
   try {
     const user = req.session.user;
     if (user) {
+      const showAll = req.query.all === 'true';
+      const limit = showAll ? 0 : 500;
+
       const ventes = await venteQueries.getVentes(
         {
           travail_pour: user.id || user.travail_pour,
@@ -14,7 +17,8 @@ exports.data_table = async (req, res) => {
         {
           offered: 1,
           offered_confirmed: 1,
-        }
+        },
+        { limit }
       );
       const userDetails = await getUserDetails(user);
 
@@ -25,6 +29,7 @@ exports.data_table = async (req, res) => {
       const currency = country ? country.devise : "XOF";
 
       res.render("data_table", {
+        showAll,
         ventes: ventes.result.map((el) => {
           return {
             ...(el._doc || el),

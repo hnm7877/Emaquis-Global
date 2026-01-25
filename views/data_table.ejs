@@ -292,6 +292,17 @@
 												</tbody>
 											</table>
 										</div>
+                                        <div class="text-center mt-3">
+                                            <% if (typeof showAll !== 'undefined' && showAll) { %>
+                                                <a href="/data_table" class="btn btn-outline-primary btn-sm">
+                                                    <i class="fas fa-filter me-2"></i> Voir les 500 dernières ventes (Rapide)
+                                                </a>
+                                            <% } else { %>
+                                                <a href="/data_table?all=true" class="btn btn-outline-secondary btn-sm">
+                                                    <i class="fas fa-history me-2"></i> Voir tout l'historique (Plus lent)
+                                                </a>
+                                            <% } %>
+                                        </div>
 									</div>
 								</div>
 							</div>
