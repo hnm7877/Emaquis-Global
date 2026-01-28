@@ -1,4 +1,6 @@
 const { generatorTicket } = require('../services/generator.service');
+const moment = require('moment');
+
 
 const generateTicket = (data) => {
 	const ticket = `
