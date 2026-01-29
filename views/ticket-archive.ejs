@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archive des Tickets - E-Maquis</title>
+    
+    <!-- App css -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/theme.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="css/metisMenu.css" />
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="js/confetti.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Lordicon -->
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+    
+    <!-- FIX: Définition préventive pour éviter ReferenceError sur le paiement -->
+    <script>
+        // Bouchon pour une fonction qui peut être appelée par erreur par des scripts partagés
+        window.updateClassementFromServer = function() {};
+    </script>
+    
+    <style>
+        body {
+            background: #f5f6fa;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            overflow-x: hidden;
+        }
+        
+        /* Force Sidebar to be sticky and full height */
+        .vertical-menu.sidebar-animated {
+            position: sticky; /* Make it sticky so it stays in view */
+            top: 0;
+            height: 100vh;
+            flex-shrink: 0; /* Prevent shrinking */
+            z-index: 1000;
+        }
+        
+        .archive-container {
+            flex: 1; /* Take remaining width */
+            width: 100%; /* Ensure it fills available space */
+            max-width: none;
+            margin: 0;
+            padding: 2rem;
+            overflow-y: auto; /* Allow content scrolling */
+        }
+        
+        .archive-header {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .archive-header h1 {
+            color: #16213e;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .filters-section {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .filter-btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            color: #666;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-right: 0.8rem;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+        }
+        
+        .filter-btn.active {
+            background: linear-gradient(135deg, #ff9c2c 0%, #ffb347 100%);
+            color: white;
+            border-color: #ff9c2c;
+        }
+        
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 156, 44, 0.2);
+        }
+        
+        .tickets-table-container {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .ticket-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
+        
+        .ticket-table thead th {
+            background: #16213e;
+            color: white;
+            padding: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .ticket-table thead th:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+        
+        .ticket-table thead th:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .ticket-table tbody tr {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: all 0.3s;
+        }
+        
+        .ticket-table tbody tr:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+        
+        .ticket-table tbody td {
+            padding: 1.2rem 1rem;
+            vertical-align: middle;
+        }
+        
+        .ticket-table tbody tr td:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+        
+        .ticket-table tbody tr td:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .status-badge {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .status-badge.printed {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+        
+        .status-badge.unprinted {
+            background: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%);
+            color: white;
+        }
+        
+        .btn-reprint {
+            background: linear-gradient(135deg, #ff9c2c 0%, #ffb347 100%);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        
+        .btn-reprint:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 156, 44, 0.3);
+            color: white;
+        }
+        
+        .loading-spinner {
+            text-align: center;
+            padding: 3rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .empty-state lord-icon {
+            width: 120px;
+            height: 120px;
+        }
+        
+        .empty-state h3 {
+            color: #666;
+            margin-top: 1.5rem;
+        }
+        
+        .date-input {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            font-size: 0.95rem;
+        }
+        
+        .date-input:focus {
+            border-color: #ff9c2c;
+            box-shadow: 0 0 0 3px rgba(255, 156, 44, 0.1);
+            outline: none;
+        }
+        
+        /* Pagination */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2rem;
+            gap: 0.5rem;
+        }
+        
+        .pagination-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e0e0e0;
+            background: white;
+            color: #666;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .pagination-btn:hover:not(:disabled) {
+            background: #ff9c2c;
+            color: white;
+            border-color: #ff9c2c;
+        }
+        
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .pagination-btn.active {
+            background: #ff9c2c;
+            color: white;
+            border-color: #ff9c2c;
+        }
+        
+        .pagination-info {
+            padding: 0.5rem 1rem;
+            color: #666;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 1200px) {
+            .archive-container {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 991px) {
+            .archive-container {
+                padding: 1rem;
+            }
+            
+            .archive-header {
+                padding: 1.5rem;
+            }
+            
+            .archive-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .filters-section {
+                padding: 1rem;
+            }
+            
+            .filter-btn {
+                width: 100%;
+                margin-right: 0;
+                font-size: 0.9rem;
+            }
+            
+            .tickets-table-container {
+                padding: 1rem;
+                overflow-x: auto;
+            }
+            
+            .ticket-table {
+                font-size: 0.8rem;
+                min-width: 800px;
+            }
+            
+            .ticket-table thead th {
+                padding: 0.8rem 0.5rem;
+                font-size: 0.75rem;
+            }
+            
+            .ticket-table tbody td {
+                padding: 0.8rem 0.5rem;
+            }
+            
+            .status-badge {
+                font-size: 0.75rem;
+                padding: 0.3rem 0.8rem;
+            }
+            
+            .btn-reprint {
+                font-size: 0.85rem;
+                padding: 0.4rem 0.8rem;
+            }
+            
+            .pagination-container {
+                flex-wrap: wrap;
+                gap: 0.3rem;
+            }
+            
+            .pagination-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.85rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .archive-container {
+                padding: 0.5rem;
+            }
+            
+            .archive-header {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .archive-header h1 {
+                font-size: 1.25rem;
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .filters-section {
+                margin-bottom: 1rem;
+            }
+            
+            .date-input {
+                font-size: 0.85rem;
+                padding: 0.5rem;
+            }
+            
+            .ticket-table {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <%- include('partial/newSideBar.ejs') %>
+    
+    <div class="archive-container">
+        <div class="archive-header">
+            <h1>
+                <lord-icon
+                    src="https://cdn.lordicon.com/nocovwne.json"
+                    trigger="loop"
+                    delay="2000"
+                    colors="primary:#16213e,secondary:#667eea"
+                    style="width:48px;height:48px;">
+                </lord-icon>
+                Archive des Tickets
+            </h1>
+            <p class="text-muted mb-0">Consultez et réimprimez vos tickets de caisse</p>
+        </div>
+        
+        <div class="filters-section">
+            <h5 class="mb-3">Filtres</h5>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Statut d'impression</label>
+                    <div>
+                        <button class="filter-btn active" data-filter="all">
+                            <i class="fas fa-list"></i> Tous
+                        </button>
+                        <button class="filter-btn" data-filter="printed">
+                            <i class="fas fa-check-circle"></i> Imprimés
+                        </button>
+                        <button class="filter-btn" data-filter="unprinted">
+                            <i class="fas fa-times-circle"></i> Non imprimés
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Période</label>
+                    <div class="row g-2">
+                        <div class="col">
+                            <input type="date" class="form-control date-input" id="startDate" placeholder="Date début">
+                        </div>
+                        <div class="col">
+                            <input type="date" class="form-control date-input" id="endDate" placeholder="Date fin">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tickets-table-container">
+            <div id="loadingSpinner" class="loading-spinner">
+                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Chargement...</span>
+                </div>
+            </div>
+            
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <lord-icon
+                    src="https://cdn.lordicon.com/wloilxuq.json"
+                    trigger="loop"
+                    delay="2000"
+                    colors="primary:#16213e,secondary:#667eea">
+                </lord-icon>
+                <h3>Aucun ticket trouvé</h3>
+                <p class="text-muted">Essayez de modifier vos filtres</p>
+            </div>
+            
+            <div id="tableContainer" style="display: none;">
+                <div class="table-responsive">
+                    <table class="ticket-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>N° Facture</th>
+                                <th>Montant</th>
+                                <th>Employé</th>
+                                <th>Statut</th>
+                                <th>Date impression</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ticketsTableBody">
+                            <!-- Tickets will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination-container" id="paginationContainer" style="display: none;">
+                    <button class="pagination-btn" id="prevPageBtn">
+                        <i class="fas fa-chevron-left"></i> Précédent
+                    </button>
+                    <span class="pagination-info" id="paginationInfo">Page 1</span>
+                    <button class="pagination-btn" id="nextPageBtn">
+                        Suivant <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Ticket Archive Script -->
+    <script src="/js/ticket-archive.js"></script>
+    
+    <!-- Bootstrap JS (needs to match dashboard version roughly, using CDN as per dashboard usually or local if available) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+</body>
+</html>

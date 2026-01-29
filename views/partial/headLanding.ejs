@@ -1,4 +1,52 @@
-<!-- Preloader -->
+<!-- Preloader Override -->
+<style>
+  /* Override main.css spin */
+  .preloader img {
+    animation: heartBeat 2s infinite ease-in-out !important;
+    width: 120px !important; /* Slightly larger for presence */
+  }
+
+  /* Lively Background */
+  .preloader {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f2f5 100%);
+    overflow: hidden;
+  }
+
+  /* Add Ripple Effect behind logo */
+  .preloader::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(255,156,44,0.1) 0%, rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+    animation: ripple 3s infinite linear;
+    z-index: -1;
+  }
+
+  @keyframes heartBeat {
+      0% { transform: scale(1); }
+      14% { transform: scale(1.1); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.1); }
+      70% { transform: scale(1); }
+  }
+
+  @keyframes ripple {
+      0% { width: 0; height: 0; opacity: 0.8; }
+      100% { width: 500px; height: 500px; opacity: 0; }
+  }
+
+  /* Hide old rings if desired, or keep them. User said "sans toucher le reste", but rings might conflict.
+     Let's keep them but make them softer? Or hide them if they look bad.
+     The user didn't complain about rings, just wanted "belle animation".
+     I'll leave them.
+  */
+</style>
+
 <div class="preloader row clearfix justify-content-center align-items-center">
   <div class="pathOne"></div>
   <div class="pathTwo"></div>
@@ -9,6 +57,7 @@
   <div class="ldrThree"></div>
 
   <div class="">
+    <!-- Logo with Pulse -->
     <img src="newAssets/images/logo/emaquisLogo2.png" alt="" srcset="" />
   </div>
 </div>

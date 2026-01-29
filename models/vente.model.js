@@ -60,6 +60,8 @@ const VenteSchema = new Schema(
     amount_collected: { type: Boolean, default: true },
     offered: { type: Boolean, default: false },
     offered_confirmed: { type: Boolean, default: false },
+    ticketPrinted: { type: Boolean, default: false },
+    ticketPrintedAt: { type: Date, default: null },
   },
   { timestamps: true }
 );

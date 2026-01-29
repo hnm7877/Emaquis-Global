@@ -1,3 +1,34 @@
 .info_ets{
     display: flex;
 }
+
+/* Ticket PDF Design */
+body {
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  font-family: 'Roboto Mono', monospace;
+}
+
+div {
+  max-width: 400px;
+  width: 100%;
+}
+
+pre {
+  font-family: 'Roboto Mono', 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  background: #f8f9fa;
+  border: 3px solid #16213e;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 0;
+  box-shadow: 0 8px 24px rgba(22, 33, 62, 0.15);
+  color: #16213e;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}

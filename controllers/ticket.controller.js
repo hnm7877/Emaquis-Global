@@ -73,6 +73,14 @@ exports.generateTicket = async (req, res) => {
 
 				browser.close();
 
+				// Enregistrer que le ticket a été imprimé
+				if (!vente.ticketPrinted) {
+					await venteQueries.updateVente(orderId, {
+						ticketPrinted: true,
+						ticketPrintedAt: new Date(),
+					});
+				}
+
 				res.contentType('application/pdf');
 				res.send(pdf);
 			} else {

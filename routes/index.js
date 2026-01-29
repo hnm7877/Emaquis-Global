@@ -69,6 +69,7 @@ const { addEmployeeImage } = require("../controllers/allemploye");
 const { settingQueries } = require("../requests/settingQueries");
 const { userQueries } = require("../requests/UserQueries");
 const { generateTicket } = require("../controllers/ticket.controller");
+const ticketArchiveController = require("../controllers/ticket-archive.controller");
 const {
   listeProduitGlobal,
   postProduitGlobal,
@@ -343,6 +344,11 @@ router.post("/emajouterproduit", upload.single("image"), async (req, res) => {
 });
 
 router.get("/generate-ticket/:orderId", generateTicket);
+
+// Routes d'archive de tickets
+router.get("/ticket-archives", checkAuthUser, ticketArchiveController.showArchivePage);
+router.get("/api/ticket-archives", checkAuthUser, ticketArchiveController.getTicketArchives);
+router.get("/reprint-ticket/:orderId", ticketArchiveController.reprintTicket);
 
 router.use("/billet", billetRouter);
 router.use("/app", appConfigRouter);
