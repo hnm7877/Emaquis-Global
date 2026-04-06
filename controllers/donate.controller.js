@@ -5,11 +5,12 @@ exports.donatePage = async (req, res) => {
 	if (Number.isNaN(amount) || amount < 100) {
 		res.redirect('/');
 	} else {
-    const apiKey = '212203080763d5904661eff5.58954293';
-    const siteId = '397031';
+    const apiKey = process.env.CINETPAY_API_KEY || '212203080763d5904661eff5.58954293';
+    const siteId = process.env.CINETPAY_SITE_ID || '397031';
     const mode = 'PRODUCTION';
-    const notifyUrl = 'http://mondomaine.com/notify/';
-    const returnUrl = 'http://localhost:3000/donate-success';
+    const baseUrl = res.locals.publicBaseUrl || process.env.PUBLIC_BASE_URL || `${req.protocol}://${req.get('host')}`;
+    const notifyUrl = `${baseUrl}/donate/webhook`;
+    const returnUrl = `${baseUrl}/donate-success`;
     
 		res.render('donate', {
 			amount: Number(amount),

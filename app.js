@@ -70,6 +70,18 @@ const Serveur = class {
     // this.app.use(bodyParser.json());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
+    // CinetPay : disponible dans toutes les vues EJS (cinetpayApiKey, cinetpaySiteId, publicBaseUrl)
+    this.app.use((req, res, next) => {
+      res.locals.cinetpayApiKey =
+        process.env.CINETPAY_API_KEY ||
+        "212203080763d5904661eff5.58954293";
+      res.locals.cinetpaySiteId =
+        process.env.CINETPAY_SITE_ID || "397031";
+      res.locals.publicBaseUrl =
+        process.env.PUBLIC_BASE_URL ||
+        `${req.protocol}://${req.get("host")}`;
+      next();
+    });
     this.app.use(forceSession);
     this.app.use("/api/settings", settingsRouter);
     // this.app.use(function (req, res, next) {

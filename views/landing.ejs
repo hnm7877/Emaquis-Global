@@ -336,7 +336,14 @@
                   "
                 >
                   <figure class="video-image">
-                    <img src="https://via.placeholder.com/117x117" alt="" />
+                    <img
+                      src="newAssets/images/background/serveuse.jpg"
+                      alt="E-Maquis"
+                      width="117"
+                      height="117"
+                      loading="lazy"
+                      style="object-fit: cover; border-radius: 8px"
+                    />
                   </figure>
                   <a
                     href="https://youtu.be/hQ8UUccZEMM"
@@ -455,15 +462,15 @@
                     </div>
 
                     <!-- <div class="mobile-small-image">
-										<img src="https://via.placeholder.com/322x306" alt="" />
+										<img src="newAssets/images/screenshots/sc4.png" alt="" />
 									</div>
 		
 									<div class="heart-image-icon">
-										<img src="https://via.placeholder.com/289x289" alt="" />
+										<img src="newAssets/images/screenshots/sc4.png" alt="" />
 									</div>
 		
 									<div class="plus-small-image">
-										<img src="https://via.placeholder.com/100x100" alt="" />
+										<img src="newAssets/images/icons/app-1.png" alt="" />
 									</div> -->
                   </div>
                 </div>
@@ -514,7 +521,7 @@
               <div class="inner-column">
                 <!-- Cloud Icon -->
                 <!-- <div class="cloud-icon">
-								<img src="https://via.placeholder.com/90x73" alt="" />
+								<img src="newAssets/images/icons/google-play.png" alt="" />
 							</div> -->
                 <div class="row clearfix">
                   <!-- Featured Block -->
@@ -630,7 +637,7 @@
                 </div>
                 <!-- Side Image -->
                 <!-- <div class="side-image">
-								<img src="https://via.placeholder.com/130x367" alt="" />
+								<img src="newAssets/images/screenshots/sc4.png" alt="" />
 							</div> -->
               </div>
             </div>
@@ -641,7 +648,7 @@
 
       <!-- Steps Section -->
       <section class="steps-section" id="steps-section">
-        <!-- <div class="patern-layer-one" style="background-image: url(https://via.placeholder.com/713x900)"></div> -->
+        <!-- <div class="patern-layer-one" style="background-image: url(newAssets/images/background/serveuse.jpg)"></div> -->
         <div
           class="patern-layer-two"
           style="background-image: url(images/background/pattern-3.png)"
@@ -887,8 +894,8 @@
                     </div>
                     <!-- <div class="small-image titlt wow slideInRight" data-wow-delay="300ms"
 										data-wow-duration="1500ms" data-tilt data-tilt-max="15">
-										<a href="https://via.placeholder.com/213x242" class="app-2 lightbox-image"><img
-												src="https://via.placeholder.com/213x242" alt="" /></a>
+										<a href="newAssets/images/background/two.png" class="app-2 lightbox-image"><img
+												src="newAssets/images/background/two.png" alt="" /></a>
 									</div> -->
                   </div>
                 </div>
@@ -973,7 +980,7 @@
 				
 				<div class="image paroller" data-paroller-factor="-0.30" data-paroller-factor-lg="0.60"
 					data-paroller-type="foreground" data-paroller-direction="horizontal"
-					style="background-image:url(https://via.placeholder.com/330x271)"></div>
+					style="background-image:url(newAssets/images/background/pattern-5.png)"></div>
 			</div> -->
         <div class="auto-container" id="download">
           <div class="row clearfix">
@@ -1353,35 +1360,6 @@
         </div>
       </div>
     </div>
-    <script>
-      const { userQueries } = require("./requests/UserQueries");
-
-      async function importAllUsers() {
-        try {
-          const result = await new Promise((resolve, reject) => {
-            userQueries
-              .getAllUSers()
-              .then((data) => {
-                if (data.etat) {
-                  resolve(data.result);
-                } else {
-                  reject(data.err);
-                }
-              })
-              .catch((err) => {
-                reject(err);
-              });
-          });
-
-          console.log("All Users:", result);
-        } catch (error) {
-          console.error("Error importing users:", error);
-        }
-      }
-
-      importAllUsers();
-    </script>
-
     <script src="newAssets/js/jquery.js"></script>
     <script src="newAssets/js/popper.min.js"></script>
     <script src="newAssets/js/pagenav.js"></script>

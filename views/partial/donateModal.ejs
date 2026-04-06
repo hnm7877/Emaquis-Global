@@ -317,161 +317,209 @@ aria-hidden="true"
 
 <script src="https://cdn.cinetpay.com/seamless/main.js"></script>
 <script>
-const lastModalDate = localStorage.getItem("lastModalDate");
+(function () {
+  const lastModalDate = localStorage.getItem("lastModalDate");
 
-const formatNumber = (number) => {
-  return number < 10 ? "0" + number : number;
-};
+  const formatNumber = (number) => {
+    return number < 10 ? "0" + number : number;
+  };
 
-// Logic for amount chips
-document.querySelectorAll('.amount-chip').forEach(chip => {
-  chip.addEventListener('click', function() {
-    // Remove active class from all
-    document.querySelectorAll('.amount-chip').forEach(c => c.classList.remove('active'));
-    // Add active to clicked
-    this.classList.add('active');
-    // Update input
-    document.getElementById('amount').value = this.getAttribute('data-value');
-  });
-});
+  /** Montant CinetPay : multiple de 5 (hors USD) — doc initialisation */
+  function normalizeDonationAmount(raw) {
+    const n = parseInt(String(raw), 10);
+    if (Number.isNaN(n) || n < 100) return null;
+    const rounded = Math.round(n / 5) * 5;
+    return Math.max(100, rounded);
+  }
 
-// Update chips if manual input changes
-document.getElementById('amount').addEventListener('input', function() {
-    const val = this.value;
-    document.querySelectorAll('.amount-chip').forEach(c => c.classList.remove('active'));
-    // checks if matches any chip
-    const matchingChip = document.querySelector(`.amount-chip[data-value="${val}"]`);
-    if(matchingChip) matchingChip.classList.add('active');
-});
+  /** Numéro exploitable par les wallets (ex. Wave CI) : format international */
+  function normalizePhoneForCinetPay(raw) {
+    if (raw == null || raw === "") return "+2250102030405";
+    let s = String(raw).replace(/\s+/g, "").replace(/-/g, "");
+    const digits = s.replace(/\D/g, "");
+    if (digits.length < 8 || /^0+$/.test(digits)) return "+2250102030405";
+    if (s.startsWith("+")) return s.length >= 12 ? s : "+2250102030405";
+    if (s.startsWith("225") && s.length >= 11) return "+" + s;
+    if (s.startsWith("0") && s.length === 10) return "+225" + s.slice(1);
+    if (digits.length >= 8) return "+225" + digits.replace(/^0+/, "");
+    return "+2250102030405";
+  }
 
-// Confetti Helper
-const fireConfetti = () => {
-    if (typeof confetti === "function") {
-        confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
-        });
+  function bindDonationUi() {
+    document.querySelectorAll(".amount-chip").forEach((chip) => {
+      chip.addEventListener("click", function () {
+        document.querySelectorAll(".amount-chip").forEach((c) => c.classList.remove("active"));
+        this.classList.add("active");
+        document.getElementById("amount").value = this.getAttribute("data-value");
+      });
+    });
+
+    const amountInput = document.getElementById("amount");
+    if (amountInput) {
+      amountInput.addEventListener("input", function () {
+        const val = this.value;
+        document.querySelectorAll(".amount-chip").forEach((c) => c.classList.remove("active"));
+        const matchingChip = document.querySelector('.amount-chip[data-value="' + val + '"]');
+        if (matchingChip) matchingChip.classList.add("active");
+      });
     }
-};
 
-// Payment Logic
-document.getElementById('btn-donate-trigger').addEventListener('click', function() {
-    const amount = document.getElementById('amount').value;
-    if(!amount || amount < 100) {
-        alert("Veuillez entrer un montant valide (minimum 100 FCFA)");
+    const trigger = document.getElementById("btn-donate-trigger");
+    if (!trigger) return;
+
+    trigger.addEventListener("click", function () {
+      const amountNorm = normalizeDonationAmount(document.getElementById("amount").value);
+      if (amountNorm === null) {
+        alert("Veuillez entrer un montant valide (minimum 100 FCFA, multiple de 5).");
         return;
-    }
+      }
 
-    // User data from server-side rendering
-    const customer_name = '<%= typeof user !== "undefined" && user?.nom ? user.nom : "Donateur" %>';
-    const customer_surname = '<%= typeof user !== "undefined" && user?.prenoms ? user.prenoms : "Anonyme" %>';
-    const customer_email = '<%= typeof user !== "undefined" && user?.email ? user.email : "don@emaquis.com" %>';
-    const customer_phone_number = '<%= typeof user !== "undefined" && user?.numero ? user.numero : "00000000" %>';
-    const customer_address = '<%= typeof user !== "undefined" && user?.adresse ? user.adresse : "NA" %>';
-    const customer_city = '<%= typeof user !== "undefined" && user?.city ? user.city : "Abidjan" %>';
-    const customer_country = '<%= typeof user !== "undefined" && user?.country ? (user.country.length === 2 ? user.country : "CI") : "CI" %>';
+      if (typeof window.CinetPay === "undefined") {
+        alert("Le module de paiement ne s'est pas chargé. Vérifiez votre connexion et rechargez la page.");
+        return;
+      }
 
-    CinetPay.setConfig({
-        apikey: '212203080763d5904661eff5.58954293',
-        site_id: '397031',
-        notify_url: 'http://mondomaine.com/notify/',
-        mode: 'PRODUCTION' 
-    });
+      const customer_name = <%- JSON.stringify(locals.user && locals.user.nom ? locals.user.nom : "Donateur") %>;
+      const customer_surname = <%- JSON.stringify(locals.user && (locals.user.prenoms || locals.user.prenom) ? (locals.user.prenoms || locals.user.prenom) : "Anonyme") %>;
+      const customer_email = <%- JSON.stringify(locals.user && locals.user.email ? locals.user.email : "don@emaquis.com") %>;
+      const customer_phone_number = normalizePhoneForCinetPay(
+        <%- JSON.stringify(locals.user && locals.user.numero ? String(locals.user.numero) : "") %>
+      );
+      const customer_address = <%- JSON.stringify(locals.user && locals.user.adresse ? locals.user.adresse : "Abidjan") %>;
+      const customer_city = <%- JSON.stringify(locals.user && locals.user.city ? locals.user.city : "Abidjan") %>;
+      let customer_country = <%- JSON.stringify(locals.user && locals.user.country ? String(locals.user.country).toUpperCase().slice(0, 2) : "CI") %>;
+      if (!customer_country || customer_country.length !== 2) customer_country = "CI";
 
-    CinetPay.getCheckout({
-        transaction_id: Math.floor(Math.random() * 100000000).toString(),
-        amount: parseInt(amount),
-        currency: 'XOF',
-        channels: 'ALL',
-        description: 'Donation E-Maquis',
-        customer_name,
-        customer_surname,
-        customer_email,
-        customer_phone_number,
-        customer_address,
-        customer_city,
-        customer_country,
+      const origin = window.location.origin;
+      const notifyUrl = origin + "/donate/webhook";
+      const returnUrl = origin + "/donate-success";
+
+      const apikey = "<%= cinetpayApiKey %>";
+      const site_id = "<%= cinetpaySiteId %>";
+
+      CinetPay.setConfig({
+        apikey: apikey,
+        site_id: site_id,
+        notify_url: notifyUrl,
+        return_url: returnUrl,
+        mode: "PRODUCTION",
+      });
+
+      const transaction_id = "DON" + Date.now() + String(Math.floor(Math.random() * 1000000));
+
+      CinetPay.getCheckout({
+        transaction_id: transaction_id,
+        amount: amountNorm,
+        currency: "XOF",
+        channels: "ALL",
+        description: "Don E-Maquis",
+        customer_name: customer_name,
+        customer_surname: customer_surname,
+        customer_email: customer_email,
+        customer_phone_number: customer_phone_number,
+        customer_address: customer_address,
+        customer_city: customer_city,
+        customer_country: customer_country,
         customer_state: customer_country,
-        customer_zip_code: '00000',
-    });
+        customer_zip_code: "00000",
+      });
 
-    CinetPay.waitResponse(function(data) {
+      CinetPay.waitResponse(function (data) {
         if (data.status == "REFUSED") {
-            alert("Le paiement a échoué. Merci d'essayer à nouveau.");
+          alert("Le paiement a échoué. Merci d'essayer à nouveau.");
         } else if (data.status == "ACCEPTED") {
-            // SUCCESS UI
-            document.getElementById('donationFormView').style.display = 'none';
-            document.getElementById('donationFooter').style.display = 'none';
-            document.getElementById('donationSuccessView').style.display = 'block';
-            
-            // Trigger confetti
-            fireConfetti();
+          document.getElementById("donationFormView").style.display = "none";
+          document.getElementById("donationFooter").style.display = "none";
+          document.getElementById("donationSuccessView").style.display = "block";
+          if (typeof confetti === "function") {
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+          }
         }
-    });
+      });
 
-    CinetPay.onError(function(data) {
-        console.log(data);
+      CinetPay.onError(function (data) {
+        console.error("CinetPay onError:", data);
         alert("Une erreur est survenue lors de l'initialisation du paiement.");
+      });
     });
-});
+  }
 
-const autoShowModal = () => {
-  console.log("autoShowModal");
-  const href = window.location.href;
-  const lastPath = href.split("/").pop();
-  try {
-     const totalOrderValidate = "<%=locals.totalVentesValidate%>";
-     const pagesNotToDisplayModal = [
+  function autoShowModal() {
+    const href = window.location.href;
+    const lastPath = href.split("/").pop();
+    try {
+      const totalOrderValidate = "<%= typeof locals.totalVentesValidate !== 'undefined' ? locals.totalVentesValidate : '' %>";
+      const pagesNotToDisplayModal = [
         "connexion",
         "inscription",
         "donate-success",
         "donate-error",
       ];
 
-    if (
+      if (
         !lastPath ||
         pagesNotToDisplayModal.includes(lastPath) ||
         isNaN(totalOrderValidate) ||
         Number(totalOrderValidate) < 10
-    ) {
+      ) {
         return;
+      }
+    } catch (e) {
+      return;
     }
-  } catch(e) {
-      console.log("Error checking modal conditions", e);
-  }
 
-  const show = () => {
-      // Small delay to ensure smooth entry
-      setTimeout(() => {
-          $("#donateModal").modal("show");
+    const show = () => {
+      setTimeout(function () {
+        var $ = window.jQuery;
+        var el = document.getElementById("donateModal");
+        if ($ && el && $.fn.modal) {
+          $(el).modal("show");
+        } else if (el && window.bootstrap && window.bootstrap.Modal) {
+          window.bootstrap.Modal.getOrCreateInstance(el).show();
+        }
       }, 1000);
-      localStorage.setItem("lastModalDate", new Date());
-  }
+      localStorage.setItem("lastModalDate", new Date().toISOString());
+    };
 
-  if (!lastModalDate) {
-    show();
-  } else {
-    const lastModalDateObj = new Date(lastModalDate);
-    const currentDate = new Date();
-    const dateFormat =
-      formatNumber(currentDate.getDate()) +
-      "/" +
-      formatNumber(currentDate.getMonth() + 1) +
-      "/" +
-      currentDate.getFullYear();
-    const lastModalDateFormat =
-      formatNumber(lastModalDateObj.getDate()) +
-      "/" +
-      formatNumber(lastModalDateObj.getMonth() + 1) +
-      "/" +
-      lastModalDateObj.getFullYear();
-
-    if (lastModalDateFormat !== dateFormat) {
+    if (!lastModalDate) {
       show();
+    } else {
+      const lastModalDateObj = new Date(lastModalDate);
+      const currentDate = new Date();
+      const dateFormat =
+        formatNumber(currentDate.getDate()) +
+        "/" +
+        formatNumber(currentDate.getMonth() + 1) +
+        "/" +
+        currentDate.getFullYear();
+      const lastModalDateFormat =
+        formatNumber(lastModalDateObj.getDate()) +
+        "/" +
+        formatNumber(lastModalDateObj.getMonth() + 1) +
+        "/" +
+        lastModalDateObj.getFullYear();
+
+      if (lastModalDateFormat !== dateFormat) {
+        show();
+      }
     }
   }
-};
-autoShowModal();
-setInterval(autoShowModal, 5 * 60 * 1000);
+
+  function scheduleAutoShow() {
+    window.addEventListener("load", function () {
+      autoShowModal();
+      setInterval(autoShowModal, 5 * 60 * 1000);
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function () {
+      bindDonationUi();
+      scheduleAutoShow();
+    });
+  } else {
+    bindDonationUi();
+    scheduleAutoShow();
+  }
+})();
 </script>
