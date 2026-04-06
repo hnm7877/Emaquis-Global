@@ -266,6 +266,36 @@
           padding: 20px;
         }
       }
+
+      /* Hero : image de fond pleine zone + vignette « vidéo » dimensionnée (évite l’effet miniature) */
+      #home-banner.banner-section {
+        min-height: 70vh;
+      }
+      #home-banner .bg-layer {
+        background-size: cover !important;
+        background-position: center center !important;
+        background-repeat: no-repeat !important;
+      }
+      #home-banner .content-column .video-box {
+        width: 240px;
+        height: 240px;
+        max-width: min(240px, 85vw);
+      }
+      #home-banner .content-column .video-box .video-image {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        border-radius: 50%;
+      }
+      #home-banner .content-column .video-box .video-image img {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        object-fit: cover;
+        border-radius: 50%;
+        display: block;
+      }
     </style>
 
     <link
@@ -337,12 +367,12 @@
                 >
                   <figure class="video-image">
                     <img
-                      src="newAssets/images/background/serveuse.jpg"
-                      alt="E-Maquis"
-                      width="117"
-                      height="117"
-                      loading="lazy"
-                      style="object-fit: cover; border-radius: 8px"
+                      src="/images/paresseux_sous_parasol_DEF.png"
+                      alt=""
+                      width="240"
+                      height="240"
+                      decoding="async"
+                      onerror="this.onerror=null;this.src='newAssets/images/background/serveuse.jpg';"
                     />
                   </figure>
                   <a

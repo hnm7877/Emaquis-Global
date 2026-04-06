@@ -6,7 +6,7 @@
   .donation-modal-content {
       border: none;
       border-radius: 20px;
-      overflow: hidden;
+      overflow: visible;
       box-shadow: 0 15px 35px rgba(0,0,0,0.2);
   }
 
@@ -117,9 +117,24 @@
       70% { transform: scale(1); }
   }
 
-  /* FIX: CinetPay Z-Index Override */
-  .cp-modal, .cp-content-wrapper {
-      z-index: 99999 !important;
+  /* Guichet CinetPay (Wave QR, iframe) au-dessus du modal Bootstrap (~1050) */
+  .cp-modal,
+  .cp-content-wrapper,
+  .cp-overlay,
+  [class^="cp-"],
+  [class*=" cinetpay"] {
+    z-index: 2147483000 !important;
+  }
+  body.modal-open .modal {
+    z-index: 1050;
+  }
+  body.modal-open .modal-backdrop {
+    z-index: 1040;
+  }
+  /* Iframes du checkout CinetPay */
+  body > iframe[src*="cinetpay"],
+  body > iframe[src*="checkout.cinetpay"] {
+    z-index: 2147483001 !important;
   }
 </style>
 
@@ -170,6 +185,25 @@ aria-hidden="true"
                 value="2000"
                 placeholder="Ex: 1500"
               />
+            </div>
+
+            <div class="custom-input-group mt-4">
+              <label for="donatePhone" class="text-muted small font-weight-bold"
+                >Numéro Mobile Money / Wave <span class="text-danger">*</span></label
+              >
+              <input
+                type="tel"
+                class="form-control"
+                id="donatePhone"
+                name="donatePhone"
+                autocomplete="tel"
+                required
+                placeholder="Ex: 07 12 34 56 78"
+                value="<%- locals.user && locals.user.numero ? String(locals.user.numero).replace(/"/g, '&quot;') : '' %>"
+              />
+              <small class="text-muted d-block mt-1"
+                >Indiquez le numéro qui recevra la demande Wave (10 chiffres, ex. 07…). Obligatoire pour éviter les refus en production.</small
+              >
             </div>
         </div>
 
@@ -332,17 +366,41 @@ aria-hidden="true"
     return Math.max(100, rounded);
   }
 
-  /** Numéro exploitable par les wallets (ex. Wave CI) : format international */
+  /**
+   * Côte d’Ivoire : +225 suivi de 10 chiffres (ex. 0712345678 → +225712345678).
+   * Ne pas envoyer de faux numéro : Wave refuse sinon (ex. affichage « 225000 »).
+   */
   function normalizePhoneForCinetPay(raw) {
-    if (raw == null || raw === "") return "+2250102030405";
-    let s = String(raw).replace(/\s+/g, "").replace(/-/g, "");
+    if (raw == null) return "";
+    let s = String(raw).trim().replace(/\s+/g, "").replace(/-/g, "");
+    if (!s) return "";
     const digits = s.replace(/\D/g, "");
-    if (digits.length < 8 || /^0+$/.test(digits)) return "+2250102030405";
-    if (s.startsWith("+")) return s.length >= 12 ? s : "+2250102030405";
-    if (s.startsWith("225") && s.length >= 11) return "+" + s;
-    if (s.startsWith("0") && s.length === 10) return "+225" + s.slice(1);
-    if (digits.length >= 8) return "+225" + digits.replace(/^0+/, "");
-    return "+2250102030405";
+    if (!digits || /^0+$/.test(digits)) return "";
+
+    if (s.startsWith("+225") && /^\+225\d{10}$/.test(s)) return s;
+
+    if (digits.startsWith("225") && digits.length >= 13) {
+      const rest = digits.slice(3, 13);
+      if (rest.length === 10) return "+225" + rest;
+    }
+
+    if (digits.length === 10 && digits.charAt(0) === "0") {
+      return "+225" + digits.slice(1);
+    }
+
+    if (digits.length === 10 && /^[1-9]\d{9}$/.test(digits)) {
+      return "+225" + digits;
+    }
+
+    if (digits.length === 9 && /^[1-9]\d{8}$/.test(digits)) {
+      return "+225" + digits;
+    }
+
+    return "";
+  }
+
+  function isValidCiWaveNumber(e164) {
+    return typeof e164 === "string" && /^\+225\d{10}$/.test(e164);
   }
 
   function bindDonationUi() {
@@ -382,17 +440,30 @@ aria-hidden="true"
       const customer_name = <%- JSON.stringify(locals.user && locals.user.nom ? locals.user.nom : "Donateur") %>;
       const customer_surname = <%- JSON.stringify(locals.user && (locals.user.prenoms || locals.user.prenom) ? (locals.user.prenoms || locals.user.prenom) : "Anonyme") %>;
       const customer_email = <%- JSON.stringify(locals.user && locals.user.email ? locals.user.email : "don@emaquis.com") %>;
-      const customer_phone_number = normalizePhoneForCinetPay(
-        <%- JSON.stringify(locals.user && locals.user.numero ? String(locals.user.numero) : "") %>
-      );
+      const phoneField = document.getElementById("donatePhone");
+      const phoneRaw = phoneField ? phoneField.value.trim() : "";
+      const customer_phone_number = normalizePhoneForCinetPay(phoneRaw);
+      if (!isValidCiWaveNumber(customer_phone_number)) {
+        alert(
+          "Numéro de téléphone invalide pour Wave / Mobile Money.\n\n" +
+            "Entrez 10 chiffres avec l’indicatif local (ex. 07 12 34 56 78 ou 0712345678)."
+        );
+        if (phoneField) phoneField.focus();
+        return;
+      }
       const customer_address = <%- JSON.stringify(locals.user && locals.user.adresse ? locals.user.adresse : "Abidjan") %>;
       const customer_city = <%- JSON.stringify(locals.user && locals.user.city ? locals.user.city : "Abidjan") %>;
       let customer_country = <%- JSON.stringify(locals.user && locals.user.country ? String(locals.user.country).toUpperCase().slice(0, 2) : "CI") %>;
       if (!customer_country || customer_country.length !== 2) customer_country = "CI";
 
-      const origin = window.location.origin;
-      const notifyUrl = origin + "/donate/webhook";
-      const returnUrl = origin + "/donate-success";
+      var _baseNotify = <%- JSON.stringify(
+        typeof publicBaseUrl !== "undefined" && publicBaseUrl
+          ? String(publicBaseUrl).replace(/\/+$/, "")
+          : ""
+      ) %>;
+      var origin = _baseNotify || window.location.origin;
+      var notifyUrl = origin + "/donate/webhook";
+      var returnUrl = origin + "/donate-success";
 
       const apikey = "<%= cinetpayApiKey %>";
       const site_id = "<%= cinetpaySiteId %>";
@@ -403,31 +474,69 @@ aria-hidden="true"
         notify_url: notifyUrl,
         return_url: returnUrl,
         mode: "PRODUCTION",
+        type: "WEB",
       });
 
       const transaction_id = "DON" + Date.now() + String(Math.floor(Math.random() * 1000000));
 
-      CinetPay.getCheckout({
-        transaction_id: transaction_id,
-        amount: amountNorm,
-        currency: "XOF",
-        channels: "ALL",
-        description: "Don E-Maquis",
-        customer_name: customer_name,
-        customer_surname: customer_surname,
-        customer_email: customer_email,
-        customer_phone_number: customer_phone_number,
-        customer_address: customer_address,
-        customer_city: customer_city,
-        customer_country: customer_country,
-        customer_state: customer_country,
-        customer_zip_code: "00000",
-      });
+      function openCinetPayCheckout() {
+        CinetPay.getCheckout({
+          transaction_id: transaction_id,
+          amount: amountNorm,
+          currency: "XOF",
+          channels: "ALL",
+          description: "Don E-Maquis",
+          customer_name: customer_name,
+          customer_surname: customer_surname,
+          customer_email: customer_email,
+          customer_phone_number: customer_phone_number,
+          customer_address: customer_address,
+          customer_city: customer_city,
+          customer_country: customer_country,
+          customer_state: customer_country,
+          customer_zip_code: "00000",
+        });
+      }
+
+      function showDonateModalAgain() {
+        var el = document.getElementById("donateModal");
+        if (window.jQuery && window.jQuery.fn.modal && el) {
+          window.jQuery(el).modal("show");
+        } else if (el && window.bootstrap && window.bootstrap.Modal) {
+          window.bootstrap.Modal.getOrCreateInstance(el).show();
+        }
+      }
+
+      /* Fermer le modal don : évite double fond sombre + masque du QR Wave derrière le backdrop */
+      var donateEl = document.getElementById("donateModal");
+      if (window.jQuery && window.jQuery.fn.modal && donateEl) {
+        window.jQuery(donateEl).modal("hide");
+        window.jQuery(donateEl).one("hidden.bs.modal", function () {
+          setTimeout(openCinetPayCheckout, 150);
+        });
+      } else if (donateEl && window.bootstrap && window.bootstrap.Modal) {
+        var bsModal =
+          window.bootstrap.Modal.getInstance(donateEl) ||
+          new window.bootstrap.Modal(donateEl);
+        donateEl.addEventListener(
+          "hidden.bs.modal",
+          function onHidden() {
+            donateEl.removeEventListener("hidden.bs.modal", onHidden);
+            setTimeout(openCinetPayCheckout, 150);
+          },
+          { once: true }
+        );
+        bsModal.hide();
+      } else {
+        openCinetPayCheckout();
+      }
 
       CinetPay.waitResponse(function (data) {
         if (data.status == "REFUSED") {
           alert("Le paiement a échoué. Merci d'essayer à nouveau.");
+          showDonateModalAgain();
         } else if (data.status == "ACCEPTED") {
+          showDonateModalAgain();
           document.getElementById("donationFormView").style.display = "none";
           document.getElementById("donationFooter").style.display = "none";
           document.getElementById("donationSuccessView").style.display = "block";
