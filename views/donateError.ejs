@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 	<head>
 		<meta charset="UTF-8" />
 		<meta
@@ -18,42 +18,109 @@
 			href="newAssets/css/responsive.css"
 			rel="stylesheet"
 		/>
-		<title>Merci à vous</title>
+		<title>Don non abouti — E-Maquis</title>
 		<style>
 			body {
 				display: flex;
 				justify-content: center;
 				align-items: center;
 				height: 100vh;
+				background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+			}
+			.error-card {
+				background: white;
+				border-radius: 20px;
+				padding: 40px;
+				max-width: 480px;
+				width: 90%;
+				text-align: center;
+				box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+			}
+			.error-icon {
+				font-size: 4rem;
+				margin-bottom: 15px;
+				animation: shake 0.6s ease;
+			}
+			.error-card h2 {
+				color: #991b1b;
+				font-weight: 700;
+				margin-bottom: 10px;
+			}
+			.error-card p {
+				color: #6b7280;
+				font-size: 1rem;
+				line-height: 1.6;
+			}
+			.btn-retry {
+				background: linear-gradient(135deg, #ff9966, #ff5e62);
+				color: white;
+				border: none;
+				border-radius: 12px;
+				padding: 12px 30px;
+				font-weight: 600;
+				font-size: 1rem;
+				margin-top: 20px;
+				text-decoration: none;
+				display: inline-block;
+				transition: all 0.3s;
+			}
+			.btn-retry:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 4px 15px rgba(255, 94, 98, 0.4);
+				color: white;
+				text-decoration: none;
+			}
+			.btn-home {
+				color: #6b7280;
+				font-size: 0.9rem;
+				margin-top: 12px;
+				display: inline-block;
+				text-decoration: underline;
+			}
+			.btn-home:hover {
+				color: #374151;
+			}
+			.redirect-text {
+				color: #9ca3af;
+				font-size: 0.8rem;
+				margin-top: 15px;
+			}
+			@keyframes shake {
+				0%, 100% { transform: translateX(0); }
+				20% { transform: translateX(-10px); }
+				40% { transform: translateX(10px); }
+				60% { transform: translateX(-5px); }
+				80% { transform: translateX(5px); }
 			}
 		</style>
 	</head>
 	<body>
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-					<div
-						class="alert alert-danger text-center"
-						role="alert"
-					>
-						<h4 class="alert-heading">Oups!</h4>
-						<p>
-							Une erreur s'est produite lors du traitement de votre don,
-							veuillez réessayer plus tard.
-						</p>
-						<hr />
-						<p class="mb-0">
-							Vous pouvez continuer à soutenir notre cause en faisant un autre
-							don.
-						</p>
-					</div>
-				</div>
-			</div>
+		<div class="error-card">
+			<div class="error-icon">😔</div>
+			<h2>Don non abouti</h2>
+			<p>
+				Le paiement n'a pas pu être finalisé. Cela peut arriver
+				pour plusieurs raisons (annulation, solde insuffisant, erreur réseau).
+			</p>
+			<p style="font-size: 0.9rem;">
+				Vous pouvez réessayer à tout moment. Votre générosité compte beaucoup pour nous ! 🙏
+			</p>
+			<a href="/" class="btn-retry">Réessayer un don</a>
+			<br />
+			<a href="/" class="btn-home">Retour à l'accueil</a>
+			<p class="redirect-text">Redirection automatique dans <span id="countdown">10</span>s...</p>
 		</div>
 		<script>
-			setTimeout(() => {
-				window.location.href = '/';
-			}, 5000);
+			let seconds = 10;
+			const countdownEl = document.getElementById('countdown');
+			const interval = setInterval(() => {
+				seconds--;
+				if (countdownEl) countdownEl.textContent = seconds;
+				if (seconds <= 0) {
+					clearInterval(interval);
+					window.location.href = '/';
+				}
+			}, 1000);
 		</script>
 	</body>
 </html>
